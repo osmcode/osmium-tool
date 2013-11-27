@@ -1,0 +1,15 @@
+Source: osmium
+Section: utils
+Priority: optional
+Maintainer: Jochen Topf <jochen@topf.org>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.9.4
+Homepage: http://osmcode.org/osmium/
+
+Package: osmium
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: 
+Description: Command line tool for working with OpenStreetMap data.
+ A versatile command line tool that makes manipulating
+ OpenStreetMap data easy.

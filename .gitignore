@@ -1,0 +1,5 @@
+osmium
+.*.swp
+src/*.o
+doc/*.1
+doc/*.html

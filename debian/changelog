@@ -1,0 +1,5 @@
+osmium (0.0.1) jessie; urgency=low
+
+  * Initial standalone debian package
+
+ -- Jochen Topf <jochen@topf.org>  Wed, 27 Nov 2013 13:42:00 +0100
