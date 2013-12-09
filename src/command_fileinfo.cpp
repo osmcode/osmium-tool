@@ -91,7 +91,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
 
 struct InfoHandler : public osmium::handler::Handler {
 
-    osmium::BBox bbox;
+    osmium::Box bounds;
     uint64_t nodes = 0;
     uint64_t ways = 0;
     uint64_t relations = 0;
@@ -99,7 +99,7 @@ struct InfoHandler : public osmium::handler::Handler {
 
     void node(const osmium::Node& node) {
         hash.Update(node.data(), node.byte_size());
-        bbox.extend(node.location());
+        bounds.extend(node.location());
         ++nodes;
     }
 
@@ -141,8 +141,8 @@ bool CommandFileinfo::run() {
         std::cout << "Header:\n";
 
         std::cout << "  Bounding boxes:\n";
-        for (auto& bbox : header.bboxes()) {
-            std::cout << "    " << bbox << "\n";
+        for (auto& box : header.boxes()) {
+            std::cout << "    " << box << "\n";
         }
         std::cout << "  With history: " << (header.has_multiple_object_versions() ? "yes" : "no") << "\n";
 
@@ -155,7 +155,7 @@ bool CommandFileinfo::run() {
             InfoHandler info_handler;
             osmium::apply(reader, info_handler);
             std::cout << "Data: " << "\n";
-            std::cout << "  Bounding box: " << info_handler.bbox << "\n";
+            std::cout << "  Bounding box: " << info_handler.bounds << "\n";
 
             unsigned char digest[CryptoPP::SHA::DIGESTSIZE];
             info_handler.hash.Final(digest);
