@@ -6,7 +6,7 @@
 Osmium -- OpenStreetMap data manipulation command line tool
 http://osmcode.org/osmium
 
-Copyright (C) 2013  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013, 2014  Jochen Topf <jochen@topf.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ class CommandCat : public Command {
     std::string m_output_filename = "-"; // default: stdout
     std::string m_input_format;
     std::string m_output_format;
+    std::vector<std::string> m_output_headers;
     osmium::io::File m_output_file;
     std::vector<osmium::io::File> m_input_files;
     bool m_output_overwrite = false;

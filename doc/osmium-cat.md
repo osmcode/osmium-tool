@@ -33,13 +33,16 @@ can be used to convert OSM files from one format into another.
     all input files, there is no way to set the format for some input files
     only. See the FILE FORMATS section for details.
 
---output-file, -o
+--output, -o
 :   Name of the output file. Default is '-' (*stdout*).
 
 --output-format, -f
 :   The format of the output file. Can be used to set the output file format
     if it can't be autodetected from the output file name. See the FILE FORMATS
     section for details.
+
+--output-header
+:   Add output header. This option can be given several times.
 
 --overwrite, -O
 :   Allow an existing output file to be overwritten. Normally **osmium** will

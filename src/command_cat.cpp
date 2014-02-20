@@ -3,7 +3,7 @@
 Osmium -- OpenStreetMap data manipulation command line tool
 http://osmcode.org/osmium
 
-Copyright (C) 2013  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013, 2014  Jochen Topf <jochen@topf.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
         ("output-format,f", po::value<std::string>(), "Format of output file")
         ("input-format,F", po::value<std::string>(), "Format of input files")
         ("generator", po::value<std::string>(), "Generator setting for file header")
+        ("output-header", po::value<std::vector<std::string>>(), "Add output header")
         ("overwrite,O", "Allow existing output file to be overwritten")
         ;
 
@@ -84,6 +85,10 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
             m_output_format = vm["output-format"].as<std::string>();
         }
 
+        if (vm.count("output-header")) {
+            m_output_headers = vm["output-header"].as<std::vector<std::string>>();
+        }
+
         if (vm.count("overwrite")) {
             m_output_overwrite = true;
         }
@@ -104,6 +109,10 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     m_vout << "  output-filename: " << m_output_filename << "\n";
     m_vout << "  input-format: " << m_input_format << "\n";
     m_vout << "  output-format: " << m_output_format << "\n";
+    m_vout << "  output-header: \n";
+    for (const auto& h : m_output_headers) {
+        m_vout << "    " << h << "\n";
+    }
 
     if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
         std::cerr << "When writing to STDOUT you need to use the --output-format,f option to declare the file format.\n";
@@ -141,6 +150,9 @@ bool CommandCat::run() {
             osmium::io::Reader reader(m_input_files[0]);
             osmium::io::Header header = reader.header();
             header.set("generator", m_generator);
+            for (const auto& h : m_output_headers) {
+                header.set(h);
+            }
             osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
             while (osmium::memory::Buffer buffer = reader.read()) {
                 writer(std::move(buffer));
@@ -148,6 +160,9 @@ bool CommandCat::run() {
             writer.close();
         } else { // multiple input files
             osmium::io::Header header({{"generator", m_generator}});
+            for (const auto& h : m_output_headers) {
+                header.set(h);
+            }
             osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
             for (const auto& input_file : m_input_files) {
                 m_vout << "Copying input file '" << input_file.filename() << "'\n";
