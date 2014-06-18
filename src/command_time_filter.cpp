@@ -3,7 +3,7 @@
 Osmium -- OpenStreetMap data manipulation command line tool
 http://osmcode.org/osmium
 
-Copyright (C) 2013  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013, 2014  Jochen Topf <jochen@topf.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
         }
 
         if (vm.count("overwrite")) {
-            m_output_overwrite = true;
+            m_output_overwrite = osmium::io::overwrite::allow;
         }
 
         if (vm.count("verbose")) {

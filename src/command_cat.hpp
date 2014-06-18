@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <osmium/io/file.hpp>
+#include <osmium/io/overwrite.hpp>
 
 #include "osmc.hpp"
 
@@ -39,7 +40,7 @@ class CommandCat : public Command {
     std::vector<std::string> m_output_headers;
     osmium::io::File m_output_file;
     std::vector<osmium::io::File> m_input_files;
-    bool m_output_overwrite = false;
+    osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
 
 public:
 

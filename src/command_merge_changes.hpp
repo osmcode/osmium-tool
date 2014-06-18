@@ -6,7 +6,7 @@
 Osmium -- OpenStreetMap data manipulation command line tool
 http://osmcode.org/osmium
 
-Copyright (C) 2013  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013, 2014  Jochen Topf <jochen@topf.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <osmium/io/file.hpp>
+#include <osmium/io/overwrite.hpp>
 
 #include "osmc.hpp"
 
@@ -38,7 +39,7 @@ class CommandMergeChanges : public Command {
     std::string m_input_format;
     std::string m_output_format;
 
-    bool m_output_overwrite = false;
+    osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
     bool m_simplify_change = false;
 
     osmium::io::File m_output_file;

@@ -90,7 +90,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
         }
 
         if (vm.count("overwrite")) {
-            m_output_overwrite = true;
+            m_output_overwrite = osmium::io::overwrite::allow;
         }
 
     } catch (boost::program_options::error& e) {
