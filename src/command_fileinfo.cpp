@@ -33,7 +33,7 @@ namespace po = boost::program_options;
 
 #include <osmium/io/any_input.hpp>
 #include <osmium/handler.hpp>
-#include <osmium/osm/entity_flags.hpp>
+#include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/ostream.hpp>
 #include <osmium/visitor.hpp>
 
@@ -135,7 +135,7 @@ bool CommandFileinfo::run() {
             std::cout << "  Size: " << filesize(m_input_file.filename()) << "\n";
         }
 
-        osmium::io::Reader reader(m_input_file, m_extended ? osmium::osm_entity::flags::all : osmium::osm_entity::flags::nothing);
+        osmium::io::Reader reader(m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing);
 
         osmium::io::Header header = reader.header();
         std::cout << "Header:\n";
