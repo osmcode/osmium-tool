@@ -143,7 +143,7 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
 }
 
 bool CommandTimeFilter::run() {
-    osmium::io::Reader reader(m_input_file);
+    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::object);
 
     osmium::io::Header header = reader.header();
     header.set("generator", m_generator);

@@ -123,14 +123,14 @@ bool CommandApplyChanges::run() {
     osmium::ObjectPointerCollection objects;
 
     for (const std::string& change_file_name : m_change_filenames) {
-        osmium::io::Reader reader(change_file_name);
+        osmium::io::Reader reader(change_file_name, osmium::osm_entity_bits::object);
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));
         }
     }
 
-    osmium::io::Reader reader(m_input_filename);
+    osmium::io::Reader reader(m_input_filename, osmium::osm_entity_bits::object);
 
     osmium::io::Header header = reader.header();
     header.set("generator", m_generator);
@@ -165,7 +165,7 @@ bool CommandApplyChanges::run() {
     } else {
         // If the --simplify option was not given, this
         // is a straightforward sort of the change files
-        // and the a merge with the input file.
+        // and then a merge with the input file.
         objects.sort(osmium::object_order_type_id_version());
 
         std::set_union(objects.begin(),

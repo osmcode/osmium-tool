@@ -125,7 +125,7 @@ bool CommandMergeChanges::run() {
     // read all input files, keep the buffers around and add pointer
     // to each object to objects collection.
     for (const std::string& change_file_name : m_input_filenames) {
-        osmium::io::Reader reader(change_file_name);
+        osmium::io::Reader reader(change_file_name, osmium::osm_entity_bits::object);
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));
