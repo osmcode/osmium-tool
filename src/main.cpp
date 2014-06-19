@@ -43,6 +43,8 @@ enum return_code : int {
 
 int main(int argc, char *argv[]) {
     std::string command = argv[0];
+
+    // remove path from command
     if (command.find_last_of("/") != std::string::npos) {
         command = command.substr(command.find_last_of("/") + 1);
     }
@@ -67,8 +69,8 @@ int main(int argc, char *argv[]) {
             arguments.erase(arguments.begin());
         }
     } else {
-        if (command.substr(0, 5) == "osmium-") {
-            command = command.substr(5);
+        if (command.substr(0, 7) == "osmium-") {
+            command = command.substr(7);
         }
     }
 
