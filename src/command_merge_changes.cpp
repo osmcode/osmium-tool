@@ -28,7 +28,7 @@ namespace po = boost::program_options;
 #include <osmium/io/any_input.hpp>
 #include <osmium/io/any_output.hpp>
 #include <osmium/io/output_iterator.hpp>
-#include <osmium/osm/object_pointer_collection.hpp>
+#include <osmium/object_pointer_collection.hpp>
 #include <osmium/osm/object_comparisons.hpp>
 
 #include "command_merge_changes.hpp"
@@ -120,7 +120,7 @@ bool CommandMergeChanges::run() {
     // this will contain all the buffers with the input data
     std::vector<osmium::memory::Buffer> changes;
 
-    osmium::osm::ObjectPointerCollection objects;
+    osmium::ObjectPointerCollection objects;
 
     // read all input files, keep the buffers around and add pointer
     // to each object to objects collection.
@@ -143,12 +143,12 @@ bool CommandMergeChanges::run() {
         // If the --simplify option was given we sort with the
         // largest version of each object first and then only
         // copy this last version of any object to the output_buffer.
-        objects.sort(osmium::osm::object_order_type_id_reverse_version());
-        std::unique_copy(objects.cbegin(), objects.cend(), out, osmium::osm::object_equal_type_id());
+        objects.sort(osmium::object_order_type_id_reverse_version());
+        std::unique_copy(objects.cbegin(), objects.cend(), out, osmium::object_equal_type_id());
     } else {
         // If the --simplify option was not given, this
         // is a straightforward sort and copy.
-        objects.sort(osmium::osm::object_order_type_id_version());
+        objects.sort(osmium::object_order_type_id_version());
         std::copy(objects.cbegin(), objects.cend(), out);
     }
 

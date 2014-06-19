@@ -27,7 +27,7 @@ namespace po = boost::program_options;
 #include <osmium/io/any_input.hpp>
 #include <osmium/io/any_output.hpp>
 #include <osmium/io/output_iterator.hpp>
-#include <osmium/osm/object_pointer_collection.hpp>
+#include <osmium/object_pointer_collection.hpp>
 #include <osmium/osm/object_comparisons.hpp>
 
 #include "command_apply_changes.hpp"
@@ -120,7 +120,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
 
 bool CommandApplyChanges::run() {
     std::vector<osmium::memory::Buffer> changes;
-    osmium::osm::ObjectPointerCollection objects;
+    osmium::ObjectPointerCollection objects;
 
     for (const std::string& change_file_name : m_change_filenames) {
         osmium::io::Reader reader(change_file_name);
@@ -142,7 +142,7 @@ bool CommandApplyChanges::run() {
         // If the --simplify option was given we sort with the
         // largest version of each object first and then only
         // copy this last version of any object to the output_buffer.
-        objects.sort(osmium::osm::object_order_type_id_reverse_version());
+        objects.sort(osmium::object_order_type_id_reverse_version());
 
         osmium::object_id_type id = 0;
         bool keep_deleted = !m_remove_deleted;
@@ -161,12 +161,12 @@ bool CommandApplyChanges::run() {
                        osmium::io::InputIterator<osmium::io::Reader, osmium::Object> {reader},
                        osmium::io::InputIterator<osmium::io::Reader, osmium::Object> {},
                        output_it,
-                       osmium::osm::object_order_type_id_reverse_version());
+                       osmium::object_order_type_id_reverse_version());
     } else {
         // If the --simplify option was not given, this
         // is a straightforward sort of the change files
         // and the a merge with the input file.
-        objects.sort(osmium::osm::object_order_type_id_version());
+        objects.sort(osmium::object_order_type_id_version());
 
         std::set_union(objects.begin(),
                        objects.end(),
