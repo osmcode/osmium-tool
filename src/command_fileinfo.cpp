@@ -3,7 +3,7 @@
 Osmium -- OpenStreetMap data manipulation command line tool
 http://osmcode.org/osmium
 
-Copyright (C) 2013  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013, 2014  Jochen Topf <jochen@topf.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ namespace po = boost::program_options;
 #include <osmium/io/any_input.hpp>
 #include <osmium/handler.hpp>
 #include <osmium/osm/entity_bits.hpp>
-#include <osmium/osm/ostream.hpp>
 #include <osmium/visitor.hpp>
 
 #include "command_fileinfo.hpp"
