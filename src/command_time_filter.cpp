@@ -151,7 +151,7 @@ bool CommandTimeFilter::run() {
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
     osmium::io::OutputIterator<osmium::io::Writer> out(writer);
 
-    typedef osmium::io::InputIterator<osmium::io::Reader, osmium::Object> object_iterator;
+    typedef osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> object_iterator;
 
     object_iterator object_it(reader);
     object_iterator object_end;
