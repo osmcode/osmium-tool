@@ -94,7 +94,18 @@ struct InfoHandler : public osmium::handler::Handler {
     uint64_t nodes = 0;
     uint64_t ways = 0;
     uint64_t relations = 0;
+    osmium::Timestamp first_timestamp = osmium::end_of_time();
+    osmium::Timestamp last_timestamp = osmium::start_of_time();
     CryptoPP::SHA hash {};
+
+    void osm_object(const osmium::OSMObject& object) {
+        if (object.timestamp() < first_timestamp) {
+            first_timestamp = object.timestamp();
+        }
+        if (object.timestamp() > last_timestamp) {
+            last_timestamp = object.timestamp();
+        }
+    }
 
     void node(const osmium::Node& node) {
         hash.Update(node.data(), node.byte_size());
@@ -155,6 +166,8 @@ bool CommandFileinfo::run() {
             osmium::apply(reader, info_handler);
             std::cout << "Data: " << "\n";
             std::cout << "  Bounding box: " << info_handler.bounds << "\n";
+            std::cout << "  First timestamp: " << info_handler.first_timestamp << "\n";
+            std::cout << "  Last timestamp: " << info_handler.last_timestamp << "\n";
 
             unsigned char digest[CryptoPP::SHA::DIGESTSIZE];
             info_handler.hash.Final(digest);
