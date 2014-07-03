@@ -91,12 +91,18 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
 struct InfoHandler : public osmium::handler::Handler {
 
     osmium::Box bounds;
+    uint64_t changesets = 0;
     uint64_t nodes = 0;
     uint64_t ways = 0;
     uint64_t relations = 0;
     osmium::Timestamp first_timestamp = osmium::end_of_time();
     osmium::Timestamp last_timestamp = osmium::start_of_time();
     CryptoPP::SHA hash {};
+
+    void changeset(const osmium::Changeset& changeset) {
+        hash.Update(changeset.data(), changeset.byte_size());
+        ++changesets;
+    }
 
     void osm_object(const osmium::OSMObject& object) {
         if (object.timestamp() < first_timestamp) {
@@ -163,6 +169,7 @@ bool CommandFileinfo::run() {
 
         if (m_extended) {
             InfoHandler info_handler;
+
             osmium::apply(reader, info_handler);
             std::cout << "Data: " << "\n";
             std::cout << "  Bounding box: " << info_handler.bounds << "\n";
@@ -176,6 +183,7 @@ bool CommandFileinfo::run() {
                 std::cout << static_cast<int>(digest[i]);
             }
             std::cout << std::dec << "\n";
+            std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
             std::cout << "  Number of nodes: " << info_handler.nodes << "\n";
             std::cout << "  Number of ways: " << info_handler.ways << "\n";
             std::cout << "  Number of relations: " << info_handler.relations << "\n";
