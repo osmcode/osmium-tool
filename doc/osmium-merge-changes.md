@@ -1,23 +1,23 @@
-% OSMIUM-CAT(1)
+% OSMIUM-MERGE-CHANGES(1)
 % Jochen Topf <jochen@topf.org>
 
 # NAME
 
-osmium-cat - Concatenate OSM files and convert to different formats.
+osmium-merge-changes - Merge several OSM change files into one.
 
 
 # SYNOPSIS
 
-**osmium cat** \[OPTIONS\] \[**-o** *OUTPUT-FILE*\] *INPUT-FILE...*
+**osmium merge-changes** \[OPTIONS\] *CHANGE-FILE...*
 
 
 # DESCRIPTION
 
-Concatenates all input files and writes the result to the output file. The data
-is not sorted in any way but strictly copied from input to output.
+Merges the content of all change files given on the command line into one large
+change file. Objects are sorted by type, ID, and version, so it doesn't matter
+in what order the change files are given or in what order they contain the data.
 
-Because this program supports several different input and output formats, it
-can be used to convert OSM files from one format into another.
+**Osmium merge** does its work in main memory, so all data has to fit in there!
 
 
 # OPTIONS
@@ -39,15 +39,14 @@ can be used to convert OSM files from one format into another.
 --output-format, -f FORMAT
 :   The format of the output file. Can be used to set the output file format
     if it can't be autodetected from the output file name.
-    **See osmium-file-formats**(5) or the libosmium manual for details.
-
---output-header OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed headers.
+    See **osmium-file-formats**(5) or the libosmium manual for details.
 
 --overwrite, -O
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
+
+--simplify, -s
+:   Only write the last version of any object to the output.
 
 --verbose, -v
 :   Set verbose mode. The program will output information about what it is
@@ -56,20 +55,16 @@ can be used to convert OSM files from one format into another.
 
 # DIAGNOSTICS
 
-**osmium cat** exits with code 0 if everything went alright, it exits
+**osmium merge** exits with code 0 if everything went alright, it exits
 with code 2 if there was a problem with the command line arguments,
 and with exit code 1 if some other error occurred.
 
 
 # EXAMPLES
 
-Convert a PBF file to a compressed XML file:
+Merge all changes in *changes* directory into *all.osc.gz*:
 
-    osmium cat -o out.osm.bz2 in.osm.pbf
-
-Concatenate all change files in the 'changes' directory into one:
-
-    osmium cat -o all-changes.osc.gz changes/*.osc.gz
+    osmium merge-changes -o all.osc.gz changes/*.gz
 
 
 # SEE ALSO

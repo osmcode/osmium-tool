@@ -24,7 +24,7 @@ Run **osmium help** *COMMAND* to get more information about a command.
 --help, -h
 :   Show usage and list of commands.
 
---version, -v
+--version
 :   Show program version.
 
 
@@ -33,26 +33,21 @@ Run **osmium help** *COMMAND* to get more information about a command.
 apply-changes
 :   Apply OSM change file(s) to OSM data file.
 cat
-:   Concatenate OSM files and convert OSM files between different formats.
-dump
-:   Dump contents of OSM file.
+:   Concatenate OSM files and convert to different formats.
 fileinfo
 :   Show information about an OpenStreetMap file.
 help
 :   Show help about commands.
 merge-changes
 :   Merge several OSM change files into one.
-
-
-# COPYRIGHT
-
-Copyright (C) 2013  Jochen Topf <jochen@topf.org>.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
+time-filter
+:   Filter OSM data by time from a history file.
 
 
 # SEE ALSO
 
-<http://osmcode.org/osmium>
+* **osmium-apply-changes**(1), **osmium-cat**(1), **osmium-fileinfo**(1),
+  **osmium-merge-changes**(1), **osmium-time-filter**(1), **osmium-file-formats**(5)
+* [Osmium website](http://osmcode.org/osmium)
+* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

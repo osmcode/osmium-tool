@@ -1,23 +1,26 @@
-% OSMIUM-CAT(1)
+% OSMIUM-APPLY-CHANGES(1)
 % Jochen Topf <jochen@topf.org>
 
 # NAME
 
-osmium-cat - Concatenate OSM files and convert to different formats.
+osmium-apply-changes - Apply OSM change file(s) to OSM data file.
 
 
 # SYNOPSIS
 
-**osmium cat** \[OPTIONS\] \[**-o** *OUTPUT-FILE*\] *INPUT-FILE...*
+**osmium apply-changes** \[OPTIONS\] *INPUT-FILE* *CHANGE-FILE...*
 
 
 # DESCRIPTION
 
-Concatenates all input files and writes the result to the output file. The data
-is not sorted in any way but strictly copied from input to output.
+Merges the content of all change files given on the command line and applies
+those changes to the INPUT-FILE.
 
-Because this program supports several different input and output formats, it
-can be used to convert OSM files from one format into another.
+Objects in change files are sorted by type, ID, and version, so it doesn't matter
+in what order the change files are given or in what order they contain the data.
+
+**Osmium apply** keeps the contents of the change files in main memory, so the
+data has to fit in there!
 
 
 # OPTIONS
@@ -39,15 +42,18 @@ can be used to convert OSM files from one format into another.
 --output-format, -f FORMAT
 :   The format of the output file. Can be used to set the output file format
     if it can't be autodetected from the output file name.
-    **See osmium-file-formats**(5) or the libosmium manual for details.
-
---output-header OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed headers.
+    See **osmium-file-formats**(5) or the libosmium manual for details.
 
 --overwrite, -O
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
+
+--remove-deleted, -r
+:   Remove deleted objects from the output. If this is not set, deleted objects
+    will be in the output with the visible flag set to false.
+
+--simplify, -s
+:   Only write the last version of any object to the output.
 
 --verbose, -v
 :   Set verbose mode. The program will output information about what it is
@@ -63,13 +69,9 @@ and with exit code 1 if some other error occurred.
 
 # EXAMPLES
 
-Convert a PBF file to a compressed XML file:
+Apply change file 362.osc.gz to planet file:
 
-    osmium cat -o out.osm.bz2 in.osm.pbf
-
-Concatenate all change files in the 'changes' directory into one:
-
-    osmium cat -o all-changes.osc.gz changes/*.osc.gz
+    osmium apply-changes -o new.osm.pbf planet.osm.pbf 362.osc.gz
 
 
 # SEE ALSO

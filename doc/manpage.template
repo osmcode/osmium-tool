@@ -1,0 +1,30 @@
+$if(has-tables)$
+.\"t
+$endif$
+.TH "$title$" "$section$" "$date$" "$footer$" "$header$"
+$for(header-includes)$
+$header-includes$
+$endfor$
+$for(include-before)$
+$include-before$
+$endfor$
+$body$
+$for(include-after)$
+$include-after$
+$endfor$
+$if(author)$
+.SH COPYRIGHT
+.PP
+Copyright (C) 2013\-2014 Jochen Topf <jochen@topf.org>.
+License GPLv3+: GNU GPL version 3 or later
+<http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+.SH CONTACT
+.PP
+Developers can be contacted through the OSM dev mailinglist
+(http://lists.openstreetmap.org/cgi-bin/mailman/listinfo/dev).
+Bugs should be reported to https://github.com/osmcode/osmium-tool.
+.SH AUTHORS
+$for(author)$$author$$sep$; $endfor$.
+$endif$
