@@ -102,14 +102,14 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
 
     m_vout << "Command line options and default settings:\n";
     m_vout << "  generator: " << m_generator << "\n";
-    m_vout << "  input-filenames: \n";
+    m_vout << "  input filenames: \n";
     for (const auto& fn : m_input_filenames) {
         m_vout << "    " << fn << "\n";
     }
-    m_vout << "  output-filename: " << m_output_filename << "\n";
-    m_vout << "  input-format: " << m_input_format << "\n";
-    m_vout << "  output-format: " << m_output_format << "\n";
-    m_vout << "  output-header: \n";
+    m_vout << "  output filename: " << m_output_filename << "\n";
+    m_vout << "  input format: " << m_input_format << "\n";
+    m_vout << "  output format: " << m_output_format << "\n";
+    m_vout << "  output header: \n";
     for (const auto& h : m_output_headers) {
         m_vout << "    " << h << "\n";
     }

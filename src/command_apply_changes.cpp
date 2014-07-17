@@ -37,6 +37,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     try {
         po::options_description cmdline("Allowed options");
         cmdline.add_options()
+        ("verbose,v", "Set verbose mode")
         ("output,o", po::value<std::string>(), "Output file")
         ("output-format,f", po::value<std::string>(), "Format of output file")
         ("input-format,F", po::value<std::string>(), "Format of input file")
@@ -98,6 +99,10 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
             m_generator = vm["generator"].as<std::string>();
         }
 
+        if (vm.count("verbose")) {
+            m_vout.verbose(true);
+        }
+
     } catch (boost::program_options::error& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;
         return false;
@@ -115,12 +120,27 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
 
     m_output_file = osmium::io::File(m_output_filename, m_output_format);
 
+    m_vout << "Started osmium apply-changes\n";
+
+    m_vout << "Command line options and default settings:\n";
+    m_vout << "  generator: " << m_generator << "\n";
+    m_vout << "  input data file name: " << m_input_filename << "\n";
+    m_vout << "  input change file names: \n";
+    for (const auto& fn : m_change_filenames) {
+        m_vout << "    " << fn << "\n";
+    }
+    m_vout << "  output filename: " << m_output_filename << "\n";
+    m_vout << "  input format: " << m_input_format << "\n";
+    m_vout << "  output format: " << m_output_format << "\n";
+
     return true;
 }
 
 bool CommandApplyChanges::run() {
     std::vector<osmium::memory::Buffer> changes;
     osmium::ObjectPointerCollection objects;
+
+    m_vout << "Reading change file contents...\n";
 
     for (const std::string& change_file_name : m_change_filenames) {
         osmium::io::Reader reader(change_file_name, osmium::osm_entity_bits::object);
@@ -130,11 +150,13 @@ bool CommandApplyChanges::run() {
         }
     }
 
+    m_vout << "Opening input file...\n";
     osmium::io::Reader reader(m_input_filename, osmium::osm_entity_bits::object);
 
     osmium::io::Header header = reader.header();
     header.set("generator", m_generator);
 
+    m_vout << "Opening output file...\n";
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
     osmium::io::OutputIterator<osmium::io::Writer> out(writer);
 
@@ -142,6 +164,7 @@ bool CommandApplyChanges::run() {
         // If the --simplify option was given we sort with the
         // largest version of each object first and then only
         // copy this last version of any object to the output_buffer.
+        m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_reverse_version());
 
         osmium::object_id_type id = 0;
@@ -156,6 +179,7 @@ bool CommandApplyChanges::run() {
             }
         });
 
+        m_vout << "Applying changes and writing them to output...\n";
         std::set_union(objects.begin(),
                        objects.end(),
                        osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> {reader},
@@ -166,8 +190,10 @@ bool CommandApplyChanges::run() {
         // If the --simplify option was not given, this
         // is a straightforward sort of the change files
         // and then a merge with the input file.
+        m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_version());
 
+        m_vout << "Applying changes and writing them to output...\n";
         std::set_union(objects.begin(),
                        objects.end(),
                        osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> {reader},
@@ -177,6 +203,8 @@ bool CommandApplyChanges::run() {
 
     out.flush();
     writer.close();
+
+    m_vout << "Done.\n";
 
     return true;
 }

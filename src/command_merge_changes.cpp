@@ -38,6 +38,7 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     try {
         po::options_description cmdline("Allowed options");
         cmdline.add_options()
+        ("verbose,v", "Set verbose mode")
         ("output,o", po::value<std::string>(), "Output file")
         ("output-format,f", po::value<std::string>(), "Format of output file")
         ("input-format,F", po::value<std::string>(), "Format of input files")
@@ -88,6 +89,10 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
             m_generator = vm["generator"].as<std::string>();
         }
 
+        if (vm.count("verbose")) {
+            m_vout.verbose(true);
+        }
+
     } catch (boost::program_options::error& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;
         return false;
@@ -113,6 +118,18 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
 
     m_output_file = osmium::io::File(m_output_filename, m_output_format);
 
+    m_vout << "Started osmium merge-changes\n";
+
+    m_vout << "Command line options and default settings:\n";
+    m_vout << "  generator: " << m_generator << "\n";
+    m_vout << "  input change file names: \n";
+    for (const auto& fn : m_input_filenames) {
+        m_vout << "    " << fn << "\n";
+    }
+    m_vout << "  output filename: " << m_output_filename << "\n";
+    m_vout << "  input format: " << m_input_format << "\n";
+    m_vout << "  output format: " << m_output_format << "\n";
+
     return true;
 }
 
@@ -124,6 +141,7 @@ bool CommandMergeChanges::run() {
 
     // read all input files, keep the buffers around and add pointer
     // to each object to objects collection.
+    m_vout << "Reading change file contents...\n";
     for (const std::string& change_file_name : m_input_filenames) {
         osmium::io::Reader reader(change_file_name, osmium::osm_entity_bits::object);
         while (osmium::memory::Buffer buffer = reader.read()) {
@@ -134,6 +152,8 @@ bool CommandMergeChanges::run() {
 
     osmium::io::Header header;
     header.set("generator", m_generator);
+
+    m_vout << "Opening output file...\n";
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
     osmium::io::OutputIterator<osmium::io::Writer> out(writer);
 
@@ -143,17 +163,23 @@ bool CommandMergeChanges::run() {
         // If the --simplify option was given we sort with the
         // largest version of each object first and then only
         // copy this last version of any object to the output_buffer.
+        m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_reverse_version());
+        m_vout << "Writing last version of each object to output...\n";
         std::unique_copy(objects.cbegin(), objects.cend(), out, osmium::object_equal_type_id());
     } else {
         // If the --simplify option was not given, this
         // is a straightforward sort and copy.
+        m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_version());
+        m_vout << "Writing all objects to output...\n";
         std::copy(objects.cbegin(), objects.cend(), out);
     }
 
     out.flush();
     writer.close();
+
+    m_vout << "Done.\n";
 
     return true;
 }

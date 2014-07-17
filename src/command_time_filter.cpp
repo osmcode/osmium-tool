@@ -136,18 +136,20 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
         }
     }
 
-    m_vout << "Start osmium-time-filter\n";
+    m_vout << "Started osmium time-filter\n";
     m_vout << "Filtering from time " << m_from.to_iso() << " to " << m_to.to_iso() << "\n";
 
     return true;
 }
 
 bool CommandTimeFilter::run() {
+    m_vout << "Opening input file...\n";
     osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::object);
 
     osmium::io::Header header = reader.header();
     header.set("generator", m_generator);
 
+    m_vout << "Opening output file...\n";
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
     osmium::io::OutputIterator<osmium::io::Writer> out(writer);
 
@@ -158,6 +160,7 @@ bool CommandTimeFilter::run() {
 
     typedef osmium::DiffIterator<object_iterator> diff_iterator;
 
+    m_vout << "Filtering data...\n";
     std::copy_if(
         diff_iterator(object_it, object_end),
         diff_iterator(object_end, object_end),
@@ -170,6 +173,8 @@ bool CommandTimeFilter::run() {
 
     out.flush();
     writer.close();
+
+    m_vout << "Done.\n";
 
     return true;
 }
