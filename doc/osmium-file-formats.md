@@ -38,6 +38,9 @@ The following options can be added when writing OSM files:
 xml_change_format=true/false
 :   Enable/disable XML change format. Same as *.osc*.
 
+force_visible_flag=true/false (*default: false*)
+:   Force writing of visible flag, even for normal OSM XML files.
+
 pbf_dense_nodes=true/false (*default: true*)
 :   Enable/disable DenseNodes format for PBF files. 
 

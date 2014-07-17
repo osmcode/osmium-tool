@@ -43,7 +43,7 @@ can be used to convert OSM files from one format into another.
 
 --output-header OPTION
 :   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed headers.
+    *libosmium manual* for a list of allowed header options.
 
 --overwrite, -O
 :   Allow an existing output file to be overwritten. Normally **osmium** will

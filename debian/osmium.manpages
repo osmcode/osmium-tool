@@ -1,4 +1,7 @@
 doc/osmium.1
+doc/osmium-apply-changes.1
 doc/osmium-cat.1
+doc/osmium-file-formats.5
 doc/osmium-fileinfo.1
+doc/osmium-merge-changes.1
 doc/osmium-time-filter.1
