@@ -43,6 +43,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
         ("generator", po::value<std::string>(), "Generator setting for file header")
         ("output-header", po::value<std::vector<std::string>>(), "Add output header")
         ("overwrite,O", "Allow existing output file to be overwritten")
+        ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
         ;
 
         po::options_description hidden("Hidden options");
@@ -93,6 +94,24 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
             m_output_overwrite = osmium::io::overwrite::allow;
         }
 
+        if (vm.count("object-type")) {
+            m_osm_entity_bits = osmium::osm_entity_bits::nothing;
+            for (const auto& t : vm["object-type"].as<std::vector<std::string>>()) {
+                if (t == "node") {
+                    m_osm_entity_bits |= osmium::osm_entity_bits::node;
+                } else if (t == "way") {
+                    m_osm_entity_bits |= osmium::osm_entity_bits::way;
+                } else if (t == "relation") {
+                    m_osm_entity_bits |= osmium::osm_entity_bits::relation;
+                } else if (t == "changeset") {
+                    m_osm_entity_bits |= osmium::osm_entity_bits::changeset;
+                } else {
+                    std::cerr << "Unknown object type '" << t << "' (Allowed are 'node', 'way', 'relation', and 'changeset').\n";
+                    return false;
+                }
+            }
+        }
+
     } catch (boost::program_options::error& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;
         return false;
@@ -113,6 +132,20 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     for (const auto& h : m_output_headers) {
         m_vout << "    " << h << "\n";
     }
+    m_vout << "  object types:";
+    if (m_osm_entity_bits & osmium::osm_entity_bits::node) {
+        m_vout << " node";
+    }
+    if (m_osm_entity_bits & osmium::osm_entity_bits::way) {
+        m_vout << " way";
+    }
+    if (m_osm_entity_bits & osmium::osm_entity_bits::relation) {
+        m_vout << " relation";
+    }
+    if (m_osm_entity_bits & osmium::osm_entity_bits::changeset) {
+        m_vout << " changeset";
+    }
+    m_vout << "\n";
 
     if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
         std::cerr << "When writing to STDOUT you need to use the --output-format,f option to declare the file format.\n";
@@ -147,7 +180,7 @@ bool CommandCat::run() {
     try {
         if (m_input_files.size() == 1) { // single input file
             m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";
-            osmium::io::Reader reader(m_input_files[0]);
+            osmium::io::Reader reader(m_input_files[0], m_osm_entity_bits);
             osmium::io::Header header = reader.header();
             header.set("generator", m_generator);
             for (const auto& h : m_output_headers) {
@@ -166,7 +199,7 @@ bool CommandCat::run() {
             osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
             for (const auto& input_file : m_input_files) {
                 m_vout << "Copying input file '" << input_file.filename() << "'\n";
-                osmium::io::Reader reader(input_file);
+                osmium::io::Reader reader(input_file, m_osm_entity_bits);
                 while (osmium::memory::Buffer buffer = reader.read()) {
                     writer(std::move(buffer));
                 }

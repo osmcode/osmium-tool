@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/overwrite.hpp>
+#include <osmium/osm/entity_bits.hpp>
 
 #include "osmc.hpp"
 
@@ -41,6 +42,7 @@ class CommandCat : public Command {
     osmium::io::File m_output_file;
     std::vector<osmium::io::File> m_input_files;
     osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
+    osmium::osm_entity_bits::type m_osm_entity_bits = osmium::osm_entity_bits::all;
 
 public:
 

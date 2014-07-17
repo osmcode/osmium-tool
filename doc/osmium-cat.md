@@ -49,6 +49,10 @@ can be used to convert OSM files from one format into another.
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
+--object-type, -t TYPE
+:   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
+    By default all types are read. This option can be given multiple times.
+
 --verbose, -v
 :   Set verbose mode. The program will output information about what it is
     doing to *stderr*.
@@ -70,6 +74,10 @@ Convert a PBF file to a compressed XML file:
 Concatenate all change files in the 'changes' directory into one:
 
     osmium cat -o all-changes.osc.gz changes/*.osc.gz
+
+Copy nodes and ways from source to destination file:
+
+    osmium cat -o dest.osm.pbf source.osm.pbf -t node -t way
 
 
 # SEE ALSO
