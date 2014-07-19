@@ -19,6 +19,8 @@ CXXFLAGS += -O3
 CXXFLAGS += -std=c++11 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 CXXFLAGS += -I../libosmium/include
 
+PREFIX ?= /usr
+
 OS:=$(shell uname -s)
 ifeq ($(OS),Darwin)
 	CXXFLAGS += -stdlib=libc++
@@ -66,7 +68,7 @@ src/command_%.o: src/command_%.cpp src/command_%.hpp $(INCLUDES)
 osmium: src/main.o $(COMMANDS_O)
 	$(CXX) -o $@ $< $(COMMANDS_O) $(LDFLAGS) $(LIB_PBF) $(LIB_EXPAT) $(LIB_GZIP) $(LIB_BZIP2) $(LIB_PRGOPT) $(LIB_CRYPTO)
 
-check:
+cppcheck:
 	cppcheck --std=c++11 $(CPPCHECK_OPTIONS) src/*pp
 
 indent:
@@ -80,10 +82,10 @@ doc:
 	$(MAKE) -C doc
 
 install:
-	install -m 755 -g $(INSTALL_GROUP) -o root -d $(DESTDIR)/usr/bin
-	install -m 755 -g $(INSTALL_GROUP) -o root -d $(DESTDIR)/usr/share/doc/osmium
-	install -m 755 -g $(INSTALL_GROUP) -o root osmium $(DESTDIR)/usr/bin/osmium
-	install -m 644 -g $(INSTALL_GROUP) -o root README.md $(DESTDIR)/usr/share/doc/osmium/README.md
+	install -m 755 -g $(INSTALL_GROUP) -o root -d $(DESTDIR)$(PREFIX)/bin
+	install -m 755 -g $(INSTALL_GROUP) -o root -d $(DESTDIR)$(PREFIX)/share/doc/osmium
+	install -m 755 -g $(INSTALL_GROUP) -o root osmium $(DESTDIR)$(PREFIX)/bin/osmium
+	install -m 644 -g $(INSTALL_GROUP) -o root README.md $(DESTDIR)$(PREFIX)/share/doc/osmium/README.md
 
 deb:
 	debuild -I -us -uc
