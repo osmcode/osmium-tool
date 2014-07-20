@@ -2,7 +2,7 @@ Source: osmium
 Section: utils
 Priority: optional
 Maintainer: Jochen Topf <jochen@topf.org>
-Build-Depends: debhelper (>= 7),
+Build-Depends: debhelper (>= 9),
                libboost-program-options-dev,
                libbz2-dev,
                libcrypto++-dev,
