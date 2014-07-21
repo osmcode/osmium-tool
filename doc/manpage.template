@@ -23,7 +23,7 @@ There is NO WARRANTY, to the extent permitted by law.
 .SH CONTACT
 .PP
 Developers can be contacted through the OSM dev mailinglist
-(http://lists.openstreetmap.org/cgi-bin/mailman/listinfo/dev).
+(https://lists.openstreetmap.org/listinfo/dev).
 Bugs should be reported to https://github.com/osmcode/osmium-tool.
 .SH AUTHORS
 $for(author)$$author$$sep$; $endfor$.
