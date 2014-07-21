@@ -29,7 +29,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
 
-#include <crypto++/sha.h>
+#ifdef USE_CRYPTOPP
+# include <cryptopp/sha.h>
+#else
+# include <crypto++/sha.h>
+#endif
 
 #include <osmium/io/any_input.hpp>
 #include <osmium/handler.hpp>
