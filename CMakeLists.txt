@@ -1,44 +1,72 @@
+#----------------------------------------------------------------------
+#
+#  Osmium Tool CMakeLists.txt
+#
+#----------------------------------------------------------------------
+
+cmake_minimum_required(VERSION 2.8.5)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+
+#----------------------------------------------------------------------
+#
+#  Projection version
+#
+#----------------------------------------------------------------------
 
 project(osmium)
 
-set(OSMIUM_VERSION 0.0.1)
+set(OSMIUM_VERSION_MAJOR 0)
+set(OSMIUM_VERSION_MINOR 0)
+set(OSMIUM_VERSION_PATCH 1)
 
-cmake_minimum_required(VERSION 2.8.5)
+set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERSION_PATCH})
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 #----------------------------------------------------------------------
+#
+#  Find external dependencies
+#
+#----------------------------------------------------------------------
 find_package(Threads REQUIRED)
+list(APPEND LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 
 find_package(ZLIB REQUIRED)
 include_directories(${ZLIB_INCLUDE_DIRS})
+list(APPEND LIBRARIES ${ZLIB_LIBRARIES})
 
 find_package(BZip2 REQUIRED)
 include_directories(${BZIP2_INCLUDE_DIRS})
+list(APPEND LIBRARIES ${BZIP2_LIBRARIES})
 
 find_package(EXPAT REQUIRED)
 include_directories(${EXPAT_INCLUDE_DIRS})
+list(APPEND LIBRARIES ${EXPAT_LIBRARIES})
 
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
+list(APPEND LIBRARIES ${PROTOBUF_LITE_LIBRARIES})
 
 find_package(Boost COMPONENTS program_options REQUIRED)
 include_directories(${BOOST_INCLUDE_DIRS})
+list(APPEND LIBRARIES ${Boost_LIBRARIES})
 
 find_package(Cryptopp REQUIRED)
 include_directories(${CRYPTOPP_INCLUDE_DIRS})
+list(APPEND LIBRARIES ${CRYPTOPP_LIBRARIES})
 
 find_package(OSMPBF REQUIRED)
 include_directories(${OSMPBF_INCLUDE_DIRS})
+list(APPEND LIBRARIES ${OSMPBF_LIBRARIES})
 
 find_package(Osmium REQUIRED)
 include_directories(${OSMIUM_INCLUDE_DIRS})
 
+
 #----------------------------------------------------------------------
-add_subdirectory(src)
-
-install(FILES README.md DESTINATION share/doc/osmium)
-
+#
+#  Optional "cppcheck" target that checks C++ code
+#
 #----------------------------------------------------------------------
 message(STATUS "Looking for cppcheck")
 find_program(CPPCHECK cppcheck)
@@ -54,9 +82,13 @@ if(CPPCHECK)
 else()
     message(STATUS "Looking for cppcheck - not found")
     message(STATUS "  Make target cppcheck not available")
-endif()
+endif(CPPCHECK)
 
 
+#----------------------------------------------------------------------
+#
+#  Optional "man" target to generate man pages
+#
 #----------------------------------------------------------------------
 message(STATUS "Looking for pandoc")
 find_program(PANDOC pandoc)
@@ -89,6 +121,59 @@ if(PANDOC)
 else()
     message(STATUS "Looking for pandoc - not found")
     message(STATUS "  Manual pages will not be built")
-endif()
+endif(PANDOC)
+
+
+#----------------------------------------------------------------------
+#
+#  Create src/config.hpp
+#
+#----------------------------------------------------------------------
+configure_file(
+    ${PROJECT_SOURCE_DIR}/src/config.hpp.in
+    ${PROJECT_BINARY_DIR}/src/config.hpp
+)
+
+include_directories(${PROJECT_BINARY_DIR}/src)
+
+
+#----------------------------------------------------------------------
+#
+#  C++ compilation options
+#
+#----------------------------------------------------------------------
+add_definitions(-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64)
+
+add_compile_options(-std=c++11)
+
+add_compile_options(
+    -Wall
+    -Wextra
+    -pedantic
+    -Wredundant-decls
+    -Wdisabled-optimization
+    -Wctor-dtor-privacy
+    -Wnon-virtual-dtor
+    -Woverloaded-virtual
+    -Wsign-promo
+    -Wold-style-cast
+)
+
+# always compile with optimization, even in debug mode
+set(CMAKE_CXX_FLAGS_DEBUG -O3)
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
+
+if(APPLE)
+    add_compile_options(-stdlib=libc++)
+    set(LDFLAGS ${LDFLAGS} -stdlib=libc++)
+endif(APPLE)
+
+
+#----------------------------------------------------------------------
+
+add_subdirectory(src)
+
+install(FILES README.md DESTINATION share/doc/osmium)
+
 
 #----------------------------------------------------------------------
