@@ -1,0 +1,151 @@
+#compdef osmium
+#
+# ZSH completion for Osmium tool.
+#
+# To test this file:
+# 1) Comment out last line
+# 2) Call: . ./zsh_osmium
+# 3) Call: compdef _osmium osmium
+#
+# To read more about what is happening here:
+#  zshcompsys(1)
+#  http://bewatermyfriend.org/p/2012/003/
+#  http://zsh.sourceforge.net/Guide/zshguide06.html
+#
+
+local -a osmium_commands
+osmium_commands=(apply-changes cat fileinfo help merge-changes time-filter)
+
+local -a osmium_help_topics
+osmium_help_topics=(${osmium_commands} file-formats)
+
+osmium_file_glob="'*.(osm|osh|osc|pbf|osm.pbf) *.(osm|osh|osc).(bz2|gz)'"
+
+_osmium() {
+    if (( CURRENT > 2 )); then
+        # Remember the subcommand name
+        local cmd=${words[2]}
+        # Set the context for the subcommand.
+        curcontext="${curcontext%:*:*}:osmium-$cmd"
+        # Narrow the range of words we are looking at to exclude `osmium'
+        (( CURRENT-- ))
+        shift words
+        # Run the completion for the subcommand
+        _osmium-$cmd
+    else
+        _describe -t osmium-commands 'osmium command' osmium_commands
+    fi
+}
+
+_osmium-apply-changes() {
+    _arguments : \
+        '--generator[generator setting for output file header]:generator:' \
+        '(--input-format)-F[format of input OSM file(s)]:OSM file format:_osmium_file_formats' \
+        '(-F)--input-format[format of input OSM file(s)]:OSM file format:_osmium_file_formats' \
+        "(--output)-o[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        "(-o)--output[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        '(--output-format)-f[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(--overwrite)-O[allow overwriting of existing output file]' \
+        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '(--remove-deleted)-r[remove deleted objects]' \
+        '(-r)--remove-deleted[remove deleted objects]' \
+        '(--simplify)-s[only write last version of any object]' \
+        '(-s)--simplify[only write last version of any object]' \
+        '(--verbose)-v[set verbose mode]' \
+        '(-v)--verbose[set verbose mode]' \
+        "*::input OSM files:_files -g ${osmium_file_glob}"
+}
+
+_osmium-cat() {
+    _arguments : \
+        '--generator[generator setting for output file header]:generator:' \
+        '(--input-format)-F[format of input OSM file(s)]:OSM file format:_osmium_file_formats' \
+        '(-F)--input-format[format of input OSM file(s)]:OSM file format:_osmium_file_formats' \
+        "(--output)-o[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        "(-o)--output[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        '(--output-format)-f[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '--output-header[add option for output header]:output header:' \
+        '(--overwrite)-O[allow overwriting of existing output file]' \
+        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '*-t[read only object of given output types]:OSM object type:_osmium_object_type' \
+        '*--object-type[read only object of given output types]:OSM object type:_osmium_object_type' \
+        '(--verbose)-v[set verbose mode]' \
+        '(-v)--verbose[set verbose mode]' \
+        "*::input OSM file:_files -g ${osmium_file_glob}"
+}
+
+_osmium-fileinfo() {
+    _arguments : \
+        '(--extended)-e[show extended info (reads entire file)]' \
+        '(-e)--extended[show extended info (reads entire file)]' \
+        '(-F)--input-format=[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        '(--input-format)-F=[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        "*::input OSM file:_files -g ${osmium_file_glob}"
+}
+
+_osmium-merge-changes() {
+    _arguments : \
+        '--generator[generator setting for output file header]:generator:' \
+        '(--input-format)-F[format of input OSM file(s)]:OSM file format:_osmium_file_formats' \
+        '(-F)--input-format[format of input OSM file(s)]:OSM file format:_osmium_file_formats' \
+        "(--output)-o[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        "(-o)--output[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        '(--output-format)-f[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(--overwrite)-O[allow overwriting of existing output file]' \
+        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '(--simplify)-s[only write last version of any object]' \
+        '(-s)--simplify[only write last version of any object]' \
+        '(--verbose)-v[set verbose mode]' \
+        '(-v)--verbose[set verbose mode]' \
+        "*::input OSM files:_files -g ${osmium_file_glob}"
+}
+
+_osmium-time-filter() {
+    _arguments : \
+        '--generator[generator setting for output file header]:generator:' \
+        '(--input-format)-F[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        '(-F)--input-format[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        "(--output)-o[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        "(-o)--output[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        '(--output-format)-f[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(--overwrite)-O[allow overwriting of existing output file]' \
+        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '(--verbose)-v[set verbose mode]' \
+        '(-v)--verbose[set verbose mode]' \
+        "1::input OSM file:_files -g ${osmium_file_glob}" \
+        "2::start time (format\: yyyy-mm-ddThh\:mm\:ssZ):" \
+        "3::end time (format\: yyyy-mm-ddThh\:mm\:ssZ):"
+}
+
+_osmium_file_formats() {
+    _values 'OSM file formats' \
+        'osm[XML data format]' \
+        'osm.gz[XML data format (compressed with gzip)]' \
+        'osm.bz2[XML data format (compressed with bzip2)]' \
+        'osh[XML history format]' \
+        'osh.gz[XML history format (compressed with gzip)]' \
+        'osh.bz2[XML history format (compressed with bzip2)]' \
+        'osc[XML change format]' \
+        'osc.gz[XML change format (compressed with gzip)]' \
+        'osc.bz2[XML change format (compressed with bzip2)]' \
+        'pbf[PBF format]'
+}
+
+_osmium_object_type() {
+    _values 'OSM object type' \
+        'node' \
+        'way' \
+        'relation' \
+        'changeset'
+}
+
+_osmium-help() {
+    _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
+}
+
+_osmium "$@"
+
