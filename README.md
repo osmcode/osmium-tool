@@ -6,10 +6,11 @@ Command line tool for working with OpenStreetMap data based on the Osmium librar
 
 ## Prerequisites
 
-You need a C++11 compliant compiler. GCC 4.7.3 and clang 3.2 are known to work.
+You need a C++11 compliant compiler. GCC 4.8 and clang 3.2 are known to work. You
+also need the following libraries:
 
     Osmium Library
-        http://osmcode.org/osmium
+        http://osmcode.org/libosmium
 
     boost-program-options (for parsing command line options)
         http://www.boost.org/doc/libs/1_54_0/doc/html/program_options.html
@@ -39,16 +40,36 @@ You need a C++11 compliant compiler. GCC 4.7.3 and clang 3.2 are known to work.
         http://www.cryptopp.com/
         Debian/Ubuntu: libcrypto++-dev
 
+    cmake (for building)
+        http://www.cmake.org/
+        Debian/Ubuntu: cmake
+
 
 ## Building
 
-Type 'make'.
+Osmium uses CMake for its builds. On Unix/Linux systems compile as follows:
+
+```
+mkdir build
+cd build
+cmake ..
+make
+```
+
+To set the build type call cmake with `-DCMAKE_BUILD_TYPE=type`. Possible
+values are empty, Debug, Release, RelWithDebInfo and MinSizeRel.
 
 
 ## Documentation
 
 There are man pages in the 'doc' directory. To build them you need 'pandoc'.
-Run 'make doc' to build.
+Run 'make man' to build.
+
+
+## Building Debian Package
+
+A `debian` directory is provided for building (unofficial) Debian packages.
+Call `debuild -I -us -uc` to build the package.
 
 
 ## License

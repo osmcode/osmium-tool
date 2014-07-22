@@ -3,11 +3,13 @@ Section: utils
 Priority: optional
 Maintainer: Jochen Topf <jochen@topf.org>
 Build-Depends: debhelper (>= 9),
+               cmake (>= 2.8),
                libboost-program-options-dev,
                libbz2-dev,
                libcrypto++-dev,
                libexpat1-dev,
                libosmpbf-dev,
+               libprotobuf-c-dev | libprotobuf-c0-dev (>= 0.14),
                pandoc,
                zlib1g-dev
 Standards-Version: 3.9.5

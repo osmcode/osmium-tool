@@ -118,6 +118,13 @@ if(PANDOC)
     endforeach()
 
     add_custom_target(man ALL DEPENDS ${MAN_FILES})
+
+    foreach(m IN LISTS MAN_PAGES_1)
+        install(FILES ${CMAKE_BINARY_DIR}/${m} DESTINATION share/man/man1)
+    endforeach()
+    foreach(m IN LISTS MAN_PAGES_5)
+        install(FILES ${CMAKE_BINARY_DIR}/${m} DESTINATION share/man/man5)
+    endforeach()
 else()
     message(STATUS "Looking for pandoc - not found")
     message(STATUS "  Manual pages will not be built")
