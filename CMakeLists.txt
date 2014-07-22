@@ -126,6 +126,24 @@ endif(PANDOC)
 
 #----------------------------------------------------------------------
 #
+#  Optional "format" target that formats C++ code
+#
+#----------------------------------------------------------------------
+message(STATUS "Looking for astyle")
+find_program(ASTYLE astyle)
+
+if(ASTYLE)
+    add_custom_target(format astyle --style=java --indent-namespaces --indent-switches --pad-header --lineend=linux --suffix=none --recursive src/*pp)
+    message(STATUS "Looking for astyle - found")
+    message(STATUS "  Adding 'indent' target")
+else()
+    message(STATUS "Looking for astyle - not found")
+    message(STATUS "  No 'indent' target available")
+endif(ASTYLE)
+
+
+#----------------------------------------------------------------------
+#
 #  Create src/config.hpp
 #
 #----------------------------------------------------------------------
