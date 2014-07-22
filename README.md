@@ -69,7 +69,9 @@ Run 'make man' to build.
 ## Building Debian Package
 
 A `debian` directory is provided for building (unofficial) Debian packages.
-Call `debuild -I -us -uc` to build the package.
+Call `debuild -I -us -uc` to build the package. Note that there currently is no
+libosmium package with the new libosmium version needed for the Osmium tool, so
+the build dependencies are not complete.
 
 
 ## License

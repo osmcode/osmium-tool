@@ -198,7 +198,5 @@ endif(APPLE)
 
 add_subdirectory(src)
 
-install(FILES README.md DESTINATION share/doc/osmium)
-
 
 #----------------------------------------------------------------------
