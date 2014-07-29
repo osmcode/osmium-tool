@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
 
+#include "command_fileinfo.hpp"
+
 #ifdef USE_CRYPTOPP
 # include <cryptopp/sha.h>
 #else
@@ -39,8 +41,6 @@ namespace po = boost::program_options;
 #include <osmium/handler.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/visitor.hpp>
-
-#include "command_fileinfo.hpp"
 
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
