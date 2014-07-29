@@ -30,38 +30,83 @@ set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERS
 #----------------------------------------------------------------------
 find_package(Threads REQUIRED)
 list(APPEND LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+if(NOT THREADS_FOUND)
+    message(WARNING "Threads library not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(ZLIB REQUIRED)
 include_directories(${ZLIB_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${ZLIB_LIBRARIES})
+if(NOT ZLIB_FOUND)
+    message(WARNING "Zlib not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(BZip2 REQUIRED)
 include_directories(${BZIP2_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${BZIP2_LIBRARIES})
+if(NOT BZIP2_FOUND)
+    message(WARNING "BZip2 library not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(EXPAT REQUIRED)
 include_directories(${EXPAT_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${EXPAT_LIBRARIES})
+if(NOT EXPAT_FOUND)
+    message(WARNING "Expat library not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${PROTOBUF_LITE_LIBRARIES})
+if(NOT PROTOBUF_FOUND)
+    message(WARNING "Protobuf library not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(Boost COMPONENTS program_options REQUIRED)
 include_directories(${BOOST_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${Boost_LIBRARIES})
+if(NOT Boost_FOUND)
+    message(WARNING "Boost program_options not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(Cryptopp REQUIRED)
 include_directories(${CRYPTOPP_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${CRYPTOPP_LIBRARIES})
+if(NOT CRYPTOPP_FOUND)
+    message(WARNING "Crypto++/Cryptopp library not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(OSMPBF REQUIRED)
 include_directories(${OSMPBF_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${OSMPBF_LIBRARIES})
+if(NOT OSMPBF_FOUND)
+    message(WARNING "OSMPBF library not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
 find_package(Osmium REQUIRED)
 include_directories(${OSMIUM_INCLUDE_DIRS})
+if(NOT OSMIUM_FOUND)
+    message(WARNING "Libosmium not found!\n")
+    set(MISSING_LIB 1)
+endif()
 
+
+#----------------------------------------------------------------------
+#
+#  Check that all required libraries are available
+#
+#----------------------------------------------------------------------
+if(MISSING_LIB)
+    message(FATAL_ERROR "Required library or libraries missing. Aborting...")
+endif(MISSING_LIB)
 
 #----------------------------------------------------------------------
 #
