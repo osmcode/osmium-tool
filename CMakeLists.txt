@@ -68,7 +68,7 @@ if(NOT PROTOBUF_FOUND)
 endif()
 
 find_package(Boost COMPONENTS program_options REQUIRED)
-include_directories(${BOOST_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
 list(APPEND LIBRARIES ${Boost_LIBRARIES})
 if(NOT Boost_FOUND)
     message(WARNING "Boost program_options not found!\n")
@@ -107,6 +107,7 @@ endif()
 if(MISSING_LIB)
     message(FATAL_ERROR "Required library or libraries missing. Aborting...")
 endif(MISSING_LIB)
+
 
 #----------------------------------------------------------------------
 #
@@ -214,9 +215,12 @@ include_directories(${PROJECT_BINARY_DIR}/src)
 #----------------------------------------------------------------------
 add_definitions(-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64)
 
-add_compile_options(-std=c++11)
-
-add_compile_options(
+if (MSVC)
+    add_definitions(-wd4996 -DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS)
+    list(APPEND LIBRARIES ws2_32)
+else()
+  add_compile_options(-std=c++11)
+  add_compile_options(
     -Wall
     -Wextra
     -pedantic
@@ -227,11 +231,12 @@ add_compile_options(
     -Woverloaded-virtual
     -Wsign-promo
     -Wold-style-cast
-)
+  )
+  #always compile with optimization, even in debug mode
+  set(CMAKE_CXX_FLAGS_DEBUG -O3)
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
+endif()
 
-# always compile with optimization, even in debug mode
-set(CMAKE_CXX_FLAGS_DEBUG -O3)
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
 
 if(APPLE)
     add_compile_options(-stdlib=libc++)
