@@ -45,8 +45,8 @@ class CommandTimeFilter : public Command {
     osmium::io::File m_input_file;
     osmium::io::File m_output_file;
 
-    osmium::Timestamp m_from {};
-    osmium::Timestamp m_to {};
+    osmium::Timestamp m_from;
+    osmium::Timestamp m_to;
 
 public:
 

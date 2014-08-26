@@ -102,7 +102,7 @@ struct InfoHandler : public osmium::handler::Handler {
     uint64_t relations = 0;
     osmium::Timestamp first_timestamp = osmium::end_of_time();
     osmium::Timestamp last_timestamp = osmium::start_of_time();
-    CryptoPP::SHA hash {};
+    CryptoPP::SHA hash;
 
     void changeset(const osmium::Changeset& changeset) {
         hash.Update(changeset.data(), changeset.byte_size());
