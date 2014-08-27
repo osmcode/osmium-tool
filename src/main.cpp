@@ -45,8 +45,9 @@ int main(int argc, char *argv[]) {
     std::string command = argv[0];
 
     // remove path from command
-    if (command.find_last_of("/") != std::string::npos) {
-        command = command.substr(command.find_last_of("/") + 1);
+    // (backslash for windows, slash for everybody else)
+    if (command.find_last_of("/\\") != std::string::npos) {
+        command = command.substr(command.find_last_of("/\\") + 1);
     }
 
     std::vector<std::string> arguments;
@@ -55,7 +56,7 @@ int main(int argc, char *argv[]) {
         arguments.push_back(argv[i]);
     }
 
-    if (command == "osmium") {
+    if (command == "osmium" || command == "osmium.exe") {
         if (arguments.size() == 0) {
             command = "help";
         } else {
