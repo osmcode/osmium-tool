@@ -27,11 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 #include <numeric>
 #include <string>
+
 #ifndef _MSC_VER
-#include <unistd.h>
+# include <unistd.h>
 #else
-#include <process.h>
-#define execlp _execlp
+# include <process.h>
+# define execlp _execlp
 #endif
 
 #include "command_help.hpp"
