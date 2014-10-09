@@ -180,8 +180,11 @@ bool CommandFileinfo::run() {
             osmium::apply(reader, info_handler);
             std::cout << "Data: " << "\n";
             std::cout << "  Bounding box: " << info_handler.bounds << "\n";
-            std::cout << "  First timestamp: " << info_handler.first_timestamp << "\n";
-            std::cout << "  Last timestamp: " << info_handler.last_timestamp << "\n";
+
+            if (info_handler.first_timestamp != osmium::end_of_time()) {
+                std::cout << "  First timestamp: " << info_handler.first_timestamp << "\n";
+                std::cout << "  Last timestamp: " << info_handler.last_timestamp << "\n";
+            }
 
             unsigned char digest[CryptoPP::SHA::DIGESTSIZE];
             info_handler.hash.Final(digest);
