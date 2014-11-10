@@ -29,12 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # include <unistd.h>
 #endif
 
-#ifdef USE_CRYPTOPP
-# include <cryptopp/sha.h>
-#else
-# include <crypto++/sha.h>
-#endif
-
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
 
@@ -44,6 +38,13 @@ namespace po = boost::program_options;
 #include <osmium/visitor.hpp>
 
 #include "command_fileinfo.hpp"
+
+// this must be after the local includes..
+#ifdef USE_CRYPTOPP
+# include <cryptopp/sha.h>
+#else
+# include <crypto++/sha.h>
+#endif
 
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
