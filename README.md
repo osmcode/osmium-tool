@@ -1,13 +1,14 @@
 
 # OSMIUM Command Line Tool
 
-Command line tool for working with OpenStreetMap data based on the Osmium library.
+Command line tool for working with OpenStreetMap data based on the Osmium
+library.
 
 
 ## Prerequisites
 
-You need a C++11 compliant compiler. GCC 4.8 and clang 3.2 are known to work. You
-also need the following libraries:
+You need a C++11 compliant compiler. GCC 4.8 and clang 3.2 are known to work.
+You also need the following libraries:
 
     Osmium Library
         http://osmcode.org/libosmium
@@ -25,6 +26,8 @@ also need the following libraries:
     OSMPBF (for PBF support)
         https://github.com/scrosby/OSM-binary
         Debian/Ubuntu: libosmpbf-dev
+        (You need at least version 1.3.2,
+         install from GIT if the package is too old.)
 
     zlib (for PBF support)
         http://www.zlib.net/
@@ -47,7 +50,11 @@ also need the following libraries:
 
 ## Building
 
-Osmium uses CMake for its builds. On Unix/Linux systems compile as follows:
+Osmium uses CMake for its builds. On Unix/Linux systems a simple Makefile
+wrapper is provided. Just type `make` to compile. Results will be in the
+`build` directory.
+
+Or you can go the long route explicitly calling CMake as follows:
 
 ```
 mkdir build
@@ -63,15 +70,16 @@ values are empty, Debug, Release, RelWithDebInfo and MinSizeRel.
 ## Documentation
 
 There are man pages in the 'doc' directory. To build them you need 'pandoc'.
-Run 'make man' to build.
+If the `pandoc` command was found during the CMake config step, the manpages
+will be built, if not they will not be built.
 
 
 ## Building Debian Package
 
 A `debian` directory is provided for building (unofficial) Debian packages.
-Call `debuild -I -us -uc` to build the package. Note that there currently is no
-libosmium package with the new libosmium version needed for the Osmium tool, so
-the build dependencies are not complete.
+Call `make deb` or `debuild -I -us -uc` to build the package. Note that there
+currently is no libosmium package with the new libosmium version needed for the
+Osmium tool, so the build dependencies are not complete.
 
 
 ## License
