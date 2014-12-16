@@ -1,5 +1,5 @@
 
-# OSMIUM Command Line Tool
+# Osmium Command Line Tool
 
 Command line tool for working with OpenStreetMap data based on the Osmium
 library.
@@ -50,9 +50,9 @@ You also need the following libraries:
 
 ## Building
 
-Osmium uses CMake for its builds. On Unix/Linux systems a simple Makefile
-wrapper is provided. Just type `make` to compile. Results will be in the
-`build` directory.
+Osmium uses CMake for its builds. For Unix/Linux systems a simple Makefile
+wrapper is provided to make the build even easier. Just type `make` to compile.
+Results will be in the `build` directory.
 
 Or you can go the long route explicitly calling CMake as follows:
 
