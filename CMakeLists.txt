@@ -67,7 +67,9 @@ if(NOT CRYPTOPP_FOUND)
     set(MISSING_LIB 1)
 endif()
 
-find_package(Osmium REQUIRED)
+include(OsmiumOptions)
+
+find_package(Osmium REQUIRED COMPONENTS io)
 include_directories(${OSMIUM_INCLUDE_DIRS})
 if(NOT OSMIUM_FOUND)
     message(WARNING "Libosmium not found!\n")
@@ -205,44 +207,6 @@ configure_file(
 )
 
 include_directories(${PROJECT_BINARY_DIR}/src)
-
-
-#----------------------------------------------------------------------
-#
-#  C++ compilation options
-#
-#----------------------------------------------------------------------
-add_definitions(-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64)
-
-if(MSVC)
-    add_definitions(-wd4996 -DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS)
-else()
-    add_compile_options(-std=c++11)
-    add_compile_options(
-        -Wall
-        -Wextra
-        -pedantic
-        -Wredundant-decls
-        -Wdisabled-optimization
-        -Wctor-dtor-privacy
-        -Wnon-virtual-dtor
-        -Woverloaded-virtual
-        -Wsign-promo
-        -Wold-style-cast
-    )
-    #always compile with optimization, even in debug mode
-    set(CMAKE_CXX_FLAGS_DEBUG -O3)
-    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
-endif()
-
-if (WIN32)
-    list(APPEND LIBRARIES ws2_32)
-endif()
-
-if(APPLE)
-    add_compile_options(-stdlib=libc++)
-    set(LDFLAGS ${LDFLAGS} -stdlib=libc++)
-endif(APPLE)
 
 
 #----------------------------------------------------------------------

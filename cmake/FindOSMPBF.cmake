@@ -9,7 +9,7 @@
 # and not
 #  #include <osmpbf.h>
 
-FIND_PATH(OSMPBF_INCLUDE_DIR osmpbf/osmpbf.h
+find_path(OSMPBF_INCLUDE_DIR osmpbf/osmpbf.h
   HINTS
   $ENV{OSMPBF_DIR}
   PATH_SUFFIXES include
@@ -22,7 +22,7 @@ FIND_PATH(OSMPBF_INCLUDE_DIR osmpbf/osmpbf.h
   /opt
 )
 
-FIND_LIBRARY(OSMPBF_LIBRARY
+find_library(OSMPBF_LIBRARY
   NAMES osmpbf
   HINTS
   $ENV{OSMPBF_DIR}
@@ -36,7 +36,7 @@ FIND_LIBRARY(OSMPBF_LIBRARY
   /opt
 )
 
-INCLUDE(FindPackageHandleStandardArgs)
+include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set OSMPBF_FOUND to TRUE if
 # all listed variables are TRUE
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(OSMPBF DEFAULT_MSG OSMPBF_LIBRARY OSMPBF_INCLUDE_DIR)
