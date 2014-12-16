@@ -1,8 +1,46 @@
-# - Find Osmium
-# Find the Osmium headers.
+#
+#  FindOsmium.cmake
+#
+#  Find the Libosmium headers and, optionally, several components needed for
+#  different Libosmium functions.
+#
+#  Usage:
+#
+#    Copy this file (and OsmiumOptions.cmake) somewhere into your project
+#    directory, where cmake can find it. Usually this will be a directory
+#    called "cmake" which you can add to your module search path with the
+#    following line in your CMakeLists.txt:
+#
+#      list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+#
+#    Then add the following in your CMakeLists.txt:
+#
+#      include(OsmiumOptions)
+#      find_package(Osmium REQUIRED COMPONENTS <XXX>)
+#      include_directories(${OSMIUM_INCLUDE_DIRS})
+#
+#    For the <XXX> substitute a space separated list of one or more of the
+#    following components:
+#
+#      pbf        - include libraries needed for PBF input and output
+#      xml        - include libraries needed for XML input and output
+#      io         - include libraries needed for any type of input/output
+#      geos       - include if you want to use any of the GEOS functions
+#      gdal       - include if you want to use any of the OGR functions
+#      proj       - include if you want to use any of the Proj.4 functions
+#      sparsehash - include if you use the sparsehash index
+#
+#    You can check for success with something like this:
+#
+#      if(NOT OSMIUM_FOUND)
+#          message(WARNING "Libosmium not found!\n")
+#      endif()
+#
+#  Variables:
 #
 #  OSMIUM_INCLUDE_DIRS - Where to find include files.
 #  OSMIUM_FOUND        - True if Osmium found.
+#
 
 # Look for the header file.
 find_path(OSMIUM_INCLUDE_DIR osmium/osm.hpp
@@ -19,10 +57,10 @@ find_path(OSMIUM_INCLUDE_DIR osmium/osm.hpp
     /opt
 )
 
-# handle the QUIETLY and REQUIRED arguments and set OSMIUM_FOUND to TRUE if
-# all listed variables are TRUE
+# Handle the QUIETLY and REQUIRED arguments and set OSMIUM_FOUND to TRUE if
+# all listed variables are TRUE.
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(OSMIUM REQUIRED_VARS OSMIUM_INCLUDE_DIR)
+find_package_handle_standard_args(OSMIUM REQUIRED_VARS OSMIUM_INCLUDE_DIR)
 
 # Copy the results to the output variables.
 if(OSMIUM_FOUND)
@@ -33,23 +71,72 @@ if(Osmium_FIND_REQUIRED AND NOT OSMIUM_FOUND)
   message(FATAL_ERROR "Can not find libosmium headers, please install them or configure the paths")
 endif()
 
+#----------------------------------------------------------------------
+#
+#  Check for optional components
+#
+#----------------------------------------------------------------------
+if(Osmium_FIND_COMPONENTS)
+  foreach(component ${Osmium_FIND_COMPONENTS})
+    string(TOUPPER ${component} _COMPONENT)
+    set(OSMIUM_USE_${_COMPONENT} TRUE)
+  endforeach()
+endif()
 
-if(";${Osmium_FIND_COMPONENTS};" MATCHES ";io;")
+# Component 'io' is an alias for 'pbf' and 'xml'
+if(OSMIUM_USE_IO)
+  set(OSMIUM_USE_PBF TRUE)
+  set(OSMIUM_USE_XML TRUE)
+endif()
+
+# Component 'ogr' is an alias for 'gdal'
+if(OSMIUM_USE_OGR)
+  set(OSMIUM_USE_GDAL TRUE)
+endif()
+
+# Component 'pbf'
+if(OSMIUM_USE_PBF)
   find_package(OSMPBF)
   find_package(Protobuf)
   find_package(ZLIB)
-  find_package(BZip2)
-  find_package(EXPAT)
   find_package(Threads)
 
-  if(OSMPBF_FOUND AND PROTOBUF_FOUND AND ZLIB_FOUND AND BZIP2_FOUND AND EXPAT_FOUND AND Threads_FOUND)
+  if(OSMPBF_FOUND AND PROTOBUF_FOUND AND ZLIB_FOUND AND Threads_FOUND)
     list(APPEND OSMIUM_LIBRARIES
-      ${OSMPBF_LIBRARIES} ${PROTOBUF_LITE_LIBRARY}
-      ${ZLIB_LIBRARY} ${BZIP2_LIBRARIES}
-      ${EXPAT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+      ${OSMPBF_LIBRARIES}
+      ${PROTOBUF_LITE_LIBRARY}
+      ${ZLIB_LIBRARY}
+      ${CMAKE_THREAD_LIBS_INIT}
+    )
     list(APPEND OSMIUM_INCLUDE_DIRS
       ${OSMPBF_INCLUDE_DIRS}
       ${PROTOBUF_INCLUDE_DIR}
+      ${ZLIB_INCLUDE_DIR}
+    )
+    if(WIN32)
+      list(APPEND OSMIUM_LIBRARIES ws2_32)
+    endif()
+  else()
+    set(MISSING_LIBRARIES 1)
+    if(Osmium_FIND_REQUIRED)
+      message(FATAL_ERROR "Can not find some libraries for Osmium input/output formats, please install them or configure the paths")
+    endif()
+  endif()
+endif()
+
+# Component 'xml'
+if(OSMIUM_USE_XML)
+  find_package(BZip2)
+  find_package(ZLIB)
+  find_package(EXPAT)
+
+  if(BZIP2_FOUND AND EXPAT_FOUND AND ZLIB_FOUND)
+    list(APPEND OSMIUM_LIBRARIES
+      ${BZIP2_LIBRARIES}
+      ${ZLIB_LIBRARY}
+      ${EXPAT_LIBRARY}
+    )
+    list(APPEND OSMIUM_INCLUDE_DIRS
       ${EXPAT_INCLUDE_DIR}
       ${BZIP2_INCLUDE_DIR}
       ${ZLIB_INCLUDE_DIR}
@@ -65,8 +152,8 @@ if(";${Osmium_FIND_COMPONENTS};" MATCHES ";io;")
   endif()
 endif()
 
-if(";${Osmium_FIND_COMPONENTS};" MATCHES ";geos;")
-  ##### Find GEOS Library
+# Component 'geos'
+if(OSMIUM_USE_GEOS)
   find_path(GEOS_INCLUDE_DIR geos/geom.h)
   find_library(GEOS_LIBRARY NAMES geos)
   if(GEOS_INCLUDE_DIR AND GEOS_LIBRARY)
@@ -82,7 +169,8 @@ if(";${Osmium_FIND_COMPONENTS};" MATCHES ";geos;")
   endif()
 endif()
 
-if(";${Osmium_FIND_COMPONENTS};" MATCHES ";gdal;")
+# Component 'gdal' (alias 'ogr')
+if(OSMIUM_USE_GDAL)
   find_package(GDAL)
   if(NOT GDAL_FOUND)
     set(MISSING_LIBRARIES 1)
@@ -95,8 +183,8 @@ if(";${Osmium_FIND_COMPONENTS};" MATCHES ";gdal;")
   endif()
 endif()
 
-if(";${Osmium_FIND_COMPONENTS};" MATCHES ";proj;")
-  ##### Find Proj.4 Library
+# Component 'proj'
+if(OSMIUM_USE_PROJ)
   find_path(PROJ_INCLUDE_DIR proj_api.h)
   find_library(PROJ_LIBRARY NAMES proj)
   if(PROJ_INCLUDE_DIR AND PROJ_LIBRARY)
@@ -112,8 +200,8 @@ if(";${Osmium_FIND_COMPONENTS};" MATCHES ";proj;")
   endif()
 endif()
 
-if(";${Osmium_FIND_COMPONENTS};" MATCHES ";sparsehash;")
-  ##### Find Google SparseHash
+# Component 'sparsehash'
+if(OSMIUM_USE_SPARSEHASH)
   find_path(SPARSEHASH_INCLUDE_DIR google/sparsetable)
   if(SPARSEHASH_INCLUDE_DIR)
     message(STATUS "Found SparseHash")
@@ -126,6 +214,8 @@ if(";${Osmium_FIND_COMPONENTS};" MATCHES ";sparsehash;")
     endif()
   endif()
 endif()
+
+#----------------------------------------------------------------------
 
 list(REMOVE_DUPLICATES OSMIUM_INCLUDE_DIRS)
 list(REMOVE_DUPLICATES OSMIUM_LIBRARIES)

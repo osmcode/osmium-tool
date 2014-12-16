@@ -23,7 +23,7 @@ find_library(CRYPTOPP_LIBRARY NAMES crypto++ libcrypto++ cryptopp libcryptopp)
 # handle the QUIETLY and REQUIRED arguments and set CRYPTOPP_FOUND to TRUE if
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(CRYPTOPP
+find_package_handle_standard_args(CRYPTOPP
                                   REQUIRED_VARS CRYPTOPP_LIBRARY CRYPTOPP_INCLUDE_DIR)
 
 # Copy the results to the output variables.

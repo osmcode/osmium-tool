@@ -3,4 +3,4 @@ osmium
 src/*.o
 doc/*.1
 doc/*.html
-build/*
+build*
