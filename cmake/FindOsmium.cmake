@@ -224,7 +224,10 @@ if(MSVC)
 endif()
 
 if(APPLE)
-    add_compile_options(-stdlib=libc++)
+# following only available from cmake 2.8.12:
+#   add_compile_options(-stdlib=libc++)
+# so using this instead:
+    add_definitions(-stdlib=libc++)
     set(LDFLAGS ${LDFLAGS} -stdlib=libc++)
 endif()
 
@@ -233,7 +236,12 @@ endif()
 list(REMOVE_DUPLICATES OSMIUM_INCLUDE_DIRS)
 list(REMOVE_DUPLICATES OSMIUM_LIBRARIES)
 
+# This is a set of recommended warning options that can be added when compiling
+# libosmium code.
+set(OSMIUM_WARNING_OPTIONS "-Wall -Wextra -pedantic -Wredundant-decls -Wdisabled-optimization -Wctor-dtor-privacy -Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo -Wold-style-cast -Wno-return-type" CACHE STRING "Recommended warning options for libosmium")
+
 if(Osmium_DEBUG)
   message(STATUS "OSMIUM_LIBRARIES=" ${OSMIUM_LIBRARIES})
   message(STATUS "OSMIUM_INCLUDE_DIRS=" ${OSMIUM_INCLUDE_DIRS})
 endif()
+
