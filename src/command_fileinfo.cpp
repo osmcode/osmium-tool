@@ -107,6 +107,11 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::Timestamp last_timestamp = osmium::start_of_time();
     CryptoPP::SHA hash;
 
+    bool ordered = true;
+    bool multiple_versions = false;
+    osmium::item_type last_type = osmium::item_type::undefined;
+    osmium::object_id_type last_id = 0;
+
     void changeset(const osmium::Changeset& changeset) {
         hash.Update(changeset.data(), changeset.byte_size());
         ++changesets;
@@ -119,6 +124,20 @@ struct InfoHandler : public osmium::handler::Handler {
         if (object.timestamp() > last_timestamp) {
             last_timestamp = object.timestamp();
         }
+
+        if (last_type == object.type()) {
+            if (last_id == object.id()) {
+                multiple_versions = true;
+            }
+            if (last_id > object.id()) {
+                ordered = false;
+            }
+        } else if (last_type > object.type()) {
+            ordered = false;
+        }
+
+        last_type = object.type();
+        last_id = object.id();
     }
 
     void node(const osmium::Node& node) {
@@ -185,6 +204,13 @@ bool CommandFileinfo::run() {
             if (info_handler.first_timestamp != osmium::end_of_time()) {
                 std::cout << "  First timestamp: " << info_handler.first_timestamp << "\n";
                 std::cout << "  Last timestamp: " << info_handler.last_timestamp << "\n";
+            }
+
+            std::cout << "  Objects ordered (by type and id): " << (info_handler.ordered ? "yes\n" : "no\n");
+
+            std::cout << "  Multiple versions of same object: " << (info_handler.multiple_versions ? "yes\n" : "no\n");
+            if (info_handler.multiple_versions != header.has_multiple_object_versions()) {
+                std::cout << "    WARNING! This is different from the setting in the header.\n";
             }
 
             unsigned char digest[CryptoPP::SHA::DIGESTSIZE];

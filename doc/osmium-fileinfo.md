@@ -37,8 +37,11 @@ Data
     file. It is only shown if the **--extended** option was used. It
     shows the actual bounding box calculated from the nodes in the file,
     the first and last timestamp of all objects in the file, a SHA1
-    checksum of the data in the file and the number of changesets,
-    nodes, ways, and relations found in the file.
+    checksum of the data in the file, the number of changesets, nodes,
+    ways, and relations found in the file, whether the objects in the
+    file were ordered by type (nodes, then ways, then relations) and
+    id, and whether there were multiple versions of the same object in
+    the file (history files and change files can have that).
 
 
 # OPTIONS
