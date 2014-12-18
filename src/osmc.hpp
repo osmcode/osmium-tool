@@ -105,7 +105,7 @@ public:
         for (const auto& cmd : instance().m_commands) {
             commands.push_back(std::make_pair(cmd.first, cmd.second.description));
         }
-        return std::move(commands);
+        return commands;
     }
 
     static bool add(const std::string& name, const std::string& description, create_command_type create_function) {
