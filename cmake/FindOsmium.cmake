@@ -1,8 +1,11 @@
+#----------------------------------------------------------------------
 #
 #  FindOsmium.cmake
 #
 #  Find the Libosmium headers and, optionally, several components needed for
 #  different Libosmium functions.
+#
+#----------------------------------------------------------------------
 #
 #  Usage:
 #
@@ -36,11 +39,18 @@
 #          message(WARNING "Libosmium not found!\n")
 #      endif()
 #
+#----------------------------------------------------------------------
+#
 #  Variables:
 #
-#  OSMIUM_INCLUDE_DIRS - Where to find include files.
-#  OSMIUM_FOUND        - True if Osmium found.
+#    OSMIUM_FOUND         - True if Osmium found.
+#    OSMIUM_INCLUDE_DIRS  - Where to find include files.
+#    OSMIUM_XML_LIBRARIES - Libraries needed for XML I/O.
+#    OSMIUM_PBF_LIBRARIES - Libraries needed for PBF I/O.
+#    OSMIUM_IO_LIBRARIES  - Libraries needed for XML or PBF I/O.
+#    OSMIUM_LIBRARIES     - All libraries Osmium uses somewhere.
 #
+#----------------------------------------------------------------------
 
 # Look for the header file.
 find_path(OSMIUM_INCLUDE_DIR osmium/osm.hpp
@@ -77,35 +87,38 @@ endif()
 #
 #----------------------------------------------------------------------
 if(Osmium_FIND_COMPONENTS)
-    foreach(component ${Osmium_FIND_COMPONENTS})
-      string(TOUPPER ${component} _COMPONENT)
-      set(OSMIUM_USE_${_COMPONENT} TRUE)
+    foreach(_component ${Osmium_FIND_COMPONENTS})
+        string(TOUPPER ${_component} _component_uppercase)
+        set(Osmium_USE_${_component_uppercase} TRUE)
     endforeach()
 endif()
 
+#----------------------------------------------------------------------
 # Component 'io' is an alias for 'pbf' and 'xml'
-if(OSMIUM_USE_IO)
-    set(OSMIUM_USE_PBF TRUE)
-    set(OSMIUM_USE_XML TRUE)
+if(Osmium_USE_IO)
+    set(Osmium_USE_PBF TRUE)
+    set(Osmium_USE_XML TRUE)
 endif()
 
+#----------------------------------------------------------------------
 # Component 'ogr' is an alias for 'gdal'
-if(OSMIUM_USE_OGR)
-    set(OSMIUM_USE_GDAL TRUE)
+if(Osmium_USE_OGR)
+    set(Osmium_USE_GDAL TRUE)
 endif()
 
+#----------------------------------------------------------------------
 # Component 'pbf'
-if(OSMIUM_USE_PBF)
+if(Osmium_USE_PBF)
     find_package(OSMPBF)
     find_package(Protobuf)
     find_package(ZLIB)
     find_package(Threads)
 
     if(OSMPBF_FOUND AND PROTOBUF_FOUND AND ZLIB_FOUND AND Threads_FOUND)
-        list(APPEND OSMIUM_LIBRARIES
+        list(APPEND OSMIUM_PBF_LIBRARIES
             ${OSMPBF_LIBRARIES}
             ${PROTOBUF_LITE_LIBRARY}
-            ${ZLIB_LIBRARY}
+            ${ZLIB_LIBRARIES}
             ${CMAKE_THREAD_LIBS_INIT}
         )
         list(APPEND OSMIUM_INCLUDE_DIRS
@@ -117,21 +130,21 @@ if(OSMIUM_USE_PBF)
             list(APPEND OSMIUM_LIBRARIES ws2_32)
         endif()
     else()
-        set(MISSING_LIBRARIES 1)
-        if(Osmium_FIND_REQUIRED)
-            message(FATAL_ERROR "Can not find some libraries for Osmium input/output formats, please install them or configure the paths")
-        endif()
+        set(_missing_libraries 1)
+        message(WARNING "Osmium: Can not find some libraries for PBF input/output, please install them or configure the paths.")
     endif()
 endif()
 
+#----------------------------------------------------------------------
 # Component 'xml'
-if(OSMIUM_USE_XML)
+if(Osmium_USE_XML)
+    find_package(EXPAT)
     find_package(BZip2)
     find_package(ZLIB)
-    find_package(EXPAT)
+    find_package(Threads)
 
-    if(EXPAT_FOUND AND BZIP2_FOUND AND ZLIB_FOUND)
-        list(APPEND OSMIUM_LIBRARIES
+    if(EXPAT_FOUND AND BZIP2_FOUND AND ZLIB_FOUND AND Threads_FOUND)
+        list(APPEND OSMIUM_XML_LIBRARIES
             ${EXPAT_LIBRARIES}
             ${BZIP2_LIBRARIES}
             ${ZLIB_LIBRARIES}
@@ -146,78 +159,103 @@ if(OSMIUM_USE_XML)
             list(APPEND OSMIUM_LIBRARIES ws2_32)
         endif()
     else()
-        set(MISSING_LIBRARIES 1)
-        if(Osmium_FIND_REQUIRED)
-            message(FATAL_ERROR "Can not find some libraries for Osmium input/output formats, please install them or configure the paths")
-        endif()
+        set(_missing_libraries 1)
+        message(WARNING "Osmium: Can not find some libraries for XML input/output, please install them or configure the paths.")
     endif()
 endif()
 
+#----------------------------------------------------------------------
+list(APPEND OSMIUM_IO_LIBRARIES
+    ${OSMIUM_PBF_LIBRARIES}
+    ${OSMIUM_XML_LIBRARIES}
+)
+
+list(APPEND OSMIUM_LIBRARIES
+    ${OSMIUM_IO_LIBRARIES}
+)
+
+#----------------------------------------------------------------------
 # Component 'geos'
-if(OSMIUM_USE_GEOS)
+if(Osmium_USE_GEOS)
     find_path(GEOS_INCLUDE_DIR geos/geom.h)
     find_library(GEOS_LIBRARY NAMES geos)
+
     if(GEOS_INCLUDE_DIR AND GEOS_LIBRARY)
-        message(STATUS "Found GEOS: " ${GEOS_LIBRARY})
         SET(GEOS_FOUND 1)
         list(APPEND OSMIUM_LIBRARIES ${GEOS_LIBRARY})
         list(APPEND OSMIUM_INCLUDE_DIRS ${GEOS_INCLUDE_DIR})
     else()
-        set(MISSING_LIBRARIES 1)
-        if(Osmium_FIND_REQUIRED)
-            message(FATAL_ERROR "GEOS library is required but not found, please install it or configure the paths")
-        endif()
+        set(_missing_libraries 1)
+        message(WARNING "Osmium: GEOS library is required but not found, please install it or configure the paths.")
     endif()
 endif()
 
+#----------------------------------------------------------------------
 # Component 'gdal' (alias 'ogr')
-if(OSMIUM_USE_GDAL)
+if(Osmium_USE_GDAL)
     find_package(GDAL)
-    if(NOT GDAL_FOUND)
-        set(MISSING_LIBRARIES 1)
-        if(Osmium_FIND_REQUIRED)
-            message(FATAL_ERROR "GDAL library is required but not found, please install it or configure the paths")
-        endif()
+
+    if(GDAL_FOUND)
+        list(APPEND OSMIUM_LIBRARIES ${GDAL_LIBRARIES})
+        list(APPEND OSMIUM_INCLUDE_DIRS ${GDAL_INCLUDE_DIRS})
     else()
-        list(APPEND OSMIUM_LIBRARIES ${GDAL_LIBRARY})
-        list(APPEND OSMIUM_INCLUDE_DIRS ${GDAL_INCLUDE_DIR})
+        set(_missing_libraries 1)
+        message(WARNING "Osmium: GDAL library is required but not found, please install it or configure the paths.")
     endif()
 endif()
 
+#----------------------------------------------------------------------
 # Component 'proj'
-if(OSMIUM_USE_PROJ)
+if(Osmium_USE_PROJ)
     find_path(PROJ_INCLUDE_DIR proj_api.h)
     find_library(PROJ_LIBRARY NAMES proj)
+
     if(PROJ_INCLUDE_DIR AND PROJ_LIBRARY)
-        message(STATUS "Found PROJ: " ${PROJ_LIBRARY})
         set(PROJ_FOUND 1)
         list(APPEND OSMIUM_LIBRARIES ${PROJ_LIBRARY})
         list(APPEND OSMIUM_INCLUDE_DIRS ${PROJ_INCLUDE_DIR})
     else()
-        set(MISSING_LIBRARIES 1)
-        if(Osmium_FIND_REQUIRED)
-            message(FATAL_ERROR "PROJ library is required but not found, please install it or configure the paths")
-        endif()
+        set(_missing_libraries 1)
+        message(WARNING "Osmium: PROJ.4 library is required but not found, please install it or configure the paths.")
     endif()
 endif()
 
+#----------------------------------------------------------------------
 # Component 'sparsehash'
-if(OSMIUM_USE_SPARSEHASH)
+if(Osmium_USE_SPARSEHASH)
     find_path(SPARSEHASH_INCLUDE_DIR google/sparsetable)
+
     if(SPARSEHASH_INCLUDE_DIR)
-        message(STATUS "Found SparseHash")
         set(SPARSEHASH_FOUND 1)
         list(APPEND OSMIUM_INCLUDE_DIRS ${SPARSEHASH_INCLUDE_DIR})
     else()
-        set(MISSING_LIBRARIES 1)
-        if(Osmium_FIND_REQUIRED)
-            message(FATAL_ERROR "SparseHash library is required but not found, please install it or configure the paths")
-        endif()
+        set(_missing_libraries 1)
+        message(WARNING "Osmium: Google SparseHash library is required but not found, please install it or configure the paths.")
     endif()
 endif()
 
 #----------------------------------------------------------------------
 
+list(REMOVE_DUPLICATES OSMIUM_INCLUDE_DIRS)
+list(REMOVE_DUPLICATES OSMIUM_XML_LIBRARIES)
+list(REMOVE_DUPLICATES OSMIUM_PBF_LIBRARIES)
+list(REMOVE_DUPLICATES OSMIUM_IO_LIBRARIES)
+list(REMOVE_DUPLICATES OSMIUM_LIBRARIES)
+
+#----------------------------------------------------------------------
+#
+#  Check that all required libraries are available
+#
+#----------------------------------------------------------------------
+if(Osmium_FIND_REQUIRED AND _missing_libraries)
+    message(FATAL_ERROR "Required library or libraries missing. Aborting.")
+endif()
+
+#----------------------------------------------------------------------
+#
+#  Add compiler flags
+#
+#----------------------------------------------------------------------
 add_definitions(-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64)
 
 if(MSVC)
@@ -234,14 +272,16 @@ endif()
 
 #----------------------------------------------------------------------
 
-list(REMOVE_DUPLICATES OSMIUM_INCLUDE_DIRS)
-list(REMOVE_DUPLICATES OSMIUM_LIBRARIES)
-
 # This is a set of recommended warning options that can be added when compiling
 # libosmium code.
 set(OSMIUM_WARNING_OPTIONS "-Wall -Wextra -pedantic -Wredundant-decls -Wdisabled-optimization -Wctor-dtor-privacy -Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo -Wold-style-cast -Wno-return-type" CACHE STRING "Recommended warning options for libosmium")
 
+set(OSMIUM_DRACONIC_CLANG_OPTIONS "-Wdocumentation -Wunused-exception-parameter -Wmissing-declarations -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-unused-macros -Wno-exit-time-destructors -Wno-global-constructors -Wno-padded -Wno-switch-enum -Wno-missing-prototypes -Wno-weak-vtables -Wno-cast-align -Wno-float-equal")
+
 if(Osmium_DEBUG)
+    message(STATUS "OSMIUM_XML_LIBRARIES=" ${OSMIUM_XML_LIBRARIES})
+    message(STATUS "OSMIUM_PBF_LIBRARIES=" ${OSMIUM_PBF_LIBRARIES})
+    message(STATUS "OSMIUM_IO_LIBRARIES=" ${OSMIUM_IO_LIBRARIES})
     message(STATUS "OSMIUM_LIBRARIES=" ${OSMIUM_LIBRARIES})
     message(STATUS "OSMIUM_INCLUDE_DIRS=" ${OSMIUM_INCLUDE_DIRS})
 endif()
