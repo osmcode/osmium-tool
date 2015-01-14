@@ -121,14 +121,14 @@ if(Osmium_USE_PBF)
             ${ZLIB_LIBRARIES}
             ${CMAKE_THREAD_LIBS_INIT}
         )
+        if(WIN32)
+            list(APPEND OSMIUM_PBF_LIBRARIES ws2_32)
+        endif()
         list(APPEND OSMIUM_INCLUDE_DIRS
             ${OSMPBF_INCLUDE_DIRS}
             ${PROTOBUF_INCLUDE_DIR}
             ${ZLIB_INCLUDE_DIR}
         )
-        if(WIN32)
-            list(APPEND OSMIUM_LIBRARIES ws2_32)
-        endif()
     else()
         set(_missing_libraries 1)
         message(WARNING "Osmium: Can not find some libraries for PBF input/output, please install them or configure the paths.")
@@ -155,9 +155,6 @@ if(Osmium_USE_XML)
             ${BZIP2_INCLUDE_DIR}
             ${ZLIB_INCLUDE_DIR}
         )
-        if(WIN32)
-            list(APPEND OSMIUM_LIBRARIES ws2_32)
-        endif()
     else()
         set(_missing_libraries 1)
         message(WARNING "Osmium: Can not find some libraries for XML input/output, please install them or configure the paths.")
@@ -259,7 +256,14 @@ endif()
 add_definitions(-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64)
 
 if(MSVC)
-    add_definitions(-wd4996 -DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-wd4996)
+    add_definitions(-wd4068)
+
+    # Disable warning C4715: "not all control paths return a value" because
+    # it generates too many false positives.
+    add_definitions(-wd4715)
+
+    add_definitions(-DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 if(APPLE)
@@ -274,7 +278,11 @@ endif()
 
 # This is a set of recommended warning options that can be added when compiling
 # libosmium code.
-set(OSMIUM_WARNING_OPTIONS "-Wall -Wextra -pedantic -Wredundant-decls -Wdisabled-optimization -Wctor-dtor-privacy -Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo -Wold-style-cast -Wno-return-type" CACHE STRING "Recommended warning options for libosmium")
+if(MSVC)
+    set(OSMIUM_WARNING_OPTIONS "/W2 /wd4514" CACHE STRING "Recommended warning options for libosmium")
+else()
+    set(OSMIUM_WARNING_OPTIONS "-Wall -Wextra -pedantic -Wredundant-decls -Wdisabled-optimization -Wctor-dtor-privacy -Wnon-virtual-dtor -Woverloaded-virtual -Wsign-promo -Wold-style-cast -Wno-return-type" CACHE STRING "Recommended warning options for libosmium")
+endif()
 
 set(OSMIUM_DRACONIC_CLANG_OPTIONS "-Wdocumentation -Wunused-exception-parameter -Wmissing-declarations -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-unused-macros -Wno-exit-time-destructors -Wno-global-constructors -Wno-padded -Wno-switch-enum -Wno-missing-prototypes -Wno-weak-vtables -Wno-cast-align -Wno-float-equal")
 
