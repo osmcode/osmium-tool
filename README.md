@@ -4,6 +4,7 @@
 Command line tool for working with OpenStreetMap data based on the Osmium
 library.
 
+[![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.png)](http://travis-ci.org/osmcode/osmium-tool)
 
 ## Prerequisites
 

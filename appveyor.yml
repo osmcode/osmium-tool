@@ -1,0 +1,62 @@
+#
+# Configuration for appveyor.com
+#
+
+environment:
+  matrix:
+  - configuration: Dev
+  - configuration: Release
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+# Operating system (build VM template)
+os: Visual Studio 2014 CTP4
+
+# scripts that are called at very beginning, before repo cloning
+init:
+
+# clone directory
+clone_folder: c:\projects\osmium-tool
+
+platform: x64
+
+install:
+  - cmake -version
+  - CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+  - SET LODEPSDIR=c:\projects\osmium-tool\libosmium-deps
+  - SET PROJ_LIB=%LODEPSDIR%\proj\share
+  - set GDAL_DATA=%LODEPSDIR%\gdal\data
+  #geos.dll
+  - SET PATH=%LODEPSDIR%\geos\lib;%PATH%
+  #gdal.dll
+  - SET PATH=%LODEPSDIR%\gdal\lib;%PATH%
+  #libexpat.dll
+  - SET PATH=%LODEPSDIR%\expat\lib;%PATH%
+  #libtiff.dll
+  - SET PATH=%LODEPSDIR%\libtiff\lib;%PATH%
+  #zlibwapi.dll
+  - SET PATH=%LODEPSDIR%\zlib\lib;%PATH%
+  #convert backslashes in bzip2 path to forward slashes
+  #cmake cannot find it otherwise
+  - SET LIBBZIP2=%LODEPSDIR%\bzip2\lib\libbz2.lib
+  - SET LIBBZIP2=%LIBBZIP2:\=/%
+  - ps: Start-FileDownload https://mapnik.s3.amazonaws.com/dist/dev/libosmium-deps-win-14.0-x64.7z -FileName lodeps.7z
+  - 7z x lodeps.7z > nul
+  - echo %LODEPSDIR%
+  - dir %LODEPSDIR%
+  #- tree %LODEPSDIR%
+  - cd c:\projects
+  - git clone https://github.com/osmcode/libosmium.git
+  - git clone https://github.com/osmcode/osm-testdata.git
+
+build_script:
+  - cd c:\projects\osmium-tool
+  - mkdir build
+  - cd build
+  - cmake .. -LA -G "NMake Makefiles" -DOsmium_DEBUG=TRUE -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DBOOST_ROOT=%LODEPSDIR%\boost -DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_57.lib -DOSMPBF_LIBRARY=%LODEPSDIR%\osmpbf\lib\osmpbf.lib -DOSMPBF_INCLUDE_DIR=%LODEPSDIR%\osmpbf\include -DPROTOBUF_LIBRARY=%LODEPSDIR%\protobuf\lib\libprotobuf.lib -DPROTOBUF_LITE_LIBRARY=%LODEPSDIR%\protobuf\lib\libprotobuf-lite.lib -DPROTOBUF_INCLUDE_DIR=%LODEPSDIR%\protobuf\include -DZLIB_LIBRARY=%LODEPSDIR%\zlib\lib\zlibwapi.lib -DZLIB_INCLUDE_DIR=%LODEPSDIR%\zlib\include -DEXPAT_LIBRARY=%LODEPSDIR%\expat\lib\libexpat.lib -DEXPAT_INCLUDE_DIR=%LODEPSDIR%\expat\include -DBZIP2_LIBRARIES=%LIBBZIP2% -DBZIP2_INCLUDE_DIR=%LODEPSDIR%\bzip2\include -DGDAL_LIBRARY=%LODEPSDIR%\gdal\lib\gdal_i.lib -DGDAL_INCLUDE_DIR=%LODEPSDIR%\gdal\include -DGEOS_LIBRARY=%LODEPSDIR%\geos\lib\geos_i.lib -DGEOS_INCLUDE_DIR=%LODEPSDIR%\geos\include -DPROJ_LIBRARY=%LODEPSDIR%\proj\lib\proj.lib -DPROJ_INCLUDE_DIR=%LODEPSDIR%\proj\include -DSPARSEHASH_INCLUDE_DIR=%LODEPSDIR%\sparsehash\include -DGETOPT_LIBRARY=%LODEPSDIR%\wingetopt\lib\wingetopt.lib -DGETOPT_INCLUDE_DIR=%LODEPSDIR%\wingetopt\include
+  - nmake
+
