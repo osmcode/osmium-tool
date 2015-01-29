@@ -76,7 +76,18 @@ int main(int argc, char *argv[]) {
     }
 
     if (command == "version") {
-        std::cout << "osmium version " << OSMIUM_VERSION << std::endl;
+        std::cout << "osmium version " << OSMIUM_VERSION << "\n"
+                  << "Copyright (C) 2013-2015  Jochen Topf <jochen@topf.org>\n"
+                  << "License: GNU GENERAL PUBLIC LICENSE Version 3 <http://gnu.org/licenses/gpl.html>.\n"
+                  << "This is free software: you are free to change and redistribute it.\n"
+                  << "There is NO WARRANTY, to the extent permitted by law.\n";
+
+#ifdef OSMIUM_WITH_CRYPTOPP
+        std::cout << "SHA support: enabled\n";
+#else
+        std::cout << "SHA support: disabled\n";
+#endif
+
         return return_code::okay;
     }
 
