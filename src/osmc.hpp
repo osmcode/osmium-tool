@@ -38,11 +38,15 @@ class Command {
 
 protected:
 
-    std::string m_generator {"osmium/" OSMIUM_VERSION};
+    std::string m_generator;
     bool m_debug {false};
     osmium::util::VerboseOutput m_vout {false};
 
 public:
+
+    Command() :
+        m_generator("osmium/" OSMIUM_VERSION) {
+    }
 
     virtual ~Command() {
     }
