@@ -168,9 +168,9 @@ bool CommandApplyChanges::run() {
         objects.sort(osmium::object_order_type_id_reverse_version());
 
         osmium::object_id_type id = 0;
-        bool keep_deleted = !m_remove_deleted;
+        const bool keep_deleted = !m_remove_deleted;
 
-        auto output_it = boost::make_function_output_iterator([&out, &id, keep_deleted](const osmium::OSMObject& obj) {
+        auto output_it = boost::make_function_output_iterator([&out, &id, &keep_deleted](const osmium::OSMObject& obj) {
             if (obj.id() != id) {
                 if (keep_deleted || obj.visible()) {
                     *out = obj;
