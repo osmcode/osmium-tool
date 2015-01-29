@@ -86,8 +86,10 @@ Osmium tool, so the build dependencies are not complete.
 
 ## License
 
-This program is available under the GNU GENERAL PUBLIC LICENSE Version 3. See
-the file LICENSE.txt for the complete text of the license.
+Copyright (C) 2013-2015  Jochen Topf <jochen@topf.org>
+
+This program is available under the GNU GENERAL PUBLIC LICENSE Version 3.
+See the file LICENSE.txt for the complete text of the license.
 
 
 ## Authors
