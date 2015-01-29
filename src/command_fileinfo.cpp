@@ -151,11 +151,11 @@ struct InfoHandler : public osmium::handler::Handler {
         ++nodes;
     }
 
-    void way(const osmium::Way& way) {
+    void way(const osmium::Way& /* way */) {
         ++ways;
     }
 
-    void relation(const osmium::Relation& relation) {
+    void relation(const osmium::Relation& /* relation */) {
         ++relations;
     }
 

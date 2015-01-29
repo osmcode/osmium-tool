@@ -1,18 +1,20 @@
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
-#  Osmium Tool CMakeLists.txt
+#  CMake Config
 #
-#----------------------------------------------------------------------
+#  Osmium Tool
+#
+#-----------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 2.8.5)
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 #  Project version
 #
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 project(osmium)
 
@@ -25,11 +27,11 @@ set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERS
 add_definitions(-DOSMIUM_VERSION="${OSMIUM_VERSION}")
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 #  Find external dependencies
 #
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -41,11 +43,11 @@ find_package(Cryptopp)
 include_directories(${CRYPTOPP_INCLUDE_DIRS})
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 #  Optional "cppcheck" target that checks C++ code
 #
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 message(STATUS "Looking for cppcheck")
 find_program(CPPCHECK cppcheck)
 
@@ -63,11 +65,11 @@ else()
 endif(CPPCHECK)
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 #  Optional "man" target to generate man pages
 #
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 message(STATUS "Looking for pandoc")
 find_program(PANDOC pandoc)
 
@@ -109,11 +111,11 @@ else()
 endif(PANDOC)
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 #  Optional "format" target that formats C++ code
 #
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 message(STATUS "Looking for astyle")
 find_program(ASTYLE astyle)
 
@@ -127,11 +129,11 @@ else()
 endif(ASTYLE)
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 #
 #  Decide which C++ version to use (Minimum/default: C++11).
 #
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 if(NOT USE_CPP_VERSION)
     set(USE_CPP_VERSION c++11)
@@ -142,39 +144,43 @@ message(STATUS "Use C++ version: ${USE_CPP_VERSION}")
 # so using this instead:
 add_definitions(-std=${USE_CPP_VERSION})
 
-#----------------------------------------------------------------------
 
-set(CMAKE_CXX_FLAGS_NONE "-O3 -g"
-    CACHE STRING "Flags used by the compiler during all builds."
-    FORCE)
-
-set(CMAKE_CXX_FLAGS_DEV "-O3 -g ${OSMIUM_WARNING_OPTIONS}"
-    CACHE STRING "Flags used by the compiler during developer builds."
-    FORCE)
-set(CMAKE_EXE_LINKER_FLAGS_DEV ""
-    CACHE STRING "Flags used by the linker during developer builds."
-    FORCE)
-mark_as_advanced(
-    CMAKE_CXX_FLAGS_DEV
-    CMAKE_EXE_LINKER_FLAGS_DEV
-)
-
+#-----------------------------------------------------------------------------
+#
+#  Build Type
+#
+#-----------------------------------------------------------------------------
 set(CMAKE_CONFIGURATION_TYPES "Debug Release RelWithDebInfo MinSizeRel Dev")
 
-# Update the documentation string of CMAKE_BUILD_TYPE for GUIs
-set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
+# In 'Dev' mode: compile with very strict warnings and turn them into errors.
+if(CMAKE_BUILD_TYPE STREQUAL "Dev")
+    if(NOT MSVC)
+        add_definitions(-Werror)
+    endif()
+    add_definitions(${OSMIUM_WARNING_OPTIONS})
+endif()
+
+# Force RelWithDebInfo build type if none was given
+if(CMAKE_BUILD_TYPE)
+    set(build_type ${CMAKE_BUILD_TYPE})
+else()
+    set(build_type "RelWithDebInfo")
+endif()
+
+set(CMAKE_BUILD_TYPE ${build_type}
+    CACHE STRING
     "Choose the type of build, options are: ${CMAKE_CONFIGURATION_TYPES}."
     FORCE)
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 include_directories(${PROJECT_BINARY_DIR}/src)
 
 add_subdirectory(src)
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 if(NOT CRYPTOPP_FOUND)
     message(WARNING "=========================================================================
   Libcryptopp/crypto++ not found! - Some functionality will be missing.
@@ -184,4 +190,4 @@ if(NOT CRYPTOPP_FOUND)
 endif()
 
 
-#----------------------------------------------------------------------
+#-----------------------------------------------------------------------------
