@@ -31,34 +31,12 @@ set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERS
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 include_directories(${Boost_INCLUDE_DIRS})
-if(NOT Boost_FOUND)
-    message(WARNING "Boost program_options not found!\n")
-    set(MISSING_LIB 1)
-endif()
-
-find_package(Cryptopp REQUIRED)
-include_directories(${CRYPTOPP_INCLUDE_DIRS})
-if(NOT CRYPTOPP_FOUND)
-    message(WARNING "Crypto++/Cryptopp library not found!\n")
-    set(MISSING_LIB 1)
-endif()
 
 find_package(Osmium REQUIRED COMPONENTS io)
 include_directories(${OSMIUM_INCLUDE_DIRS})
-if(NOT OSMIUM_FOUND)
-    message(WARNING "Libosmium not found!\n")
-    set(MISSING_LIB 1)
-endif()
 
-
-#----------------------------------------------------------------------
-#
-#  Check that all required libraries are available
-#
-#----------------------------------------------------------------------
-if(MISSING_LIB)
-    message(FATAL_ERROR "Required library or libraries missing. Aborting...")
-endif(MISSING_LIB)
+find_package(Cryptopp)
+include_directories(${CRYPTOPP_INCLUDE_DIRS})
 
 
 #----------------------------------------------------------------------
@@ -203,6 +181,16 @@ set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
 #----------------------------------------------------------------------
 
 add_subdirectory(src)
+
+
+#----------------------------------------------------------------------
+if(NOT CRYPTOPP_FOUND)
+    message(WARNING "=========================================================================
+  Libcryptopp/crypto++ not found! - Some functionality will be missing.
+  Install the library/headers to fix this. You might have to set the
+  CRYPTOPP_INCLUDE_DIR and CRYPTOPP_LIBRARY CMake variables.
+=========================================================================")
+endif()
 
 
 #----------------------------------------------------------------------

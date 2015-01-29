@@ -39,11 +39,10 @@ namespace po = boost::program_options;
 
 #include "command_fileinfo.hpp"
 
-// this must be after the local includes..
-#ifdef USE_CRYPTOPP
+#ifdef OSMIUM_WITH_CRYPTOPP
 # include <cryptopp/sha.h>
 #else
-# include <crypto++/sha.h>
+# pragma message("Compiling without libcryptopp - fileinfo SHA will not be available")
 #endif
 
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
@@ -105,7 +104,9 @@ struct InfoHandler : public osmium::handler::Handler {
     uint64_t relations = 0;
     osmium::Timestamp first_timestamp = osmium::end_of_time();
     osmium::Timestamp last_timestamp = osmium::start_of_time();
+#ifdef OSMIUM_WITH_CRYPTOPP
     CryptoPP::SHA hash;
+#endif
 
     bool ordered = true;
     bool multiple_versions = false;
@@ -113,11 +114,16 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::object_id_type last_id = 0;
 
     void changeset(const osmium::Changeset& changeset) {
+#ifdef OSMIUM_WITH_CRYPTOPP
         hash.Update(changeset.data(), changeset.byte_size());
+#endif
         ++changesets;
     }
 
     void osm_object(const osmium::OSMObject& object) {
+#ifdef OSMIUM_WITH_CRYPTOPP
+        hash.Update(object.data(), object.byte_size());
+#endif
         if (object.timestamp() < first_timestamp) {
             first_timestamp = object.timestamp();
         }
@@ -141,18 +147,15 @@ struct InfoHandler : public osmium::handler::Handler {
     }
 
     void node(const osmium::Node& node) {
-        hash.Update(node.data(), node.byte_size());
         bounds.extend(node.location());
         ++nodes;
     }
 
     void way(const osmium::Way& way) {
-        hash.Update(way.data(), way.byte_size());
         ++ways;
     }
 
     void relation(const osmium::Relation& relation) {
-        hash.Update(relation.data(), relation.byte_size());
         ++relations;
     }
 
@@ -213,12 +216,15 @@ bool CommandFileinfo::run() {
                 std::cout << "    WARNING! This is different from the setting in the header.\n";
             }
 
+#ifdef OSMIUM_WITH_CRYPTOPP
             unsigned char digest[CryptoPP::SHA::DIGESTSIZE];
             info_handler.hash.Final(digest);
             std::cout << "  SHA: " << std::hex;
             for (int i=0; i < CryptoPP::SHA::DIGESTSIZE; ++i) {
                 std::cout << static_cast<int>(digest[i]);
             }
+#endif
+
             std::cout << std::dec << "\n";
             std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
             std::cout << "  Number of nodes: " << info_handler.nodes << "\n";
