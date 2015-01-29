@@ -23,7 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 #include <boost/program_options.hpp>
-namespace po = boost::program_options;
 
 #include <osmium/io/any_input.hpp>
 #include <osmium/io/any_output.hpp>
@@ -34,6 +33,7 @@ namespace po = boost::program_options;
 #include "command_merge_changes.hpp"
 
 bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
+    namespace po = boost::program_options;
     po::variables_map vm;
     try {
         po::options_description cmdline("Allowed options");
