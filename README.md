@@ -9,8 +9,8 @@ library.
 
 ## Prerequisites
 
-You need a C++11 compliant compiler. GCC 4.8 and clang 3.2 are known to work.
-You also need the following libraries:
+You need a C++11 compliant compiler. GCC 4.8 and later as well as clang 3.4 and
+later are known to work. You also need the following libraries:
 
     Osmium Library
         http://osmcode.org/libosmium
@@ -41,13 +41,17 @@ You also need the following libraries:
         Debian/Ubuntu: libexpat1-dev
         openSUSE: libexpat-devel
 
-    libcrypto++ (for checksumming)
+    libcrypto++ (optional, for checksumming)
         http://www.cryptopp.com/
         Debian/Ubuntu: libcrypto++-dev
 
     cmake (for building)
         http://www.cmake.org/
         Debian/Ubuntu: cmake
+
+    Pandoc (optional, do build documentation)
+        http://johnmacfarlane.net/pandoc/
+        Debian/Ubuntu: pandoc
 
 
 ## Building
@@ -58,15 +62,14 @@ Results will be in the `build` directory.
 
 Or you can go the long route explicitly calling CMake as follows:
 
-```
-mkdir build
-cd build
-cmake ..
-make
-```
+    mkdir build
+    cd build
+    cmake ..
+    make
 
 To set the build type call cmake with `-DCMAKE_BUILD_TYPE=type`. Possible
-values are empty, Debug, Release, RelWithDebInfo and MinSizeRel.
+values are empty, Debug, Release, RelWithDebInfo, MinSizeRel, and Dev. The
+defaults is RelWithDebInfo.
 
 
 ## Documentation

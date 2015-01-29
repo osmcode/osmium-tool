@@ -20,9 +20,8 @@ install:
  - sudo rm /usr/bin/cpp
  - sudo ln -s /usr/bin/cpp-4.8 /usr/bin/cpp
  # upgrade libosmium dependencies
- - sudo apt-get install --yes make libboost-dev libboost-program-options-dev libprotobuf-dev protobuf-compiler libcrypto++-dev
+ - sudo apt-get install --yes make libboost-dev libboost-program-options-dev libprotobuf-dev protobuf-compiler libcrypto++-dev pandoc
  - cd ..
- - git clone https://github.com/osmcode/osm-testdata.git
  - git clone https://github.com/osmcode/libosmium.git
  # OSMPBF is too old, install from git
  #- sudo apt-get install --yes libosmpbf-dev
