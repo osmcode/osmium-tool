@@ -22,6 +22,8 @@ set(OSMIUM_VERSION_PATCH 1)
 
 set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERSION_PATCH})
 
+add_definitions(-DOSMIUM_VERSION="${OSMIUM_VERSION}")
+
 
 #----------------------------------------------------------------------
 #
@@ -127,19 +129,6 @@ endif(ASTYLE)
 
 #----------------------------------------------------------------------
 #
-#  Create src/config.hpp
-#
-#----------------------------------------------------------------------
-configure_file(
-    ${PROJECT_SOURCE_DIR}/src/config.hpp.in
-    ${PROJECT_BINARY_DIR}/src/config.hpp
-)
-
-include_directories(${PROJECT_BINARY_DIR}/src)
-
-
-#----------------------------------------------------------------------
-#
 #  Decide which C++ version to use (Minimum/default: C++11).
 #
 #----------------------------------------------------------------------
@@ -179,6 +168,8 @@ set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING
 
 
 #----------------------------------------------------------------------
+
+include_directories(${PROJECT_BINARY_DIR}/src)
 
 add_subdirectory(src)
 

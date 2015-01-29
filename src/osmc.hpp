@@ -31,8 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <osmium/util/verbose_output.hpp>
 
-#include "config.hpp"
-
 /**
  * Virtual base class for commands that can be called from the command line.
  */
