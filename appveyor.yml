@@ -30,16 +30,8 @@ install:
   - cmake -version
   - CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - SET LODEPSDIR=c:\projects\osmium-tool\libosmium-deps
-  - SET PROJ_LIB=%LODEPSDIR%\proj\share
-  - set GDAL_DATA=%LODEPSDIR%\gdal\data
-  #geos.dll
-  - SET PATH=%LODEPSDIR%\geos\lib;%PATH%
-  #gdal.dll
-  - SET PATH=%LODEPSDIR%\gdal\lib;%PATH%
   #libexpat.dll
   - SET PATH=%LODEPSDIR%\expat\lib;%PATH%
-  #libtiff.dll
-  - SET PATH=%LODEPSDIR%\libtiff\lib;%PATH%
   #zlibwapi.dll
   - SET PATH=%LODEPSDIR%\zlib\lib;%PATH%
   #convert backslashes in bzip2 path to forward slashes
