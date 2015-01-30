@@ -111,9 +111,11 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::item_type last_type = osmium::item_type::undefined;
     osmium::object_id_type last_id = 0;
 
-    void changeset(const osmium::Changeset& changeset) {
 #ifdef OSMIUM_WITH_CRYPTOPP
+    void changeset(const osmium::Changeset& changeset) {
         hash.Update(changeset.data(), changeset.byte_size());
+#else
+    void changeset(const osmium::Changeset& /* changeset */) {
 #endif
         ++changesets;
     }
