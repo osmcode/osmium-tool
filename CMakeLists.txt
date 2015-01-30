@@ -199,7 +199,10 @@ enable_testing()
 function(do_test _name _command _regex)
     separate_arguments(_command)
     add_test(NAME ${_name} COMMAND ${_command})
-    set_tests_properties(${_name} PROPERTIES PASS_REGULAR_EXPRESSION ${_regex})
+    set_tests_properties(${_name} PROPERTIES
+                         ENVIRONMENT "MANPATH=${PROJECT_BINARY_DIR}/man"
+                         PASS_REGULAR_EXPRESSION ${_regex}
+    )
 endfunction()
 
 do_test(version  "osmium --version" "^osmium version ${OSMIUM_VERSION}\n")
