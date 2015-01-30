@@ -73,6 +73,21 @@ endif(CPPCHECK)
 message(STATUS "Looking for pandoc")
 find_program(PANDOC pandoc)
 
+function(add_man_page _section _name)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/man/man${_section})
+    set(_output_file ${CMAKE_BINARY_DIR}/man/man${_section}/${_name}.${_section})
+    set(_source_file ${CMAKE_SOURCE_DIR}/doc/${_name}.md)
+    set(_install_dir "share/man/man{$_section}")
+    add_custom_command(OUTPUT ${_output_file}
+        COMMAND ${PANDOC} ${PANDOC_MAN_OPTIONS} -o ${_output_file} ${_source_file}
+        DEPENDS ${_source_file}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Building manpage ${_name}.${_section}"
+        VERBATIM)
+    set(ALL_MAN_PAGES "${ALL_MAN_PAGES};${_output_file}" PARENT_SCOPE)
+endfunction()
+
+
 if(PANDOC)
     message(STATUS "Looking for pandoc - found")
     message(STATUS "  Manual pages will be built")
@@ -80,31 +95,17 @@ if(PANDOC)
     set(PANDOC_MAN_OPTIONS -s -t man --template ${CMAKE_CURRENT_SOURCE_DIR}/doc/manpage.template --variable "description=osmium/${OSMIUM_VERSION}" --variable "date=${PUBDATE}")
     set(PANDOC_HTML_OPTIONS -s -t html)
 
-    set(MAN_PAGES_1 osmium.1 osmium-apply-changes.1 osmium-cat.1 osmium-fileinfo.1 osmium-merge-changes.1 osmium-time-filter.1)
-    set(MAN_PAGES_5 osmium-file-formats.5)
-    set(MAN_NAMES ${MAN_PAGES_1} ${MAN_PAGES_5})
-    set(MAN_FILES)
-    foreach(m IN LISTS MAN_NAMES)
-        set(mf ${CMAKE_BINARY_DIR}/${m})
-        string(REGEX REPLACE ".[0-9]\$" "" mws "${m}")
-        set(ms ${CMAKE_SOURCE_DIR}/doc/${mws}.md)
-        add_custom_command(OUTPUT ${mf}
-            COMMAND ${PANDOC} ${PANDOC_MAN_OPTIONS} -o ${mf} ${ms}
-            DEPENDS ${ms}
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Building manpage ${mf}"
-            VERBATIM)
-        list(APPEND MAN_FILES ${mf})
-    endforeach()
+    add_man_page(1 osmium)
+    add_man_page(1 osmium-apply-changes)
+    add_man_page(1 osmium-cat)
+    add_man_page(1 osmium-fileinfo)
+    add_man_page(1 osmium-merge-changes)
+    add_man_page(1 osmium-time-filter)
+    add_man_page(5 osmium-file-formats)
 
-    add_custom_target(man ALL DEPENDS ${MAN_FILES})
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/man DESTINATION share)
 
-    foreach(m IN LISTS MAN_PAGES_1)
-        install(FILES ${CMAKE_BINARY_DIR}/${m} DESTINATION share/man/man1)
-    endforeach()
-    foreach(m IN LISTS MAN_PAGES_5)
-        install(FILES ${CMAKE_BINARY_DIR}/${m} DESTINATION share/man/man5)
-    endforeach()
+    add_custom_target(man ALL DEPENDS ${ALL_MAN_PAGES})
 else()
     message(STATUS "Looking for pandoc - not found")
     message(STATUS "  Manual pages will not be built")
@@ -172,6 +173,14 @@ set(CMAKE_BUILD_TYPE ${build_type}
     CACHE STRING
     "Choose the type of build, options are: ${CMAKE_CONFIGURATION_TYPES}."
     FORCE)
+
+
+#-----------------------------------------------------------------------------
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/osmium-wrapper.in
+    ${PROJECT_BINARY_DIR}/osmium
+)
 
 
 #-----------------------------------------------------------------------------
