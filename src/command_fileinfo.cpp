@@ -211,9 +211,14 @@ bool CommandFileinfo::run() {
 
             std::cout << "  Objects ordered (by type and id): " << (info_handler.ordered ? "yes\n" : "no\n");
 
-            std::cout << "  Multiple versions of same object: " << (info_handler.multiple_versions ? "yes\n" : "no\n");
-            if (info_handler.multiple_versions != header.has_multiple_object_versions()) {
-                std::cout << "    WARNING! This is different from the setting in the header.\n";
+            std::cout << "  Multiple versions of same object: ";
+            if (info_handler.ordered) {
+                std::cout << (info_handler.multiple_versions ? "yes\n" : "no\n");
+                if (info_handler.multiple_versions != header.has_multiple_object_versions()) {
+                    std::cout << "    WARNING! This is different from the setting in the header.\n";
+                }
+            } else {
+                std::cout << "unknown (because objects in file are unordered)";
             }
 
 #ifdef OSMIUM_WITH_CRYPTOPP
