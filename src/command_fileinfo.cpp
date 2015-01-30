@@ -40,8 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef OSMIUM_WITH_CRYPTOPP
 # include <cryptopp/sha.h>
-#else
-# pragma message("Compiling without libcryptopp - fileinfo SHA will not be available")
 #endif
 
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {

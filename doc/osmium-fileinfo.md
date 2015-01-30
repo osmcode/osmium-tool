@@ -64,7 +64,7 @@ and with exit code 1 if some other error occurred.
 
 # NOTES
 
-Calculation of the SHA1 is only available when Osmium was compiled with support
+Calculation of the SHA1 is only available if Osmium was compiled with support
 for it. Check **osmium --version** to see whether thats the case.
 
 
