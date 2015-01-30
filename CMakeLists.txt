@@ -184,6 +184,26 @@ configure_file(
 
 
 #-----------------------------------------------------------------------------
+#
+#  Tests
+#
+#-----------------------------------------------------------------------------
+
+enable_testing()
+
+function(do_test _name _command _regex)
+    separate_arguments(_command)
+    add_test(NAME ${_name} COMMAND ${_command})
+    set_tests_properties(${_name} PROPERTIES PASS_REGULAR_EXPRESSION ${_regex})
+endfunction()
+
+do_test(version  "osmium --version" "^osmium version ${OSMIUM_VERSION}\n")
+do_test(help     "osmium help"      "^Usage: .*Commands are:")
+do_test(help2    "osmium --help"    "^Usage: .*Commands are:")
+do_test(help_cat "osmium help cat"  "^OSMIUM-CAT\\(1\\)")
+
+
+#-----------------------------------------------------------------------------
 
 include_directories(${PROJECT_BINARY_DIR}/src)
 
