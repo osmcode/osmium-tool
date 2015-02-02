@@ -29,12 +29,12 @@ install:
  - cd OSM-binary/src
  - make
  - sudo make install
- - cd ../..
 
-before_script:
- - true
+#before_script:
+# - true
 
 script:
+ - cd $TRAVIS_BUILD_DIR
  - if [ "${CXX}" = 'g++' ]; then export CXX=g++-4.8; fi;
  - mkdir build
  - cd build
