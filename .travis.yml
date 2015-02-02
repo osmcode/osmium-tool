@@ -40,4 +40,5 @@ script:
  - cd build
  - cmake -LA -DCMAKE_BUILD_TYPE=${CONFIGURATION} ..
  - make VERBOSE=1
+ - ctest
 
