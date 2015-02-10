@@ -208,7 +208,10 @@ endfunction()
 do_test(version  "osmium --version" "^osmium version ${OSMIUM_VERSION}\n")
 do_test(help     "osmium help"      "^Usage: .*Commands are:")
 do_test(help2    "osmium --help"    "^Usage: .*Commands are:")
-do_test(help_cat "osmium help cat"  "^OSMIUM-CAT\\(1\\)")
+
+if(PANDOC)
+    do_test(help_cat "osmium help cat" "^OSMIUM-CAT\\(1\\)")
+endif()
 
 
 if(BUILD_WITH_CRYPTOPP AND CRYPTOPP_FOUND)
