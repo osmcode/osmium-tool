@@ -28,20 +28,20 @@ platform: x64
 
 install:
   # show all availble env vars
-  - SET
-  - ECHO cmake on AppVeyor
+  - set
+  - echo cmake on AppVeyor
   - cmake -version
-  - CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - SET PATH=c:\projects\libosmium\cmake-3.1.0-win32-x86\bin;%PATH%
-  - SET LODEPSDIR=c:\projects\osmium-tool\libosmium-deps
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+  - set PATH=c:\projects\osmium-tool\cmake-3.1.0-win32-x86\bin;%PATH%
+  - set LODEPSDIR=c:\projects\osmium-tool\libosmium-deps
   #libexpat.dll
-  - SET PATH=%LODEPSDIR%\expat\lib;%PATH%
+  - set PATH=%LODEPSDIR%\expat\lib;%PATH%
   #zlibwapi.dll
-  - SET PATH=%LODEPSDIR%\zlib\lib;%PATH%
+  - set PATH=%LODEPSDIR%\zlib\lib;%PATH%
   #convert backslashes in bzip2 path to forward slashes
   #cmake cannot find it otherwise
-  - SET LIBBZIP2=%LODEPSDIR%\bzip2\lib\libbz2.lib
-  - SET LIBBZIP2=%LIBBZIP2:\=/%
+  - set LIBBZIP2=%LODEPSDIR%\bzip2\lib\libbz2.lib
+  - set LIBBZIP2=%LIBBZIP2:\=/%
   - ps: Start-FileDownload https://mapnik.s3.amazonaws.com/deps/cmake-3.1.0-win32-x86.7z -FileName cm.7z
   - ps: Start-FileDownload https://mapnik.s3.amazonaws.com/dist/dev/libosmium-deps-win-14.0-x64.7z -FileName lodeps.7z
   - 7z x cm.7z > nul
@@ -49,7 +49,7 @@ install:
   - echo %LODEPSDIR%
   - dir %LODEPSDIR%
   #- tree %LODEPSDIR%
-  - ECHO our own cmake
+  - echo our own cmake
   - cmake -version
   - cd c:\projects
   - git clone https://github.com/osmcode/libosmium.git
