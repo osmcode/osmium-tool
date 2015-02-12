@@ -159,6 +159,39 @@ endif()
 
 #-----------------------------------------------------------------------------
 #
+#  Compiler and Linker flags
+#
+#-----------------------------------------------------------------------------
+if(MSVC)
+    set(USUAL_COMPILE_OPTIONS "/Ox")
+else()
+    set(USUAL_COMPILE_OPTIONS "-O3 -g")
+endif()
+
+if(WIN32)
+    add_definitions(-DWIN32 -D_WIN32 -DMSWIN32 -DBGDWIN32
+                    -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0600)
+endif()
+
+set(CMAKE_CXX_FLAGS_DEV "${USUAL_COMPILE_OPTIONS}"
+    CACHE STRING "Flags used by the compiler during developer builds."
+    FORCE)
+
+set(CMAKE_EXE_LINKER_FLAGS_DEV ""
+    CACHE STRING "Flags used by the linker during developer builds."
+    FORCE)
+mark_as_advanced(
+    CMAKE_CXX_FLAGS_DEV
+    CMAKE_EXE_LINKER_FLAGS_DEV
+)
+
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${USUAL_COMPILE_OPTIONS}"
+    CACHE STRING "Flags used by the compiler during RELWITHDEBINFO builds."
+    FORCE)
+
+
+#-----------------------------------------------------------------------------
+#
 #  Build Type
 #
 #-----------------------------------------------------------------------------
