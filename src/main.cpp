@@ -82,12 +82,6 @@ int main(int argc, char *argv[]) {
                   << "This is free software: you are free to change and redistribute it.\n"
                   << "There is NO WARRANTY, to the extent permitted by law.\n";
 
-#ifdef OSMIUM_WITH_CRYPTOPP
-        std::cout << "SHA support: enabled\n";
-#else
-        std::cout << "SHA support: disabled\n";
-#endif
-
         return return_code::okay;
     }
 

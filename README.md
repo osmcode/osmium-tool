@@ -19,6 +19,10 @@ later are known to work. You also need the following libraries:
         http://www.boost.org/doc/libs/1_54_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
 
+    boost-crc
+        http://www.boost.org/doc/libs/1_57_0/libs/crc/
+        Debian/Ubuntu: libboost-dev
+
     Google protocol buffers (for PBF support)
         http://code.google.com/p/protobuf/ (at least version 2.3.0 needed)
         Debian/Ubuntu: libprotobuf-dev protobuf-compiler
@@ -40,10 +44,6 @@ later are known to work. You also need the following libraries:
         http://expat.sourceforge.net/
         Debian/Ubuntu: libexpat1-dev
         openSUSE: libexpat-devel
-
-    libcrypto++ (optional, for checksumming)
-        http://www.cryptopp.com/
-        Debian/Ubuntu: libcrypto++-dev
 
     cmake (for building)
         http://www.cmake.org/

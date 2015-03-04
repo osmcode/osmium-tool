@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # include <unistd.h>
 #endif
 
+#include <boost/crc.hpp>
 #include <boost/program_options.hpp>
 
 #include <osmium/io/any_input.hpp>
@@ -37,10 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/visitor.hpp>
 
 #include "command_fileinfo.hpp"
-
-#ifdef OSMIUM_WITH_CRYPTOPP
-# include <cryptopp/sha.h>
-#endif
 
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     namespace po = boost::program_options;
@@ -102,28 +99,20 @@ struct InfoHandler : public osmium::handler::Handler {
     uint64_t relations = 0;
     osmium::Timestamp first_timestamp = osmium::end_of_time();
     osmium::Timestamp last_timestamp = osmium::start_of_time();
-#ifdef OSMIUM_WITH_CRYPTOPP
-    CryptoPP::SHA hash;
-#endif
+    boost::crc_32_type crc32;
 
     bool ordered = true;
     bool multiple_versions = false;
     osmium::item_type last_type = osmium::item_type::undefined;
     osmium::object_id_type last_id = 0;
 
-#ifdef OSMIUM_WITH_CRYPTOPP
     void changeset(const osmium::Changeset& changeset) {
-        hash.Update(changeset.data(), changeset.byte_size());
-#else
-    void changeset(const osmium::Changeset& /* changeset */) {
-#endif
+        crc32.process_bytes(changeset.data(), changeset.byte_size());
         ++changesets;
     }
 
     void osm_object(const osmium::OSMObject& object) {
-#ifdef OSMIUM_WITH_CRYPTOPP
-        hash.Update(object.data(), object.byte_size());
-#endif
+        crc32.process_bytes(object.data(), object.byte_size());
         if (object.timestamp() < first_timestamp) {
             first_timestamp = object.timestamp();
         }
@@ -221,16 +210,7 @@ bool CommandFileinfo::run() {
                 std::cout << "unknown (because objects in file are unordered)";
             }
 
-#ifdef OSMIUM_WITH_CRYPTOPP
-            unsigned char digest[CryptoPP::SHA::DIGESTSIZE];
-            info_handler.hash.Final(digest);
-            std::cout << "  SHA: " << std::hex;
-            for (int i=0; i < CryptoPP::SHA::DIGESTSIZE; ++i) {
-                std::cout << static_cast<int>(digest[i]);
-            }
-#endif
-
-            std::cout << std::dec << "\n";
+            std::cout << "  CRC32: " << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
             std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
             std::cout << "  Number of nodes: " << info_handler.nodes << "\n";
             std::cout << "  Number of ways: " << info_handler.ways << "\n";

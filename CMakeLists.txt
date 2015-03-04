@@ -44,14 +44,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(Osmium REQUIRED COMPONENTS io)
 include_directories(${OSMIUM_INCLUDE_DIRS})
 
-#-----------------------------------------------------------------------------
-option(BUILD_WITH_CRYPTOPP "Build using libcryptopp" ON)
-
-if(BUILD_WITH_CRYPTOPP)
-    find_package(Cryptopp)
-    include_directories(${CRYPTOPP_INCLUDE_DIRS})
-endif()
-
 
 #-----------------------------------------------------------------------------
 #
@@ -248,13 +240,6 @@ do_test(help2    "osmium --help"    "^Usage: .*Commands are:")
 
 if(PANDOC)
     do_test(help_cat "osmium help cat" "^OSMIUM-CAT\\(1\\)")
-endif()
-
-
-if(BUILD_WITH_CRYPTOPP AND CRYPTOPP_FOUND)
-    do_test(version_sha "osmium --version" "\nSHA support: enabled\n")
-else()
-    do_test(version_sha "osmium --version" "\nSHA support: disabled\n")
 endif()
 
 
