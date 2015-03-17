@@ -22,9 +22,7 @@ This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 .SH CONTACT
 .PP
-Developers can be contacted through the OSM dev mailinglist
-(https://lists.openstreetmap.org/listinfo/dev).
-Bugs should be reported to https://github.com/osmcode/osmium-tool.
+http://osmcode.org/contact.html
 .SH AUTHORS
 $for(author)$$author$$sep$; $endfor$.
 $endif$
