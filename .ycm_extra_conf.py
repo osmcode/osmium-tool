@@ -6,6 +6,10 @@
 #
 #-----------------------------------------------------------------------------
 
+from os.path import realpath, dirname
+
+basedir = dirname(realpath(__file__))
+
 # some default flags
 # for more information install clang-3.2-doc package and
 # check UsersManual.html
@@ -26,7 +30,7 @@ flags = [
 'c++',
 
 # libosmium include dirs
-'-I../libosmium/include',
+'-I%s/../libosmium/include' % basedir,
 
 ]
 
