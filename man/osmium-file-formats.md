@@ -1,5 +1,3 @@
-% OSMIUM-FILE-FORMATS(5)
-% Jochen Topf <jochen@topf.org>
 
 # NAME
 

@@ -31,6 +31,8 @@ set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERS
 
 add_definitions(-DOSMIUM_VERSION="${OSMIUM_VERSION}")
 
+set(AUTHOR "Jochen Topf <jochen@topf.org>")
+
 
 #-----------------------------------------------------------------------------
 #
@@ -80,8 +82,14 @@ function(add_man_page _section _name)
     set(_output_file ${CMAKE_BINARY_DIR}/man/man${_section}/${_name}.${_section})
     set(_source_file ${CMAKE_SOURCE_DIR}/man/${_name}.md)
     set(_install_dir "share/man/man{$_section}")
+    string(TOUPPER ${_name} _name_upcase)
     add_custom_command(OUTPUT ${_output_file}
-        COMMAND ${PANDOC} ${PANDOC_MAN_OPTIONS} -o ${_output_file} ${_source_file}
+        COMMAND ${PANDOC}
+            ${PANDOC_MAN_OPTIONS}
+            --variable "title=${_name_upcase}"
+            --variable "section=${_section}"
+            -o ${_output_file}
+            ${_source_file}
         DEPENDS ${_source_file}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMENT "Building manpage ${_name}.${_section}"
@@ -94,7 +102,14 @@ if(PANDOC)
     message(STATUS "Looking for pandoc - found")
     message(STATUS "  Manual pages will be built")
     execute_process(COMMAND date "+%Y-%m-%d" OUTPUT_VARIABLE PUBDATE OUTPUT_STRIP_TRAILING_WHITESPACE)
-    set(PANDOC_MAN_OPTIONS -s -t man --template ${CMAKE_CURRENT_SOURCE_DIR}/man/manpage.template --variable "description=osmium/${OSMIUM_VERSION}" --variable "date=${PUBDATE}")
+        set(PANDOC_MAN_OPTIONS
+        -s
+        -t man
+        --template ${CMAKE_CURRENT_SOURCE_DIR}/man/manpage.template
+        --variable "description=osmium/${OSMIUM_VERSION}"
+        --variable "date=${PUBDATE}"
+        --variable "author=${AUTHOR}"
+    )
     set(PANDOC_HTML_OPTIONS -s -t html)
 
     add_man_page(1 osmium)

@@ -1,5 +1,3 @@
-% OSMIUM(1)
-% Jochen Topf <jochen@topf.org>
 
 # NAME
 osmium - multipurpose tool for working with OpenStreetMap data

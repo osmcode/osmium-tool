@@ -1,5 +1,3 @@
-% OSMIUM-APPLY-CHANGES(1)
-% Jochen Topf <jochen@topf.org>
 
 # NAME
 

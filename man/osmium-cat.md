@@ -1,5 +1,3 @@
-% OSMIUM-CAT(1)
-% Jochen Topf <jochen@topf.org>
 
 # NAME
 
