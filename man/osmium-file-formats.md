@@ -3,7 +3,7 @@
 
 # NAME
 
-osmium-file-formats - OSM file formats known to Osmium.
+osmium-file-formats - OSM file formats known to Osmium
 
 # FORMATS
 

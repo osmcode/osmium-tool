@@ -2,12 +2,12 @@
 % Jochen Topf <jochen@topf.org>
 
 # NAME
-osmium - Multipurpose tool for working with OpenStreetMap data.
+osmium - multipurpose tool for working with OpenStreetMap data
 
 
 # SYNOPSIS
 
-**osmium** *COMMAND* \[ARGS\]\
+**osmium** *COMMAND* \[*ARGS*\]\
 **osmium** --help\
 **osmium** --version
 
@@ -21,7 +21,7 @@ Run **osmium help** *COMMAND* to get more information about a command.
 
 # OPTIONS
 
---help, -h
+-h, --help
 :   Show usage and list of commands.
 
 --version

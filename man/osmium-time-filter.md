@@ -3,13 +3,13 @@
 
 # NAME
 
-osmium-time-filter - Filter OSM data by time from a history file.
+osmium-time-filter - filter OSM data by time from a history file
 
 
 # SYNOPSIS
 
-**osmium time-filter** \[OPTIONS\] *INPUT-FILE* \[*TIME*\]\
-**osmium time-filter** \[OPTIONS\] *INPUT-FILE* *FROM-TIME* *TO-TIME*
+**osmium time-filter** \[*OPTIONS*\] *INPUT-FILE* \[*TIME*\]\
+**osmium time-filter** \[*OPTIONS*\] *INPUT-FILE* *FROM-TIME* *TO-TIME*
 
 
 # DESCRIPTION
@@ -30,29 +30,29 @@ The format for the timestamps is "yyyy-mm-ddThh:mm::ssZ".
 
 # OPTIONS
 
---generator
-:   The name and version of the program generating the output file. It will be
-    added to the header of the output file. Default is "*osmium/*" and the version
-    of osmium.
-
---input-format, -F
-:   The format of the input file. Can be used to set the input file format
-    if it can't be autodetected from the file name.
-    **See osmium-file-formats**(5) or the libosmium manual for details.
-
---output-file, -o
-:   Name of the output file. Default is '-' (*stdout*).
-
---output-format, -f
+-f, --output-format=FORMAT
 :   The format of the output file. Can be used to set the output file format
     if it can't be autodetected from the output file name.
     **See osmium-file-formats**(5) or the libosmium manual for details.
 
---overwrite, -O
+-F, --input-format=FORMAT
+:   The format of the input file. Can be used to set the input file format
+    if it can't be autodetected from the file name.
+    **See osmium-file-formats**(5) or the libosmium manual for details.
+
+--generator=NAME
+:   The name and version of the program generating the output file. It will be
+    added to the header of the output file. Default is "*osmium/*" and the version
+    of osmium.
+
+-o, --output-file=FILE
+:   Name of the output file. Default is '-' (*stdout*).
+
+-O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
---verbose, -v
+-v, --verbose
 :   Set verbose mode. The program will output information about what it is
     doing to *stderr*.
 

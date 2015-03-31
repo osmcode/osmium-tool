@@ -3,12 +3,12 @@
 
 # NAME
 
-osmium-fileinfo - Show information about an OpenStreetMap file.
+osmium-fileinfo - show information about an OpenStreetMap file
 
 
 # SYNOPSIS
 
-**osmium fileinfo** \[OPTIONS\] *FILE*
+**osmium fileinfo** \[*OPTIONS*\] *FILE*
 
 
 # DESCRIPTION
@@ -46,10 +46,10 @@ Data
 
 # OPTIONS
 
---extended, -e
+-e, --extended
 :   Read the complete file and show additional information.
 
---input-format, -f
+-f, --input-format=FORMAT
 :   The format of the input file. Can be used to set the input file format
     if it can't be autodetected from the file name.
     See **osmium-file-formats**(5) or the libosmium manual for details.

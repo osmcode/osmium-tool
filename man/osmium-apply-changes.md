@@ -3,12 +3,12 @@
 
 # NAME
 
-osmium-apply-changes - Apply OSM change file(s) to OSM data file.
+osmium-apply-changes - apply OSM change file(s) to OSM data file
 
 
 # SYNOPSIS
 
-**osmium apply-changes** \[OPTIONS\] *INPUT-FILE* *CHANGE-FILE...*
+**osmium apply-changes** \[*OPTIONS*\] *INPUT-FILE* *CHANGE-FILE*...
 
 
 # DESCRIPTION
@@ -25,37 +25,37 @@ data has to fit in there!
 
 # OPTIONS
 
---generator NAME
-:   The name and version of the program generating the output file. It will be
-    added to the header of the output file. Default is "*osmium/*" and the version
-    of osmium.
+-f, --output-format=FORMAT
+:   The format of the output file. Can be used to set the output file format
+    if it can't be autodetected from the output file name.
+    See **osmium-file-formats**(5) or the libosmium manual for details.
 
---input-format, -F FORMAT
+-F, --input-format=FORMAT
 :   The format of the input files. Can be used to set the input format if it
     can't be autodetected from the file names. This will set the format for
     all input files, there is no way to set the format for some input files
     only. See **osmium-file-formats**(5) or the libosmium manual for details.
 
---output, -o FILE
+--generator=NAME
+:   The name and version of the program generating the output file. It will be
+    added to the header of the output file. Default is "*osmium/*" and the version
+    of osmium.
+
+-o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
 
---output-format, -f FORMAT
-:   The format of the output file. Can be used to set the output file format
-    if it can't be autodetected from the output file name.
-    See **osmium-file-formats**(5) or the libosmium manual for details.
-
---overwrite, -O
+-O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
---remove-deleted, -r
+-r, --remove-deleted
 :   Remove deleted objects from the output. If this is not set, deleted objects
     will be in the output with the visible flag set to false.
 
---simplify, -s
+-s, --simplify
 :   Only write the last version of any object to the output.
 
---verbose, -v
+-v, --verbose
 :   Set verbose mode. The program will output information about what it is
     doing to *stderr*.
 
