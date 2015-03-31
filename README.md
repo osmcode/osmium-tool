@@ -74,17 +74,9 @@ defaults is RelWithDebInfo.
 
 ## Documentation
 
-There are man pages in the 'doc' directory. To build them you need 'pandoc'.
+There are man pages in the 'man' directory. To build them you need 'pandoc'.
 If the `pandoc` command was found during the CMake config step, the manpages
 will be built, if not they will not be built.
-
-
-## Building Debian Package
-
-A `debian` directory is provided for building (unofficial) Debian packages.
-Call `make deb` or `debuild -I -us -uc` to build the package. Note that there
-currently is no libosmium package with the new libosmium version needed for the
-Osmium tool, so the build dependencies are not complete.
 
 
 ## License
