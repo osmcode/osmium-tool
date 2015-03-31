@@ -49,7 +49,7 @@ later are known to work. You also need the following libraries:
         http://www.cmake.org/
         Debian/Ubuntu: cmake
 
-    Pandoc (optional, do build documentation)
+    Pandoc (optional, to build documentation)
         http://johnmacfarlane.net/pandoc/
         Debian/Ubuntu: pandoc
 
