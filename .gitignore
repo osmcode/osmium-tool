@@ -1,6 +1,2 @@
 .*.swp
-src/*.o
-doc/*.1
-doc/*.html
-build*
 .ycm_extra_conf.pyc
