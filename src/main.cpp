@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::string> arguments;
 
-    for (int i=1; i < argc; ++i) {
+    for (int i = 1; i < argc; ++i) {
         arguments.push_back(argv[i]);
     }
 

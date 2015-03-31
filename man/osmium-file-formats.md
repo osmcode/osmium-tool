@@ -40,7 +40,7 @@ force_visible_flag=true/false (*default: false*)
 :   Force writing of visible flag, even for normal OSM XML files.
 
 pbf_dense_nodes=true/false (*default: true*)
-:   Enable/disable DenseNodes format for PBF files. 
+:   Enable/disable DenseNodes format for PBF files.
 
 pbf_compression=true/false (*default: true*)
 :   Enable/disable compression in PBF files. Disabling this will make writing
