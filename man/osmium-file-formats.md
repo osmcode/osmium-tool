@@ -50,6 +50,11 @@ pbf_add_metadata=true/false (*default: true*)
 :   Enable/disable writing of object metadata such as changeset id, username,
     etc. Disabling this will make files a bit smaller.
 
+pbf_sort_stringtables=true/false (*default: true*)
+:   Specify whether the string tables in the PBF data blocks should be sorted.
+    Writing the PBF files is slightly faster without sorting.
+
+
 # EXAMPLES
 
 Here are some examples:
