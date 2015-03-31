@@ -78,7 +78,7 @@ find_program(PANDOC pandoc)
 function(add_man_page _section _name)
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/man/man${_section})
     set(_output_file ${CMAKE_BINARY_DIR}/man/man${_section}/${_name}.${_section})
-    set(_source_file ${CMAKE_SOURCE_DIR}/doc/${_name}.md)
+    set(_source_file ${CMAKE_SOURCE_DIR}/man/${_name}.md)
     set(_install_dir "share/man/man{$_section}")
     add_custom_command(OUTPUT ${_output_file}
         COMMAND ${PANDOC} ${PANDOC_MAN_OPTIONS} -o ${_output_file} ${_source_file}
@@ -94,7 +94,7 @@ if(PANDOC)
     message(STATUS "Looking for pandoc - found")
     message(STATUS "  Manual pages will be built")
     execute_process(COMMAND date "+%Y-%m-%d" OUTPUT_VARIABLE PUBDATE OUTPUT_STRIP_TRAILING_WHITESPACE)
-    set(PANDOC_MAN_OPTIONS -s -t man --template ${CMAKE_CURRENT_SOURCE_DIR}/doc/manpage.template --variable "description=osmium/${OSMIUM_VERSION}" --variable "date=${PUBDATE}")
+    set(PANDOC_MAN_OPTIONS -s -t man --template ${CMAKE_CURRENT_SOURCE_DIR}/man/manpage.template --variable "description=osmium/${OSMIUM_VERSION}" --variable "date=${PUBDATE}")
     set(PANDOC_HTML_OPTIONS -s -t html)
 
     add_man_page(1 osmium)
