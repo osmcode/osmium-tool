@@ -250,13 +250,3 @@ add_subdirectory(src)
 
 
 #-----------------------------------------------------------------------------
-if(BUILD_WITH_CRYPTOPP AND NOT CRYPTOPP_FOUND)
-    message(WARNING "=========================================================================
-  Libcryptopp/crypto++ not found! - Some functionality will be missing.
-  Install the library/headers to fix this. You might have to set the
-  CRYPTOPP_INCLUDE_DIR and CRYPTOPP_LIBRARY CMake variables.
-=========================================================================")
-endif()
-
-
-#-----------------------------------------------------------------------------
