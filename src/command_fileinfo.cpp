@@ -207,7 +207,7 @@ bool CommandFileinfo::run() {
                     std::cout << "    WARNING! This is different from the setting in the header.\n";
                 }
             } else {
-                std::cout << "unknown (because objects in file are unordered)";
+                std::cout << "unknown (because objects in file are unordered)\n";
             }
 
             std::cout << "  CRC32: " << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
