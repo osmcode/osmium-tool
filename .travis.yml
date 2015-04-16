@@ -1,3 +1,9 @@
+#-----------------------------------------------------------------------------
+#
+#  Configuration for continuous integration service at travis-ci.org
+#
+#-----------------------------------------------------------------------------
+
 language: cpp
 
 compiler:
@@ -9,36 +15,34 @@ env:
  - CONFIGURATION=Release
 
 before_install:
- # we need at least g++-4.8 for c++11 features
+ # upgrade compiler (we need at least g++-4.8 for C++11 features)
  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
- - sudo apt-get update --yes --quiet
+ - sudo apt-get update --yes -qq
+ - gcc_version=4.8
+ - sudo apt-get install --yes gcc-${gcc_version} g++-${gcc_version}
+ - gcc-${gcc_version} --version
+ # make sure compiler executables point to the just installed version
+ - sudo ln -sf /usr/bin/cpp-${gcc_version} /usr/bin/cpp
+ - sudo ln -sf /usr/bin/gcc-${gcc_version} /usr/bin/gcc
+ - sudo ln -sf /usr/bin/g++-${gcc_version} /usr/bin/g++
+ # install dependencies
+ - sudo apt-get install --yes make libboost-dev libboost-program-options-dev libprotobuf-dev protobuf-compiler pandoc
 
 install:
- # upgrade compilers
- - sudo apt-get install --yes gcc-4.8 g++-4.8
- # make sure 'cpp' is the just installed current one
- - sudo rm /usr/bin/cpp
- - sudo ln -s /usr/bin/cpp-4.8 /usr/bin/cpp
- # upgrade libosmium dependencies
- - sudo apt-get install --yes make libboost-dev libboost-program-options-dev libprotobuf-dev protobuf-compiler pandoc
  - cd ..
  - git clone https://github.com/osmcode/libosmium.git
- # OSMPBF is too old, install from git
- #- sudo apt-get install --yes libosmpbf-dev
  - git clone https://github.com/scrosby/OSM-binary.git
  - cd OSM-binary/src
  - make
  - sudo make install
 
-#before_script:
-# - true
-
 script:
  - cd $TRAVIS_BUILD_DIR
- - if [ "${CXX}" = 'g++' ]; then export CXX=g++-4.8; fi;
  - mkdir build
  - cd build
- - cmake -LA -DCMAKE_BUILD_TYPE=${CONFIGURATION} ..
+ # GCC ignores the pragmas in the code that disable the "return-type" warning selectively, so use this workaround
+ - if [ "${CXX}" = 'g++' ]; then WORKAROUND="-DCMAKE_CXX_FLAGS=-Wno-return-type"; else WORKAROUND=""; fi
+ - cmake -LA -DCMAKE_BUILD_TYPE=${CONFIGURATION} ${WORKAROUND} ..
  - make VERBOSE=1
- - ctest
+ - ctest --output-on-failure
 
