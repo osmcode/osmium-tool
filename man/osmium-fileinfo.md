@@ -34,7 +34,7 @@ Data
 :   This section shows the information available from reading the whole
     file. It is only shown if the **--extended** option was used. It
     shows the actual bounding box calculated from the nodes in the file,
-    the first and last timestamp of all objects in the file, a SHA1
+    the first and last timestamp of all objects in the file, a CRC32
     checksum of the data in the file, the number of changesets, nodes,
     ways, and relations found in the file, whether the objects in the
     file were ordered by type (nodes, then ways, then relations) and
@@ -58,12 +58,6 @@ Data
 **osmium fileinfo** exits with code 0 if everything went alright, it exits
 with code 2 if there was a problem with the command line arguments,
 and with exit code 1 if some other error occurred.
-
-
-# NOTES
-
-Calculation of the SHA1 is only available if Osmium was compiled with support
-for it. Check **osmium --version** to see whether thats the case.
 
 
 # SEE ALSO
