@@ -47,7 +47,7 @@ Data
 -e, --extended
 :   Read the complete file and show additional information.
 
--f, --input-format=FORMAT
+-F, --input-format=FORMAT
 :   The format of the input file. Can be used to set the input file format
     if it can't be autodetected from the file name.
     See **osmium-file-formats**(5) or the libosmium manual for details.
