@@ -49,7 +49,7 @@ bool CommandHelp::run() {
         auto commands = CommandFactory::help();
 
         // find the maximum length of all command names
-        size_t max_width = std::accumulate(commands.begin(), commands.end(), 0, [](size_t max_so_far, std::pair<std::string, std::string> info) {
+        size_t max_width = std::accumulate(commands.begin(), commands.end(), size_t(0), [](size_t max_so_far, std::pair<std::string, std::string> info) {
             return std::max(max_so_far, info.first.length());
         });
 
