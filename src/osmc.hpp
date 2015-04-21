@@ -114,6 +114,14 @@ public:
         return instance().register_command(name, description, create_function);
     }
 
+    static std::string get_description(const std::string& name) {
+        auto it = instance().m_commands.find(name);
+        if (it == instance().m_commands.end()) {
+            return "";
+        }
+        return it->second.description;
+    }
+
     bool register_command(const std::string& name, const std::string& description, create_command_type create_function) {
         command_info info {description, create_function};
         return m_commands.insert(std::make_pair(name, info)).second;

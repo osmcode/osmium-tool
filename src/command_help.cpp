@@ -30,9 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef _MSC_VER
 # include <unistd.h>
-#else
-# include <process.h>
-# define execlp _execlp
 #endif
 
 #include "command_help.hpp"
@@ -42,11 +39,22 @@ bool CommandHelp::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
+void show_help(const std::string& topic, const std::string& info) {
+#ifndef _MSC_VER
+    // show man page
+    std::string manpage("osmium-");
+    manpage += topic;
+    ::execlp("man", "man", manpage.c_str(), nullptr);
+#endif
+    std::cout << info << "\n";
+    std::cout << "You'll find more documentation at http://osmcode.org/osmium/\n";
+}
+
 bool CommandHelp::run() {
+    auto commands = CommandFactory::help();
+
     if (m_topic == "help") {
         std::cout << "Usage: osmium [--version] [--help] <command> [<args>]\n\nCommands are:\n";
-
-        auto commands = CommandFactory::help();
 
         // find the maximum length of all command names
         size_t max_width = std::accumulate(commands.begin(), commands.end(), size_t(0), [](size_t max_so_far, std::pair<std::string, std::string> info) {
@@ -62,13 +70,18 @@ bool CommandHelp::run() {
         return true;
     }
 
-    // show man page
-    std::string manpage("osmium-");
-    manpage += m_topic;
-    ::execlp("man", "man", manpage.c_str(), nullptr);
+    std::string description = CommandFactory::get_description(m_topic);
+    if (!description.empty()) {
+        show_help(m_topic, std::string("osmium ") + m_topic + ": " + description);
+        return true;
+    }
 
-    std::cerr << "Executing man command failed: " << std::strerror(errno) << std::endl;
+    if (m_topic == "file-formats") {
+        show_help("file-formats", "osmium file-formats: Supported formats are 'xml', 'pbf', and 'opl'.");
+        return true;
+    }
 
+    std::cerr << "Unknown help topic '" << m_topic << "'\n";
     return false;
 }
 
