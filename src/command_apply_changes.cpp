@@ -136,6 +136,40 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
+/**
+ *  Copy the first OSM object with a given Id to the output iterator. Keep
+ *  track of the Id of each object to do this.
+ *
+ *  If kd is set to true, it will copy deleted objects, too. Otherwise those
+ *  are suppressed.
+ *
+ *  We are using this functor class instead of a simple lambda, because the
+ *  lambda doesn't build on MSVC.
+ */
+class copy_first_with_id {
+
+    osmium::io::OutputIterator<osmium::io::Writer> out;
+    osmium::object_id_type id = 0;
+    bool keep_deleted;
+
+public:
+
+    copy_first_with_id(osmium::io::OutputIterator<osmium::io::Writer> oi, bool kd) :
+        out(oi),
+        keep_deleted(kd) {
+    }
+
+    void operator()(const osmium::OSMObject& obj) {
+        if (obj.id() != id) {
+            if (keep_deleted || obj.visible()) {
+                *out = obj;
+            }
+            id = obj.id();
+        }
+    }
+
+}; // class copy_first_with_id
+
 bool CommandApplyChanges::run() {
     std::vector<osmium::memory::Buffer> changes;
     osmium::ObjectPointerCollection objects;
@@ -167,17 +201,9 @@ bool CommandApplyChanges::run() {
         m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_reverse_version());
 
-        osmium::object_id_type id = 0;
-        bool keep_deleted = !m_remove_deleted;
-
-        auto output_it = boost::make_function_output_iterator([out, id, keep_deleted](const osmium::OSMObject& obj) mutable {
-            if (obj.id() != id) {
-                if (keep_deleted || obj.visible()) {
-                    *out = obj;
-                }
-                id = obj.id();
-            }
-        });
+        auto output_it = boost::make_function_output_iterator(
+                            copy_first_with_id(out, !m_remove_deleted)
+        );
 
         m_vout << "Applying changes and writing them to output...\n";
         std::set_union(objects.begin(),
