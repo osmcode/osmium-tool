@@ -104,7 +104,7 @@ if(PANDOC)
     message(STATUS "Looking for pandoc - found")
     message(STATUS "  Manual pages will be built")
     execute_process(COMMAND date "+%Y-%m-%d" OUTPUT_VARIABLE PUBDATE OUTPUT_STRIP_TRAILING_WHITESPACE)
-        set(PANDOC_MAN_OPTIONS
+    set(PANDOC_MAN_OPTIONS
         -s
         -t man
         --template ${CMAKE_CURRENT_SOURCE_DIR}/man/manpage.template
