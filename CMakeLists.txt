@@ -159,6 +159,9 @@ else()
     set(USUAL_COMPILE_OPTIONS "-O3 -g")
 endif()
 
+separate_arguments(OSMIUM_COMPILE_OPTIONS)
+add_compile_options(${OSMIUM_COMPILE_OPTIONS})
+
 if(WIN32)
     add_definitions(-DWIN32 -D_WIN32 -DMSWIN32 -DBGDWIN32
                     -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0600)
