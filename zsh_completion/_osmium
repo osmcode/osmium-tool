@@ -4,7 +4,7 @@
 #
 # To test this file:
 # 1) Comment out last line
-# 2) Call: . ./zsh_osmium
+# 2) Call: . ./_osmium
 # 3) Call: compdef _osmium osmium
 #
 # To read more about what is happening here:
@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|pbf|osm.pbf) *.(osm|osh|osc).(bz2|gz)'"
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(apply-changes cat fileinfo help merge-changes time-filter)
+    osmium_commands=(apply-changes cat check-refs fileinfo help merge-changes time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -67,6 +67,19 @@ _osmium-cat() {
         '(-O)--overwrite[allow overwriting of existing output file]' \
         '*-t[read only object of given output types]:OSM object type:_osmium_object_type' \
         '*--object-type[read only object of given output types]:OSM object type:_osmium_object_type' \
+        '(--verbose)-v[set verbose mode]' \
+        '(-v)--verbose[set verbose mode]' \
+        "*::input OSM file:_files -g ${osmium_file_glob}"
+}
+
+_osmium-check-refs() {
+    _arguments : \
+        '(-F)--input-format=[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        '(--input-format)-F=[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        '(--show-ids)-i[show ids of missing objects]' \
+        '(-i)--show-ids[show ids of missing objects]' \
+        '(--check-relations)-r[also check referential integrity of relations]' \
+        '(-r)--check-relations[also check referential integrity of relations]' \
         '(--verbose)-v[set verbose mode]' \
         '(-v)--verbose[set verbose mode]' \
         "*::input OSM file:_files -g ${osmium_file_glob}"
@@ -141,7 +154,7 @@ _osmium_object_type() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(apply-changes cat fileinfo help merge-changes time-filter file-formats)
+    osmium_help_topics=(apply-changes cat check-refs fileinfo help merge-changes time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 
