@@ -29,6 +29,8 @@ flags = [
 '-x',
 'c++',
 
+'-I%s/include' % basedir,
+
 # libosmium include dirs
 '-I%s/../libosmium/include' % basedir,
 

@@ -20,14 +20,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <algorithm>
 #include <iostream>
-
-#include <sys/types.h>
+#include <iterator>
+#include <sstream>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <system_error>
+#include <vector>
 
 #ifndef _MSC_VER
 # include <unistd.h>
 #endif
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#include <rapidjson/prettywriter.h>
+#include <rapidjson/stringbuffer.h>
+#pragma GCC diagnostic pop
 
 #include <boost/crc.hpp>
 #include <boost/program_options.hpp>
@@ -39,56 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "command_fileinfo.hpp"
 
-bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
-    namespace po = boost::program_options;
-    po::variables_map vm;
-    try {
-        po::options_description cmdline("Allowed options");
-        cmdline.add_options()
-        ("extended,e", "Extended output")
-        ("input-format,F", po::value<std::string>(), "Format of input file")
-        ;
 
-        po::options_description hidden("Hidden options");
-        hidden.add_options()
-        ("input-filename", po::value<std::string>(), "Input file")
-        ;
-
-        po::options_description desc("Allowed options");
-        desc.add(cmdline).add(hidden);
-
-        po::positional_options_description positional;
-        positional.add("input-filename", 1);
-
-        po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
-        po::notify(vm);
-
-        if (vm.count("extended")) {
-            m_extended = true;
-        }
-
-        if (vm.count("input-format")) {
-            m_input_format = vm["input-format"].as<std::string>();
-        }
-
-        if (vm.count("input-filename")) {
-            m_input_filename = vm["input-filename"].as<std::string>();
-        }
-
-    } catch (boost::program_options::error& e) {
-        std::cerr << "Error parsing command line: " << e.what() << std::endl;
-        return false;
-    }
-
-    if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        std::cerr << "When reading from STDIN you need to use the --input-format,F option to declare the file format.\n";
-        return false;
-    }
-
-    m_input_file = osmium::io::File(m_input_filename, m_input_format);
-
-    return true;
-}
+/*************************************************************************/
 
 struct InfoHandler : public osmium::handler::Handler {
 
@@ -150,78 +112,468 @@ struct InfoHandler : public osmium::handler::Handler {
 
 }; // InfoHandler
 
+/*************************************************************************/
+
 off_t filesize(const std::string& filename) {
     if (filename.empty()) {
         return 0;
     }
+
     struct stat s;
-    stat(filename.c_str(), &s);
+    if (::stat(filename.c_str(), &s) == -1) {
+        throw std::system_error(errno, std::system_category(), "stat failed");
+    }
+
     return s.st_size;
 }
 
-bool CommandFileinfo::run() {
-    try {
+/*************************************************************************/
+
+class Output {
+
+public:
+
+    virtual ~Output() = default;
+
+    virtual void file(const std::string& filename, const osmium::io::File& input_file) = 0;
+    virtual void header(const osmium::io::Header& header) = 0;
+    virtual void data(const osmium::io::Header& header, const InfoHandler& info_handler) = 0;
+
+    virtual void output() {
+    }
+
+}; // class Output
+
+class HumanReadableOutput : public Output {
+
+public:
+
+    void file(const std::string& input_filename, const osmium::io::File& input_file) override final {
         std::cout << "File:\n";
-        std::cout << "  Name: " << m_input_filename << "\n";
-        std::cout << "  Format: " << m_input_file.format() << "\n";
-        std::cout << "  Compression: " << m_input_file.compression() << "\n";
+        std::cout << "  Name: " << input_filename << "\n";
+        std::cout << "  Format: " << input_file.format() << "\n";
+        std::cout << "  Compression: " << input_file.compression() << "\n";
 
-        if (!m_input_file.filename().empty()) {
-            std::cout << "  Size: " << filesize(m_input_file.filename()) << "\n";
+        if (!input_file.filename().empty()) {
+            std::cout << "  Size: " << filesize(input_file.filename()) << "\n";
         }
+    }
 
-        osmium::io::Reader reader(m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing);
-
-        osmium::io::Header header = reader.header();
+    void header(const osmium::io::Header& header) override final {
         std::cout << "Header:\n";
 
         std::cout << "  Bounding boxes:\n";
-        for (auto& box : header.boxes()) {
+        for (const auto& box : header.boxes()) {
             std::cout << "    " << box << "\n";
         }
         std::cout << "  With history: " << (header.has_multiple_object_versions() ? "yes" : "no") << "\n";
 
         std::cout << "  Options:\n";
-        for (auto option : header) {
+        for (const auto& option : header) {
             std::cout << "    " << option.first << "=" << option.second << "\n";
         }
+    }
+
+    void data(const osmium::io::Header& header, const InfoHandler& info_handler) override final {
+        std::cout << "Data: " << "\n";
+        std::cout << "  Bounding box: " << info_handler.bounds << "\n";
+
+        if (info_handler.first_timestamp != osmium::end_of_time()) {
+            std::cout << "  Timestamps:\n";
+            std::cout << "    First: " << info_handler.first_timestamp << "\n";
+            std::cout << "    Last: " << info_handler.last_timestamp << "\n";
+        }
+
+        std::cout << "  Objects ordered (by type and id): " << (info_handler.ordered ? "yes\n" : "no\n");
+
+        std::cout << "  Multiple versions of same object: ";
+        if (info_handler.ordered) {
+            std::cout << (info_handler.multiple_versions ? "yes\n" : "no\n");
+            if (info_handler.multiple_versions != header.has_multiple_object_versions()) {
+                std::cout << "    WARNING! This is different from the setting in the header.\n";
+            }
+        } else {
+            std::cout << "unknown (because objects in file are unordered)\n";
+        }
+
+        std::cout << "  CRC32: " << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
+        std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
+        std::cout << "  Number of nodes: " << info_handler.nodes << "\n";
+        std::cout << "  Number of ways: " << info_handler.ways << "\n";
+        std::cout << "  Number of relations: " << info_handler.relations << "\n";
+    }
+
+}; // class HumanReadableOutput
+
+
+class JSONOutput : public Output {
+
+    typedef rapidjson::PrettyWriter<rapidjson::StringBuffer> writer_type;
+
+    rapidjson::StringBuffer m_stream;
+    writer_type m_writer;
+
+public:
+
+    JSONOutput() :
+        m_stream(),
+        m_writer(m_stream) {
+        m_writer.StartObject();
+    }
+
+    void file(const std::string& input_filename, const osmium::io::File& input_file) override final {
+        m_writer.String("file");
+        m_writer.StartObject();
+
+        m_writer.String("name");
+        m_writer.String(input_filename.c_str());
+
+        m_writer.String("format");
+        m_writer.String(osmium::io::as_string(input_file.format()));
+
+        m_writer.String("compression");
+        m_writer.String(osmium::io::as_string(input_file.compression()));
+
+        if (!input_file.filename().empty()) {
+            m_writer.String("size");
+            m_writer.Int64(filesize(input_file.filename()));
+        }
+
+        m_writer.EndObject();
+    }
+
+    void add_bbox(const osmium::Box& box) {
+        m_writer.StartArray();
+        m_writer.Double(box.bottom_left().lon());
+        m_writer.Double(box.bottom_left().lat());
+        m_writer.Double(box.top_right().lon());
+        m_writer.Double(box.top_right().lat());
+        m_writer.EndArray();
+    }
+
+    void header(const osmium::io::Header& header) override final {
+        m_writer.String("header");
+        m_writer.StartObject();
+
+        m_writer.String("boxes");
+        m_writer.StartArray();
+        for (const auto& box : header.boxes()) {
+            add_bbox(box);
+        }
+        m_writer.EndArray();
+
+        m_writer.String("with_history");
+        m_writer.Bool(header.has_multiple_object_versions());
+
+        m_writer.String("option");
+        m_writer.StartObject();
+        for (const auto& option : header) {
+            m_writer.String(option.first.c_str());
+            m_writer.String(option.second.c_str());
+        }
+        m_writer.EndObject();
+
+        m_writer.EndObject();
+    }
+
+    void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) override final {
+        m_writer.String("data");
+        m_writer.StartObject();
+
+        m_writer.String("bbox");
+        add_bbox(info_handler.bounds);
+
+        if (info_handler.first_timestamp != osmium::end_of_time()) {
+            m_writer.String("timestamp");
+            m_writer.StartObject();
+
+            m_writer.String("first");
+            std::string s = info_handler.first_timestamp.to_iso();
+            m_writer.String(s.c_str());
+            m_writer.String("last");
+            s = info_handler.last_timestamp.to_iso();
+            m_writer.String(s.c_str());
+
+            m_writer.EndObject();
+        }
+
+        m_writer.String("objects_ordered");
+        m_writer.Bool(info_handler.ordered);
+
+        if (info_handler.ordered) {
+            m_writer.String("multiple_versions");
+            m_writer.Bool(info_handler.multiple_versions);
+        }
+
+        m_writer.String("crc32");
+        std::stringstream ss;
+        ss << std::hex << info_handler.crc32.checksum() << std::dec;
+        m_writer.String(ss.str().c_str());
+
+        m_writer.String("count");
+        m_writer.StartObject();
+        m_writer.String("changesets");
+        m_writer.Int64(info_handler.changesets);
+        m_writer.String("nodes");
+        m_writer.Int64(info_handler.nodes);
+        m_writer.String("ways");
+        m_writer.Int64(info_handler.ways);
+        m_writer.String("relations");
+        m_writer.Int64(info_handler.relations);
+        m_writer.EndObject();
+
+        m_writer.EndObject();
+    }
+
+    void output() override final {
+        m_writer.EndObject();
+        std::cout << m_stream.GetString() << "\n";
+    }
+
+}; // class JSONOutput
+
+class SimpleOutput : public Output {
+
+    std::string m_get_value;
+
+    bool output_variable(const std::string& name) {
+        return m_get_value == name;
+    }
+
+public:
+
+    SimpleOutput(const std::string& get_value) :
+        m_get_value(get_value) {
+    }
+
+    void file(const std::string& input_filename, const osmium::io::File& input_file) override final {
+        if (m_get_value == "file.name") {
+            std::cout << input_filename << "\n";
+        }
+        if (m_get_value == "file.format") {
+            std::cout << input_file.format() << "\n";
+        }
+        if (m_get_value == "file.compression") {
+            std::cout << input_file.compression() << "\n";
+        }
+        if (m_get_value == "file.size") {
+            if (input_file.filename().empty()) {
+                std::cout << 0 << "\n";
+            } else {
+                std::cout << filesize(input_file.filename()) << "\n";
+            }
+        }
+    }
+
+    void header(const osmium::io::Header& header) override final {
+        if (m_get_value == "header.with_history") {
+            std::cout << (header.has_multiple_object_versions() ? "yes" : "no") << "\n";
+        }
+
+        for (const auto& option : header) {
+            std::string value_name = "header.option.";
+            value_name.append(option.first);
+            if (m_get_value == value_name) {
+                std::cout << option.second << "\n";
+            }
+        }
+    }
+
+    void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) override final {
+        if (m_get_value == "data.bbox") {
+            std::cout << info_handler.bounds << "\n";
+        }
+
+        if (m_get_value == "data.timestamp.first") {
+            if (info_handler.first_timestamp == osmium::end_of_time()) {
+                std::cout << "\n";
+            } else {
+                std::cout << info_handler.first_timestamp << "\n";
+            }
+        }
+
+        if (m_get_value == "data.timestamp.last") {
+            if (info_handler.first_timestamp == osmium::end_of_time()) {
+                std::cout << "\n";
+            } else {
+                std::cout << info_handler.last_timestamp << "\n";
+            }
+        }
+
+        if (m_get_value == "data.objects_ordered") {
+            std::cout << (info_handler.ordered ? "yes\n" : "no\n");
+        }
+
+        if (m_get_value == "data.multiple_versions") {
+            if (info_handler.ordered) {
+                std::cout << (info_handler.multiple_versions ? "yes\n" : "no\n");
+            } else {
+                std::cout << "unknown\n";
+            }
+        }
+
+        if (m_get_value == "data.crc32") {
+            std::cout << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
+        }
+
+        if (m_get_value == "data.count.changesets") {
+            std::cout << info_handler.changesets << "\n";
+        }
+        if (m_get_value == "data.count.nodes") {
+            std::cout << info_handler.nodes << "\n";
+        }
+        if (m_get_value == "data.count.ways") {
+            std::cout << info_handler.ways << "\n";
+        }
+        if (m_get_value == "data.count.relations") {
+            std::cout << info_handler.relations << "\n";
+        }
+    }
+
+}; // class SimpleOutput
+
+
+/*************************************************************************/
+
+bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
+    namespace po = boost::program_options;
+    po::variables_map vm;
+    try {
+        po::options_description cmdline("Allowed options");
+        cmdline.add_options()
+        ("extended,e", "Extended output")
+        ("get,g", po::value<std::string>(), "Get value")
+        ("show-variables,G", "Show variables for --get option")
+        ("input-format,F", po::value<std::string>(), "Format of input file")
+        ("json,j", "JSON output")
+        ;
+
+        po::options_description hidden("Hidden options");
+        hidden.add_options()
+        ("input-filename", po::value<std::string>(), "Input file")
+        ;
+
+        po::options_description desc("Allowed options");
+        desc.add(cmdline).add(hidden);
+
+        po::positional_options_description positional;
+        positional.add("input-filename", 1);
+
+        po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+        po::notify(vm);
+
+        if (vm.count("extended")) {
+            m_extended = true;
+        }
+
+        if (vm.count("json")) {
+            m_json_output = true;
+        }
+
+        if (vm.count("input-format")) {
+            m_input_format = vm["input-format"].as<std::string>();
+        }
+
+        if (vm.count("input-filename")) {
+            m_input_filename = vm["input-filename"].as<std::string>();
+        }
+
+        std::vector<std::string> known_values = {
+            "file.name",
+            "file.format",
+            "file.compression",
+            "file.size",
+            "header.with_history",
+            "header.option.generator",
+            "header.option.version",
+            "header.option.pbf_dense_nodes",
+            "header.option.osmosis_replication_timestamp",
+            "header.option.osmosis_replication_sequence_number",
+            "header.option.osmosis_replication_base_url",
+            "data.bbox",
+            "data.timestamp.first",
+            "data.timestamp.last",
+            "data.objects_ordered",
+            "data.multiple_versions",
+            "data.crc32",
+            "data.count.nodes",
+            "data.count.ways",
+            "data.count.relations",
+            "data.count.changesets"
+        };
+
+        if (vm.count("show-variables")) {
+            std::copy(known_values.cbegin(), known_values.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
+            m_do_not_run = true;
+            return true;
+        }
+
+        if (vm.count("get")) {
+            m_get_value = vm["get"].as<std::string>();
+            const auto& f = std::find(known_values.cbegin(), known_values.cend(), m_get_value);
+            if (f == known_values.cend()) {
+                std::cerr << "Unknown value for --get/-g option '" << m_get_value << "'. Use --show-variables/-G to see list of known values.\n";
+                return false;
+            }
+            if (m_get_value.substr(0, 5) == "data." && ! m_extended) {
+                std::cerr << "You need to set --extended/-e for any 'data.*' variables to be available.\n";
+                return false;
+            }
+        }
+
+        if (vm.count("get") && vm.count("json")) {
+            std::cerr << "You can not use --get/-g and --json/-j together.\n";
+            return false;
+        }
+
+    } catch (boost::program_options::error& e) {
+        std::cerr << "Error parsing command line: " << e.what() << std::endl;
+        return false;
+    }
+
+    if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
+        std::cerr << "When reading from STDIN you need to use the --input-format,F option to declare the file format.\n";
+        return false;
+    }
+
+    m_input_file = osmium::io::File(m_input_filename, m_input_format);
+
+    return true;
+}
+
+bool CommandFileinfo::run() {
+    if (m_do_not_run) {
+        return true;
+    }
+
+    std::unique_ptr<Output> output;
+    if (m_json_output) {
+        output.reset(new JSONOutput());
+    } else if (m_get_value.empty()) {
+        output.reset(new HumanReadableOutput());
+    } else {
+        output.reset(new SimpleOutput(m_get_value));
+    }
+
+    try {
+        output->file(m_input_filename, m_input_file);
+
+        osmium::io::Reader reader(m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing);
+        osmium::io::Header header = reader.header();
+        output->header(header);
 
         if (m_extended) {
             InfoHandler info_handler;
-
             osmium::apply(reader, info_handler);
-            std::cout << "Data: " << "\n";
-            std::cout << "  Bounding box: " << info_handler.bounds << "\n";
-
-            if (info_handler.first_timestamp != osmium::end_of_time()) {
-                std::cout << "  First timestamp: " << info_handler.first_timestamp << "\n";
-                std::cout << "  Last timestamp: " << info_handler.last_timestamp << "\n";
-            }
-
-            std::cout << "  Objects ordered (by type and id): " << (info_handler.ordered ? "yes\n" : "no\n");
-
-            std::cout << "  Multiple versions of same object: ";
-            if (info_handler.ordered) {
-                std::cout << (info_handler.multiple_versions ? "yes\n" : "no\n");
-                if (info_handler.multiple_versions != header.has_multiple_object_versions()) {
-                    std::cout << "    WARNING! This is different from the setting in the header.\n";
-                }
-            } else {
-                std::cout << "unknown (because objects in file are unordered)\n";
-            }
-
-            std::cout << "  CRC32: " << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
-            std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
-            std::cout << "  Number of nodes: " << info_handler.nodes << "\n";
-            std::cout << "  Number of ways: " << info_handler.ways << "\n";
-            std::cout << "  Number of relations: " << info_handler.relations << "\n";
+            output->data(header, info_handler);
         }
 
-        return true;
+        output->output();
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         return false;
     }
+    return true;
 }
 
 namespace {

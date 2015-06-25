@@ -33,8 +33,11 @@ class CommandFileinfo : public Command {
 
     std::string m_input_filename = "-"; // default: stdin
     bool m_extended = false;
+    bool m_json_output = false;
+    bool m_do_not_run = false;
     std::string m_input_format;
     osmium::io::File m_input_file;
+    std::string m_get_value;
 
 public:
 

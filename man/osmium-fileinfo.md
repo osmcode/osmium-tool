@@ -17,6 +17,12 @@ in the header, etc.
 This command will usually only read the file header. Use the **--extended**
 option to show more information.
 
+Normally this command will output the data in human readable form. If the
+-j, --json option is used, the output will be in JSON format instead.
+
+If the -g, --get option is used, only the value of the named variable will be
+printed.
+
 The output is split into three sections:
 
 File
@@ -51,6 +57,47 @@ Data
 :   The format of the input file. Can be used to set the input file format
     if it can't be autodetected from the file name.
     See **osmium-file-formats**(5) or the libosmium manual for details.
+
+-g, --get=VARIABLE
+:   Get value of VARIABLE. Can not be used together with --json.
+
+:G, --show-variables
+:   Show a list of all variable names.
+
+-j, --json
+:   Output in JSON format. Can not be used together with --get.
+
+
+# VARIABLES
+
+The following variables are available:
+
+    file.name - STRING
+    file.format - STRING: XML|PBF
+    file.compression - STRING: none|bzip2|gzip
+    file.size - INTEGER (0 for stdout)
+    header.with_history - BOOL (yes|no)
+    header.option.generator - STRING
+    header.option.version - STRING
+    header.option.pbf_dense_nodes - BOOL (yes|no)
+    header.option.osmosis_replication_timestamp - STRING with TIMESTAMP
+    header.option.osmosis_replication_sequence_number - INTEGER
+    header.option.osmosis_replication_base_url - STRING
+    data.bbox - BOX
+        (in JSON as nested ARRAY with coordinates)
+    data.timestamp.first - STRING with TIMESTAMP
+    data.timestamp.last - STRING wih TIMESTAMP
+    data.objects_ordered - BOOL (yes|no)
+    data.multiple_versions - STRING (yes|no|unknown)
+        (in JSON as BOOL and missing if "unknown")
+    data.crc32 - STRING with 8 hex digits
+    data.count.nodes - INTEGER
+    data.count.ways - INTEGER
+    data.count.relations - INTEGER
+    data.count.changesets - INTEGER
+
+All timestamps are in the usual OSM ISO format `yy-mm-ddThh::mm::ssZ`. Boxes
+are in the format `(xmin, ymin, xmax, ymax)`.
 
 
 # DIAGNOSTICS

@@ -245,6 +245,7 @@ endif()
 
 #-----------------------------------------------------------------------------
 
+include_directories(include)
 include_directories(${PROJECT_BINARY_DIR}/src)
 
 add_subdirectory(src)
