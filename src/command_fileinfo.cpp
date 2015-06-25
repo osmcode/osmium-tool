@@ -55,22 +55,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 struct InfoHandler : public osmium::handler::Handler {
 
     osmium::Box bounds;
+
     uint64_t changesets = 0;
-    uint64_t nodes = 0;
-    uint64_t ways = 0;
-    uint64_t relations = 0;
+    uint64_t nodes      = 0;
+    uint64_t ways       = 0;
+    uint64_t relations  = 0;
+
+    osmium::object_id_type largest_changeset_id = 0;
+    osmium::object_id_type largest_node_id      = 0;
+    osmium::object_id_type largest_way_id       = 0;
+    osmium::object_id_type largest_relation_id  = 0;
+
     osmium::Timestamp first_timestamp = osmium::end_of_time();
-    osmium::Timestamp last_timestamp = osmium::start_of_time();
+    osmium::Timestamp last_timestamp  = osmium::start_of_time();
+
     boost::crc_32_type crc32;
 
     bool ordered = true;
     bool multiple_versions = false;
+
     osmium::item_type last_type = osmium::item_type::undefined;
     osmium::object_id_type last_id = 0;
 
     void changeset(const osmium::Changeset& changeset) {
         crc32.process_bytes(changeset.data(), changeset.byte_size());
         ++changesets;
+
+        if (changeset.id() > largest_changeset_id) {
+            largest_changeset_id = changeset.id();
+        }
     }
 
     void osm_object(const osmium::OSMObject& object) {
@@ -100,14 +113,26 @@ struct InfoHandler : public osmium::handler::Handler {
     void node(const osmium::Node& node) {
         bounds.extend(node.location());
         ++nodes;
+
+        if (node.id() > largest_node_id) {
+            largest_node_id = node.id();
+        }
     }
 
-    void way(const osmium::Way& /* way */) {
+    void way(const osmium::Way& way) {
         ++ways;
+
+        if (way.id() > largest_way_id) {
+            largest_way_id = way.id();
+        }
     }
 
-    void relation(const osmium::Relation& /* relation */) {
+    void relation(const osmium::Relation& relation) {
         ++relations;
+
+        if (relation.id() > largest_relation_id) {
+            largest_relation_id = relation.id();
+        }
     }
 
 }; // InfoHandler
@@ -197,10 +222,16 @@ public:
         }
 
         std::cout << "  CRC32: " << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
+
         std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
-        std::cout << "  Number of nodes: " << info_handler.nodes << "\n";
-        std::cout << "  Number of ways: " << info_handler.ways << "\n";
-        std::cout << "  Number of relations: " << info_handler.relations << "\n";
+        std::cout << "  Number of nodes: "      << info_handler.nodes      << "\n";
+        std::cout << "  Number of ways: "       << info_handler.ways       << "\n";
+        std::cout << "  Number of relations: "  << info_handler.relations  << "\n";
+
+        std::cout << "  Largest changeset ID: " << info_handler.largest_changeset_id << "\n";
+        std::cout << "  Largest node ID: "      << info_handler.largest_node_id      << "\n";
+        std::cout << "  Largest way ID: "       << info_handler.largest_way_id       << "\n";
+        std::cout << "  Largest relation ID: "  << info_handler.largest_relation_id  << "\n";
     }
 
 }; // class HumanReadableOutput
@@ -322,6 +353,18 @@ public:
         m_writer.Int64(info_handler.relations);
         m_writer.EndObject();
 
+        m_writer.String("maxid");
+        m_writer.StartObject();
+        m_writer.String("changesets");
+        m_writer.Int64(info_handler.largest_changeset_id);
+        m_writer.String("nodes");
+        m_writer.Int64(info_handler.largest_node_id);
+        m_writer.String("ways");
+        m_writer.Int64(info_handler.largest_way_id);
+        m_writer.String("relations");
+        m_writer.Int64(info_handler.largest_relation_id);
+        m_writer.EndObject();
+
         m_writer.EndObject();
     }
 
@@ -428,6 +471,19 @@ public:
         if (m_get_value == "data.count.relations") {
             std::cout << info_handler.relations << "\n";
         }
+
+        if (m_get_value == "data.maxid.changesets") {
+            std::cout << info_handler.largest_changeset_id << "\n";
+        }
+        if (m_get_value == "data.maxid.nodes") {
+            std::cout << info_handler.largest_node_id << "\n";
+        }
+        if (m_get_value == "data.maxid.ways") {
+            std::cout << info_handler.largest_way_id << "\n";
+        }
+        if (m_get_value == "data.maxid.relations") {
+            std::cout << info_handler.largest_relation_id << "\n";
+        }
     }
 
 }; // class SimpleOutput
@@ -499,7 +555,11 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
             "data.count.nodes",
             "data.count.ways",
             "data.count.relations",
-            "data.count.changesets"
+            "data.count.changesets",
+            "data.maxid.nodes",
+            "data.maxid.ways",
+            "data.maxid.relations",
+            "data.maxid.changesets"
         };
 
         if (vm.count("show-variables")) {
