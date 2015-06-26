@@ -32,6 +32,7 @@ endfunction()
 #-----------------------------------------------------------------------------
 
 add_subdirectory(cat)
+add_subdirectory(check-refs)
 add_subdirectory(fileinfo)
 add_subdirectory(help)
 add_subdirectory(time-filter)
