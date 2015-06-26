@@ -224,72 +224,7 @@ configure_file(
 #-----------------------------------------------------------------------------
 
 enable_testing()
-
-function(do_test _name _command _regex)
-    separate_arguments(_command)
-    add_test(NAME ${_name} COMMAND ${_command})
-    set_tests_properties(${_name} PROPERTIES
-                         ENVIRONMENT "MANPATH=${PROJECT_BINARY_DIR}/man"
-                         PASS_REGULAR_EXPRESSION ${_regex}
-    )
-endfunction()
-
-do_test(version  "osmium --version" "^osmium version ${OSMIUM_VERSION}\n")
-do_test(help     "osmium help"      "^Usage: .*Commands are:")
-do_test(help2    "osmium --help"    "^Usage: .*Commands are:")
-
-if(PANDOC)
-    do_test(help_cat "osmium help cat" "^OSMIUM-CAT\\(1\\)")
-endif()
-
-#-----------------------------------------------------------------------------
-
-function(check_output _name _command _output)
-    set(_cmd "${PROJECT_BINARY_DIR}/src/osmium ${_command}")
-    add_test(
-        NAME ${_name}
-        COMMAND ${CMAKE_COMMAND}
-        -Dcmd=${_cmd}
-        -Ddir=${PROJECT_SOURCE_DIR}/test
-        -Dreference=${_output}
-        -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
-    )
-endfunction()
-
-function(check_time_filter _name _type _from _to _output)
-    check_output(time-filter-${_name} "time-filter --generator=test -f ${_type} time-filter/input.osh ${_from} ${_to}" "time-filter/output-${_output}.${_type}")
-endfunction()
-
-check_time_filter(last osm ""                   "" last)
-check_time_filter(ts1  osm 2015-01-01T01:00:00Z "" ts1)
-check_time_filter(ts1a osm 2015-01-01T01:01:00Z "" ts1)
-check_time_filter(ts2  osm 2015-01-01T02:00:00Z "" ts2)
-check_time_filter(ts2a osm 2015-01-01T02:01:00Z "" ts2)
-check_time_filter(ts3  osm 2015-01-01T03:00:00Z "" ts3)
-check_time_filter(ts3a osm 2015-01-01T03:01:00Z "" ts3)
-
-check_time_filter(range-0-5   osh 2015-01-01T00:00:00Z 2015-01-01T05:00:00Z range-0-5)
-check_time_filter(range-1-2   osh 2015-01-01T01:00:00Z 2015-01-01T02:00:00Z range-1-2)
-check_time_filter(range-1a-2a osh 2015-01-01T01:01:00Z 2015-01-01T02:01:00Z range-1a-2a)
-check_time_filter(range-2-3   osh 2015-01-01T02:00:00Z 2015-01-01T03:00:00Z range-2-3)
-check_time_filter(range-2-3a  osh 2015-01-01T02:00:00Z 2015-01-01T03:01:00Z range-2-3a)
-check_time_filter(range-2-4   osh 2015-01-01T02:00:00Z 2015-01-01T04:00:00Z range-2-4)
-
-
-function(check_cat _name _in1 _in2 _output)
-    check_output(cat-${_name} "cat --generator=test -f osm cat/${_in1} cat/${_in2}" "cat/${_output}")
-endfunction()
-
-check_cat(cat12 input1.osm input2.osm output-cat12.osm)
-check_cat(cat21 input2.osm input1.osm output-cat21.osm)
-
-
-function(check_fileinfo _name _options _input _output)
-    check_output(fileinfo-${_name} "fileinfo ${_options} fileinfo/${_input}" "fileinfo/${_output}")
-endfunction()
-
-check_fileinfo(fi1 "--extended" fi1.osm fi1-result.txt)
-
+add_subdirectory(test)
 
 #-----------------------------------------------------------------------------
 
