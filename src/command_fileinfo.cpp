@@ -45,6 +45,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/io/any_input.hpp>
 #include <osmium/handler.hpp>
 #include <osmium/osm/entity_bits.hpp>
+#include <osmium/util/minmax.hpp>
 #include <osmium/visitor.hpp>
 
 #include "command_fileinfo.hpp"
@@ -61,13 +62,13 @@ struct InfoHandler : public osmium::handler::Handler {
     uint64_t ways       = 0;
     uint64_t relations  = 0;
 
-    osmium::object_id_type largest_changeset_id = 0;
-    osmium::object_id_type largest_node_id      = 0;
-    osmium::object_id_type largest_way_id       = 0;
-    osmium::object_id_type largest_relation_id  = 0;
+    osmium::max_op<osmium::object_id_type> largest_changeset_id { 0 };
+    osmium::max_op<osmium::object_id_type> largest_node_id { 0 };
+    osmium::max_op<osmium::object_id_type> largest_way_id { 0 };
+    osmium::max_op<osmium::object_id_type> largest_relation_id { 0 };
 
-    osmium::Timestamp first_timestamp = osmium::end_of_time();
-    osmium::Timestamp last_timestamp  = osmium::start_of_time();
+    osmium::min_op<osmium::Timestamp> first_timestamp;
+    osmium::max_op<osmium::Timestamp> last_timestamp;
 
     boost::crc_32_type crc32;
 
@@ -81,19 +82,13 @@ struct InfoHandler : public osmium::handler::Handler {
         crc32.process_bytes(changeset.data(), changeset.byte_size());
         ++changesets;
 
-        if (changeset.id() > largest_changeset_id) {
-            largest_changeset_id = changeset.id();
-        }
+        largest_changeset_id.update(changeset.id());
     }
 
     void osm_object(const osmium::OSMObject& object) {
         crc32.process_bytes(object.data(), object.byte_size());
-        if (object.timestamp() < first_timestamp) {
-            first_timestamp = object.timestamp();
-        }
-        if (object.timestamp() > last_timestamp) {
-            last_timestamp = object.timestamp();
-        }
+        first_timestamp.update(object.timestamp());
+        last_timestamp.update(object.timestamp());
 
         if (last_type == object.type()) {
             if (last_id == object.id()) {
@@ -114,28 +109,22 @@ struct InfoHandler : public osmium::handler::Handler {
         bounds.extend(node.location());
         ++nodes;
 
-        if (node.id() > largest_node_id) {
-            largest_node_id = node.id();
-        }
+        largest_node_id.update(node.id());
     }
 
     void way(const osmium::Way& way) {
         ++ways;
 
-        if (way.id() > largest_way_id) {
-            largest_way_id = way.id();
-        }
+        largest_way_id.update(way.id());
     }
 
     void relation(const osmium::Relation& relation) {
         ++relations;
 
-        if (relation.id() > largest_relation_id) {
-            largest_relation_id = relation.id();
-        }
+        largest_relation_id.update(relation.id());
     }
 
-}; // InfoHandler
+}; // struct InfoHandler
 
 /*************************************************************************/
 
@@ -203,10 +192,10 @@ public:
         std::cout << "Data: " << "\n";
         std::cout << "  Bounding box: " << info_handler.bounds << "\n";
 
-        if (info_handler.first_timestamp != osmium::end_of_time()) {
+        if (info_handler.first_timestamp() != osmium::end_of_time()) {
             std::cout << "  Timestamps:\n";
-            std::cout << "    First: " << info_handler.first_timestamp << "\n";
-            std::cout << "    Last: " << info_handler.last_timestamp << "\n";
+            std::cout << "    First: " << info_handler.first_timestamp() << "\n";
+            std::cout << "    Last: " << info_handler.last_timestamp() << "\n";
         }
 
         std::cout << "  Objects ordered (by type and id): " << (info_handler.ordered ? "yes\n" : "no\n");
@@ -228,10 +217,10 @@ public:
         std::cout << "  Number of ways: "       << info_handler.ways       << "\n";
         std::cout << "  Number of relations: "  << info_handler.relations  << "\n";
 
-        std::cout << "  Largest changeset ID: " << info_handler.largest_changeset_id << "\n";
-        std::cout << "  Largest node ID: "      << info_handler.largest_node_id      << "\n";
-        std::cout << "  Largest way ID: "       << info_handler.largest_way_id       << "\n";
-        std::cout << "  Largest relation ID: "  << info_handler.largest_relation_id  << "\n";
+        std::cout << "  Largest changeset ID: " << info_handler.largest_changeset_id() << "\n";
+        std::cout << "  Largest node ID: "      << info_handler.largest_node_id()      << "\n";
+        std::cout << "  Largest way ID: "       << info_handler.largest_way_id()       << "\n";
+        std::cout << "  Largest relation ID: "  << info_handler.largest_relation_id()  << "\n";
     }
 
 }; // class HumanReadableOutput
@@ -314,15 +303,15 @@ public:
         m_writer.String("bbox");
         add_bbox(info_handler.bounds);
 
-        if (info_handler.first_timestamp != osmium::end_of_time()) {
+        if (info_handler.first_timestamp() != osmium::end_of_time()) {
             m_writer.String("timestamp");
             m_writer.StartObject();
 
             m_writer.String("first");
-            std::string s = info_handler.first_timestamp.to_iso();
+            std::string s = info_handler.first_timestamp().to_iso();
             m_writer.String(s.c_str());
             m_writer.String("last");
-            s = info_handler.last_timestamp.to_iso();
+            s = info_handler.last_timestamp().to_iso();
             m_writer.String(s.c_str());
 
             m_writer.EndObject();
@@ -356,13 +345,13 @@ public:
         m_writer.String("maxid");
         m_writer.StartObject();
         m_writer.String("changesets");
-        m_writer.Int64(info_handler.largest_changeset_id);
+        m_writer.Int64(info_handler.largest_changeset_id());
         m_writer.String("nodes");
-        m_writer.Int64(info_handler.largest_node_id);
+        m_writer.Int64(info_handler.largest_node_id());
         m_writer.String("ways");
-        m_writer.Int64(info_handler.largest_way_id);
+        m_writer.Int64(info_handler.largest_way_id());
         m_writer.String("relations");
-        m_writer.Int64(info_handler.largest_relation_id);
+        m_writer.Int64(info_handler.largest_relation_id());
         m_writer.EndObject();
 
         m_writer.EndObject();
@@ -428,18 +417,18 @@ public:
         }
 
         if (m_get_value == "data.timestamp.first") {
-            if (info_handler.first_timestamp == osmium::end_of_time()) {
+            if (info_handler.first_timestamp() == osmium::end_of_time()) {
                 std::cout << "\n";
             } else {
-                std::cout << info_handler.first_timestamp << "\n";
+                std::cout << info_handler.first_timestamp() << "\n";
             }
         }
 
         if (m_get_value == "data.timestamp.last") {
-            if (info_handler.first_timestamp == osmium::end_of_time()) {
+            if (info_handler.first_timestamp() == osmium::end_of_time()) {
                 std::cout << "\n";
             } else {
-                std::cout << info_handler.last_timestamp << "\n";
+                std::cout << info_handler.last_timestamp() << "\n";
             }
         }
 
@@ -473,16 +462,16 @@ public:
         }
 
         if (m_get_value == "data.maxid.changesets") {
-            std::cout << info_handler.largest_changeset_id << "\n";
+            std::cout << info_handler.largest_changeset_id() << "\n";
         }
         if (m_get_value == "data.maxid.nodes") {
-            std::cout << info_handler.largest_node_id << "\n";
+            std::cout << info_handler.largest_node_id() << "\n";
         }
         if (m_get_value == "data.maxid.ways") {
-            std::cout << info_handler.largest_way_id << "\n";
+            std::cout << info_handler.largest_way_id() << "\n";
         }
         if (m_get_value == "data.maxid.relations") {
-            std::cout << info_handler.largest_relation_id << "\n";
+            std::cout << info_handler.largest_relation_id() << "\n";
         }
     }
 
