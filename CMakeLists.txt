@@ -245,12 +245,19 @@ endif()
 #-----------------------------------------------------------------------------
 
 function(check_output _name _command _output)
-    add_test(NAME ${_name} COMMAND sh -c "${_command} | cmp --quiet - ${_output}")
+    set(_cmd "${PROJECT_BINARY_DIR}/src/osmium ${_command}")
+    add_test(
+        NAME ${_name}
+        COMMAND ${CMAKE_COMMAND}
+        -Dcmd=${_cmd}
+        -Ddir=${PROJECT_SOURCE_DIR}/test
+        -Dreference=${_output}
+        -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
+    )
 endfunction()
 
 function(check_time_filter _name _type _from _to _output)
-    set(_tdir "${PROJECT_SOURCE_DIR}/test/time-filter")
-    check_output(time-filter-${_name} "osmium time-filter --generator=test -f ${_type} ${_tdir}/input.osh ${_from} ${_to}" "${_tdir}/output-${_output}.${_type}")
+    check_output(time-filter-${_name} "time-filter --generator=test -f ${_type} time-filter/input.osh ${_from} ${_to}" "time-filter/output-${_output}.${_type}")
 endfunction()
 
 check_time_filter(last osm ""                   "" last)
@@ -267,6 +274,21 @@ check_time_filter(range-1a-2a osh 2015-01-01T01:01:00Z 2015-01-01T02:01:00Z rang
 check_time_filter(range-2-3   osh 2015-01-01T02:00:00Z 2015-01-01T03:00:00Z range-2-3)
 check_time_filter(range-2-3a  osh 2015-01-01T02:00:00Z 2015-01-01T03:01:00Z range-2-3a)
 check_time_filter(range-2-4   osh 2015-01-01T02:00:00Z 2015-01-01T04:00:00Z range-2-4)
+
+
+function(check_cat _name _in1 _in2 _output)
+    check_output(cat-${_name} "cat --generator=test -f osm cat/${_in1} cat/${_in2}" "cat/${_output}")
+endfunction()
+
+check_cat(cat12 input1.osm input2.osm output-cat12.osm)
+check_cat(cat21 input2.osm input1.osm output-cat21.osm)
+
+
+function(check_fileinfo _name _options _input _output)
+    check_output(fileinfo-${_name} "fileinfo ${_options} fileinfo/${_input}" "fileinfo/${_output}")
+endfunction()
+
+check_fileinfo(fi1 "--extended" fi1.osm fi1-result.txt)
 
 
 #-----------------------------------------------------------------------------
