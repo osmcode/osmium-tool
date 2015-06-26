@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
+#include <osmium/index/bool_vector.hpp>
 #include <osmium/io/any_input.hpp>
 #include <osmium/io/any_output.hpp>
 
@@ -107,42 +108,10 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
 }
 
 
-/*
- * Small wrapper class around std::vector<bool> that make sure the vector is
- * always large enough for the data we are putting in.
- */
-class bitsvec {
-
-    std::vector<bool> m_bits;
-
-public:
-
-    bitsvec() :
-        m_bits() {
-    }
-
-    void set(osmium::object_id_type id) {
-        osmium::unsigned_object_id_type pid = std::abs(id);
-
-        if (m_bits.size() <= pid) {
-            m_bits.resize(pid + 1024 * 1024);
-        }
-
-        m_bits[pid] = true;
-    }
-
-    bool get(osmium::object_id_type id) const {
-        osmium::unsigned_object_id_type pid = std::abs(id);
-
-        return pid < m_bits.size() && m_bits[pid];
-    }
-
-}; // class bitsvec
-
 class RefCheckHandler : public osmium::handler::Handler {
 
-    bitsvec m_nodes;
-    bitsvec m_ways;
+    osmium::index::BoolVector<osmium::unsigned_object_id_type> m_nodes;
+    osmium::index::BoolVector<osmium::unsigned_object_id_type> m_ways;
 
     std::vector<uint32_t> m_relation_ids;
     std::set<uint32_t> m_member_relation_ids;
@@ -220,7 +189,7 @@ public:
         }
         ++m_node_count;
 
-        m_nodes.set(node.id());
+        m_nodes.set(node.positive_id());
     }
 
     void way(const osmium::Way& way) {
@@ -230,11 +199,11 @@ public:
         ++m_way_count;
 
         if (m_check_relations) {
-            m_ways.set(way.id());
+            m_ways.set(way.positive_id());
         }
 
         for (const auto& node_ref : way.nodes()) {
-            if (!m_nodes.get(node_ref.ref())) {
+            if (!m_nodes.get(node_ref.positive_ref())) {
                 ++m_missing_nodes_in_ways;
                 if (m_show_ids) {
                     std::cout << "n" << node_ref.ref() << " in w" << way.id() << "\n";
@@ -254,18 +223,18 @@ public:
             for (const auto& member : relation.members()) {
                 switch (member.type()) {
                     case osmium::item_type::node:
-                        if (!m_nodes.get(member.ref())) {
+                        if (!m_nodes.get(member.positive_ref())) {
                             ++m_missing_nodes_in_relations;
-                            m_nodes.set(member.ref());
+                            m_nodes.set(member.positive_ref());
                             if (m_show_ids) {
                                 std::cout << "n" << member.ref() << " in r" << relation.id() << "\n";
                             }
                         }
                         break;
                     case osmium::item_type::way:
-                        if (!m_ways.get(member.ref())) {
+                        if (!m_ways.get(member.positive_ref())) {
                             ++m_missing_ways_in_relations;
-                            m_ways.set(member.ref());
+                            m_ways.set(member.positive_ref());
                             if (m_show_ids) {
                                 std::cout << "w" << member.ref() << " in r" << relation.id() << "\n";
                             }
