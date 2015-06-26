@@ -95,6 +95,10 @@ The following variables are available:
     data.count.ways - INTEGER
     data.count.relations - INTEGER
     data.count.changesets - INTEGER
+    data.maxid.nodes - INTEGER
+    data.maxid.ways - INTEGER
+    data.maxid.relations - INTEGER
+    data.maxid.changesets - INTEGER
 
 All timestamps are in the usual OSM ISO format `yy-mm-ddThh::mm::ssZ`. Boxes
 are in the format `(xmin, ymin, xmax, ymax)`.
