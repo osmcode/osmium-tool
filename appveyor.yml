@@ -44,8 +44,8 @@ install:
   #cmake cannot find it otherwise
   - set LIBBZIP2=%LODEPSDIR%\bzip2\lib\libbz2.lib
   - set LIBBZIP2=%LIBBZIP2:\=/%
-  - ps: Start-FileDownload https://mapnik.s3.amazonaws.com/deps/cmake-3.1.0-win32-x86.7z -FileName cm.7z
-  - ps: Start-FileDownload https://mapnik.s3.amazonaws.com/dist/dev/libosmium-deps-win-14.0-x64.7z -FileName lodeps.7z
+  - ps: Start-FileDownload https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/cmake-3.1.0-win32-x86.7z -FileName cm.7z
+  - ps: Start-FileDownload https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/libosmium-deps-win-14.0-x64.7z -FileName lodeps.7z
   - 7z x cm.7z > nul
   - 7z x lodeps.7z > nul
   - echo %LODEPSDIR%
