@@ -37,52 +37,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     namespace po = boost::program_options;
     po::variables_map vm;
-    try {
-        po::options_description cmdline("Allowed options");
-        cmdline.add_options()
-        ("verbose,v", "Set verbose mode")
-        ("show-ids,i", "Show IDs of missing objects")
-        ("input-format,F", po::value<std::string>(), "Format of input files")
-        ("check-relations,r", "Also check relations")
-        ;
 
-        po::options_description hidden("Hidden options");
-        hidden.add_options()
-        ("input-filename", po::value<std::string>(), "Input file")
-        ;
+    po::options_description cmdline("Allowed options");
+    cmdline.add_options()
+    ("verbose,v", "Set verbose mode")
+    ("show-ids,i", "Show IDs of missing objects")
+    ("input-format,F", po::value<std::string>(), "Format of input files")
+    ("check-relations,r", "Also check relations")
+    ;
 
-        po::options_description desc("Allowed options");
-        desc.add(cmdline).add(hidden);
+    po::options_description hidden("Hidden options");
+    hidden.add_options()
+    ("input-filename", po::value<std::string>(), "Input file")
+    ;
 
-        po::positional_options_description positional;
-        positional.add("input-filename", 1);
+    po::options_description desc("Allowed options");
+    desc.add(cmdline).add(hidden);
 
-        po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
-        po::notify(vm);
+    po::positional_options_description positional;
+    positional.add("input-filename", 1);
 
-        if (vm.count("verbose")) {
-            m_vout.verbose(true);
-        }
+    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::notify(vm);
 
-        if (vm.count("show-ids")) {
-            m_show_ids = true;
-        }
+    if (vm.count("verbose")) {
+        m_vout.verbose(true);
+    }
 
-        if (vm.count("input-filename")) {
-            m_input_filename = vm["input-filename"].as<std::string>();
-        }
+    if (vm.count("show-ids")) {
+        m_show_ids = true;
+    }
 
-        if (vm.count("input-format")) {
-            m_input_format = vm["input-format"].as<std::string>();
-        }
+    if (vm.count("input-filename")) {
+        m_input_filename = vm["input-filename"].as<std::string>();
+    }
 
-        if (vm.count("check-relations")) {
-            m_check_relations = true;
-        }
+    if (vm.count("input-format")) {
+        m_input_format = vm["input-format"].as<std::string>();
+    }
 
-    } catch (boost::program_options::error& e) {
-        std::cerr << "Error parsing command line: " << e.what() << std::endl;
-        return false;
+    if (vm.count("check-relations")) {
+        m_check_relations = true;
     }
 
     m_vout << "Started osmium check-refs\n";
@@ -94,8 +89,7 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     m_vout << "  check relations: " << (m_check_relations ? "yes\n" : "no\n");
 
     if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        std::cerr << "When reading from STDIN you need to use the --input-format,F option to declare the file format.\n";
-        return false;
+        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
     }
 
     if (m_input_format.empty()) {

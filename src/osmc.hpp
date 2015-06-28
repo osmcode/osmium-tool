@@ -53,8 +53,10 @@ public:
 
     // This function parses the command line arguments for a
     // command.
-    // It returns true if the parsing was successful.
-    // It returns false if the arguments could not be parsed.
+    // It returns true if the parsing was successful and the run()
+    // function should be called. It returns false if the work is
+    // done and run() should not be called.
+    // It throws if there was a problem with the arguments.
     //
     // This function should not attempt to open any files or
     // do any other actual work. That will happen in the run()
@@ -140,5 +142,20 @@ public:
     }
 
 }; // class CommandFactory
+
+/**
+ *  Thrown when there is a problem with the command line arguments.
+ */
+struct argument_error : std::runtime_error {
+
+    argument_error(const char* message) :
+        std::runtime_error(message) {
+    }
+
+    argument_error(const std::string& message) :
+        std::runtime_error(message) {
+    }
+
+};
 
 #endif // OSMC_HPP

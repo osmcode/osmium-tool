@@ -33,92 +33,84 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     namespace po = boost::program_options;
     po::variables_map vm;
-    try {
-        po::options_description cmdline("Allowed options");
-        cmdline.add_options()
-        ("verbose,v", "Set verbose mode")
-        ("output,o", po::value<std::string>(), "Output file")
-        ("output-format,f", po::value<std::string>(), "Format of output file")
-        ("input-format,F", po::value<std::string>(), "Format of input file")
-        ("generator", po::value<std::string>(), "Generator setting for file header")
-        ("overwrite,O", "Allow existing output file to be overwritten")
-        ;
 
-        po::options_description hidden("Hidden options");
-        hidden.add_options()
-        ("input-filename", po::value<std::string>(), "OSM input file")
-        ("time-from", po::value<std::string>(), "Start of time range")
-        ("time-to", po::value<std::string>(), "End of time range")
-        ;
+    po::options_description cmdline("Allowed options");
+    cmdline.add_options()
+    ("verbose,v", "Set verbose mode")
+    ("output,o", po::value<std::string>(), "Output file")
+    ("output-format,f", po::value<std::string>(), "Format of output file")
+    ("input-format,F", po::value<std::string>(), "Format of input file")
+    ("generator", po::value<std::string>(), "Generator setting for file header")
+    ("overwrite,O", "Allow existing output file to be overwritten")
+    ;
 
-        po::options_description desc("Allowed options");
-        desc.add(cmdline).add(hidden);
+    po::options_description hidden("Hidden options");
+    hidden.add_options()
+    ("input-filename", po::value<std::string>(), "OSM input file")
+    ("time-from", po::value<std::string>(), "Start of time range")
+    ("time-to", po::value<std::string>(), "End of time range")
+    ;
 
-        po::positional_options_description positional;
-        positional.add("input-filename", 1);
-        positional.add("time-from", 1);
-        positional.add("time-to", 1);
+    po::options_description desc("Allowed options");
+    desc.add(cmdline).add(hidden);
 
-        po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
-        po::notify(vm);
+    po::positional_options_description positional;
+    positional.add("input-filename", 1);
+    positional.add("time-from", 1);
+    positional.add("time-to", 1);
 
-        if (vm.count("input-filename")) {
-            m_input_filename = vm["input-filename"].as<std::string>();
-        }
+    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::notify(vm);
 
-        if (vm.count("output")) {
-            m_output_filename = vm["output"].as<std::string>();
-        }
+    if (vm.count("input-filename")) {
+        m_input_filename = vm["input-filename"].as<std::string>();
+    }
 
-        if (vm.count("input-format")) {
-            m_input_format = vm["input-format"].as<std::string>();
-        }
+    if (vm.count("output")) {
+        m_output_filename = vm["output"].as<std::string>();
+    }
 
-        if (vm.count("output-format")) {
-            m_output_format = vm["output-format"].as<std::string>();
-        }
+    if (vm.count("input-format")) {
+        m_input_format = vm["input-format"].as<std::string>();
+    }
 
-        if (vm.count("overwrite")) {
-            m_output_overwrite = osmium::io::overwrite::allow;
-        }
+    if (vm.count("output-format")) {
+        m_output_format = vm["output-format"].as<std::string>();
+    }
 
-        if (vm.count("verbose")) {
-            m_vout.verbose(true);
-        }
+    if (vm.count("overwrite")) {
+        m_output_overwrite = osmium::io::overwrite::allow;
+    }
 
-        if (vm.count("generator")) {
-            m_generator = vm["generator"].as<std::string>();
-        }
+    if (vm.count("verbose")) {
+        m_vout.verbose(true);
+    }
 
-        m_from = osmium::Timestamp(time(0));
+    if (vm.count("generator")) {
+        m_generator = vm["generator"].as<std::string>();
+    }
+
+    m_from = osmium::Timestamp(time(0));
+    m_to = m_from;
+
+    if (vm.count("time-from")) {
+        m_from = osmium::Timestamp(vm["time-from"].as<std::string>().c_str());
         m_to = m_from;
+    }
 
-        if (vm.count("time-from")) {
-            m_from = osmium::Timestamp(vm["time-from"].as<std::string>().c_str());
-            m_to = m_from;
+    if (vm.count("time-to")) {
+        m_to = osmium::Timestamp(vm["time-to"].as<std::string>().c_str());
+        if (m_to < m_from) {
+            throw argument_error("Second timestamp is before first one.");
         }
-
-        if (vm.count("time-to")) {
-            m_to = osmium::Timestamp(vm["time-to"].as<std::string>().c_str());
-            if (m_to < m_from) {
-                std::cerr << "Second timestamp is before first one.\n";
-                return false;
-            }
-        }
-
-    } catch (boost::program_options::error& e) {
-        std::cerr << "Error parsing command line: " << e.what() << std::endl;
-        return false;
     }
 
     if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        std::cerr << "When writing to STDOUT you need to use the --output-format,f option to declare the file format.\n";
-        return false;
+        throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
     }
 
     if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        std::cerr << "When reading from STDIN you need to use the --input-format,F option to declare the file format.\n";
-        return false;
+        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
     }
 
     m_input_file = osmium::io::File(m_input_filename, m_input_format);

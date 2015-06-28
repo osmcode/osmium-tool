@@ -483,106 +483,96 @@ public:
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     namespace po = boost::program_options;
     po::variables_map vm;
-    try {
-        po::options_description cmdline("Allowed options");
-        cmdline.add_options()
-        ("extended,e", "Extended output")
-        ("get,g", po::value<std::string>(), "Get value")
-        ("show-variables,G", "Show variables for --get option")
-        ("input-format,F", po::value<std::string>(), "Format of input file")
-        ("json,j", "JSON output")
-        ;
 
-        po::options_description hidden("Hidden options");
-        hidden.add_options()
-        ("input-filename", po::value<std::string>(), "Input file")
-        ;
+    po::options_description cmdline("Allowed options");
+    cmdline.add_options()
+    ("extended,e", "Extended output")
+    ("get,g", po::value<std::string>(), "Get value")
+    ("show-variables,G", "Show variables for --get option")
+    ("input-format,F", po::value<std::string>(), "Format of input file")
+    ("json,j", "JSON output")
+    ;
 
-        po::options_description desc("Allowed options");
-        desc.add(cmdline).add(hidden);
+    po::options_description hidden("Hidden options");
+    hidden.add_options()
+    ("input-filename", po::value<std::string>(), "Input file")
+    ;
 
-        po::positional_options_description positional;
-        positional.add("input-filename", 1);
+    po::options_description desc("Allowed options");
+    desc.add(cmdline).add(hidden);
 
-        po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
-        po::notify(vm);
+    po::positional_options_description positional;
+    positional.add("input-filename", 1);
 
-        if (vm.count("extended")) {
-            m_extended = true;
-        }
+    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::notify(vm);
 
-        if (vm.count("json")) {
-            m_json_output = true;
-        }
+    if (vm.count("extended")) {
+        m_extended = true;
+    }
 
-        if (vm.count("input-format")) {
-            m_input_format = vm["input-format"].as<std::string>();
-        }
+    if (vm.count("json")) {
+        m_json_output = true;
+    }
 
-        if (vm.count("input-filename")) {
-            m_input_filename = vm["input-filename"].as<std::string>();
-        }
+    if (vm.count("input-format")) {
+        m_input_format = vm["input-format"].as<std::string>();
+    }
 
-        std::vector<std::string> known_values = {
-            "file.name",
-            "file.format",
-            "file.compression",
-            "file.size",
-            "header.with_history",
-            "header.option.generator",
-            "header.option.version",
-            "header.option.pbf_dense_nodes",
-            "header.option.osmosis_replication_timestamp",
-            "header.option.osmosis_replication_sequence_number",
-            "header.option.osmosis_replication_base_url",
-            "data.bbox",
-            "data.timestamp.first",
-            "data.timestamp.last",
-            "data.objects_ordered",
-            "data.multiple_versions",
-            "data.crc32",
-            "data.count.nodes",
-            "data.count.ways",
-            "data.count.relations",
-            "data.count.changesets",
-            "data.maxid.nodes",
-            "data.maxid.ways",
-            "data.maxid.relations",
-            "data.maxid.changesets"
-        };
+    if (vm.count("input-filename")) {
+        m_input_filename = vm["input-filename"].as<std::string>();
+    }
 
-        if (vm.count("show-variables")) {
-            std::copy(known_values.cbegin(), known_values.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
-            m_do_not_run = true;
-            return true;
-        }
+    std::vector<std::string> known_values = {
+        "file.name",
+        "file.format",
+        "file.compression",
+        "file.size",
+        "header.with_history",
+        "header.option.generator",
+        "header.option.version",
+        "header.option.pbf_dense_nodes",
+        "header.option.osmosis_replication_timestamp",
+        "header.option.osmosis_replication_sequence_number",
+        "header.option.osmosis_replication_base_url",
+        "data.bbox",
+        "data.timestamp.first",
+        "data.timestamp.last",
+        "data.objects_ordered",
+        "data.multiple_versions",
+        "data.crc32",
+        "data.count.nodes",
+        "data.count.ways",
+        "data.count.relations",
+        "data.count.changesets",
+        "data.maxid.nodes",
+        "data.maxid.ways",
+        "data.maxid.relations",
+        "data.maxid.changesets"
+    };
 
-        if (vm.count("get")) {
-            m_get_value = vm["get"].as<std::string>();
-            const auto& f = std::find(known_values.cbegin(), known_values.cend(), m_get_value);
-            if (f == known_values.cend()) {
-                std::cerr << "Unknown value for --get/-g option '" << m_get_value << "'. Use --show-variables/-G to see list of known values.\n";
-                return false;
-            }
-            if (m_get_value.substr(0, 5) == "data." && ! m_extended) {
-                std::cerr << "You need to set --extended/-e for any 'data.*' variables to be available.\n";
-                return false;
-            }
-        }
-
-        if (vm.count("get") && vm.count("json")) {
-            std::cerr << "You can not use --get/-g and --json/-j together.\n";
-            return false;
-        }
-
-    } catch (boost::program_options::error& e) {
-        std::cerr << "Error parsing command line: " << e.what() << std::endl;
+    if (vm.count("show-variables")) {
+        std::copy(known_values.cbegin(), known_values.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
         return false;
     }
 
+    if (vm.count("get")) {
+        m_get_value = vm["get"].as<std::string>();
+        const auto& f = std::find(known_values.cbegin(), known_values.cend(), m_get_value);
+        if (f == known_values.cend()) {
+            throw argument_error(std::string("Unknown value for --get/-g option '") + m_get_value + "'. Use --show-variables/-G to see list of known values.");
+        }
+        if (m_get_value.substr(0, 5) == "data." && ! m_extended) {
+            throw argument_error("You need to set --extended/-e for any 'data.*' variables to be available.");
+        }
+    }
+
+    if (vm.count("get") && vm.count("json")) {
+        throw argument_error("You can not use --get/-g and --json/-j together.");
+    }
+
     if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        std::cerr << "When reading from STDIN you need to use the --input-format,F option to declare the file format.\n";
-        return false;
+        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
     }
 
     m_input_file = osmium::io::File(m_input_filename, m_input_format);
@@ -591,10 +581,6 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
 }
 
 bool CommandFileinfo::run() {
-    if (m_do_not_run) {
-        return true;
-    }
-
     std::unique_ptr<Output> output;
     if (m_json_output) {
         output.reset(new JSONOutput());

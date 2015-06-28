@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+#include <boost/program_options.hpp>
+
 #include <osmpbf/osmpbf.h>
 
 #include "osmc.hpp"
@@ -92,7 +94,15 @@ int main(int argc, char *argv[]) {
         return return_code::fatal;
     }
 
-    if (!cmd->setup(arguments)) {
+    try {
+        if (!cmd->setup(arguments)) {
+            return return_code::okay;
+        }
+    } catch (boost::program_options::error& e) {
+        std::cerr << "Error parsing command line: " << e.what() << std::endl;
+        return return_code::fatal;
+    } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
         return return_code::fatal;
     }
 

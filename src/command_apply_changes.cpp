@@ -34,88 +34,81 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     namespace po = boost::program_options;
     po::variables_map vm;
-    try {
-        po::options_description cmdline("Allowed options");
-        cmdline.add_options()
-        ("verbose,v", "Set verbose mode")
-        ("output,o", po::value<std::string>(), "Output file")
-        ("output-format,f", po::value<std::string>(), "Format of output file")
-        ("input-format,F", po::value<std::string>(), "Format of input file")
-        ("simplify,s", "Simplify change")
-        ("remove-deleted,r", "Remove deleted objects from output")
-        ("generator", po::value<std::string>(), "Generator setting for file header")
-        ("overwrite,O", "Allow existing output file to be overwritten")
-        ;
 
-        po::options_description hidden("Hidden options");
-        hidden.add_options()
-        ("input-filename", po::value<std::string>(), "OSM input file")
-        ("change-filenames", po::value<std::vector<std::string>>(), "OSM change input files")
-        ;
+    po::options_description cmdline("Allowed options");
+    cmdline.add_options()
+    ("verbose,v", "Set verbose mode")
+    ("output,o", po::value<std::string>(), "Output file")
+    ("output-format,f", po::value<std::string>(), "Format of output file")
+    ("input-format,F", po::value<std::string>(), "Format of input file")
+    ("simplify,s", "Simplify change")
+    ("remove-deleted,r", "Remove deleted objects from output")
+    ("generator", po::value<std::string>(), "Generator setting for file header")
+    ("overwrite,O", "Allow existing output file to be overwritten")
+    ;
 
-        po::options_description desc("Allowed options");
-        desc.add(cmdline).add(hidden);
+    po::options_description hidden("Hidden options");
+    hidden.add_options()
+    ("input-filename", po::value<std::string>(), "OSM input file")
+    ("change-filenames", po::value<std::vector<std::string>>(), "OSM change input files")
+    ;
 
-        po::positional_options_description positional;
-        positional.add("input-filename", 1);
-        positional.add("change-filenames", -1);
+    po::options_description desc("Allowed options");
+    desc.add(cmdline).add(hidden);
 
-        po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
-        po::notify(vm);
+    po::positional_options_description positional;
+    positional.add("input-filename", 1);
+    positional.add("change-filenames", -1);
 
-        if (vm.count("input-filename")) {
-            m_input_filename = vm["input-filename"].as<std::string>();
-        }
+    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::notify(vm);
 
-        if (vm.count("change-filenames")) {
-            m_change_filenames = vm["change-filenames"].as<std::vector<std::string>>();
-        }
+    if (vm.count("input-filename")) {
+        m_input_filename = vm["input-filename"].as<std::string>();
+    }
 
-        if (vm.count("output")) {
-            m_output_filename = vm["output"].as<std::string>();
-        }
+    if (vm.count("change-filenames")) {
+        m_change_filenames = vm["change-filenames"].as<std::vector<std::string>>();
+    }
 
-        if (vm.count("input-format")) {
-            m_input_format = vm["input-format"].as<std::string>();
-        }
+    if (vm.count("output")) {
+        m_output_filename = vm["output"].as<std::string>();
+    }
 
-        if (vm.count("output-format")) {
-            m_output_format = vm["output-format"].as<std::string>();
-        }
+    if (vm.count("input-format")) {
+        m_input_format = vm["input-format"].as<std::string>();
+    }
 
-        if (vm.count("overwrite")) {
-            m_output_overwrite = osmium::io::overwrite::allow;
-        }
+    if (vm.count("output-format")) {
+        m_output_format = vm["output-format"].as<std::string>();
+    }
 
-        if (vm.count("simplify")) {
-            m_simplify_change = true;
-        }
+    if (vm.count("overwrite")) {
+        m_output_overwrite = osmium::io::overwrite::allow;
+    }
 
-        if (vm.count("remove-deleted")) {
-            m_remove_deleted = true;
-        }
+    if (vm.count("simplify")) {
+        m_simplify_change = true;
+    }
 
-        if (vm.count("generator")) {
-            m_generator = vm["generator"].as<std::string>();
-        }
+    if (vm.count("remove-deleted")) {
+        m_remove_deleted = true;
+    }
 
-        if (vm.count("verbose")) {
-            m_vout.verbose(true);
-        }
+    if (vm.count("generator")) {
+        m_generator = vm["generator"].as<std::string>();
+    }
 
-    } catch (boost::program_options::error& e) {
-        std::cerr << "Error parsing command line: " << e.what() << std::endl;
-        return false;
+    if (vm.count("verbose")) {
+        m_vout.verbose(true);
     }
 
     if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        std::cerr << "When writing to STDOUT you need to use the --output-format,f option to declare the file format.\n";
-        return false;
+        throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
     }
 
     if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        std::cerr << "When reading from STDIN you need to use the --input-format,F option to declare the file format.\n";
-        return false;
+        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
     }
 
     m_output_file = osmium::io::File(m_output_filename, m_output_format);
