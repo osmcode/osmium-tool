@@ -29,13 +29,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "osmc.hpp"
 
-class CommandFileinfo : public Command {
+class CommandFileinfo : public Command, with_single_osm_input {
 
-    std::string m_input_filename = "-"; // default: stdin
     bool m_extended = false;
     bool m_json_output = false;
-    std::string m_input_format;
-    osmium::io::File m_input_file;
     std::string m_get_value;
 
 public:

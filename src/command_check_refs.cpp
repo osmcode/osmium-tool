@@ -68,14 +68,6 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
         m_show_ids = true;
     }
 
-    if (vm.count("input-filename")) {
-        m_input_filename = vm["input-filename"].as<std::string>();
-    }
-
-    if (vm.count("input-format")) {
-        m_input_format = vm["input-format"].as<std::string>();
-    }
-
     if (vm.count("check-relations")) {
         m_check_relations = true;
     }
@@ -88,15 +80,7 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     m_vout << "  show ids: " << (m_show_ids ? "yes\n" : "no\n");
     m_vout << "  check relations: " << (m_check_relations ? "yes\n" : "no\n");
 
-    if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
-    }
-
-    if (m_input_format.empty()) {
-        m_input_file = osmium::io::File(m_input_filename);
-    } else {
-        m_input_file = osmium::io::File(m_input_filename, m_input_format);
-    }
+    setup_input_file(vm);
 
     return true;
 }

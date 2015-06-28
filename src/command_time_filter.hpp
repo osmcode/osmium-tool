@@ -26,24 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <osmium/io/file.hpp>
-#include <osmium/io/overwrite.hpp>
 #include <osmium/osm/timestamp.hpp>
 
 #include "osmc.hpp"
 
-class CommandTimeFilter : public Command {
-
-    std::string m_input_filename = "-"; // default: stdin
-    std::string m_output_filename = "-"; // default: stdout
-
-    std::string m_input_format;
-    std::string m_output_format;
-
-    osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
-
-    osmium::io::File m_input_file;
-    osmium::io::File m_output_file;
+class CommandTimeFilter : public Command, with_single_osm_input, with_osm_output {
 
     osmium::Timestamp m_from;
     osmium::Timestamp m_to;

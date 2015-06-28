@@ -515,14 +515,6 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         m_json_output = true;
     }
 
-    if (vm.count("input-format")) {
-        m_input_format = vm["input-format"].as<std::string>();
-    }
-
-    if (vm.count("input-filename")) {
-        m_input_filename = vm["input-filename"].as<std::string>();
-    }
-
     std::vector<std::string> known_values = {
         "file.name",
         "file.format",
@@ -571,11 +563,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         throw argument_error("You can not use --get/-g and --json/-j together.");
     }
 
-    if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
-    }
-
-    m_input_file = osmium::io::File(m_input_filename, m_input_format);
+    setup_input_file(vm);
 
     return true;
 }

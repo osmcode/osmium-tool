@@ -26,23 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <osmium/io/file.hpp>
-#include <osmium/io/overwrite.hpp>
-
 #include "osmc.hpp"
 
-class CommandMergeChanges : public Command {
+class CommandMergeChanges : public Command, with_multiple_osm_inputs, with_osm_output {
 
-    std::vector<std::string> m_input_filenames;
-    std::string m_output_filename = "-"; // default: stdout
-
-    std::string m_input_format;
-    std::string m_output_format;
-
-    osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
     bool m_simplify_change = false;
-
-    osmium::io::File m_output_file;
 
 public:
 

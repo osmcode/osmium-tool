@@ -25,15 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
-#include <osmium/io/file.hpp>
-
 #include "osmc.hpp"
 
-class CommandCheckRefs : public Command {
-
-    std::string m_input_filename = "-"; // default: stdin
-    std::string m_input_format;
-    osmium::io::File m_input_file;
+class CommandCheckRefs : public Command, with_single_osm_input {
 
     bool m_show_ids = false;
     bool m_check_relations = false;

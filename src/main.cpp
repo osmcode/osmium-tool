@@ -24,8 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <boost/program_options.hpp>
-
 #include <osmpbf/osmpbf.h>
 
 #include "osmc.hpp"

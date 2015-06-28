@@ -29,7 +29,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+#include <boost/program_options.hpp>
+
+#include <osmium/io/file.hpp>
+#include <osmium/io/overwrite.hpp>
 #include <osmium/util/verbose_output.hpp>
+
+/**
+ *  Thrown when there is a problem with the command line arguments.
+ */
+struct argument_error : std::runtime_error {
+
+    argument_error(const char* message) :
+        std::runtime_error(message) {
+    }
+
+    argument_error(const std::string& message) :
+        std::runtime_error(message) {
+    }
+
+};
 
 /**
  * Virtual base class for commands that can be called from the command line.
@@ -72,6 +91,107 @@ public:
 
 }; // class Command
 
+class with_single_osm_input {
+
+protected:
+
+    std::string m_input_filename = "-"; // default: stdin
+    std::string m_input_format;
+    osmium::io::File m_input_file;
+
+public:
+
+    void setup_input_file(const boost::program_options::variables_map& vm) {
+        if (vm.count("input-filename")) {
+            m_input_filename = vm["input-filename"].as<std::string>();
+        }
+
+        if (vm.count("input-format")) {
+            m_input_format = vm["input-format"].as<std::string>();
+        }
+
+        if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
+            throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
+        }
+
+        m_input_file = osmium::io::File(m_input_filename, m_input_format);
+    }
+
+}; // class with_single_osm_input
+
+class with_multiple_osm_inputs {
+
+protected:
+
+    std::vector<std::string> m_input_filenames;
+    std::string m_input_format;
+    std::vector<osmium::io::File> m_input_files;
+
+public:
+
+    void setup_input_files(const boost::program_options::variables_map& vm) {
+        if (vm.count("input-filenames")) {
+            m_input_filenames = vm["input-filenames"].as<std::vector<std::string>>();
+        } else {
+            m_input_filenames.push_back("-"); // default is stdin
+        }
+
+        if (vm.count("input-format")) {
+            m_input_format = vm["input-format"].as<std::string>();
+        }
+
+        if (m_input_format.empty()) {
+            bool uses_stdin = false;
+            for (auto& filename : m_input_filenames) {
+                if (filename.empty() || filename == "-") {
+                    uses_stdin = true;
+                }
+            }
+            if (uses_stdin) {
+                throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
+            }
+        }
+
+        for (const std::string& input_filename : m_input_filenames) {
+            osmium::io::File input_file(input_filename, m_input_format);
+            m_input_files.push_back(input_file);
+        }
+    }
+
+}; // class with_multiple_osm_inputs
+
+class with_osm_output {
+
+protected:
+
+    std::string m_output_filename = "-"; // default: stdout
+    std::string m_output_format;
+    osmium::io::File m_output_file;
+    osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
+
+public:
+
+    void setup_output_file(const boost::program_options::variables_map& vm) {
+        if (vm.count("output")) {
+            m_output_filename = vm["output"].as<std::string>();
+        }
+
+        if (vm.count("output-format")) {
+            m_output_format = vm["output-format"].as<std::string>();
+        }
+
+        if (vm.count("overwrite")) {
+            m_output_overwrite = osmium::io::overwrite::allow;
+        }
+
+        if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
+            throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
+        }
+
+        m_output_file = osmium::io::File(m_output_filename, m_output_format);
+    }
+
+}; // class with_osm_output
 
 /**
  * All commands than can be called from the command line are registered
@@ -142,20 +262,5 @@ public:
     }
 
 }; // class CommandFactory
-
-/**
- *  Thrown when there is a problem with the command line arguments.
- */
-struct argument_error : std::runtime_error {
-
-    argument_error(const char* message) :
-        std::runtime_error(message) {
-    }
-
-    argument_error(const std::string& message) :
-        std::runtime_error(message) {
-    }
-
-};
 
 #endif // OSMC_HPP

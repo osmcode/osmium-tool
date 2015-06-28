@@ -68,30 +68,8 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
         m_generator = vm["generator"].as<std::string>();
     }
 
-    if (vm.count("input-filenames")) {
-        m_input_filenames = vm["input-filenames"].as<std::vector<std::string>>();
-    } else {
-        m_input_filenames.push_back("-"); // default is stdin
-    }
-
-    if (vm.count("output")) {
-        m_output_filename = vm["output"].as<std::string>();
-    }
-
-    if (vm.count("input-format")) {
-        m_input_format = vm["input-format"].as<std::string>();
-    }
-
-    if (vm.count("output-format")) {
-        m_output_format = vm["output-format"].as<std::string>();
-    }
-
     if (vm.count("output-header")) {
         m_output_headers = vm["output-header"].as<std::vector<std::string>>();
-    }
-
-    if (vm.count("overwrite")) {
-        m_output_overwrite = osmium::io::overwrite::allow;
     }
 
     if (vm.count("object-type")) {
@@ -141,28 +119,8 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     }
     m_vout << "\n";
 
-    if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
-    }
-
-    if (m_input_format.empty()) {
-        bool uses_stdin = false;
-        for (auto& filename : m_input_filenames) {
-            if (filename.empty() || filename == "-") {
-                uses_stdin = true;
-            }
-        }
-        if (uses_stdin) {
-            throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
-        }
-    }
-
-    m_output_file = osmium::io::File(m_output_filename, m_output_format);
-
-    for (const std::string& input_filename : m_input_filenames) {
-        osmium::io::File input_file(input_filename, m_input_format);
-        m_input_files.push_back(input_file);
-    }
+    setup_input_files(vm);
+    setup_output_file(vm);
 
     return true;
 }

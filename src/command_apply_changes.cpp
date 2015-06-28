@@ -63,28 +63,8 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 
-    if (vm.count("input-filename")) {
-        m_input_filename = vm["input-filename"].as<std::string>();
-    }
-
     if (vm.count("change-filenames")) {
         m_change_filenames = vm["change-filenames"].as<std::vector<std::string>>();
-    }
-
-    if (vm.count("output")) {
-        m_output_filename = vm["output"].as<std::string>();
-    }
-
-    if (vm.count("input-format")) {
-        m_input_format = vm["input-format"].as<std::string>();
-    }
-
-    if (vm.count("output-format")) {
-        m_output_format = vm["output-format"].as<std::string>();
-    }
-
-    if (vm.count("overwrite")) {
-        m_output_overwrite = osmium::io::overwrite::allow;
     }
 
     if (vm.count("simplify")) {
@@ -103,15 +83,8 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         m_vout.verbose(true);
     }
 
-    if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
-    }
-
-    if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
-    }
-
-    m_output_file = osmium::io::File(m_output_filename, m_output_format);
+    setup_input_file(vm);
+    setup_output_file(vm);
 
     m_vout << "Started osmium apply-changes\n";
 
@@ -178,7 +151,7 @@ bool CommandApplyChanges::run() {
     }
 
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader(m_input_filename, osmium::osm_entity_bits::object);
+    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::object);
 
     osmium::io::Header header = reader.header();
     header.set("generator", m_generator);

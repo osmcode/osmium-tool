@@ -61,26 +61,6 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 
-    if (vm.count("input-filenames")) {
-        m_input_filenames = vm["input-filenames"].as<std::vector<std::string>>();
-    }
-
-    if (vm.count("output")) {
-        m_output_filename = vm["output"].as<std::string>();
-    }
-
-    if (vm.count("input-format")) {
-        m_input_format = vm["input-format"].as<std::string>();
-    }
-
-    if (vm.count("output-format")) {
-        m_output_format = vm["output-format"].as<std::string>();
-    }
-
-    if (vm.count("overwrite")) {
-        m_output_overwrite = osmium::io::overwrite::allow;
-    }
-
     if (vm.count("simplify")) {
         m_simplify_change = true;
     }
@@ -93,23 +73,8 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
         m_vout.verbose(true);
     }
 
-    if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
-    }
-
-    if (m_input_format.empty()) {
-        bool uses_stdin = false;
-        for (auto& filename : m_input_filenames) {
-            if (filename.empty() || filename == "-") {
-                uses_stdin = true;
-            }
-        }
-        if (uses_stdin) {
-            throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
-        }
-    }
-
-    m_output_file = osmium::io::File(m_output_filename, m_output_format);
+    setup_input_files(vm);
+    setup_output_file(vm);
 
     m_vout << "Started osmium merge-changes\n";
 
@@ -135,8 +100,8 @@ bool CommandMergeChanges::run() {
     // read all input files, keep the buffers around and add pointer
     // to each object to objects collection.
     m_vout << "Reading change file contents...\n";
-    for (const std::string& change_file_name : m_input_filenames) {
-        osmium::io::Reader reader(change_file_name, osmium::osm_entity_bits::object);
+    for (osmium::io::File& change_file : m_input_files) {
+        osmium::io::Reader reader(change_file, osmium::osm_entity_bits::object);
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));

@@ -26,22 +26,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <osmium/io/file.hpp>
-#include <osmium/io/overwrite.hpp>
 #include <osmium/osm/entity_bits.hpp>
 
 #include "osmc.hpp"
 
-class CommandCat : public Command {
+class CommandCat : public Command, with_multiple_osm_inputs, with_osm_output {
 
-    std::vector<std::string> m_input_filenames;
-    std::string m_output_filename = "-"; // default: stdout
-    std::string m_input_format;
-    std::string m_output_format;
     std::vector<std::string> m_output_headers;
-    osmium::io::File m_output_file;
-    std::vector<osmium::io::File> m_input_files;
-    osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
     osmium::osm_entity_bits::type m_osm_entity_bits = osmium::osm_entity_bits::all;
 
 public:
