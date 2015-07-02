@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|pbf|osm.pbf) *.(osm|osh|osc).(bz2|gz)'"
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(apply-changes cat check-refs fileinfo help merge-changes time-filter)
+    osmium_commands=(apply-changes cat check-refs fileinfo help merge-changes renumber time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -112,6 +112,22 @@ _osmium-merge-changes() {
         "*::input OSM files:_files -g ${osmium_file_glob}"
 }
 
+_osmium-renumber() {
+    _arguments : \
+        '--generator[generator setting for output file header]:generator:' \
+        '(--input-format)-F[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        '(-F)--input-format[format of input OSM file]:OSM file format:_osmium_file_formats' \
+        "(--output)-o[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        "(-o)--output[output file name]:output OSM file:_files -g ${osmium_file_glob}" \
+        '(--output-format)-f[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(--overwrite)-O[allow overwriting of existing output file]' \
+        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '(--verbose)-v[set verbose mode]' \
+        '(-v)--verbose[set verbose mode]' \
+        "1::input OSM file:_files -g ${osmium_file_glob}"
+}
+
 _osmium-time-filter() {
     _arguments : \
         '--generator[generator setting for output file header]:generator:' \
@@ -154,7 +170,7 @@ _osmium_object_type() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(apply-changes cat check-refs fileinfo help merge-changes time-filter file-formats)
+    osmium_help_topics=(apply-changes cat check-refs fileinfo help merge-changes renumber time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 
