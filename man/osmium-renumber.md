@@ -43,8 +43,16 @@ IDs.
 
 --generator=NAME
 :   The name and version of the program generating the output file. It will be
-    added to the header of the output file. Default is "*osmium/*" and the version
-    of osmium.
+    added to the header of the output file. Default is "*osmium/*" and the
+    version of osmium.
+
+-i, --index-directory=DIR
+:   Directory where the index files for mapping between old and news IDs are
+    read from and written to, respectively. Use this if you want to map IDs
+    in several OSM files. Without this option, the indexes are not read from
+    or written to disk. The directory must exist. Use '.' for the current
+    directory. The files written will be named `nodes.idx`, `ways.idx`, and
+    `relations.idx`.
 
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
@@ -77,6 +85,14 @@ Renumber a PBF file and output to a compressed XML file:
 
 Renumbering Switzerland currently (summer 2015) takes only about a minute and
 needs a bit more than 2 GB RAM.
+
+Renumber an OSM file storing the indexes on disk:
+
+    osmium renumber -i. -o renumbered.osm data.osm
+
+then rewrite a change file, too:
+
+    osmium renumber -i. -o renumbered.osc changes.osc
 
 
 # SEE ALSO

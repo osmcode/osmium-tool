@@ -23,21 +23,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <map>
 #include <string>
 #include <vector>
 
-#include <osmium/index/map/sparse_mem_map.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/types.hpp>
 
 #include "osmc.hpp"
 
-typedef osmium::index::map::SparseMemMap<osmium::unsigned_object_id_type, osmium::unsigned_object_id_type> remap_index_type;
+typedef std::map<osmium::unsigned_object_id_type, osmium::unsigned_object_id_type> remap_index_type;
 
 class CommandRenumber : public Command, with_single_osm_input, with_osm_output {
 
     std::vector<std::string> m_output_headers;
+    std::string m_index_directory;
 
     remap_index_type m_id_index[3];
     osmium::object_id_type m_last_id[3] = {0, 0, 0};
@@ -48,9 +49,18 @@ public:
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
-    osmium::object_id_type lookup(int n, osmium::object_id_type id);
+    osmium::object_id_type lookup(osmium::item_type type, osmium::object_id_type id);
 
     void renumber(osmium::memory::Buffer& buffer);
+
+    std::string filename(const std::string& name);
+
+    remap_index_type& index(osmium::item_type type);
+    osmium::object_id_type& last_id(osmium::item_type type);
+
+    void read_index(osmium::item_type type, const std::string& name);
+
+    void write_index(osmium::item_type type, const std::string& name);
 
     bool run() override final;
 

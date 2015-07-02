@@ -20,14 +20,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <algorithm>
+#include <fcntl.h>
 #include <iostream>
 #include <iterator>
+#include <map>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <vector>
 
 #include <boost/program_options.hpp>
 
 #include <osmium/index/index.hpp>
 #include <osmium/io/any_input.hpp>
 #include <osmium/io/any_output.hpp>
+#include <osmium/io/detail/read_write.hpp>
+#include <osmium/util/file.hpp>
+#include <osmium/util/memory_mapping.hpp>
 
 #include "command_renumber.hpp"
 
@@ -42,6 +51,7 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     ("output-format,f", po::value<std::string>(), "Format of output file")
     ("input-format,F", po::value<std::string>(), "Format of input files")
     ("generator", po::value<std::string>(), "Generator setting for file header")
+    ("index-directory,i", po::value<std::string>(), "Index directory")
     ("output-header", po::value<std::vector<std::string>>(), "Add output header")
     ("overwrite,O", "Allow existing output file to be overwritten")
     ;
@@ -72,6 +82,10 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
         m_output_headers = vm["output-header"].as<std::vector<std::string>>();
     }
 
+    if (vm.count("index-directory")) {
+        m_index_directory = vm["index-directory"].as<std::string>();
+    }
+
     setup_input_file(vm);
     setup_output_file(vm);
 
@@ -87,44 +101,36 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     for (const auto& h : m_output_headers) {
         m_vout << "    " << h << "\n";
     }
+    m_vout << "  index directory: " << m_index_directory << "\n";
 
     return true;
 }
 
-osmium::object_id_type CommandRenumber::lookup(int n, osmium::object_id_type id) {
-    osmium::object_id_type result;
-
+osmium::object_id_type CommandRenumber::lookup(osmium::item_type type, osmium::object_id_type id) {
     try {
-        result = m_id_index[n].get(id);
-    } catch (osmium::not_found& e) {
-        m_id_index[n].set(id, ++m_last_id[n]);
-        result = m_last_id[n];
+        return index(type).at(id);
+    } catch (std::out_of_range&) {
+        index(type)[id] = ++last_id(type);
+        return last_id(type);
     }
-
-    return result;
 }
-
 
 void CommandRenumber::renumber(osmium::memory::Buffer& buffer) {
     for (auto it = buffer.begin<osmium::OSMObject>(); it != buffer.end<osmium::OSMObject>(); ++it) {
         switch (it->type()) {
             case osmium::item_type::node:
-                m_id_index[0].set(it->id(), ++m_last_id[0]);
-                it->set_id(m_last_id[0]);
+                it->set_id(lookup(osmium::item_type::node, it->id()));
                 break;
             case osmium::item_type::way:
-                m_id_index[1].set(it->id(), ++m_last_id[1]);
-                it->set_id(m_last_id[1]);
+                it->set_id(lookup(osmium::item_type::way, it->id()));
                 for (auto& ref : static_cast<osmium::Way&>(*it).nodes()) {
-                    ref.set_ref(lookup(0, ref.ref()));
+                    ref.set_ref(lookup(osmium::item_type::node, ref.ref()));
                 }
                 break;
             case osmium::item_type::relation:
-                it->set_id(m_id_index[2].get(it->id()));
+                it->set_id(lookup(osmium::item_type::relation, it->id()));
                 for (auto& member : static_cast<osmium::Relation&>(*it).members()) {
-                    int n = uint16_t(member.type()) - 1;
-                    assert(n >= 0 && n <= 2);
-                    member.set_ref(lookup(n, member.ref()));
+                    member.set_ref(lookup(member.type(), member.ref()));
                 }
                 break;
             default:
@@ -133,8 +139,68 @@ void CommandRenumber::renumber(osmium::memory::Buffer& buffer) {
     }
 }
 
+std::string CommandRenumber::filename(const std::string& name) {
+    return m_index_directory + "/" + name + ".idx";
+}
+
+remap_index_type& CommandRenumber::index(osmium::item_type type) {
+    return m_id_index[osmium::item_type_to_nwr_index(type)];
+}
+
+osmium::object_id_type& CommandRenumber::last_id(osmium::item_type type) {
+    return m_last_id[osmium::item_type_to_nwr_index(type)];
+}
+
+void CommandRenumber::read_index(osmium::item_type type, const std::string& name) {
+    std::string f { filename(name) };
+    int fd = ::open(f.c_str(), O_RDONLY);
+    if (fd < 0) {
+        // ignore if the file is not there
+        if (errno == ENOENT) {
+            return;
+        }
+        std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
+    }
+
+    size_t file_size = osmium::util::file_size(fd);
+    if (file_size % sizeof(remap_index_type::value_type) == 0) {
+        std::runtime_error(std::string("index file '") + f + "' has wrong file size");
+    }
+    osmium::util::TypedMemoryMapping<remap_index_type::value_type> mapping(file_size / sizeof(remap_index_type::value_type), false, fd);
+    std::copy(mapping.begin(), mapping.end(), std::inserter(index(type), index(type).begin()));
+
+    last_id(type) = std::max_element(mapping.begin(), mapping.end())->second;
+
+    close(fd);
+}
+
+void CommandRenumber::write_index(osmium::item_type type, const std::string& name) {
+    std::string f { filename(name) };
+    int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
+    if (fd < 0) {
+        std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
+    }
+
+    std::vector<remap_index_type::value_type> data;
+    std::copy(index(type).begin(), index(type).end(), std::back_inserter(data));
+    osmium::io::detail::reliable_write(fd, reinterpret_cast<const char*>(data.data()), sizeof(remap_index_type::value_type) * data.size());
+
+    close(fd);
+}
+
 bool CommandRenumber::run() {
     try {
+        if (!m_index_directory.empty()) {
+            m_vout << "Reading index files...\n";
+            read_index(osmium::item_type::node, "nodes");
+            read_index(osmium::item_type::way, "ways");
+            read_index(osmium::item_type::relation, "relations");
+
+            m_vout << "  Nodes     index contains " << index(osmium::item_type::node).size()     << " items\n";
+            m_vout << "  Ways      index contains " << index(osmium::item_type::way).size()      << " items\n";
+            m_vout << "  Relations index contains " << index(osmium::item_type::relation).size() << " items\n";
+        }
+
         m_vout << "First pass through input file (reading relations)...\n";
         osmium::io::Reader reader_pass1(m_input_file, osmium::osm_entity_bits::relation);
 
@@ -150,7 +216,7 @@ bool CommandRenumber::run() {
         osmium::io::InputIterator<osmium::io::Reader, osmium::Relation> end {};
 
         for (; it != end; ++it) {
-            m_id_index[2].set(it->id(), ++m_last_id[2]);
+            lookup(osmium::item_type::relation, it->id());
         }
 
         reader_pass1.close();
@@ -164,6 +230,14 @@ bool CommandRenumber::run() {
         reader_pass2.close();
 
         writer.close();
+
+        if (!m_index_directory.empty()) {
+            m_vout << "Writing index files...\n";
+            write_index(osmium::item_type::node, "nodes");
+            write_index(osmium::item_type::way, "ways");
+            write_index(osmium::item_type::relation, "relations");
+        }
+
     } catch (std::exception& e) {
         std::cerr << e.what() << "\n";
         return false;
