@@ -82,6 +82,11 @@ public:
         return true;
     }
 
+    // Show command line arguments. This is only called when the
+    // verbose option is true;
+    virtual void show_arguments() {
+    }
+
     // Run the actual command.
     // It returns true if everything ran successfully.
     // It returns false if there was an error.
@@ -96,6 +101,12 @@ public:
     void setup_common(const boost::program_options::variables_map& vm) {
         if (vm.count("verbose")) {
             m_vout.verbose(true);
+        }
+    }
+
+    void print_arguments() {
+        if (m_vout.verbose()) {
+            show_arguments();
         }
     }
 

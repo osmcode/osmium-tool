@@ -41,6 +41,8 @@ public:
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
+    void show_arguments() override final;
+
     bool run() override final;
 
 }; // class CommandTimeFilter

@@ -76,6 +76,10 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
         }
     }
 
+    return true;
+}
+
+void CommandCat::show_arguments() {
     m_vout << "Started osmium cat\n";
 
     m_vout << "Command line options and default settings:\n";
@@ -105,8 +109,6 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
         m_vout << " changeset";
     }
     m_vout << "\n";
-
-    return true;
 }
 
 bool CommandCat::run() {

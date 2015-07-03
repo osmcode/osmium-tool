@@ -48,6 +48,8 @@ public:
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
+    void show_arguments() override final;
+
     osmium::object_id_type lookup(osmium::item_type type, osmium::object_id_type id);
 
     void renumber(osmium::memory::Buffer& buffer);

@@ -104,6 +104,7 @@ int main(int argc, char *argv[]) {
         return return_code::fatal;
     }
 
+    cmd->print_arguments();
     bool result = cmd->run();
 
     google::protobuf::ShutdownProtobufLibrary();

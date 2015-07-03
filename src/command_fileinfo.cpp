@@ -567,6 +567,15 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
+void CommandFileinfo::show_arguments() {
+    m_vout << "Started osmium fileinfo\n";
+
+    m_vout << "Command line options and default settings:\n";
+    m_vout << "  input filename: " << m_input_filename << "\n";
+    m_vout << "  input format: " << m_input_format << "\n";
+    m_vout << "  extended output: " << (m_extended ? "yes\n" : "no\n");
+}
+
 bool CommandFileinfo::run() {
     std::unique_ptr<Output> output;
     if (m_json_output) {

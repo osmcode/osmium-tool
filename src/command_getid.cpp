@@ -93,6 +93,10 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         throw argument_error("Need at least one id to look for...");
     }
 
+    return true;
+}
+
+void CommandGetId::show_arguments() {
     m_vout << "Started osmium apply-changes\n";
 
     m_vout << "Command line options and default settings:\n";
@@ -117,8 +121,6 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         m_vout << " " << id;
     }
     m_vout << "\n";
-
-    return true;
 }
 
 bool CommandGetId::run() {

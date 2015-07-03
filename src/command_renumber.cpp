@@ -73,6 +73,10 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
         m_index_directory = vm["index-directory"].as<std::string>();
     }
 
+    return true;
+}
+
+void CommandRenumber::show_arguments() {
     m_vout << "Started osmium renumber\n";
 
     m_vout << "Command line options and default settings:\n";
@@ -86,8 +90,6 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
         m_vout << "    " << h << "\n";
     }
     m_vout << "  index directory: " << m_index_directory << "\n";
-
-    return true;
 }
 
 osmium::object_id_type CommandRenumber::lookup(osmium::item_type type, osmium::object_id_type id) {

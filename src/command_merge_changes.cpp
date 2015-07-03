@@ -65,6 +65,10 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
         m_simplify_change = true;
     }
 
+    return true;
+}
+
+void CommandMergeChanges::show_arguments() {
     m_vout << "Started osmium merge-changes\n";
 
     m_vout << "Command line options and default settings:\n";
@@ -76,8 +80,6 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     m_vout << "  output filename: " << m_output_filename << "\n";
     m_vout << "  input format: " << m_input_format << "\n";
     m_vout << "  output format: " << m_output_format << "\n";
-
-    return true;
 }
 
 bool CommandMergeChanges::run() {

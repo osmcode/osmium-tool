@@ -75,6 +75,10 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         m_remove_deleted = true;
     }
 
+    return true;
+}
+
+void CommandApplyChanges::show_arguments() {
     m_vout << "Started osmium apply-changes\n";
 
     m_vout << "Command line options and default settings:\n";
@@ -87,8 +91,6 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     m_vout << "  output filename: " << m_output_filename << "\n";
     m_vout << "  input format: " << m_input_format << "\n";
     m_vout << "  output format: " << m_output_format << "\n";
-
-    return true;
 }
 
 /**

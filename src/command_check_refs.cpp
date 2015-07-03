@@ -70,6 +70,10 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
         m_check_relations = true;
     }
 
+    return true;
+}
+
+void CommandCheckRefs::show_arguments() {
     m_vout << "Started osmium check-refs\n";
 
     m_vout << "Command line options and default settings:\n";
@@ -77,10 +81,7 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     m_vout << "  input format: " << m_input_format << "\n";
     m_vout << "  show ids: " << (m_show_ids ? "yes\n" : "no\n");
     m_vout << "  check relations: " << (m_check_relations ? "yes\n" : "no\n");
-
-    return true;
 }
-
 
 class RefCheckHandler : public osmium::handler::Handler {
 
