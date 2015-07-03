@@ -481,8 +481,6 @@ public:
 /*************************************************************************/
 
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
-    po::variables_map vm;
-
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
     ("extended,e", "Extended output")
@@ -503,6 +501,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::positional_options_description positional;
     positional.add("input-filename", 1);
 
+    po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 

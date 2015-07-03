@@ -33,8 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_merge_changes.hpp"
 
 bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
-    po::variables_map vm;
-
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
     ("input-format,F", po::value<std::string>(), "Format of input files")
@@ -55,6 +53,7 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     po::positional_options_description positional;
     positional.add("input-filenames", -1);
 
+    po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 

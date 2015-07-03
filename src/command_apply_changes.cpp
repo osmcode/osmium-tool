@@ -32,8 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_apply_changes.hpp"
 
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
-    po::variables_map vm;
-
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
     ("input-format,F", po::value<std::string>(), "Format of input file")
@@ -57,6 +55,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     positional.add("input-filename", 1);
     positional.add("change-filenames", -1);
 
+    po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 
