@@ -49,10 +49,10 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
 
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
-    ("verbose,v", "Set verbose mode")
     ("input-format,F", po::value<std::string>(), "Format of input file")
     ;
 
+    add_common_options(cmdline);
     add_output_options(cmdline);
 
     po::options_description hidden("Hidden options");
@@ -70,6 +70,10 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
 
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    setup_common(vm);
+    setup_input_file(vm);
+    setup_output_file(vm);
 
     if (vm.count("ids")) {
         std::string sids;
@@ -91,13 +95,6 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     } else {
         throw argument_error("Need at least one id to look for...");
     }
-
-    if (vm.count("verbose")) {
-        m_vout.verbose(true);
-    }
-
-    setup_input_file(vm);
-    setup_output_file(vm);
 
     m_vout << "Started osmium apply-changes\n";
 

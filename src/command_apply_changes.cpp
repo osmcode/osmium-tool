@@ -36,12 +36,12 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
 
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
-    ("verbose,v", "Set verbose mode")
     ("input-format,F", po::value<std::string>(), "Format of input file")
     ("simplify,s", "Simplify change")
     ("remove-deleted,r", "Remove deleted objects from output")
     ;
 
+    add_common_options(cmdline);
     add_output_options(cmdline);
 
     po::options_description hidden("Hidden options");
@@ -60,6 +60,10 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 
+    setup_common(vm);
+    setup_input_file(vm);
+    setup_output_file(vm);
+
     if (vm.count("change-filenames")) {
         m_change_filenames = vm["change-filenames"].as<std::vector<std::string>>();
     }
@@ -71,13 +75,6 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     if (vm.count("remove-deleted")) {
         m_remove_deleted = true;
     }
-
-    if (vm.count("verbose")) {
-        m_vout.verbose(true);
-    }
-
-    setup_input_file(vm);
-    setup_output_file(vm);
 
     m_vout << "Started osmium apply-changes\n";
 

@@ -45,11 +45,11 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
 
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
-    ("verbose,v", "Set verbose mode")
     ("input-format,F", po::value<std::string>(), "Format of input files")
     ("index-directory,i", po::value<std::string>(), "Index directory")
     ;
 
+    add_common_options(cmdline);
     add_output_options(cmdline);
 
     po::options_description hidden("Hidden options");
@@ -66,20 +66,13 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 
-    if (vm.count("verbose")) {
-        m_vout.verbose(true);
-    }
-
-    if (vm.count("output-header")) {
-        m_output_headers = vm["output-header"].as<std::vector<std::string>>();
-    }
+    setup_common(vm);
+    setup_input_file(vm);
+    setup_output_file(vm);
 
     if (vm.count("index-directory")) {
         m_index_directory = vm["index-directory"].as<std::string>();
     }
-
-    setup_input_file(vm);
-    setup_output_file(vm);
 
     m_vout << "Started osmium renumber\n";
 

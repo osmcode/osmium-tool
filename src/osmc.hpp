@@ -87,6 +87,18 @@ public:
     // It returns false if there was an error.
     virtual bool run() = 0;
 
+    void add_common_options(po::options_description& options) {
+        options.add_options()
+        ("verbose,v", "Set verbose mode")
+        ;
+    }
+
+    void setup_common(const boost::program_options::variables_map& vm) {
+        if (vm.count("verbose")) {
+            m_vout.verbose(true);
+        }
+    }
+
 }; // class Command
 
 class with_single_osm_input {

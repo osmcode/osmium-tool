@@ -35,10 +35,10 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
 
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
-    ("verbose,v", "Set verbose mode")
     ("input-format,F", po::value<std::string>(), "Format of input file")
     ;
 
+    add_common_options(cmdline);
     add_output_options(cmdline);
 
     po::options_description hidden("Hidden options");
@@ -59,9 +59,9 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 
-    if (vm.count("verbose")) {
-        m_vout.verbose(true);
-    }
+    setup_common(vm);
+    setup_input_file(vm);
+    setup_output_file(vm);
 
     m_from = osmium::Timestamp(time(0));
     m_to = m_from;
@@ -77,9 +77,6 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
             throw argument_error("Second timestamp is before first one.");
         }
     }
-
-    setup_input_file(vm);
-    setup_output_file(vm);
 
     if (m_from == m_to) { // point in time
         if (m_output_file.has_multiple_object_versions()) {
