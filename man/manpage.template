@@ -1,7 +1,7 @@
 $if(has-tables)$
 .\"t
 $endif$
-.TH "$title$" "$section$" "$date$" "$footer$" "$header$"
+.TH "$title$" "$section$" "$version$" "$footer$" "$header$"
 $for(header-includes)$
 $header-includes$
 $endfor$
@@ -22,6 +22,7 @@ This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 .SH CONTACT
 .PP
+If you have any questions or want to report a bug, please go to
 http://osmcode.org/contact.html
 .SH AUTHORS
 $for(author)$$author$$sep$; $endfor$.

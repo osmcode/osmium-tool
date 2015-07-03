@@ -92,7 +92,7 @@ function(add_man_page _section _name)
             --variable "section=${_section}"
             -o ${_output_file}
             ${_source_file}
-        DEPENDS ${_source_file}
+        DEPENDS ${_source_file} man/manpage.template
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMENT "Building manpage ${_name}.${_section}"
         VERBATIM)
@@ -103,13 +103,12 @@ endfunction()
 if(PANDOC)
     message(STATUS "Looking for pandoc - found")
     message(STATUS "  Manual pages will be built")
-    execute_process(COMMAND date "+%Y-%m-%d" OUTPUT_VARIABLE PUBDATE OUTPUT_STRIP_TRAILING_WHITESPACE)
     set(PANDOC_MAN_OPTIONS
         -s
         -t man
         --template ${CMAKE_CURRENT_SOURCE_DIR}/man/manpage.template
         --variable "description=osmium/${OSMIUM_VERSION}"
-        --variable "date=${PUBDATE}"
+        --variable "version=${OSMIUM_VERSION}"
         --variable "author=${AUTHOR}"
     )
     set(PANDOC_HTML_OPTIONS -s -t html)
