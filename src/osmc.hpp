@@ -127,6 +127,12 @@ public:
         m_input_file = osmium::io::File(m_input_filename, m_input_format);
     }
 
+    void add_single_input_options(po::options_description& options) {
+        options.add_options()
+        ("input-format,F", po::value<std::string>(), "Format of input file")
+        ;
+    }
+
 }; // class with_single_osm_input
 
 class with_multiple_osm_inputs {
@@ -166,6 +172,12 @@ public:
             osmium::io::File input_file(input_filename, m_input_format);
             m_input_files.push_back(input_file);
         }
+    }
+
+    void add_multiple_inputs_options(po::options_description& options) {
+        options.add_options()
+        ("input-format,F", po::value<std::string>(), "Format of input files")
+        ;
     }
 
 }; // class with_multiple_osm_inputs

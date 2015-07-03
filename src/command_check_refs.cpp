@@ -38,11 +38,11 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
     ("show-ids,i", "Show IDs of missing objects")
-    ("input-format,F", po::value<std::string>(), "Format of input files")
     ("check-relations,r", "Also check relations")
     ;
 
     add_common_options(cmdline);
+    add_single_input_options(cmdline);
 
     po::options_description hidden("Hidden options");
     hidden.add_options()
@@ -60,6 +60,7 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm);
+    setup_input_file(vm);
 
     if (vm.count("show-ids")) {
         m_show_ids = true;
@@ -76,8 +77,6 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     m_vout << "  input format: " << m_input_format << "\n";
     m_vout << "  show ids: " << (m_show_ids ? "yes\n" : "no\n");
     m_vout << "  check relations: " << (m_check_relations ? "yes\n" : "no\n");
-
-    setup_input_file(vm);
 
     return true;
 }

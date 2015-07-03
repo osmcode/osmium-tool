@@ -486,9 +486,10 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     ("extended,e", "Extended output")
     ("get,g", po::value<std::string>(), "Get value")
     ("show-variables,G", "Show variables for --get option")
-    ("input-format,F", po::value<std::string>(), "Format of input file")
     ("json,j", "JSON output")
     ;
+
+    add_single_input_options(cmdline);
 
     po::options_description hidden("Hidden options");
     hidden.add_options()
@@ -504,6 +505,8 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    setup_input_file(vm);
 
     if (vm.count("extended")) {
         m_extended = true;
@@ -560,8 +563,6 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     if (vm.count("get") && vm.count("json")) {
         throw argument_error("You can not use --get/-g and --json/-j together.");
     }
-
-    setup_input_file(vm);
 
     return true;
 }
