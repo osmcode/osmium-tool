@@ -36,12 +36,10 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Allowed options");
     cmdline.add_options()
     ("verbose,v", "Set verbose mode")
-    ("output,o", po::value<std::string>(), "Output file")
-    ("output-format,f", po::value<std::string>(), "Format of output file")
     ("input-format,F", po::value<std::string>(), "Format of input file")
-    ("generator", po::value<std::string>(), "Generator setting for file header")
-    ("overwrite,O", "Allow existing output file to be overwritten")
     ;
+
+    add_output_options(cmdline);
 
     po::options_description hidden("Hidden options");
     hidden.add_options()

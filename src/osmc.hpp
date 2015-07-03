@@ -171,13 +171,21 @@ protected:
 
 public:
 
-    void setup_output_file(const boost::program_options::variables_map& vm) {
+    void setup_output_file(const po::variables_map& vm) {
+        if (vm.count("generator")) {
+            m_generator = vm["generator"].as<std::string>();
+        }
+
         if (vm.count("output")) {
             m_output_filename = vm["output"].as<std::string>();
         }
 
         if (vm.count("output-format")) {
             m_output_format = vm["output-format"].as<std::string>();
+        }
+
+        if (vm.count("output-header")) {
+            m_output_headers = vm["output-header"].as<std::vector<std::string>>();
         }
 
         if (vm.count("overwrite")) {
@@ -188,15 +196,17 @@ public:
             throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
         }
 
-        if (vm.count("generator")) {
-            m_generator = vm["generator"].as<std::string>();
-        }
-
-        if (vm.count("output-header")) {
-            m_output_headers = vm["output-header"].as<std::vector<std::string>>();
-        }
-
         m_output_file = osmium::io::File(m_output_filename, m_output_format);
+    }
+
+    void add_output_options(po::options_description& options) {
+        options.add_options()
+        ("generator", po::value<std::string>(), "Generator setting for file header")
+        ("output,o", po::value<std::string>(), "Output file")
+        ("output-format,f", po::value<std::string>(), "Format of output file")
+        ("output-header", po::value<std::vector<std::string>>(), "Add output header")
+        ("overwrite,O", "Allow existing output file to be overwritten")
+        ;
     }
 
 }; // class with_osm_output
