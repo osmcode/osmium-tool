@@ -95,10 +95,6 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         throw argument_error("Need at least one id to look for...");
     }
 
-    if (vm.count("generator")) {
-        m_generator = vm["generator"].as<std::string>();
-    }
-
     if (vm.count("verbose")) {
         m_vout.verbose(true);
     }

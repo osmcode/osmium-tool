@@ -74,10 +74,6 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
         m_vout.verbose(true);
     }
 
-    if (vm.count("generator")) {
-        m_generator = vm["generator"].as<std::string>();
-    }
-
     if (vm.count("output-header")) {
         m_output_headers = vm["output-header"].as<std::vector<std::string>>();
     }

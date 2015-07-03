@@ -65,10 +65,6 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
         m_simplify_change = true;
     }
 
-    if (vm.count("generator")) {
-        m_generator = vm["generator"].as<std::string>();
-    }
-
     if (vm.count("verbose")) {
         m_vout.verbose(true);
     }

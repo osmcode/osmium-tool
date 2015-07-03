@@ -57,15 +57,12 @@ class Command {
 
 protected:
 
-    std::string m_generator;
     bool m_debug {false};
     osmium::util::VerboseOutput m_vout {false};
 
 public:
 
-    Command() :
-        m_generator("osmium/" OSMIUM_VERSION) {
-    }
+    Command() = default;
 
     virtual ~Command() {
     }
@@ -164,6 +161,8 @@ class with_osm_output {
 
 protected:
 
+    std::string m_generator { "osmium/" OSMIUM_VERSION };
+    std::vector<std::string> m_output_headers;
     std::string m_output_filename = "-"; // default: stdout
     std::string m_output_format;
     osmium::io::File m_output_file;
@@ -186,6 +185,14 @@ public:
 
         if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
             throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
+        }
+
+        if (vm.count("generator")) {
+            m_generator = vm["generator"].as<std::string>();
+        }
+
+        if (vm.count("output-header")) {
+            m_output_headers = vm["output-header"].as<std::vector<std::string>>();
         }
 
         m_output_file = osmium::io::File(m_output_filename, m_output_format);

@@ -37,7 +37,6 @@ typedef std::map<osmium::unsigned_object_id_type, osmium::unsigned_object_id_typ
 
 class CommandRenumber : public Command, with_single_osm_input, with_osm_output {
 
-    std::vector<std::string> m_output_headers;
     std::string m_index_directory;
 
     remap_index_type m_id_index[3];

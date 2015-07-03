@@ -75,10 +75,6 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         m_remove_deleted = true;
     }
 
-    if (vm.count("generator")) {
-        m_generator = vm["generator"].as<std::string>();
-    }
-
     if (vm.count("verbose")) {
         m_vout.verbose(true);
     }

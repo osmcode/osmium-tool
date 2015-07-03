@@ -66,10 +66,6 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
         m_vout.verbose(true);
     }
 
-    if (vm.count("generator")) {
-        m_generator = vm["generator"].as<std::string>();
-    }
-
     m_from = osmium::Timestamp(time(0));
     m_to = m_from;
 

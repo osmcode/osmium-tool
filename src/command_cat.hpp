@@ -32,7 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class CommandCat : public Command, with_multiple_osm_inputs, with_osm_output {
 
-    std::vector<std::string> m_output_headers;
     osmium::osm_entity_bits::type m_osm_entity_bits = osmium::osm_entity_bits::all;
 
 public:
