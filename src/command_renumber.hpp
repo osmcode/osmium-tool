@@ -40,7 +40,7 @@ class CommandRenumber : public Command, with_single_osm_input, with_osm_output {
     std::string m_index_directory;
 
     remap_index_type m_id_index[3];
-    osmium::object_id_type m_last_id[3] = {0, 0, 0};
+    osmium::object_id_type m_last_id[3] {0, 0, 0};
 
 public:
 
