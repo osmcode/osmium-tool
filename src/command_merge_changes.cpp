@@ -33,7 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_merge_changes.hpp"
 
 bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
-    namespace po = boost::program_options;
     po::variables_map vm;
 
     po::options_description cmdline("Allowed options");

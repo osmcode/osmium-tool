@@ -45,7 +45,6 @@ void CommandGetId::sort_unique(osmium::item_type type) {
 }
 
 bool CommandGetId::setup(const std::vector<std::string>& arguments) {
-    namespace po = boost::program_options;
     po::variables_map vm;
 
     po::options_description cmdline("Allowed options");

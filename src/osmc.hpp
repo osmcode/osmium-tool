@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <boost/program_options.hpp>
+namespace po = boost::program_options;
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/overwrite.hpp>
