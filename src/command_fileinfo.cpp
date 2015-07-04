@@ -506,8 +506,6 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
 
-    setup_input_file(vm);
-
     if (vm.count("extended")) {
         m_extended = true;
     }
@@ -547,6 +545,8 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     if (vm.count("show-variables")) {
         std::copy(known_values.cbegin(), known_values.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
         return false;
+    } else {
+        setup_input_file(vm);
     }
 
     if (vm.count("get")) {

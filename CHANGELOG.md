@@ -12,6 +12,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Osmium fileinfo --show-variables didn't work properly.
+
 
 ## [1.1.0] - 2015-07-04
 
