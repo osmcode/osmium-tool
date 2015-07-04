@@ -40,11 +40,16 @@ class CommandRenumber : public Command, with_single_osm_input, with_osm_output {
     std::string m_index_directory;
 
     remap_index_type m_id_index[3];
-    osmium::object_id_type m_last_id[3] {0, 0, 0};
+    osmium::object_id_type m_last_id[3];
 
 public:
 
-    CommandRenumber() = default;
+    CommandRenumber() {
+        // workaround for MSVC
+        m_last_id[0] = 0;
+        m_last_id[1] = 0;
+        m_last_id[2] = 0;
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
