@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Osmium fileinfo --show-variables didn't work properly.
+- Improved zsh autocompletion
 
 
 ## [1.1.0] - 2015-07-04
