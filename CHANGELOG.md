@@ -12,6 +12,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+
+## [1.1.1] - 2015-07-04
+
+### Fixed
+
 - Osmium fileinfo --show-variables didn't work properly.
 - Improved zsh autocompletion
 
@@ -50,7 +55,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.1.0...HEAD
-[1.0.1]: https://github.com/osmcode/osmium-tool/compare/v1.0.1...v1.1.0
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/osmcode/osmium-tool/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/osmcode/osmium-tool/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/osmcode/osmium-tool/compare/v1.0.0...v1.0.1
 
