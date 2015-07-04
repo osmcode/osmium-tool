@@ -197,7 +197,7 @@ class with_osm_output {
 
 protected:
 
-    std::string m_generator { "osmium/" OSMIUM_VERSION };
+    std::string m_generator;
     std::vector<std::string> m_output_headers;
     std::string m_output_filename = "-"; // default: stdout
     std::string m_output_format;
@@ -205,6 +205,10 @@ protected:
     osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
 
 public:
+
+    with_osm_output() :
+        m_generator("osmium/" OSMIUM_VERSION) {
+    }
 
     void setup_output_file(const po::variables_map& vm) {
         if (vm.count("generator")) {
