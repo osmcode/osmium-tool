@@ -43,15 +43,20 @@ function(check_output2 _name _command1 _command2 _output)
     )
 endfunction()
 
+
+#-----------------------------------------------------------------------------
+#
+#  Configure tests in all subdirectories
+#
 #-----------------------------------------------------------------------------
 
-add_subdirectory(cat)
-add_subdirectory(check-refs)
-add_subdirectory(getid)
-add_subdirectory(fileinfo)
-add_subdirectory(help)
-add_subdirectory(renumber)
-add_subdirectory(time-filter)
+file(GLOB _testcmakes "test" "*/CMakeLists.txt")
+
+foreach(_tc IN LISTS _testcmakes)
+    string(REPLACE "/CMakeLists.txt" "" _dir ${_tc})
+    message(STATUS "Adding tests in ${_dir}")
+    add_subdirectory(${_dir})
+endforeach()
 
 
 #-----------------------------------------------------------------------------
