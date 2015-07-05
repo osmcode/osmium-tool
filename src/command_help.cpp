@@ -41,11 +41,13 @@ bool CommandHelp::setup(const std::vector<std::string>& arguments) {
 
 void show_help(const std::string& topic, const std::string& info) {
 #ifndef _MSC_VER
-    // show man page
+    // show man page on non-Windows systems
     std::string manpage("osmium-");
     manpage += topic;
     ::execlp("man", "man", manpage.c_str(), nullptr);
+    // if exec fails, fall thru
 #endif
+    // show info string and link on Windows systems
     std::cout << info << "\n";
     std::cout << "You'll find more documentation at http://osmcode.org/osmium/\n";
 }
@@ -54,19 +56,22 @@ bool CommandHelp::run() {
     auto commands = CommandFactory::help();
 
     if (m_topic == "help") {
-        std::cout << "Usage: osmium [--version] [--help] <command> [<args>]\n\nCommands are:\n";
+        std::cout << "Usage: osmium COMMAND [ARG...]\n";
+        std::cout << "       osmium --version\n\nCommands are:\n";
 
-        // find the maximum length of all command names
-        size_t max_width = std::accumulate(commands.begin(), commands.end(), size_t(0), [](size_t max_so_far, std::pair<std::string, std::string> info) {
-            return std::max(max_so_far, info.first.length());
-        });
-
-        // and print them out in a nice table
+        // print command names and descriptions in a nice table
         for (const auto& cmd : commands) {
-            std::cout << "  " << std::setw(max_width) << std::left << cmd.first << std::setw(0) << "  " << cmd.second << "\n";
+            std::cout << "  "
+                      << std::setw(CommandFactory::max_command_name_length())
+                      << std::left
+                      << cmd.first
+                      << std::setw(0)
+                      << "  "
+                      << cmd.second
+                      << "\n";
         }
 
-        std::cout << "\nSee 'osmium help <command>' for more information on a specific command." << std::endl;
+        std::cout << "\nSee 'osmium help COMMAND' for more information on a specific command." << std::endl;
         return true;
     }
 
@@ -81,7 +86,7 @@ bool CommandHelp::run() {
         return true;
     }
 
-    std::cerr << "Unknown help topic '" << m_topic << "'\n";
+    std::cerr << "Unknown help topic '" << m_topic << "'.\n";
     return false;
 }
 

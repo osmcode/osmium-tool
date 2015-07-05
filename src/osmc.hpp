@@ -34,6 +34,7 @@ namespace po = boost::program_options;
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/overwrite.hpp>
+#include <osmium/util/minmax.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 /**
@@ -287,6 +288,16 @@ public:
             commands.push_back(std::make_pair(cmd.first, cmd.second.description));
         }
         return commands;
+    }
+
+    static int max_command_name_length() {
+        osmium::max_op<int> max_width;
+
+        for (const auto& cmd : instance().m_commands) {
+            max_width.update(cmd.first.length());
+        }
+
+        return max_width();
     }
 
     static bool add(const std::string& name, const std::string& description, create_command_type create_function) {
