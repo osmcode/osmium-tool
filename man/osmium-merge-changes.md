@@ -15,7 +15,7 @@ Merges the content of all change files given on the command line into one large
 change file. Objects are sorted by type, ID, and version, so it doesn't matter
 in what order the change files are given or in what order they contain the data.
 
-**Osmium merge** does its work in main memory, so all data has to fit in there!
+**osmium merge** does its work in main memory, so all data has to fit in there!
 
 
 # OPTIONS
@@ -39,6 +39,10 @@ in what order the change files are given or in what order they contain the data.
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
 
+--output-header=OPTION
+:   Add output header option. This option can be given several times. See the
+    *libosmium manual* for a list of allowed header options.
+
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
@@ -53,9 +57,14 @@ in what order the change files are given or in what order they contain the data.
 
 # DIAGNOSTICS
 
-**osmium merge** exits with code 0 if everything went alright, it exits
-with code 2 if there was a problem with the command line arguments,
-and with exit code 1 if some other error occurred.
+**osmium merge-changes** exits with exit code
+
+0
+  ~ if everything went alright,
+1
+  ~ if there was an error processing the data, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # EXAMPLES
@@ -67,6 +76,6 @@ Merge all changes in *changes* directory into *all.osc.gz*:
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

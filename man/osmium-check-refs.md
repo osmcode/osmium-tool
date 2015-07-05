@@ -53,13 +53,20 @@ nodes in order of ID, then ways in order of ID, then relations in order of ID.
 
 # DIAGNOSTICS
 
-**osmium check-refs** exits with code 2 if there was a problem with the command
-line arguments, code 0 if all referenced nodes (with -r: all objects) are in
-the file, and with exit code 1 otherwise.
+**osmium check-refs** exits with exit code
+
+0
+  ~ if all references are satisfied
+1
+  ~ if there was an error processing the data or some references were not
+    satisfied, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
 
 

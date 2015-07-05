@@ -57,13 +57,13 @@ IDs.
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
 
+--output-header=OPTION
+:   Add output header option. This option can be given several times. See the
+    *libosmium manual* for a list of allowed header options.
+
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
-
---output-header OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed header options.
 
 -v, --verbose
 :   Set verbose mode. The program will output information about what it is
@@ -72,9 +72,14 @@ IDs.
 
 # DIAGNOSTICS
 
-**osmium renumber** exits with code 0 if everything went alright, it exits
-with code 2 if there was a problem with the command line arguments,
-and with exit code 1 if some other error occurred.
+**osmium renumber** exits with exit code
+
+0
+  ~ if everything went alright,
+1
+  ~ if there was an error processing the data, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # EXAMPLES
@@ -97,6 +102,6 @@ then rewrite a change file, too:
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

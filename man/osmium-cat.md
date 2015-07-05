@@ -43,7 +43,7 @@ can be used to convert OSM files from one format into another.
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
---output-header OPTION
+--output-header=OPTION
 :   Add output header option. This option can be given several times. See the
     *libosmium manual* for a list of allowed header options.
 
@@ -58,9 +58,14 @@ can be used to convert OSM files from one format into another.
 
 # DIAGNOSTICS
 
-**osmium cat** exits with code 0 if everything went alright, it exits
-with code 2 if there was a problem with the command line arguments,
-and with exit code 1 if some other error occurred.
+**osmium cat** exits with exit code
+
+0
+  ~ if everything went alright,
+1
+  ~ if there was an error processing the data, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # EXAMPLES
@@ -80,6 +85,6 @@ Copy nodes and ways from source to destination file:
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

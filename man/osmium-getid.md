@@ -1,7 +1,7 @@
 
 # NAME
 
-osmium-getid - get objects from OSM file with given IDs
+osmium-getid - get objects from OSM file by ID
 
 
 # SYNOPSIS
@@ -35,6 +35,10 @@ Get objects with the given IDs from the input and write them to the output
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
 
+--output-header=OPTION
+:   Add output header option. This option can be given several times. See the
+    *libosmium manual* for a list of allowed header options.
+
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
@@ -46,9 +50,14 @@ Get objects with the given IDs from the input and write them to the output
 
 # DIAGNOSTICS
 
-**osmium getid** exits with code 0 if everything went alright and all IDs
-were found, it exits with code 2 if there was a problem with the command
-line arguments, and with exit code 1 if not all IDs were found.
+**osmium getid** exits with exit code
+
+0
+  ~ if all IDs were found
+1
+  ~ if there was an error processing the data or not all IDs were found, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # EXAMPLES
@@ -60,6 +69,6 @@ Output nodes 17 and 1234, way 42, and relation 111 to *stdout* in OPL format:
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

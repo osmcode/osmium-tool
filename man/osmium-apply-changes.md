@@ -6,19 +6,20 @@ osmium-apply-changes - apply OSM change file(s) to OSM data file
 
 # SYNOPSIS
 
-**osmium apply-changes** \[*OPTIONS*\] *INPUT-FILE* *CHANGE-FILE*...
+**osmium apply-changes** \[*OPTIONS*\] *OSM-DATA-FILE* *OSM-CHANGE-FILE*...
 
 
 # DESCRIPTION
 
-Merges the content of all change files given on the command line and applies
-those changes to the INPUT-FILE.
+Merges the content of all OSM change files and applies those changes to the OSM
+data file.
 
-Objects in change files are sorted by type, ID, and version, so it doesn't matter
-in what order the change files are given or in what order they contain the data.
+Objects in change files will be sorted by type, ID, and version, so it doesn't
+matter in what order the change files are given or in what order they contain
+the data.
 
-**Osmium apply** keeps the contents of the change files in main memory, so the
-data has to fit in there!
+**osmium apply-changes** keeps the contents of the change files in main memory,
+so the data has to fit in there!
 
 
 # OPTIONS
@@ -42,6 +43,10 @@ data has to fit in there!
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
 
+--output-header=OPTION
+:   Add output header option. This option can be given several times. See the
+    *libosmium manual* for a list of allowed header options.
+
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
@@ -60,20 +65,25 @@ data has to fit in there!
 
 # DIAGNOSTICS
 
-**osmium cat** exits with code 0 if everything went alright, it exits
-with code 2 if there was a problem with the command line arguments,
-and with exit code 1 if some other error occurred.
+**osmium apply-changes** exits with exit code
+
+0
+  ~ if everything went alright,
+1
+  ~ if there was an error processing the data, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # EXAMPLES
 
-Apply change file 362.osc.gz to planet file:
+Apply changes in `362.osc.gz` to planet file and write result to `new.osm.pbf`:
 
-    osmium apply-changes -o new.osm.pbf planet.osm.pbf 362.osc.gz
+    osmium apply-changes --output=new.osm.pbf planet.osm.pbf 362.osc.gz
 
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5), **osmium-merge-changes**(1)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

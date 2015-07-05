@@ -43,8 +43,12 @@ The format for the timestamps is "yyyy-mm-ddThh:mm::ssZ".
     added to the header of the output file. Default is "*osmium/*" and the version
     of osmium.
 
--o, --output-file=FILE
+-o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
+
+--output-header=OPTION
+:   Add output header option. This option can be given several times. See the
+    *libosmium manual* for a list of allowed header options.
 
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
@@ -57,9 +61,14 @@ The format for the timestamps is "yyyy-mm-ddThh:mm::ssZ".
 
 # DIAGNOSTICS
 
-**osmium time-filter** exits with code 0 if everything went alright, it exits
-with code 2 if there was a problem with the command line arguments,
-and with exit code 1 if some other error occurred.
+**osmium time-filter** exits with exit code
+
+0
+  ~ if everything went alright,
+1
+  ~ if there was an error processing the data, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # EXAMPLES
@@ -75,6 +84,6 @@ Extract planet data how it appeared on January 1 2008 from history planet:
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

@@ -1,12 +1,12 @@
 
 # NAME
 
-osmium-fileinfo - show information about an OpenStreetMap file
+osmium-fileinfo - show information about an OSM file
 
 
 # SYNOPSIS
 
-**osmium fileinfo** \[*OPTIONS*\] *FILE*
+**osmium fileinfo** \[*OPTIONS*\] *OSM-FILE*
 
 
 # DESCRIPTION
@@ -18,10 +18,10 @@ This command will usually only read the file header. Use the **--extended**
 option to show more information.
 
 Normally this command will output the data in human readable form. If the
--j, --json option is used, the output will be in JSON format instead.
+**-j**, **--json** option is used, the output will be in JSON format instead.
 
-If the -g, --get option is used, only the value of the named variable will be
-printed.
+If the **-g**, **--get** option is used, only the value of the named variable
+will be printed.
 
 The output is split into three sections:
 
@@ -51,7 +51,8 @@ Data
 # OPTIONS
 
 -e, --extended
-:   Read the complete file and show additional information.
+:   Read the complete file and show additional information. The default
+    is to read only the header of the file.
 
 -F, --input-format=FORMAT
 :   The format of the input file. Can be used to set the input file format
@@ -61,11 +62,15 @@ Data
 -g, --get=VARIABLE
 :   Get value of VARIABLE. Can not be used together with --json.
 
-:G, --show-variables
+-G, --show-variables
 :   Show a list of all variable names.
 
 -j, --json
 :   Output in JSON format. Can not be used together with --get.
+
+-v, --verbose
+:   Set verbose mode. The program will output information about what it is
+    doing to *stderr*.
 
 
 # VARIABLES
@@ -106,13 +111,18 @@ are in the format `(xmin, ymin, xmax, ymax)`.
 
 # DIAGNOSTICS
 
-**osmium fileinfo** exits with code 0 if everything went alright, it exits
-with code 2 if there was a problem with the command line arguments,
-and with exit code 1 if some other error occurred.
+**osmium fileinfo** exits with exit code
+
+0
+  ~ if everything went alright,
+1
+  ~ if there was an error processing the data, or
+2
+  ~ if there was a problem with the command line arguments.
 
 
 # SEE ALSO
 
+* **osmium**(1), **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 

@@ -5,8 +5,7 @@ osmium - multipurpose tool for working with OpenStreetMap data
 
 # SYNOPSIS
 
-**osmium** *COMMAND* \[*ARGS*\]\
-**osmium** --help\
+**osmium** *COMMAND* \[*ARG*...\]\
 **osmium** --version
 
 
@@ -29,23 +28,35 @@ Run **osmium help** *COMMAND* to get more information about a command.
 # COMMANDS
 
 apply-changes
-:   Apply OSM change file(s) to OSM data file.
+:   apply OSM change file(s) to OSM data file
 cat
-:   Concatenate OSM files and convert to different formats.
+:   concatenate OSM files and convert to different formats
+check-refs
+:   check referential integrity of OSM file
 fileinfo
-:   Show information about an OpenStreetMap file.
+:   show information about an OSM file
+getid
+:   get objects from OSM file by ID
 help
-:   Show help about commands.
+:   show help about commands
 merge-changes
-:   Merge several OSM change files into one.
+:   merge several OSM change files into one
+renumber
+:   renumber object IDs
 time-filter
-:   Filter OSM data by time from a history file.
+:   filter OSM data by time from a history file
 
 
 # SEE ALSO
 
-* **osmium-apply-changes**(1), **osmium-cat**(1), **osmium-fileinfo**(1),
-  **osmium-merge-changes**(1), **osmium-time-filter**(1), **osmium-file-formats**(5)
+* **osmium-apply-changes**(1),
+  **osmium-cat**(1),
+  **osmium-check-refs**(1),
+  **osmium-fileinfo**(1),
+  **osmium-getid**(1),
+  **osmium-merge-changes**(1),
+  **osmium-renumber**(1),
+  **osmium-time-filter**(1),
+  **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)
-* [Libosmium manual](http://osmcode.org/libosmium/manual/libosmium-manual.html)
 
