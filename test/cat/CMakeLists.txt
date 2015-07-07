@@ -7,7 +7,7 @@
 #-----------------------------------------------------------------------------
 
 function(check_cat _name _in1 _in2 _output)
-    check_output(cat-${_name} "cat --generator=test -f osm cat/${_in1} cat/${_in2}" "cat/${_output}")
+    check_output(cat ${_name} "cat --generator=test -f osm cat/${_in1} cat/${_in2}" "cat/${_output}")
 endfunction()
 
 #-----------------------------------------------------------------------------

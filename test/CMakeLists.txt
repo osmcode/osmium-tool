@@ -17,28 +17,30 @@ endfunction()
 
 #-----------------------------------------------------------------------------
 
-function(check_output _name _command _output)
+function(check_output _dir _name _command _reference)
     set(_cmd "${PROJECT_BINARY_DIR}/src/osmium ${_command}")
     add_test(
-        NAME ${_name}
+        NAME "${_dir}-${_name}"
         COMMAND ${CMAKE_COMMAND}
         -Dcmd=${_cmd}
         -Ddir=${PROJECT_SOURCE_DIR}/test
-        -Dreference=${_output}
+        -Dreference=${PROJECT_SOURCE_DIR}/test/${_reference}
+        -Doutput=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
         -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
     )
 endfunction()
 
-function(check_output2 _name _command1 _command2 _output)
+function(check_output2 _dir _name _command1 _command2 _reference)
     set(_cmd1 "${PROJECT_BINARY_DIR}/src/osmium ${_command1}")
     set(_cmd2 "${PROJECT_BINARY_DIR}/src/osmium ${_command2}")
     add_test(
-        NAME ${_name}
+        NAME "${_dir}-${_name}"
         COMMAND ${CMAKE_COMMAND}
         -Dcmd=${_cmd1}
         -Dcmd2=${_cmd2}
         -Ddir=${PROJECT_SOURCE_DIR}/test
-        -Dreference=${_output}
+        -Dreference=${PROJECT_SOURCE_DIR}/test/${_reference}
+        -Doutput=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
         -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
     )
 endfunction()

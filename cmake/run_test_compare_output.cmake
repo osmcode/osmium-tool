@@ -17,6 +17,10 @@ if(NOT reference)
     message(FATAL_ERROR "Variable 'reference' not defined")
 endif()
 
+if(NOT output)
+    message(FATAL_ERROR "Variable 'output' not defined")
+endif()
+
 message("Executing: ${cmd}")
 separate_arguments(cmd)
 
@@ -24,7 +28,7 @@ execute_process(
     COMMAND ${cmd}
     WORKING_DIRECTORY ${dir}
     RESULT_VARIABLE result
-    OUTPUT_VARIABLE stdout
+    OUTPUT_FILE ${output}
     ERROR_VARIABLE stderr
 )
 
@@ -44,7 +48,7 @@ if(cmd2)
         COMMAND ${cmd2}
         WORKING_DIRECTORY ${dir}
         RESULT_VARIABLE result
-        OUTPUT_VARIABLE stdout
+        OUTPUT_FILE ${output}
         ERROR_VARIABLE stderr
     )
 
@@ -57,10 +61,15 @@ if(cmd2)
     endif()
 endif()
 
-file(READ ${dir}/${reference} ref)
+set(compare "${CMAKE_COMMAND} -E compare_files ${reference} ${output}")
+message("Executing: ${compare}")
+separate_arguments(compare)
+execute_process(
+    COMMAND ${compare}
+    RESULT_VARIABLE result
+)
 
-if(NOT (ref STREQUAL stdout))
-    file(WRITE "test.stdout" ${stdout})
-    message(SEND_ERROR "Test output does not match '${reference}'. Output is in 'test.stdout'.")
+if(result)
+    message(SEND_ERROR "Test output does not match '${reference}'. Output is in '${output}'.")
 endif()
 

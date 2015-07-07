@@ -7,7 +7,7 @@
 #-----------------------------------------------------------------------------
 
 function(check_time_filter _name _type _from _to _output)
-    check_output(time-filter-${_name} "time-filter --generator=test -f ${_type} time-filter/input.osh ${_from} ${_to}" "time-filter/output-${_output}.${_type}")
+    check_output(time-filter ${_name} "time-filter --generator=test -f ${_type} time-filter/input.osh ${_from} ${_to}" "time-filter/output-${_output}.${_type}")
 endfunction()
 
 #-----------------------------------------------------------------------------

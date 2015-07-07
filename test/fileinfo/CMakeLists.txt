@@ -7,7 +7,7 @@
 #-----------------------------------------------------------------------------
 
 function(check_fileinfo _name _options _input _output)
-    check_output(fileinfo-${_name} "fileinfo ${_options} fileinfo/${_input}" "fileinfo/${_output}")
+    check_output(fileinfo ${_name} "fileinfo ${_options} fileinfo/${_input}" "fileinfo/${_output}")
 endfunction()
 
 #-----------------------------------------------------------------------------
