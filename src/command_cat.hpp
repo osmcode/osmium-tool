@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <osmium/osm/entity_bits.hpp>
 
-#include "osmc.hpp"
+#include "osmium-tool.hpp"
 
 class CommandCat : public Command, with_multiple_osm_inputs, with_osm_output {
 

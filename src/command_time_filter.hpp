@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <osmium/osm/timestamp.hpp>
 
-#include "osmc.hpp"
+#include "osmium-tool.hpp"
 
 class CommandTimeFilter : public Command, with_single_osm_input, with_osm_output {
 

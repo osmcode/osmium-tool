@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include "osmc.hpp"
+#include "osmium-tool.hpp"
 
 class CommandApplyChanges : public Command, with_single_osm_input, with_osm_output {
 

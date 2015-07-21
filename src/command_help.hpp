@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "osmc.hpp"
+#include "osmium-tool.hpp"
 
 class CommandHelp : public Command {
 

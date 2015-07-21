@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <string>
 
-#include "osmc.hpp"
+#include "osmium-tool.hpp"
 
 class CommandCheckRefs : public Command, with_single_osm_input {
 

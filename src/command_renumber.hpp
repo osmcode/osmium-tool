@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/types.hpp>
 
-#include "osmc.hpp"
+#include "osmium-tool.hpp"
 
 typedef std::map<osmium::unsigned_object_id_type, osmium::unsigned_object_id_type> remap_index_type;
 typedef remap_index_type::value_type remap_index_value_type;

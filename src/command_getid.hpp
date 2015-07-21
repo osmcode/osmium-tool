@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
 
-#include "osmc.hpp"
+#include "osmium-tool.hpp"
 
 class CommandGetId : public Command, with_single_osm_input, with_osm_output {
 
