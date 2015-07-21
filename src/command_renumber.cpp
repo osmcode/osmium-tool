@@ -184,58 +184,52 @@ void CommandRenumber::write_index(osmium::item_type type, const std::string& nam
 }
 
 bool CommandRenumber::run() {
-    try {
-        if (!m_index_directory.empty()) {
-            m_vout << "Reading index files...\n";
-            read_index(osmium::item_type::node, "nodes");
-            read_index(osmium::item_type::way, "ways");
-            read_index(osmium::item_type::relation, "relations");
+    if (!m_index_directory.empty()) {
+        m_vout << "Reading index files...\n";
+        read_index(osmium::item_type::node, "nodes");
+        read_index(osmium::item_type::way, "ways");
+        read_index(osmium::item_type::relation, "relations");
 
-            m_vout << "  Nodes     index contains " << index(osmium::item_type::node).size()     << " items\n";
-            m_vout << "  Ways      index contains " << index(osmium::item_type::way).size()      << " items\n";
-            m_vout << "  Relations index contains " << index(osmium::item_type::relation).size() << " items\n";
-        }
+        m_vout << "  Nodes     index contains " << index(osmium::item_type::node).size()     << " items\n";
+        m_vout << "  Ways      index contains " << index(osmium::item_type::way).size()      << " items\n";
+        m_vout << "  Relations index contains " << index(osmium::item_type::relation).size() << " items\n";
+    }
 
-        m_vout << "First pass through input file (reading relations)...\n";
-        osmium::io::Reader reader_pass1(m_input_file, osmium::osm_entity_bits::relation);
+    m_vout << "First pass through input file (reading relations)...\n";
+    osmium::io::Reader reader_pass1(m_input_file, osmium::osm_entity_bits::relation);
 
-        osmium::io::Header header = reader_pass1.header();
-        header.set("generator", m_generator);
-        header.set("xml_josm_upload", "false");
-        for (const auto& h : m_output_headers) {
-            header.set(h);
-        }
-        osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+    osmium::io::Header header = reader_pass1.header();
+    header.set("generator", m_generator);
+    header.set("xml_josm_upload", "false");
+    for (const auto& h : m_output_headers) {
+        header.set(h);
+    }
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
 
-        osmium::io::InputIterator<osmium::io::Reader, osmium::Relation> it { reader_pass1 };
-        osmium::io::InputIterator<osmium::io::Reader, osmium::Relation> end {};
+    osmium::io::InputIterator<osmium::io::Reader, osmium::Relation> it { reader_pass1 };
+    osmium::io::InputIterator<osmium::io::Reader, osmium::Relation> end {};
 
-        for (; it != end; ++it) {
-            lookup(osmium::item_type::relation, it->id());
-        }
+    for (; it != end; ++it) {
+        lookup(osmium::item_type::relation, it->id());
+    }
 
-        reader_pass1.close();
+    reader_pass1.close();
 
-        m_vout << "Second pass through input file...\n";
-        osmium::io::Reader reader_pass2(m_input_file);
-        while (osmium::memory::Buffer buffer = reader_pass2.read()) {
-            renumber(buffer);
-            writer(std::move(buffer));
-        }
-        reader_pass2.close();
+    m_vout << "Second pass through input file...\n";
+    osmium::io::Reader reader_pass2(m_input_file);
+    while (osmium::memory::Buffer buffer = reader_pass2.read()) {
+        renumber(buffer);
+        writer(std::move(buffer));
+    }
+    reader_pass2.close();
 
-        writer.close();
+    writer.close();
 
-        if (!m_index_directory.empty()) {
-            m_vout << "Writing index files...\n";
-            write_index(osmium::item_type::node, "nodes");
-            write_index(osmium::item_type::way, "ways");
-            write_index(osmium::item_type::relation, "relations");
-        }
-
-    } catch (std::exception& e) {
-        std::cerr << e.what() << "\n";
-        return false;
+    if (!m_index_directory.empty()) {
+        m_vout << "Writing index files...\n";
+        write_index(osmium::item_type::node, "nodes");
+        write_index(osmium::item_type::way, "ways");
+        write_index(osmium::item_type::relation, "relations");
     }
 
     m_vout << "Done.\n";

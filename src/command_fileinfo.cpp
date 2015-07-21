@@ -586,24 +586,20 @@ bool CommandFileinfo::run() {
         output.reset(new SimpleOutput(m_get_value));
     }
 
-    try {
-        output->file(m_input_filename, m_input_file);
+    output->file(m_input_filename, m_input_file);
 
-        osmium::io::Reader reader(m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing);
-        osmium::io::Header header = reader.header();
-        output->header(header);
+    osmium::io::Reader reader(m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing);
+    osmium::io::Header header = reader.header();
+    output->header(header);
 
-        if (m_extended) {
-            InfoHandler info_handler;
-            osmium::apply(reader, info_handler);
-            output->data(header, info_handler);
-        }
-
-        output->output();
-    } catch (std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return false;
+    if (m_extended) {
+        InfoHandler info_handler;
+        osmium::apply(reader, info_handler);
+        output->data(header, info_handler);
     }
+
+    output->output();
+
     return true;
 }
 

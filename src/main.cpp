@@ -105,14 +105,15 @@ int main(int argc, char *argv[]) {
     }
 
     cmd->print_arguments();
-    bool result = cmd->run();
 
-    google::protobuf::ShutdownProtobufLibrary();
-
-    if (result) {
-        return return_code::okay;
-    } else {
-        return return_code::error;
+    try {
+        if (cmd->run()) {
+            return return_code::okay;
+        }
+    } catch (std::exception& e) {
+        std::cerr << e.what() << "\n";
     }
+
+    return return_code::error;
 }
 

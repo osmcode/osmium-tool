@@ -112,39 +112,33 @@ void CommandCat::show_arguments() {
 }
 
 bool CommandCat::run() {
-
-    try {
-        if (m_input_files.size() == 1) { // single input file
-            m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";
-            osmium::io::Reader reader(m_input_files[0], m_osm_entity_bits);
-            osmium::io::Header header = reader.header();
-            header.set("generator", m_generator);
-            for (const auto& h : m_output_headers) {
-                header.set(h);
-            }
-            osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+    if (m_input_files.size() == 1) { // single input file
+        m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";
+        osmium::io::Reader reader(m_input_files[0], m_osm_entity_bits);
+        osmium::io::Header header = reader.header();
+        header.set("generator", m_generator);
+        for (const auto& h : m_output_headers) {
+            header.set(h);
+        }
+        osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+        while (osmium::memory::Buffer buffer = reader.read()) {
+            writer(std::move(buffer));
+        }
+        writer.close();
+    } else { // multiple input files
+        osmium::io::Header header({{"generator", m_generator}});
+        for (const auto& h : m_output_headers) {
+            header.set(h);
+        }
+        osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+        for (const auto& input_file : m_input_files) {
+            m_vout << "Copying input file '" << input_file.filename() << "'\n";
+            osmium::io::Reader reader(input_file, m_osm_entity_bits);
             while (osmium::memory::Buffer buffer = reader.read()) {
                 writer(std::move(buffer));
             }
-            writer.close();
-        } else { // multiple input files
-            osmium::io::Header header({{"generator", m_generator}});
-            for (const auto& h : m_output_headers) {
-                header.set(h);
-            }
-            osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
-            for (const auto& input_file : m_input_files) {
-                m_vout << "Copying input file '" << input_file.filename() << "'\n";
-                osmium::io::Reader reader(input_file, m_osm_entity_bits);
-                while (osmium::memory::Buffer buffer = reader.read()) {
-                    writer(std::move(buffer));
-                }
-            }
-            writer.close();
         }
-    } catch (std::exception& e) {
-        std::cerr << e.what() << "\n";
-        return false;
+        writer.close();
     }
 
     m_vout << "Done.\n";
