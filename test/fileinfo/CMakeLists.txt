@@ -12,7 +12,13 @@ endfunction()
 
 #-----------------------------------------------------------------------------
 
-check_fileinfo(fi1 "--extended" fi1.osm fi1-result.txt)
+include(TestBigEndian)
+test_big_endian(BIG_ENDIAN)
 
+if(${BIG_ENDIAN})
+    check_fileinfo(fi1 "--extended" fi1.osm fi1-result-be.txt)
+else(${BIG_ENDIAN})
+    check_fileinfo(fi1 "--extended" fi1.osm fi1-result.txt)
+endif(${BIG_ENDIAN})
 
 #-----------------------------------------------------------------------------
