@@ -152,10 +152,19 @@ void CommandRenumber::read_index(osmium::item_type type, const std::string& name
     if (file_size % sizeof(remap_index_type::value_type) == 0) {
         std::runtime_error(std::string("index file '") + f + "' has wrong file size");
     }
-    osmium::util::TypedMemoryMapping<remap_index_type::value_type> mapping(file_size / sizeof(remap_index_type::value_type), false, fd);
-    std::copy(mapping.begin(), mapping.end(), std::inserter(index(type), index(type).begin()));
 
-    last_id(type) = std::max_element(mapping.begin(), mapping.end())->second;
+    {
+        osmium::util::TypedMemoryMapping<remap_index_type::value_type> mapping(file_size / sizeof(remap_index_type::value_type), false, fd);
+        std::copy(mapping.begin(), mapping.end(), std::inserter(index(type), index(type).begin()));
+
+        last_id(type) = std::max_element(mapping.begin(),
+                                         mapping.end(),
+                                         [](const remap_index_type::value_type& a,
+                                            const remap_index_type::value_type& b) {
+                                             return a.second < b.second;
+                                         }
+                        )->second;
+    }
 
     close(fd);
 }
