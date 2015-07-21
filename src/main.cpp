@@ -24,16 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <osmpbf/osmpbf.h>
-
 #include "osmc.hpp"
-
-#include "command_apply_changes.hpp"
-#include "command_cat.hpp"
-#include "command_fileinfo.hpp"
-#include "command_help.hpp"
-#include "command_merge_changes.hpp"
-#include "command_time_filter.hpp"
 
 enum return_code : int {
     okay  = 0,
