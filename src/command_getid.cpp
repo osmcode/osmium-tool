@@ -38,10 +38,15 @@ std::vector<osmium::object_id_type>& CommandGetId::ids(osmium::item_type type) n
     return m_ids[osmium::item_type_to_nwr_index(type)];
 }
 
+const std::vector<osmium::object_id_type>& CommandGetId::ids(osmium::item_type type) const noexcept {
+    return m_ids[osmium::item_type_to_nwr_index(type)];
+}
+
 void CommandGetId::sort_unique(osmium::item_type type) {
-    std::sort(ids(type).begin(), ids(type).end());
-    auto last = std::unique(ids(type).begin(), ids(type).end());
-    ids(type).erase(last, ids(type).end());
+    auto& index = ids(type);
+    std::sort(index.begin(), index.end());
+    auto last = std::unique(index.begin(), index.end());
+    index.erase(last, index.end());
 }
 
 bool CommandGetId::setup(const std::vector<std::string>& arguments) {
@@ -123,7 +128,7 @@ void CommandGetId::show_arguments() {
     m_vout << "\n";
 }
 
-bool CommandGetId::run() {
+osmium::osm_entity_bits::type CommandGetId::get_needed_types() const {
     osmium::osm_entity_bits::type types = osmium::osm_entity_bits::nothing;
 
     if (! ids(osmium::item_type::node).empty()) {
@@ -136,8 +141,12 @@ bool CommandGetId::run() {
         types |= osmium::osm_entity_bits::relation;
     }
 
+    return types;
+}
+
+bool CommandGetId::run() {
     m_vout << "Reading input file...\n";
-    osmium::io::Reader reader(m_input_file, types);
+    osmium::io::Reader reader(m_input_file, get_needed_types());
 
     osmium::io::Header header;
     header.set("generator", m_generator);
@@ -153,8 +162,8 @@ bool CommandGetId::run() {
                      ids(osmium::item_type::relation).size();
 
     for (; it != end; ++it) {
-        auto& index = ids(it->type());
-        auto result = std::equal_range(index.begin(), index.end(), it->id());
+        const auto& index = ids(it->type());
+        const auto result = std::equal_range(index.begin(), index.end(), it->id());
         if (result.first != result.second) {
             output_buffer.add_item(*it);
             output_buffer.commit();

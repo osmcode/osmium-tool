@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+#include <osmium/io/header.hpp>
 #include <osmium/osm/entity_bits.hpp>
 
 #include "osmium-tool.hpp"
@@ -43,6 +44,8 @@ public:
     void show_arguments() override final;
 
     bool run() override final;
+
+    void setup_header(osmium::io::Header& header) const;
 
     osmium::osm_entity_bits::type osm_entity_bits() const {
         return m_osm_entity_bits;

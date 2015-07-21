@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+#include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
 
@@ -40,12 +41,15 @@ public:
     CommandGetId() = default;
 
     std::vector<osmium::object_id_type>& ids(osmium::item_type type) noexcept;
+    const std::vector<osmium::object_id_type>& ids(osmium::item_type type) const noexcept;
 
     void sort_unique(osmium::item_type type);
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
     void show_arguments() override final;
+
+    osmium::osm_entity_bits::type get_needed_types() const;
 
     bool run() override final;
 
