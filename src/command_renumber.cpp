@@ -149,18 +149,18 @@ void CommandRenumber::read_index(osmium::item_type type, const std::string& name
     }
 
     size_t file_size = osmium::util::file_size(fd);
-    if (file_size % sizeof(remap_index_type::value_type) != 0) {
+    if (file_size % sizeof(remap_index_value_type) != 0) {
         throw std::runtime_error(std::string("index file '") + f + "' has wrong file size");
     }
 
     {
-        osmium::util::TypedMemoryMapping<remap_index_type::value_type> mapping(file_size / sizeof(remap_index_type::value_type), false, fd);
+        osmium::util::TypedMemoryMapping<remap_index_value_type> mapping(file_size / sizeof(remap_index_value_type), false, fd);
         std::copy(mapping.begin(), mapping.end(), std::inserter(index(type), index(type).begin()));
 
         last_id(type) = std::max_element(mapping.begin(),
                                          mapping.end(),
-                                         [](const remap_index_type::value_type& a,
-                                            const remap_index_type::value_type& b) {
+                                         [](const remap_index_value_type& a,
+                                            const remap_index_value_type& b) {
                                              return a.second < b.second;
                                          }
                         )->second;
@@ -176,9 +176,9 @@ void CommandRenumber::write_index(osmium::item_type type, const std::string& nam
         throw std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
     }
 
-    std::vector<remap_index_type::value_type> data;
+    std::vector<remap_index_value_type> data;
     std::copy(index(type).begin(), index(type).end(), std::back_inserter(data));
-    osmium::io::detail::reliable_write(fd, reinterpret_cast<const char*>(data.data()), sizeof(remap_index_type::value_type) * data.size());
+    osmium::io::detail::reliable_write(fd, reinterpret_cast<const char*>(data.data()), sizeof(remap_index_value_type) * data.size());
 
     close(fd);
 }
