@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/visitor.hpp>
 
 #include "command_fileinfo.hpp"
-
+#include "exception.hpp"
 
 /*************************************************************************/
 

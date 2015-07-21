@@ -1,5 +1,5 @@
 
-#include <catch.hpp>
+#include "test.hpp"
 
 #include "command_cat.hpp"
 

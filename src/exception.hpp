@@ -1,5 +1,5 @@
-#ifndef COMMAND_MERGE_CHANGES_HPP
-#define COMMAND_MERGE_CHANGES_HPP
+#ifndef EXCEPTION_HPP
+#define EXCEPTION_HPP
 
 /*
 
@@ -23,26 +23,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
+#include <stdexcept>
 
-#include "cmd.hpp"
+/**
+ *  Thrown when there is a problem with the command line arguments.
+ */
+struct argument_error : std::runtime_error {
 
-class CommandMergeChanges : public Command, public with_multiple_osm_inputs, public with_osm_output {
+    argument_error(const char* message) :
+        std::runtime_error(message) {
+    }
 
-    bool m_simplify_change = false;
+    argument_error(const std::string& message) :
+        std::runtime_error(message) {
+    }
 
-public:
-
-    CommandMergeChanges() = default;
-
-    bool setup(const std::vector<std::string>& arguments) override final;
-
-    void show_arguments() override final;
-
-    bool run() override final;
-
-}; // class CommandMergeChanges
+};
 
 
-#endif // COMMAND_MERGE_CHANGES_HPP
+#endif // EXCEPTION_HPP

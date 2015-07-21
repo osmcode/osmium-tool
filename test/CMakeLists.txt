@@ -11,7 +11,7 @@ include_directories(../src)
 include_directories(../include)
 
 file(GLOB ALL_SETUP_TESTS */test_setup.cpp)
-file(GLOB ALL_COMMANDS ../src/command_*.cpp)
+file(GLOB ALL_COMMANDS ../src/command_*.cpp ../src/io.cpp ../src/cmd_factory.cpp)
 add_executable(unit_tests unit_tests.cpp ${ALL_COMMANDS} ${ALL_SETUP_TESTS})
 target_link_libraries(unit_tests ${Boost_LIBRARIES} ${OSMIUM_LIBRARIES})
 add_test(NAME unit_tests COMMAND unit_tests)

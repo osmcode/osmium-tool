@@ -33,6 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/util/string.hpp>
 
 #include "command_getid.hpp"
+#include "exception.hpp"
 
 std::vector<osmium::object_id_type>& CommandGetId::ids(osmium::item_type type) noexcept {
     return m_ids[osmium::item_type_to_nwr_index(type)];

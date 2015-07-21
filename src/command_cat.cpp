@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/io/any_output.hpp>
 
 #include "command_cat.hpp"
+#include "exception.hpp"
 
 bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Allowed options");

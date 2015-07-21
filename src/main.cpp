@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include "osmium-tool.hpp"
+#include "cmd.hpp"
 
 enum return_code : int {
     okay  = 0,

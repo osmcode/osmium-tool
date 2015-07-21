@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <osmium/io/file.hpp>
 
-#include "osmium-tool.hpp"
+#include "cmd.hpp"
 
 class CommandFileinfo : public Command, public with_single_osm_input {
 

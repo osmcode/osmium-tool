@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/diff_iterator.hpp>
 
 #include "command_time_filter.hpp"
+#include "exception.hpp"
 
 bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Allowed options");
