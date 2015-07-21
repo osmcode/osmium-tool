@@ -141,16 +141,16 @@ void CommandRenumber::read_index(osmium::item_type type, const std::string& name
     std::string f { filename(name) };
     int fd = ::open(f.c_str(), O_RDONLY);
     if (fd < 0) {
-        // ignore if the file is not there
+        // if the file is not there we don't have to read anything and can return
         if (errno == ENOENT) {
             return;
         }
-        std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
+        throw std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
     }
 
     size_t file_size = osmium::util::file_size(fd);
-    if (file_size % sizeof(remap_index_type::value_type) == 0) {
-        std::runtime_error(std::string("index file '") + f + "' has wrong file size");
+    if (file_size % sizeof(remap_index_type::value_type) != 0) {
+        throw std::runtime_error(std::string("index file '") + f + "' has wrong file size");
     }
 
     {
@@ -173,7 +173,7 @@ void CommandRenumber::write_index(osmium::item_type type, const std::string& nam
     std::string f { filename(name) };
     int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
     if (fd < 0) {
-        std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
+        throw std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
     }
 
     std::vector<remap_index_type::value_type> data;
