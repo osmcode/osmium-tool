@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "osmium-tool.hpp"
 
-class CommandApplyChanges : public Command, with_single_osm_input, with_osm_output {
+class CommandApplyChanges : public Command, public with_single_osm_input, public with_osm_output {
 
     std::vector<std::string> m_change_filenames;
 

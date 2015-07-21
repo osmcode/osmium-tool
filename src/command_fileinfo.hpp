@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "osmium-tool.hpp"
 
-class CommandFileinfo : public Command, with_single_osm_input {
+class CommandFileinfo : public Command, public with_single_osm_input {
 
     bool m_extended = false;
     bool m_json_output = false;

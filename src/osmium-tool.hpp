@@ -145,6 +145,10 @@ public:
         ;
     }
 
+    const osmium::io::File& input_file() const {
+        return m_input_file;
+    }
+
 }; // class with_single_osm_input
 
 class with_multiple_osm_inputs {
@@ -190,6 +194,10 @@ public:
         options.add_options()
         ("input-format,F", po::value<std::string>(), "Format of input files")
         ;
+    }
+
+    const std::vector<osmium::io::File>& input_files() const {
+        return m_input_files;
     }
 
 }; // class with_multiple_osm_inputs
@@ -247,6 +255,22 @@ public:
         ("output-header", po::value<std::vector<std::string>>(), "Add output header")
         ("overwrite,O", "Allow existing output file to be overwritten")
         ;
+    }
+
+    const osmium::io::File& output_file() const {
+        return m_output_file;
+    }
+
+    const std::string& generator() const {
+        return m_generator;
+    }
+
+    const std::vector<std::string>& output_headers() const {
+        return m_output_headers;
+    }
+
+    osmium::io::overwrite output_overwrite() const {
+        return m_output_overwrite;
     }
 
 }; // class with_osm_output

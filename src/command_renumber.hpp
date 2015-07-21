@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 typedef std::map<osmium::unsigned_object_id_type, osmium::unsigned_object_id_type> remap_index_type;
 typedef remap_index_type::value_type remap_index_value_type;
 
-class CommandRenumber : public Command, with_single_osm_input, with_osm_output {
+class CommandRenumber : public Command, public with_single_osm_input, public with_osm_output {
 
     std::string m_index_directory;
 

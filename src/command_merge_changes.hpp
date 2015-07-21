@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "osmium-tool.hpp"
 
-class CommandMergeChanges : public Command, with_multiple_osm_inputs, with_osm_output {
+class CommandMergeChanges : public Command, public with_multiple_osm_inputs, public with_osm_output {
 
     bool m_simplify_change = false;
 

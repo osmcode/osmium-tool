@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "osmium-tool.hpp"
 
-class CommandTimeFilter : public Command, with_single_osm_input, with_osm_output {
+class CommandTimeFilter : public Command, public with_single_osm_input, public with_osm_output {
 
     osmium::Timestamp m_from;
     osmium::Timestamp m_to;

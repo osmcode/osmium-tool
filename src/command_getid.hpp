@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "osmium-tool.hpp"
 
-class CommandGetId : public Command, with_single_osm_input, with_osm_output {
+class CommandGetId : public Command, public with_single_osm_input, public with_osm_output {
 
     std::vector<osmium::object_id_type> m_ids[3];
 
