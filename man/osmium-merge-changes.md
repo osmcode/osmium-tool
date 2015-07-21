@@ -73,6 +73,11 @@ Merge all changes in *changes* directory into *all.osc.gz*:
 
     osmium merge-changes -o all.osc.gz changes/*.gz
 
+Because `osmium merge-changes` sorts its input, you can also use it to sort
+just a single change file:
+
+    osmium merge-changes unsorted.osc.gz -o sorted.osc.gz
+
 
 # SEE ALSO
 
