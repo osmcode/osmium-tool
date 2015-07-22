@@ -106,6 +106,7 @@ void with_osm_output::setup_output_file(const po::variables_map& vm) {
     }
 
     m_output_file = osmium::io::File(m_output_filename, m_output_format);
+    m_output_file.check();
 }
 
 void with_osm_output::add_output_options(po::options_description& options) {

@@ -64,15 +64,17 @@ TEST_CASE("cat") {
         REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-F", "foo"}), argument_error);
     }
 
-#if 0
     SECTION("unknown output format suffix") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.bar"}), argument_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.bar"}), std::runtime_error);
+    }
+
+    SECTION("unknown output suffix and unknown format option") {
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.foo", "-f", "bar"}), std::runtime_error);
     }
 
     SECTION("unknown output format option") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.pbf", "-f", "bar"}), argument_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.pbf", "-f", "bar"}), std::runtime_error);
     }
-#endif
 
 }
 
