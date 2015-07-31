@@ -154,7 +154,7 @@ void CommandRenumber::read_index(osmium::item_type type, const std::string& name
     }
 
     {
-        osmium::util::TypedMemoryMapping<remap_index_value_type> mapping(file_size / sizeof(remap_index_value_type), false, fd);
+        osmium::util::TypedMemoryMapping<remap_index_value_type> mapping(file_size / sizeof(remap_index_value_type), osmium::util::MemoryMapping::mapping_mode::readonly, fd);
         std::copy(mapping.begin(), mapping.end(), std::inserter(index(type), index(type).begin()));
 
         last_id(type) = std::max_element(mapping.begin(),
