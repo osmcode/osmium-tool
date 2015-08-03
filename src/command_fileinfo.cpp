@@ -44,6 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <osmium/io/any_input.hpp>
 #include <osmium/handler.hpp>
+#include <osmium/osm/crc.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/minmax.hpp>
 #include <osmium/visitor.hpp>
@@ -70,7 +71,7 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::min_op<osmium::Timestamp> first_timestamp;
     osmium::max_op<osmium::Timestamp> last_timestamp;
 
-    boost::crc_32_type crc32;
+    osmium::CRC<boost::crc_32_type> crc32;
 
     bool ordered = true;
     bool multiple_versions = false;
@@ -79,14 +80,13 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::object_id_type last_id = 0;
 
     void changeset(const osmium::Changeset& changeset) {
-        crc32.process_bytes(changeset.data(), changeset.byte_size());
+        crc32.update(changeset);
         ++changesets;
 
         largest_changeset_id.update(changeset.id());
     }
 
     void osm_object(const osmium::OSMObject& object) {
-        crc32.process_bytes(object.data(), object.byte_size());
         first_timestamp.update(object.timestamp());
         last_timestamp.update(object.timestamp());
 
@@ -106,6 +106,7 @@ struct InfoHandler : public osmium::handler::Handler {
     }
 
     void node(const osmium::Node& node) {
+        crc32.update(node);
         bounds.extend(node.location());
         ++nodes;
 
@@ -113,12 +114,14 @@ struct InfoHandler : public osmium::handler::Handler {
     }
 
     void way(const osmium::Way& way) {
+        crc32.update(way);
         ++ways;
 
         largest_way_id.update(way.id());
     }
 
     void relation(const osmium::Relation& relation) {
+        crc32.update(relation);
         ++relations;
 
         largest_relation_id.update(relation.id());
@@ -210,7 +213,7 @@ public:
             std::cout << "unknown (because objects in file are unordered)\n";
         }
 
-        std::cout << "  CRC32: " << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
+        std::cout << "  CRC32: " << std::hex << info_handler.crc32().checksum() << std::dec << "\n";
 
         std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
         std::cout << "  Number of nodes: "      << info_handler.nodes      << "\n";
@@ -327,7 +330,7 @@ public:
 
         m_writer.String("crc32");
         std::stringstream ss;
-        ss << std::hex << info_handler.crc32.checksum() << std::dec;
+        ss << std::hex << info_handler.crc32().checksum() << std::dec;
         m_writer.String(ss.str().c_str());
 
         m_writer.String("count");
@@ -445,7 +448,7 @@ public:
         }
 
         if (m_get_value == "data.crc32") {
-            std::cout << std::hex << info_handler.crc32.checksum() << std::dec << "\n";
+            std::cout << std::hex << info_handler.crc32().checksum() << std::dec << "\n";
         }
 
         if (m_get_value == "data.count.changesets") {
