@@ -16,7 +16,7 @@ Data:
     Last: 2015-01-01T04:00:00Z
   Objects ordered (by type and id): yes
   Multiple versions of same object: no
-  CRC32: 7cb270e8
+  CRC32: 92bb4b6b
   Number of changesets: 0
   Number of nodes: 3
   Number of ways: 0
