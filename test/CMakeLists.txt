@@ -19,6 +19,10 @@ add_test(NAME unit_tests COMMAND unit_tests)
 
 #-----------------------------------------------------------------------------
 
+configure_file(io/Makefile.in ${CMAKE_CURRENT_BINARY_DIR}/io/Makefile @ONLY)
+
+#-----------------------------------------------------------------------------
+
 function(do_test _name _command _regex)
     separate_arguments(_command)
     add_test(NAME ${_name} COMMAND ${_command})

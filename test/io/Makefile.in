@@ -1,0 +1,264 @@
+#
+#  Osmium I/O tests
+#  ================
+#
+#  To run this, run cmake as usual. Then to run with default test file, call:
+#
+#    make -f BUILD_DIR/test/io/Makefile
+#
+#  Look in test/io/output/report for results. All checksums in one set
+#  must be equal, but different between sets.
+#
+#  To run with a different OSM data file, use:
+#
+#    make -f BUILD_DIR/test/io/Makefile INPUT=SOME_OSM_FILE
+#
+#  To also create OPL files and check their checksums, call
+#
+#    make -f BUILD_DIR/test/io/Makefile INPUT=SOME_OSM_FILE opl
+#
+#  and look in test/io/output/report_opl for results.
+#
+#  You can set these variables on the command line:
+#
+#    DIR     -- output directory
+#    INPUT   -- input OSM file (xml or pbf)
+#    OSMOSIS -- path to osmosis command (used to create reference files)
+#
+
+DIR     := @CMAKE_BINARY_DIR@/test/io/output
+INPUT   := @CMAKE_SOURCE_DIR@/test/io/input.osm
+OSMOSIS := /usr/bin/osmosis
+
+OSMIUM  := @CMAKE_BINARY_DIR@/src/osmium
+
+OSMIUM_CMD := $(OSMIUM) cat --overwrite
+
+ifeq ($(suffix $(INPUT)),.pbf)
+    OSMOSIS_READ := $(OSMOSIS) --read-pbf
+else
+    OSMOSIS_READ := $(OSMOSIS) --read-xml
+endif
+
+.PHONY: all report opl opl_input opl_files
+
+all: report
+
+report: $(DIR)/report
+
+opl: $(DIR)/report_opl
+
+$(DIR):
+	mkdir -p $(DIR)
+
+opl_input: $(DIR)/input.osm.opl
+
+$(DIR)/input.osm.opl: $(INPUT)
+	$(OSMIUM_CMD) $< -o $@; \
+
+opl_files: \
+    $(DIR)/osmium-xml-osmosis.osm.pbf \
+    $(DIR)/osmosis.osm.bz2 \
+    $(DIR)/osmosis-DCbMg.osm.pbf \
+    $(DIR)/osmosis-dCbMg.osm.pbf \
+    $(DIR)/osmosis-DcbMg.osm.pbf \
+    $(DIR)/osmosis-dcbMg.osm.pbf \
+    $(DIR)/osmosis-DCBMg.osm.pbf \
+    $(DIR)/osmium.osm.bz2 \
+    $(DIR)/osmium-DCbMg.osm.pbf \
+    $(DIR)/osmium-dCbMg.osm.pbf \
+    $(DIR)/osmium-DcbMg.osm.pbf \
+    $(DIR)/osmium-dcbMg.osm.pbf \
+    $(DIR)/osmosis-DCbMg-osmium.osm.pbf \
+    $(DIR)/osmosis-dCbMg-osmium.osm.pbf \
+    $(DIR)/osmosis-DcbMg-osmium.osm.pbf \
+    $(DIR)/osmosis-dcbMg-osmium.osm.pbf \
+    $(DIR)/osmium-DCbMg-osmosis.osm.pbf \
+    $(DIR)/osmium-dCbMg-osmosis.osm.pbf \
+    $(DIR)/osmium-DcbMg-osmosis.osm.pbf \
+    $(DIR)/osmium-dcbMg-osmosis.osm.pbf \
+    $(DIR)/osmosis-dCbMG.osm.pbf \
+    $(DIR)/osmosis-DCbmg.osm.pbf \
+    $(DIR)/osmium-DCbmg.osm.pbf \
+    $(DIR)/osmosis-DCbmg-osmium.osm.pbf \
+    $(DIR)/osmium-DCbmg-osmosis.osm.pbf
+	for i in $^; do \
+	    $(OSMIUM_CMD) $$i -o $${i%.pbf}.opl; \
+	done
+
+$(DIR)/osmium-DCbmg-fake.osm.opl: $(DIR)/osmium-DCbMg.osm.opl
+	sed -e 's/ v.* T/ v0 dV c0 t i0 u T/' $^ >$@
+
+$(DIR)/osmium-DCbMG-fake.osm.opl: $(DIR)/osmium-DCbMg.osm.opl
+	grep '^n' $^ | sed -e 's/[0-9][0-9] y/00 y/' -e 's/[0-9][0-9]$$/00/' >$@
+	grep '^[wr]' $^ >>$@
+
+$(DIR)/report_opl: opl_input opl_files \
+    $(DIR)/osmium-DCbmg-fake.osm.opl \
+    $(DIR)/osmium-DCbMG-fake.osm.opl
+	echo "OPL md5sum (default):" >$@; \
+	md5sum $(DIR)/input.osm.opl >>$@; \
+	md5sum $(DIR)/*bz2.opl >>$@; \
+	md5sum $(DIR)/osmium-xml-osmosis.osm.opl >>$@; \
+	for i in $(DIR)/*Mg*.opl; do \
+	    md5sum $$i; \
+	done | sort >>$@; \
+	echo >>$@; \
+	echo "OPL md5sum (non-standard granularity):" >>$@; \
+	for i in $(DIR)/*MG*.opl; do \
+	    md5sum $$i; \
+	done | sort >>$@; \
+	echo >>$@; \
+	echo "OPL md5sum (without metadata):" >>$@; \
+	for i in $(DIR)/*mg*.opl; do \
+	    md5sum $$i; \
+	done | sort >>$@; \
+	echo >>$@
+
+$(DIR)/report_default: \
+    $(INPUT) \
+    $(DIR)/osmosis.osm.bz2 \
+    $(DIR)/osmosis-DCbMg.osm.pbf \
+    $(DIR)/osmosis-dCbMg.osm.pbf \
+    $(DIR)/osmosis-DcbMg.osm.pbf \
+    $(DIR)/osmosis-dcbMg.osm.pbf \
+    $(DIR)/osmosis-DCBMg.osm.pbf \
+    $(DIR)/osmium.osm.bz2 \
+    $(DIR)/osmium-DCbMg.osm.pbf \
+    $(DIR)/osmium-dCbMg.osm.pbf \
+    $(DIR)/osmium-DcbMg.osm.pbf \
+    $(DIR)/osmium-dcbMg.osm.pbf \
+    $(DIR)/osmosis-DCbMg-osmium.osm.pbf \
+    $(DIR)/osmosis-dCbMg-osmium.osm.pbf \
+    $(DIR)/osmosis-DcbMg-osmium.osm.pbf \
+    $(DIR)/osmosis-dcbMg-osmium.osm.pbf \
+    $(DIR)/osmium-xml-osmosis.osm.pbf \
+    $(DIR)/osmium-DCbMg-osmosis.osm.pbf \
+    $(DIR)/osmium-dCbMg-osmosis.osm.pbf \
+    $(DIR)/osmium-DcbMg-osmosis.osm.pbf \
+    $(DIR)/osmium-dcbMg-osmosis.osm.pbf
+
+	echo "Default:" >$@; \
+	for i in $^; do \
+	    filename=`basename $$i`; \
+	    crc=`$(OSMIUM) fileinfo -e -g data.crc32 $$i`; \
+	    echo $$crc $$filename >>$@; \
+	done; \
+	echo >>$@
+
+$(DIR)/report_granularity: \
+    $(DIR)/osmosis-dCbMG.osm.pbf
+	echo "Non-standard granularity:" >$@; \
+	for i in $^; do \
+	    filename=`basename $$i`; \
+	    crc=`$(OSMIUM) fileinfo -e -g data.crc32 $$i`; \
+	    echo $$crc $$filename >>$@; \
+	done; \
+	echo >>$@
+
+$(DIR)/report_without_metadata: \
+    $(DIR)/osmosis-DCbmg.osm.pbf \
+    $(DIR)/osmium-DCbmg.osm.pbf \
+    $(DIR)/osmosis-DCbmg-osmium.osm.pbf \
+    $(DIR)/osmium-DCbmg-osmosis.osm.pbf
+	echo "Without metadata:" >$@; \
+	for i in $^; do \
+	    filename=`basename $$i`; \
+	    crc=`$(OSMIUM) fileinfo -e -g data.crc32 $$i`; \
+	    echo $$crc $$filename >>$@; \
+	done; \
+	echo >>$@
+
+$(DIR)/report: \
+    $(DIR)/report_default \
+    $(DIR)/report_granularity \
+    $(DIR)/report_without_metadata
+	cat $^ >$@
+
+# osmosis from input
+
+$(DIR)/osmosis.osm.bz2: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-xml file=$@
+
+$(DIR)/osmosis-DCbMg.osm.pbf: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-pbf file=$@ usedense=true compress=deflate
+
+$(DIR)/osmosis-dCbMg.osm.pbf: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-pbf file=$@ usedense=false compress=deflate
+
+$(DIR)/osmosis-DcbMg.osm.pbf: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-pbf file=$@ usedense=true compress=none
+
+$(DIR)/osmosis-dcbMg.osm.pbf: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-pbf file=$@ usedense=false compress=none
+
+$(DIR)/osmosis-DCBMg.osm.pbf: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-pbf file=$@ usedense=true compress=deflate batchlimit=10000
+
+$(DIR)/osmosis-DCbmg.osm.pbf: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-pbf file=$@ usedense=true compress=deflate omitmetadata=true
+
+$(DIR)/osmosis-dCbMG.osm.pbf: $(INPUT) $(DIR) $(OSMOSIS)
+	$(OSMOSIS_READ) $< --write-pbf file=$@ usedense=true compress=deflate granularity=10000
+
+# osmium from input
+
+$(DIR)/osmium.osm.bz2: $(INPUT) $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@
+
+$(DIR)/osmium-DCbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=gzip,pbf_add_metadata=true
+
+$(DIR)/osmium-dCbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=false,pbf_compression=gzip,pbf_add_metadata=true
+
+$(DIR)/osmium-DcbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=none,pbf_add_metadata=true
+
+$(DIR)/osmium-dcbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=false,pbf_compression=none,pbf_add_metadata=true
+
+$(DIR)/osmium-DCbmg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=gzip,pbf_add_metadata=false
+
+# osmium from osmosis output
+
+$(DIR)/osmosis-xml-osmium.osm.pbf: $(DIR)/osmosis.osm.bz2 $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@
+
+$(DIR)/osmosis-DCbMg-osmium.osm.pbf: $(DIR)/osmosis-DCbMg.osm.pbf $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@
+
+$(DIR)/osmosis-dCbMg-osmium.osm.pbf: $(DIR)/osmosis-dCbMg.osm.pbf $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@
+
+$(DIR)/osmosis-DcbMg-osmium.osm.pbf: $(DIR)/osmosis-DcbMg.osm.pbf $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@
+
+$(DIR)/osmosis-dcbMg-osmium.osm.pbf: $(DIR)/osmosis-dcbMg.osm.pbf $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@
+
+$(DIR)/osmosis-DCbmg-osmium.osm.pbf: $(DIR)/osmosis-DCbmg.osm.pbf $(DIR) $(OSMIUM)
+	$(OSMIUM_CMD) $< -o $@
+
+# osmosis from osmium output
+
+$(DIR)/osmium-xml-osmosis.osm.pbf: $(DIR)/osmium.osm.bz2 $(DIR) $(OSMOSIS)
+	$(OSMOSIS) --read-xml $< --write-pbf file=$@
+
+$(DIR)/osmium-DCbMg-osmosis.osm.pbf: $(DIR)/osmium-DCbMg.osm.pbf $(DIR) $(OSMOSIS)
+	$(OSMOSIS) --read-pbf $< --write-pbf file=$@
+
+$(DIR)/osmium-dCbMg-osmosis.osm.pbf: $(DIR)/osmium-dCbMg.osm.pbf $(DIR) $(OSMOSIS)
+	$(OSMOSIS) --read-pbf $< --write-pbf file=$@
+
+$(DIR)/osmium-DcbMg-osmosis.osm.pbf: $(DIR)/osmium-DcbMg.osm.pbf $(DIR) $(OSMOSIS)
+	$(OSMOSIS) --read-pbf $< --write-pbf file=$@
+
+$(DIR)/osmium-dcbMg-osmosis.osm.pbf: $(DIR)/osmium-dcbMg.osm.pbf $(DIR) $(OSMOSIS)
+	$(OSMOSIS) --read-pbf $< --write-pbf file=$@
+
+$(DIR)/osmium-DCbmg-osmosis.osm.pbf: $(DIR)/osmium-DCbmg.osm.pbf $(DIR) $(OSMOSIS)
+	$(OSMOSIS) --read-pbf $< --write-pbf file=$@ omitmetadata=true
+
+

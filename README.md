@@ -79,6 +79,14 @@ If the `pandoc` command was found during the CMake config step, the manpages
 will be built, if not they will not be built.
 
 
+## Tests
+
+Call `ctest` to run the tests after build.
+
+More extensive tests of the libosmium I/O system can also be run. See
+`test/io/Makefile.in` for instructions.
+
+
 ## License
 
 Copyright (C) 2013-2015  Jochen Topf <jochen@topf.org>
