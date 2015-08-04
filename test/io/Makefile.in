@@ -40,13 +40,16 @@ else
     OSMOSIS_READ := $(OSMOSIS) --read-xml
 endif
 
-.PHONY: all report opl opl_input opl_files
+.PHONY: all report opl opl_input opl_files clean
 
 all: report
 
 report: $(DIR)/report
 
 opl: $(DIR)/report_opl
+
+clean:
+	rm -f $(DIR)/*
 
 $(DIR):
 	mkdir -p $(DIR)
