@@ -110,15 +110,11 @@ endif()
 #----------------------------------------------------------------------
 # Component 'pbf'
 if(Osmium_USE_PBF)
-    find_package(OSMPBF)
-    find_package(Protobuf)
     find_package(ZLIB)
     find_package(Threads)
 
-    if(OSMPBF_FOUND AND PROTOBUF_FOUND AND ZLIB_FOUND AND Threads_FOUND)
+    if(ZLIB_FOUND AND Threads_FOUND)
         list(APPEND OSMIUM_PBF_LIBRARIES
-            ${OSMPBF_LIBRARIES}
-            ${PROTOBUF_LITE_LIBRARY}
             ${ZLIB_LIBRARIES}
             ${CMAKE_THREAD_LIBS_INIT}
         )
@@ -126,8 +122,6 @@ if(Osmium_USE_PBF)
             list(APPEND OSMIUM_PBF_LIBRARIES ws2_32)
         endif()
         list(APPEND OSMIUM_INCLUDE_DIRS
-            ${OSMPBF_INCLUDE_DIRS}
-            ${PROTOBUF_INCLUDE_DIR}
             ${ZLIB_INCLUDE_DIR}
         )
     else()
