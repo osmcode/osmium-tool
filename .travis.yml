@@ -33,15 +33,14 @@ matrix:
 addons:
     apt:
         sources:
+            - boost-latest
             - ubuntu-toolchain-r-test
         packages:
             - g++-4.8
             - gcc-4.8
-            - libboost-dev
-            - libboost-program-options-dev
-            - libprotobuf-dev
+            - libboost1.55-dev
+            - libboost-program-options1.55-dev
             - pandoc
-            - protobuf-compiler
 
 install:
     - scripts/travis_install.sh

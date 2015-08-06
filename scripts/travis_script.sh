@@ -21,8 +21,6 @@ fi
 
 cmake -LA \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-    -DOSMPBF_INCLUDE_DIR=${TRAVIS_BUILD_DIR}/../OSM-binary/include \
-    -DOSMPBF_LIBRARY=${TRAVIS_BUILD_DIR}/../OSM-binary/src/libosmpbf.a \
     ${WORKAROUND} \
     ..
 
