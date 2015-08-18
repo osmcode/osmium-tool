@@ -89,6 +89,12 @@ opl_files: \
 	    $(OSMIUM_CMD) $$i -o $${i%.pbf}.opl; \
 	done
 
+$(DIR)/osmium-DCbmg-amf.osm.opl: $(DIR)/osmium-DCbMg.osm.pbf
+	$(OSMIUM_CMD) $^ -o $@ -fopl,add_metadata=false
+
+$(DIR)/osmium-DCbmg-amf-fake.osm.opl: $(DIR)/osmium-DCbMg.osm.opl
+	sed -e 's/ v.* T/ T/' $^ >$@
+
 $(DIR)/osmium-DCbmg-fake.osm.opl: $(DIR)/osmium-DCbMg.osm.opl
 	sed -e 's/ v.* T/ v0 dV c0 t i0 u T/' $^ >$@
 
@@ -98,7 +104,9 @@ $(DIR)/osmium-DCbMG-fake.osm.opl: $(DIR)/osmium-DCbMg.osm.opl
 
 $(DIR)/report_opl: opl_input opl_files \
     $(DIR)/osmium-DCbmg-fake.osm.opl \
-    $(DIR)/osmium-DCbMG-fake.osm.opl
+    $(DIR)/osmium-DCbMG-fake.osm.opl \
+    $(DIR)/osmium-DCbmg-amf.osm.opl \
+    $(DIR)/osmium-DCbmg-amf-fake.osm.opl
 	echo "OPL md5sum (default):" >$@; \
 	md5sum $(DIR)/input.osm.opl >>$@; \
 	md5sum $(DIR)/*bz2.opl >>$@; \
@@ -112,8 +120,13 @@ $(DIR)/report_opl: opl_input opl_files \
 	    md5sum $$i; \
 	done | sort >>$@; \
 	echo >>$@; \
+	echo "OPL md5sum (with empty metadata):" >>$@; \
+	for i in $(DIR)/*mg-osm*.osm.opl $(DIR)/*mg-fake.osm.opl $(DIR)/*mg.osm.opl; do \
+	    md5sum $$i; \
+	done | sort >>$@; \
+	echo >>$@; \
 	echo "OPL md5sum (without metadata):" >>$@; \
-	for i in $(DIR)/*mg*.opl; do \
+	for i in $(DIR)/*-amf*.opl; do \
 	    md5sum $$i; \
 	done | sort >>$@; \
 	echo >>$@
