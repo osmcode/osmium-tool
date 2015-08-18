@@ -23,18 +23,6 @@ later are known to work. You also need the following libraries:
         http://www.boost.org/doc/libs/1_57_0/libs/crc/
         Debian/Ubuntu: libboost-dev
 
-    Google protocol buffers (for PBF support)
-        http://code.google.com/p/protobuf/ (at least version 2.3.0 needed)
-        Debian/Ubuntu: libprotobuf-dev protobuf-compiler
-        openSUSE: protobuf-devel
-        Also see http://wiki.openstreetmap.org/wiki/PBF_Format
-
-    OSMPBF (for PBF support)
-        https://github.com/scrosby/OSM-binary
-        Debian/Ubuntu: libosmpbf-dev
-        (You need at least version 1.3.2,
-         install from GIT if the package is too old.)
-
     zlib (for PBF support)
         http://www.zlib.net/
         Debian/Ubuntu: zlib1g-dev
