@@ -8,9 +8,22 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Added lots of tests.
+
 ### Changed
 
+- Uses new libosmium version now (use at least libosmium version 2.3.0).
+- Many corrections and updates in manual pages.
+- Change CRC32 implementation. The new implementation uses the newly added
+  CRC functions from libosmium. This should make the CRC independent of host
+  architecture and endianness.
+- Lots of refactoring code cleanups.
+
 ### Fixed
+
+- Remove license thats not applicable from LICENSE-rapidjson.txt.
+- Renumbering didn't work properly in some cases.
+- Fix error checking in renumber command.
 
 
 ## [1.1.1] - 2015-07-04
