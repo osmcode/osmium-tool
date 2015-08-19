@@ -43,7 +43,7 @@ addons:
             - pandoc
 
 install:
-    - scripts/travis_install.sh
+    - git clone --quiet --depth 1 https://github.com/osmcode/libosmium.git ../libosmium
 
 script:
     - scripts/travis_script.sh
