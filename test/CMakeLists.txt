@@ -39,10 +39,10 @@ function(check_output _dir _name _command _reference)
     add_test(
         NAME "${_dir}-${_name}"
         COMMAND ${CMAKE_COMMAND}
-        -Dcmd=${_cmd}
-        -Ddir=${PROJECT_SOURCE_DIR}/test
-        -Dreference=${PROJECT_SOURCE_DIR}/test/${_reference}
-        -Doutput=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
+        -D cmd=${_cmd}
+        -D dir=${PROJECT_SOURCE_DIR}/test
+        -D reference=${PROJECT_SOURCE_DIR}/test/${_reference}
+        -D output=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
         -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
     )
 endfunction()
@@ -53,11 +53,11 @@ function(check_output2 _dir _name _command1 _command2 _reference)
     add_test(
         NAME "${_dir}-${_name}"
         COMMAND ${CMAKE_COMMAND}
-        -Dcmd=${_cmd1}
-        -Dcmd2=${_cmd2}
-        -Ddir=${PROJECT_SOURCE_DIR}/test
-        -Dreference=${PROJECT_SOURCE_DIR}/test/${_reference}
-        -Doutput=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
+        -D cmd=${_cmd1}
+        -D cmd2=${_cmd2}
+        -D dir=${PROJECT_SOURCE_DIR}/test
+        -D reference=${PROJECT_SOURCE_DIR}/test/${_reference}
+        -D output=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
         -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
     )
 endfunction()
