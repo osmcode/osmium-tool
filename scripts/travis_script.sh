@@ -26,7 +26,7 @@ cmake -LA \
 
 make VERBOSE=1
 
-echo -en 'travis_fold:start:ctest\\r'
+echo -en 'travis_fold:start:ctest\r'
 ctest --output-on-failure
-echo -en 'travis_fold:start:ctest\\r'
+echo -en 'travis_fold:start:ctest\r'
 
