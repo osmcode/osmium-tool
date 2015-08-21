@@ -87,5 +87,5 @@ build_script:
 #  - nmake VERBOSE=1
 
 test_script:
-  - ctest --output-on-failure -C %config%
+  - ctest -V -C %config%
 
