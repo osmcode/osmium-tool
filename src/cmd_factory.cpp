@@ -39,7 +39,7 @@ int CommandFactory::max_command_name_length() {
     osmium::max_op<int> max_width;
 
     for (const auto& cmd : instance().m_commands) {
-        max_width.update(cmd.first.length());
+        max_width.update(int(cmd.first.length()));
     }
 
     return max_width();
