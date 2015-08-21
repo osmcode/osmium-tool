@@ -19,16 +19,18 @@ if [ "${CXX}" = "g++" ]; then
     CC=gcc-4.8
 fi
 
+echo 'travis_fold:start:cmake'
 cmake -LA \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
     ${WORKAROUND} \
     ..
+echo 'travis_fold:end:cmake'
 
 echo 'travis_fold:start:make'
 make VERBOSE=1
 echo 'travis_fold:end:make'
 
-echo -en 'travis_fold:start:ctest\r'
+echo 'travis_fold:start:ctest'
 ctest --output-on-failure
-echo -en 'travis_fold:end:ctest\r'
+echo 'travis_fold:end:ctest'
 
