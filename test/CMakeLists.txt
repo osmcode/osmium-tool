@@ -35,7 +35,7 @@ endfunction()
 #-----------------------------------------------------------------------------
 
 function(check_output _dir _name _command _reference)
-    set(_cmd "${PROJECT_BINARY_DIR}/src/osmium ${_command}")
+    set(_cmd "$<TARGET_FILE:osmium> ${_command}")
     add_test(
         NAME "${_dir}-${_name}"
         COMMAND ${CMAKE_COMMAND}
@@ -48,8 +48,8 @@ function(check_output _dir _name _command _reference)
 endfunction()
 
 function(check_output2 _dir _name _command1 _command2 _reference)
-    set(_cmd1 "${PROJECT_BINARY_DIR}/src/osmium ${_command1}")
-    set(_cmd2 "${PROJECT_BINARY_DIR}/src/osmium ${_command2}")
+    set(_cmd1 "$<TARGET_FILE:osmium> ${_command1}")
+    set(_cmd2 "$<TARGET_FILE:osmium> ${_command2}")
     add_test(
         NAME "${_dir}-${_name}"
         COMMAND ${CMAKE_COMMAND}
