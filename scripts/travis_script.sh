@@ -24,9 +24,11 @@ cmake -LA \
     ${WORKAROUND} \
     ..
 
+echo 'travis_fold:start:make'
 make VERBOSE=1
+echo 'travis_fold:end:make'
 
 echo -en 'travis_fold:start:ctest\r'
 ctest --output-on-failure
-echo -en 'travis_fold:start:ctest\r'
+echo -en 'travis_fold:end:ctest\r'
 

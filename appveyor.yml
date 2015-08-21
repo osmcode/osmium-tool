@@ -90,6 +90,7 @@ test_script:
   - ctest -V -C %config%
 #  - ctest --output-on-failure -C %config%
 
-after_test_script:
+#after_test:
+on_finish:
   - type C:/projects/osmium-tool/build/test/apply-changes/cmd-output-withhist
 
