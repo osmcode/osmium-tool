@@ -18,7 +18,7 @@ branches:
 shallow_clone: true
 
 # Operating system (build VM template)
-os: Visual Studio 2014 CTP4
+os: Visual Studio 2015
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -65,7 +65,7 @@ build_script:
     -DOsmium_DEBUG=TRUE
     -DCMAKE_BUILD_TYPE=%config%
     -DBOOST_ROOT=%LODEPSDIR%\boost
-    -DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_57.lib
+    -DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_58.lib
     -DZLIB_LIBRARY=%LODEPSDIR%\zlib\lib\zlibwapi.lib
     -DZLIB_INCLUDE_DIR=%LODEPSDIR%\zlib\include
     -DEXPAT_LIBRARY=%LODEPSDIR%\expat\lib\libexpat.lib
