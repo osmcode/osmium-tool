@@ -86,3 +86,6 @@ build_script:
 #    -DBZIP2_INCLUDE_DIR=%LODEPSDIR%\bzip2\include
 #  - nmake VERBOSE=1
 
+test_script:
+  - ctest --output-on-failure -C %config%
+
