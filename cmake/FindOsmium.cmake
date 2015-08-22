@@ -19,7 +19,7 @@
 #    Then add the following in your CMakeLists.txt:
 #
 #      find_package(Osmium REQUIRED COMPONENTS <XXX>)
-#      include_directories(${OSMIUM_INCLUDE_DIRS})
+#      include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
 #
 #    For the <XXX> substitute a space separated list of one or more of the
 #    following components:
