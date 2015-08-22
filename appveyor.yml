@@ -87,9 +87,5 @@ build_script:
 #  - nmake VERBOSE=1
 
 test_script:
-  - ctest -V -C %config%
-#  - ctest --output-on-failure -C %config%
-
-on_finish:
-  - type C:\projects\osmium-tool\build\test\apply-changes\cmd-output-withhist
+  - ctest --output-on-failure -C %config%
 
