@@ -28,9 +28,9 @@ clone_folder: c:\projects\osmium-tool
 
 platform: x64
 
-build_script:
+install_script:
   - scripts\build-appveyor.bat
 
-install: off
+build: off
 test: off
 deploy: off
