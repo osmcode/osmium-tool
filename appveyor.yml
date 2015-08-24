@@ -17,14 +17,12 @@ branches:
 
 shallow_clone: true
 
-init:
-  - git config --global core.autocrlf true
-
 # Operating system (build VM template)
 os: Visual Studio 2015
 
 # scripts that are called at very beginning, before repo cloning
 init:
+  - git config --global core.autocrlf true
 
 # clone directory
 clone_folder: c:\projects\osmium-tool
