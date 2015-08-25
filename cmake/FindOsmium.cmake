@@ -56,12 +56,8 @@ find_path(OSMIUM_INCLUDE_DIR osmium/osm.hpp
     PATH_SUFFIXES include
     PATHS
         ../libosmium
-        ../../libosmium
-        libosmium
         ~/Library/Frameworks
         /Library/Frameworks
-        /usr/local
-        /usr/
         /opt/local # DarwinPorts
         /opt
 )
@@ -220,18 +216,15 @@ if(Osmium_USE_SPARSEHASH)
     if(SPARSEHASH_INCLUDE_DIR)
         # Find size of sparsetable::size_type. This does not work on older
         # CMake versions because they can do this check only in C, not in C++.
-        include(CheckTypeSize)
-        set(CMAKE_REQUIRED_INCLUDES ${SPARSEHASH_INCLUDE_DIR})
-        set(CMAKE_EXTRA_INCLUDE_FILES "google/sparsetable")
-        check_type_size("google::sparsetable<int>::size_type" SPARSETABLE_SIZE_TYPE LANGUAGE CXX)
-        set(CMAKE_EXTRA_INCLUDE_FILES)
-        set(CMAKE_REQUIRED_INCLUDES)
-
-        # Falling back to checking size_t if google::sparsetable<int>::size_type
-        # could not be checked.
-        if(SPARSETABLE_SIZE_TYPE STREQUAL "")
-            check_type_size("void*" VOID_PTR_SIZE)
-            set(SPARSETABLE_SIZE_TYPE ${VOID_PTR_SIZE})
+        if (NOT CMAKE_VERSION VERSION_LESS 3.0)
+           include(CheckTypeSize)
+           set(CMAKE_REQUIRED_INCLUDES ${SPARSEHASH_INCLUDE_DIR})
+           set(CMAKE_EXTRA_INCLUDE_FILES "google/sparsetable")
+           check_type_size("google::sparsetable<int>::size_type" SPARSETABLE_SIZE_TYPE LANGUAGE CXX)
+           set(CMAKE_EXTRA_INCLUDE_FILES)
+           set(CMAKE_REQUIRED_INCLUDES)
+        else()
+           set(SPARSETABLE_SIZE_TYPE ${CMAKE_SIZEOF_VOID_P})
         endif()
 
         # Sparsetable::size_type must be at least 8 bytes (64bit), otherwise
