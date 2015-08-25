@@ -1,2 +1,2 @@
-*.osm text eol=auto
-*.opl text eol=auto
+*.osm text eol=lf
+*.opl text eol=lf
