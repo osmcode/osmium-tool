@@ -9,12 +9,6 @@ environment:
   - config: Dev
   - config: RelWithDebInfo
 
-# branches to build
-branches:
-  # whitelist
-  only:
-    - master
-
 shallow_clone: true
 
 # Operating system (build VM template)
