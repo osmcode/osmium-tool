@@ -17,9 +17,6 @@ branches:
 
 shallow_clone: true
 
-init:
-  - git config --global core.autocrlf true
-
 # Operating system (build VM template)
 os: Visual Studio 2015
 
