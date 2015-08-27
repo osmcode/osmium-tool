@@ -24,6 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+#ifdef _WIN32
+# include <fcntl.h>
+# include <io.h>
+#endif
+
 #include "cmd.hpp"
 
 enum return_code : int {
@@ -33,6 +38,10 @@ enum return_code : int {
 };
 
 int main(int argc, char *argv[]) {
+#ifdef _WIN32
+    _setmode(1, _O_BINARY);
+#endif
+
     std::string command = argv[0];
 
     // remove path from command
