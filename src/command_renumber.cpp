@@ -1,5 +1,4 @@
 /*
-
 Osmium -- OpenStreetMap data manipulation command line tool
 http://osmcode.org/osmium
 
@@ -28,6 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <vector>
+
+#ifdef _WIN32
+# include <io.h>
+#endif
 
 #include <boost/program_options.hpp>
 
@@ -147,6 +150,9 @@ void CommandRenumber::read_index(osmium::item_type type, const std::string& name
         }
         throw std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
     }
+#ifdef _WIN32
+    _setmode(fd, _O_BINARY);
+#endif
 
     size_t file_size = osmium::util::file_size(fd);
     if (file_size % sizeof(remap_index_value_type) != 0) {
@@ -175,6 +181,9 @@ void CommandRenumber::write_index(osmium::item_type type, const std::string& nam
     if (fd < 0) {
         throw std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
     }
+#ifdef _WIN32
+    _setmode(fd, _O_BINARY);
+#endif
 
     std::vector<remap_index_value_type> data;
     std::copy(index(type).begin(), index(type).end(), std::back_inserter(data));
