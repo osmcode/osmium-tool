@@ -32,12 +32,12 @@ execute_process(
     ERROR_VARIABLE stderr
 )
 
-if(result)
-    message(SEND_ERROR "Error when calling '${cmd}': ${result}")
-endif()
-
 if(NOT (stderr STREQUAL ""))
     message(SEND_ERROR "Command tested wrote to stderr: ${stderr}")
+endif()
+
+if(result)
+    message(FATAL_ERROR "Error when calling '${cmd}': ${result}")
 endif()
 
 if(cmd2)
@@ -52,12 +52,12 @@ if(cmd2)
         ERROR_VARIABLE stderr
     )
 
-    if(result)
-        message(SEND_ERROR "Error when calling '${cmd}': ${result}")
-    endif()
-
     if(NOT (stderr STREQUAL ""))
         message(SEND_ERROR "Command tested wrote to stderr: ${stderr}")
+    endif()
+
+    if(result)
+        message(FATAL_ERROR "Error when calling '${cmd}': ${result}")
     endif()
 endif()
 
