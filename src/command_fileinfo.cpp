@@ -192,7 +192,7 @@ public:
     }
 
     void data(const osmium::io::Header& header, const InfoHandler& info_handler) override final {
-        std::cout << "Data: " << "\n";
+        std::cout << "Data:\n";
         std::cout << "  Bounding box: " << info_handler.bounds << "\n";
 
         if (info_handler.first_timestamp() != osmium::end_of_time()) {
