@@ -10,7 +10,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- Uses new libosmium version now (use at least libosmium version 2.4.0).
+
 ### Fixed
+
+- Several Windows line ending issues were fixed. Consistently uses files
+  in binary mode now with LF line endings.
+- CRC calculation fixed in libosmium.
 
 
 ## [1.2.0] - 2015-08-18
