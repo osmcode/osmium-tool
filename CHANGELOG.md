@@ -10,7 +10,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Uses new libosmium version now (use at least libosmium version 2.4.0).
+### Fixed
+
+
+## [1.2.1] - 2015-08-31
+
+### Changed
+
+- Uses new libosmium version now (use at least libosmium version 2.4.1).
 
 ### Fixed
 
@@ -83,7 +90,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/osmcode/osmium-tool/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/osmcode/osmium-tool/compare/v1.1.0...v1.2.0
 [1.1.1]: https://github.com/osmcode/osmium-tool/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/osmcode/osmium-tool/compare/v1.0.1...v1.1.0
