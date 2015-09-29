@@ -57,9 +57,11 @@ nodes in order of ID, then ways in order of ID, then relations in order of ID.
 
 0
   ~ if all references are satisfied
+
 1
   ~ if there was an error processing the data or some references were not
     satisfied, or
+
 2
   ~ if there was a problem with the command line arguments.
 

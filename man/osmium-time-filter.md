@@ -65,8 +65,10 @@ The format for the timestamps is "yyyy-mm-ddThh:mm::ssZ".
 
 0
   ~ if everything went alright,
+
 1
   ~ if there was an error processing the data, or
+
 2
   ~ if there was a problem with the command line arguments.
 
