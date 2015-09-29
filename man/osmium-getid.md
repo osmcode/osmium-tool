@@ -54,8 +54,10 @@ Get objects with the given IDs from the input and write them to the output
 
 0
   ~ if all IDs were found
+
 1
   ~ if there was an error processing the data or not all IDs were found, or
+
 2
   ~ if there was a problem with the command line arguments.
 

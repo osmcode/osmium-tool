@@ -29,20 +29,28 @@ Run **osmium help** *COMMAND* to get more information about a command.
 
 apply-changes
 :   apply OSM change file(s) to OSM data file
+
 cat
 :   concatenate OSM files and convert to different formats
+
 check-refs
 :   check referential integrity of OSM file
+
 fileinfo
 :   show information about an OSM file
+
 getid
 :   get objects from OSM file by ID
+
 help
 :   show help about commands
+
 merge-changes
 :   merge several OSM change files into one
+
 renumber
 :   renumber object IDs
+
 time-filter
 :   filter OSM data by time from a history file
 

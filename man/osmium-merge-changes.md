@@ -61,8 +61,10 @@ in what order the change files are given or in what order they contain the data.
 
 0
   ~ if everything went alright,
+
 1
   ~ if there was an error processing the data, or
+
 2
   ~ if there was a problem with the command line arguments.
 

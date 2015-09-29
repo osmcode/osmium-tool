@@ -61,10 +61,13 @@ Here are some examples:
 
 pbf
 :   PBF format.
+
 osm.bz2
 :   XML format, compressed with bzip2.
+
 osc.gz
 :   OSM change file, compressed with gzip.
+
 osm.gz,xml_change_format=true
 :   OSM change file, compressed with gzip.
 
