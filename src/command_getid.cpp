@@ -152,21 +152,19 @@ bool CommandGetId::run() {
     osmium::io::Header header;
     header.set("generator", m_generator);
 
-    typedef osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> object_iterator;
+    auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
 
-    object_iterator it(reader);
-    object_iterator end;
     osmium::memory::Buffer output_buffer(10240);
 
     size_t num_ids = ids(osmium::item_type::node).size() +
                      ids(osmium::item_type::way).size() +
                      ids(osmium::item_type::relation).size();
 
-    for (; it != end; ++it) {
-        const auto& index = ids(it->type());
-        const auto result = std::equal_range(index.begin(), index.end(), it->id());
+    for (const osmium::OSMObject& object : input) {
+        const auto& index = ids(object.type());
+        const auto result = std::equal_range(index.begin(), index.end(), object.id());
         if (result.first != result.second) {
-            output_buffer.add_item(*it);
+            output_buffer.add_item(object);
             output_buffer.commit();
             --num_ids;
         }

@@ -151,6 +151,8 @@ bool CommandApplyChanges::run() {
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
     osmium::io::OutputIterator<osmium::io::Writer> out(writer);
 
+    auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
+
     if (m_simplify_change) {
         // If the --simplify option was given we sort with the
         // largest version of each object first and then only
@@ -165,8 +167,8 @@ bool CommandApplyChanges::run() {
         m_vout << "Applying changes and writing them to output...\n";
         std::set_union(objects.begin(),
                        objects.end(),
-                       osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> {reader},
-                       osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> {},
+                       input.begin(),
+                       input.end(),
                        output_it,
                        osmium::object_order_type_id_reverse_version());
     } else {
@@ -179,8 +181,8 @@ bool CommandApplyChanges::run() {
         m_vout << "Applying changes and writing them to output...\n";
         std::set_union(objects.begin(),
                        objects.end(),
-                       osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> {reader},
-                       osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject> {},
+                       input.begin(),
+                       input.end(),
                        out);
     }
 

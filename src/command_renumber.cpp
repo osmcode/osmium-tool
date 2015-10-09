@@ -215,11 +215,9 @@ bool CommandRenumber::run() {
     }
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
 
-    osmium::io::InputIterator<osmium::io::Reader, osmium::Relation> it { reader_pass1 };
-    osmium::io::InputIterator<osmium::io::Reader, osmium::Relation> end {};
-
-    for (; it != end; ++it) {
-        lookup(osmium::item_type::relation, it->id());
+    auto input = osmium::io::make_input_iterator_range<osmium::Relation>(reader_pass1);
+    for (const osmium::Relation& relation : input) {
+        lookup(osmium::item_type::relation, relation.id());
     }
 
     reader_pass1.close();
