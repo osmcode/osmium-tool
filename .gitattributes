@@ -1,0 +1,5 @@
+*.osm -crlf
+*.osc -crlf
+*.opl -crlf
+*.osh -crlf
+*-result.txt -crlf
