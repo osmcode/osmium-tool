@@ -62,6 +62,8 @@ find_path(OSMIUM_INCLUDE_DIR osmium/osm.hpp
         /opt
 )
 
+set(OSMIUM_INCLUDE_DIRS "${OSMIUM_INCLUDE_DIR}")
+
 #----------------------------------------------------------------------
 #
 #  Check for optional components
@@ -251,19 +253,14 @@ endif()
 #  Check that all required libraries are available
 #
 #----------------------------------------------------------------------
-list(REMOVE_DUPLICATES OSMIUM_EXTRA_FIND_VARS)
+if (OSMIUM_EXTRA_FIND_VARS)
+    list(REMOVE_DUPLICATES OSMIUM_EXTRA_FIND_VARS)
+endif()
 # Handle the QUIETLY and REQUIRED arguments and set OSMIUM_FOUND to TRUE if
 # all listed variables are TRUE.
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Osmium REQUIRED_VARS OSMIUM_INCLUDE_DIR ${OSMIUM_EXTRA_FIND_VARS})
 unset(OSMIUM_EXTRA_FIND_VARS)
-
-# Copy the results to the output variables.
-if(OSMIUM_FOUND)
-    set(OSMIUM_INCLUDE_DIRS ${OSMIUM_INCLUDE_DIR} ${OSMIUM_INCLUDE_DIRS})
-else()
-    set(OSMIUM_INCLUDE_DIRS "")
-endif()
 
 #----------------------------------------------------------------------
 #
