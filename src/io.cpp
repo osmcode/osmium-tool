@@ -33,7 +33,7 @@ void with_single_osm_input::setup_input_file(const boost::program_options::varia
     }
 
     if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
+        throw argument_error("When reading from STDIN you need to use the --input-format/-F option to declare the file format.");
     }
 
     m_input_file = osmium::io::File(m_input_filename, m_input_format);
@@ -64,7 +64,7 @@ void with_multiple_osm_inputs::setup_input_files(const boost::program_options::v
             }
         }
         if (uses_stdin) {
-            throw argument_error("When reading from STDIN you need to use the --input-format,F option to declare the file format.");
+            throw argument_error("When reading from STDIN you need to use the --input-format/-F option to declare the file format.");
         }
     }
 
@@ -102,7 +102,7 @@ void with_osm_output::setup_output_file(const po::variables_map& vm) {
     }
 
     if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        throw argument_error("When writing to STDOUT you need to use the --output-format,f option to declare the file format.");
+        throw argument_error("When writing to STDOUT you need to use the --output-format/-f option to declare the file format.");
     }
 
     m_output_file = osmium::io::File(m_output_filename, m_output_format);
