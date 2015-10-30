@@ -131,6 +131,7 @@ bool CommandCat::run() {
             writer(std::move(buffer));
         }
         writer.close();
+        reader.close();
     } else { // multiple input files
         osmium::io::Header header;
         setup_header(header);
@@ -142,6 +143,7 @@ bool CommandCat::run() {
             while (osmium::memory::Buffer buffer = reader.read()) {
                 writer(std::move(buffer));
             }
+            reader.close();
         }
         writer.close();
     }

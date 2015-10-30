@@ -132,6 +132,7 @@ bool CommandTimeFilter::run() {
 
     out.flush();
     writer.close();
+    reader.close();
 
     m_vout << "Done.\n";
 

@@ -180,6 +180,8 @@ bool CommandGetId::run() {
     } else {
         m_vout << "Did not find " << num_ids << " objects.\n";
     }
+
+    reader.close();
     m_vout << "Done.\n";
 
     return num_ids == 0;

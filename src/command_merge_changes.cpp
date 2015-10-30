@@ -97,6 +97,7 @@ bool CommandMergeChanges::run() {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));
         }
+        reader.close();
     }
 
     osmium::io::Header header;

@@ -139,6 +139,7 @@ bool CommandApplyChanges::run() {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));
         }
+        reader.close();
     }
 
     m_vout << "Opening input file...\n";
@@ -188,6 +189,7 @@ bool CommandApplyChanges::run() {
 
     out.flush();
     writer.close();
+    reader.close();
 
     m_vout << "Done.\n";
 

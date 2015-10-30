@@ -601,6 +601,7 @@ bool CommandFileinfo::run() {
         output->data(header, info_handler);
     }
 
+    reader.close();
     output->output();
 
     return true;

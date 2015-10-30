@@ -254,6 +254,7 @@ bool CommandCheckRefs::run() {
         handler.show_missing_relation_ids();
     }
 
+    reader.close();
     m_vout << "Done.\n";
 
     return !handler.any_errors();
