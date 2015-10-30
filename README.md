@@ -13,6 +13,7 @@ You need a C++11 compliant compiler. GCC 4.8 and later as well as clang 3.4 and
 later are known to work. You also need the following libraries:
 
     Osmium Library
+        Need at least version 2.5.0
         http://osmcode.org/libosmium
 
     boost-program-options (for parsing command line options)

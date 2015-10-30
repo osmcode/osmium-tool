@@ -105,7 +105,7 @@ bool CommandMergeChanges::run() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
-    osmium::io::OutputIterator<osmium::io::Writer> out(writer);
+    auto out = osmium::io::make_output_iterator(writer);
 
     // Now we sort all objects and write them in order into the
     // output_buffer, flushing the output_buffer whenever it is full.
@@ -126,7 +126,6 @@ bool CommandMergeChanges::run() {
         std::copy(objects.cbegin(), objects.cend(), out);
     }
 
-    out.flush();
     writer.close();
 
     m_vout << "Done.\n";

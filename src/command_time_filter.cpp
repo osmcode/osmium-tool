@@ -105,7 +105,7 @@ bool CommandTimeFilter::run() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
-    osmium::io::OutputIterator<osmium::io::Writer> out(writer);
+    auto out = osmium::io::make_output_iterator(writer);
 
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
     typedef osmium::DiffIterator<decltype(input.begin())> diff_iterator;
@@ -130,7 +130,6 @@ bool CommandTimeFilter::run() {
         });
     }
 
-    out.flush();
     writer.close();
     reader.close();
 
