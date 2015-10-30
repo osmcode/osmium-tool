@@ -162,8 +162,7 @@ bool CommandGetId::run() {
 
     for (const osmium::OSMObject& object : input) {
         const auto& index = ids(object.type());
-        const auto result = std::equal_range(index.begin(), index.end(), object.id());
-        if (result.first != result.second) {
+        if (std::binary_search(index.begin(), index.end(), object.id())) {
             output_buffer.add_item(object);
             output_buffer.commit();
             --num_ids;
