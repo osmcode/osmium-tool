@@ -121,6 +121,7 @@ if(PANDOC)
     add_man_page(1 osmium-getid)
     add_man_page(1 osmium-merge-changes)
     add_man_page(1 osmium-renumber)
+    add_man_page(1 osmium-sort)
     add_man_page(1 osmium-time-filter)
     add_man_page(5 osmium-file-formats)
 

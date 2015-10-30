@@ -51,6 +51,9 @@ merge-changes
 renumber
 :   renumber object IDs
 
+sort
+:   sort OSM files
+
 time-filter
 :   filter OSM data by time from a history file
 

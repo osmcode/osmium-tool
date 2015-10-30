@@ -8,7 +8,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Add new `sort` subcommand for sorting OSM data files, history files,
+  and change files.
+
 ### Changed
+
+- Uses new libosmium version now (use at least libosmium version 2.5.0).
 
 ### Fixed
 
