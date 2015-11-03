@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="test">
+ <changeset id="15450185" created_at="2013-03-22T04:20:25Z" open="true" user="garl" uid="51196" num_changes="0" comments_count="0">
+  <tag k="comment" v="BBOX:40.53,43.93,40.77,44.11 ADD:18 UPD:33 DEL:0"/>
+  <tag k="created_by" v="Merkaartor 0.18.1 (ru)"/>
+ </changeset>
+</osm>

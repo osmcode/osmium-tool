@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="test">
+ <changeset id="15449957" created_at="2013-03-22T02:08:55Z" closed_at="2013-03-22T02:08:58Z" open="false" user="Elbert" uid="1237205" min_lat="-10.0004425" min_lon="120.2988730" max_lat="-10.0002384" max_lon="120.2991740" num_changes="10" comments_count="0">
+  <tag k="created_by" v="JOSM/1.5 (5356 en)"/>
+ </changeset>
+</osm>

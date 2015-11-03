@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="Osmosis 0.41">
+ <changeset id="15449957" created_at="2013-03-22T02:08:55Z" num_changes="10" closed_at="2013-03-22T02:08:58Z" open="false" min_lon="120.2988730" min_lat="-10.0004425" max_lon="120.2991740" max_lat="-10.0002384" user="Elbert" uid="1237205">
+  <tag k="created_by" v="JOSM/1.5 (5356 en)"/>
+ </changeset>
+ <changeset id="15449958" created_at="2013-03-22T02:09:11Z" num_changes="0" closed_at="2013-03-22T03:09:11Z" open="false" user="sree dinesh" uid="1233268">
+  <tag k="comment" v="new residen road"/>
+  <tag k="created_by" v="JOSM/1.5 (5697 en)"/>
+ </changeset>
+</osm>

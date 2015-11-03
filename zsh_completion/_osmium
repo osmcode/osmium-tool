@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|pbf|osm.pbf) *.(osm|osh|osc).(bz2|gz)'"
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(apply-changes cat check-refs fileinfo getid help merge-changes renumber sort time-filter)
+    osmium_commands=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -78,6 +78,31 @@ _osmium-cat() {
         ${(f)"$(_osmium-output-options)"} \
         '*-t[read only object of given output types]:OSM entity type:_osmium_entity_type' \
         '*--object-type[read only object of given output types]:OSM entity type:_osmium_entity_type'
+}
+
+_osmium-changeset-filter() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-options)"} \
+        '(--with-discussions)-d[changesets with discussions]' \
+        '(-d)--with-discussions[changesets with discussions]' \
+        '(--without-discussions)-D[changesets without discussions]' \
+        '(-D)--without-discussions[changesets without discussions]' \
+        '(--with-changes)-c[changesets with changes]' \
+        '(-c)--with-changes[changesets with changes]' \
+        '(--without-changes)-C[changesets without changes]' \
+        '(-C)--without-changes[changesets without changes]' \
+        '--open[open changesets]' \
+        '--closed[closed changesets]' \
+        '(--user)-u[changesets by user]' \
+        '(-u)--user[changesets by user]' \
+        '(--uid)-U[changesets by user id]' \
+        '(-U)--uid[changesets by user id]' \
+        '-a[changesets closed after]:timestamp:' \
+        '--after[changesets closed after]:timestamp:' \
+        '-b[changesets opened before]:timestamp:' \
+        '--before[changesets opened before]:timestamp:'
 }
 
 _osmium-check-refs() {
@@ -174,7 +199,7 @@ _osmium_fileinfo_variables() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(apply-changes cat check-refs fileinfo getid help merge-changes renumber sort time-filter file-formats)
+    osmium_help_topics=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 

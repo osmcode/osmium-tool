@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add new `sort` subcommand for sorting OSM data files, history files,
   and change files.
+- Add new `changeset-filter` subcommand.
 
 ### Changed
 

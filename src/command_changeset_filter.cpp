@@ -1,0 +1,197 @@
+/*
+
+Osmium -- OpenStreetMap data manipulation command line tool
+http://osmcode.org/osmium
+
+Copyright (C) 2013-2015  Jochen Topf <jochen@topf.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+#include <boost/program_options.hpp>
+
+#include <osmium/io/any_input.hpp>
+#include <osmium/io/any_output.hpp>
+#include <osmium/io/input_iterator.hpp>
+#include <osmium/io/output_iterator.hpp>
+
+#include "command_changeset_filter.hpp"
+#include "exception.hpp"
+
+bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
+    po::options_description cmdline("Allowed options");
+    cmdline.add_options()
+    ("with-discussion,d", "Changesets with discussions (comments)")
+    ("without-discussion,D", "Changesets without discussions (no comments)")
+    ("with-changes,c", "Changesets with changes")
+    ("without-changes,C", "Changesets without any changes")
+    ("open", "Open changesets")
+    ("closed", "Closed changesets")
+    ("user,u", po::value<std::string>(), "Changesets by given user")
+    ("uid,U", po::value<osmium::user_id_type>(), "Changesets by given user ID")
+    ("after,a", po::value<std::string>(), "Changesets opened after")
+    ("before,b", po::value<std::string>(), "Changesets closed before")
+    ;
+
+    add_common_options(cmdline);
+    add_single_input_options(cmdline);
+    add_output_options(cmdline);
+
+    po::options_description hidden("Hidden options");
+    hidden.add_options()
+    ("input-filename", po::value<std::string>(), "OSM input file")
+    ;
+
+    po::options_description desc("Allowed options");
+    desc.add(cmdline).add(hidden);
+
+    po::positional_options_description positional;
+    positional.add("input-filename", 1);
+
+    po::variables_map vm;
+    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::notify(vm);
+
+    setup_common(vm);
+    setup_input_file(vm);
+    setup_output_file(vm);
+
+    if (vm.count("with-discussion")) {
+        m_with_discussion = true;
+    }
+
+    if (vm.count("without-discussion")) {
+        m_without_discussion = true;
+    }
+
+    if (vm.count("with-changes")) {
+        m_with_changes = true;
+    }
+
+    if (vm.count("without-changes")) {
+        m_without_changes = true;
+    }
+
+    if (vm.count("open")) {
+        m_open = true;
+    }
+
+    if (vm.count("closed")) {
+        m_closed = true;
+    }
+
+    if (vm.count("uid")) {
+        m_uid = vm["uid"].as<osmium::user_id_type>();
+    }
+
+    if (vm.count("user")) {
+        m_user = vm["user"].as<std::string>();
+    }
+
+    if (vm.count("after")) {
+        auto ts = vm["after"].as<std::string>();
+        try {
+            m_after = osmium::Timestamp(ts.c_str());
+        } catch (...) {
+            throw argument_error("Wrong format for --after/-a timestamp (use YYYY-MM-DDThh:mm:ssZ).");
+        }
+    }
+
+    if (vm.count("before")) {
+        auto ts = vm["before"].as<std::string>();
+        try {
+            m_before = osmium::Timestamp(ts.c_str());
+        } catch (...) {
+            throw argument_error("Wrong format for --before/-b timestamp (use YYYY-MM-DDThh:mm:ssZ).");
+        }
+    }
+
+    if (m_with_discussion && m_without_discussion) {
+        throw argument_error("You can not use --with-discussion/-d and --without-discussion/-D together.");
+    }
+
+    if (m_with_changes && m_without_changes) {
+        throw argument_error("You can not use --with-changes/-c and --without-changes/-C together.");
+    }
+
+    if (m_open && m_closed) {
+        throw argument_error("You can not use --open and --closed together.");
+    }
+
+    if (m_after > m_before) {
+        throw argument_error("Timestamp 'after' is after 'before'.");
+    }
+
+    return true;
+}
+
+void CommandChangesetFilter::show_arguments() {
+    m_vout << "Started osmium changeset-filter\n";
+}
+
+bool changeset_after(const osmium::Changeset& changeset, osmium::Timestamp time) {
+    return changeset.open() || changeset.closed_at() >= time;
+}
+
+bool changeset_before(const osmium::Changeset& changeset, osmium::Timestamp time) {
+    return changeset.created_at() <= time;
+}
+
+bool CommandChangesetFilter::run() {
+    m_vout << "Opening input file...\n";
+    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::changeset);
+
+    auto input = osmium::io::make_input_iterator_range<osmium::Changeset>(reader);
+
+    osmium::io::Header header = reader.header();
+    header.set("generator", m_generator);
+
+    m_vout << "Opening output file...\n";
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+    auto out = osmium::io::make_output_iterator(writer);
+
+    m_vout << "Filtering data...\n";
+
+    std::copy_if(input.begin(), input.end(), out,
+        [this](const osmium::Changeset& changeset) {
+            return (!m_with_discussion    || changeset.num_comments() > 0) &&
+                   (!m_without_discussion || changeset.num_comments() == 0) &&
+                   (!m_with_changes       || changeset.num_changes() > 0) &&
+                   (!m_without_changes    || changeset.num_changes() == 0) &&
+                   (!m_open               || changeset.open()) &&
+                   (!m_closed             || changeset.closed()) &&
+                   (m_uid == 0            || changeset.uid() == m_uid) &&
+                   (m_user.empty()        || m_user == changeset.user()) &&
+                   changeset_after(changeset, m_after) &&
+                   changeset_before(changeset, m_before);
+
+    });
+
+    writer.close();
+    reader.close();
+
+    m_vout << "Done.\n";
+
+    return true;
+}
+
+namespace {
+
+    const bool register_changeset_filter_command = CommandFactory::add("changeset-filter", "Filter OSM changesets by different criteria", []() {
+        return new CommandChangesetFilter();
+    });
+
+}
+

@@ -33,6 +33,9 @@ apply-changes
 cat
 :   concatenate OSM files and convert to different formats
 
+changeset-filter
+:   filter changesets from OSM changeset files
+
 check-refs
 :   check referential integrity of OSM file
 
