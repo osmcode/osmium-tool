@@ -11,10 +11,12 @@ Osmium library. These are:
 * The classical XML format in the variants *.osm* (for data files),
   *.osh* (for data files with history) and *.osc* (for change files).
 * The PBF binary format (usually with suffix *.osm.pbf*).
-* The OPL format (usually with suffix *.osm.opl*).
+* The OPL format (usually with suffix *.osm.opl*) (writing only).
+* The O5M/O5C format (usually with suffix *.o5m* or *.o5c*) (reading only).
+* The "debug" format (usually with suffix *.osm.debug*) (writing only).
 
-In addition, XML and OPL files can be compressed using *gzip* or *bzip2*.
-(Add *.gz* or *.bz2* suffixes, respectively.)
+In addition files in all formats except PBF can be compressed using *gzip* or
+*bzip2*. (Add *.gz* or *.bz2* suffixes, respectively.)
 
 # AUTODETECTION
 
@@ -46,13 +48,9 @@ pbf_compression=true/false (*default: true*)
 :   Enable/disable compression in PBF files. Disabling this will make writing
     files a bit faster, but the resulting files are 2 to 3 times bigger.
 
-pbf_add_metadata=true/false (*default: true*)
+add_metadata=true/false (*default: true*)
 :   Enable/disable writing of object metadata such as changeset id, username,
     etc. Disabling this will make files a bit smaller.
-
-pbf_sort_stringtables=true/false (*default: true*)
-:   Specify whether the string tables in the PBF data blocks should be sorted.
-    Writing the PBF files is slightly faster without sorting.
 
 
 # EXAMPLES

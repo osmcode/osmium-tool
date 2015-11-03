@@ -13,7 +13,7 @@
 #  http://zsh.sourceforge.net/Guide/zshguide06.html
 #
 
-osmium_file_glob="'*.(osm|osh|osc|pbf|osm.pbf) *.(osm|osh|osc).(bz2|gz)'"
+osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(bz2|gz)'"
 
 _osmium() {
     local -a osmium_commands
