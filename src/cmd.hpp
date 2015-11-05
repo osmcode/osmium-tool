@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace po = boost::program_options;
 
 #include <osmium/io/file.hpp>
-#include <osmium/io/overwrite.hpp>
+#include <osmium/io/writer_options.hpp>
 #include <osmium/util/minmax.hpp>
 #include <osmium/util/verbose_output.hpp>
 
