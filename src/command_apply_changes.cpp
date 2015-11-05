@@ -79,18 +79,13 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandApplyChanges::show_arguments() {
-    m_vout << "Started osmium apply-changes\n";
-
-    m_vout << "Command line options and default settings:\n";
-    m_vout << "  generator: " << m_generator << "\n";
     m_vout << "  input data file name: " << m_input_filename << "\n";
     m_vout << "  input change file names: \n";
     for (const auto& fn : m_change_filenames) {
         m_vout << "    " << fn << "\n";
     }
-    m_vout << "  output filename: " << m_output_filename << "\n";
     m_vout << "  input format: " << m_input_format << "\n";
-    m_vout << "  output format: " << m_output_format << "\n";
+    show_output_arguments(m_vout);
 }
 
 /**

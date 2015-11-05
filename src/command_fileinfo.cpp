@@ -571,12 +571,10 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandFileinfo::show_arguments() {
-    m_vout << "Started osmium fileinfo\n";
+    show_single_input_arguments(m_vout);
 
-    m_vout << "Command line options and default settings:\n";
-    m_vout << "  input filename: " << m_input_filename << "\n";
-    m_vout << "  input format: " << m_input_format << "\n";
-    m_vout << "  extended output: " << (m_extended ? "yes\n" : "no\n");
+    m_vout << "  other options:\n";
+    m_vout << "    extended output: " << (m_extended ? "yes\n" : "no\n");
 }
 
 bool CommandFileinfo::run() {

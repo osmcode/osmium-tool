@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
         return return_code::fatal;
     }
 
-    cmd->print_arguments();
+    cmd->print_arguments(command);
 
     try {
         if (cmd->run()) {

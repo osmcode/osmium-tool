@@ -138,7 +138,10 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandChangesetFilter::show_arguments() {
-    m_vout << "Started osmium changeset-filter\n";
+    show_single_input_arguments(m_vout);
+    show_output_arguments(m_vout);
+    m_vout << "  other options:\n";
+    // XXX
 }
 
 bool changeset_after(const osmium::Changeset& changeset, osmium::Timestamp time) {

@@ -90,8 +90,10 @@ public:
         }
     }
 
-    void print_arguments() {
+    void print_arguments(const std::string& command) {
         if (m_vout.verbose()) {
+            m_vout << "Started osmium " << command << "\n";
+            m_vout << "Command line options and default settings:\n";
             show_arguments();
         }
     }
@@ -112,6 +114,8 @@ public:
 
     void add_single_input_options(po::options_description& options);
 
+    void show_single_input_arguments(osmium::util::VerboseOutput& vout);
+
     const osmium::io::File& input_file() const {
         return m_input_file;
     }
@@ -131,6 +135,8 @@ public:
     void setup_input_files(const boost::program_options::variables_map& vm);
 
     void add_multiple_inputs_options(po::options_description& options);
+
+    void show_multiple_inputs_arguments(osmium::util::VerboseOutput& vout);
 
     const std::vector<osmium::io::File>& input_files() const {
         return m_input_files;
@@ -159,6 +165,8 @@ public:
     void setup_output_file(const po::variables_map& vm);
 
     void add_output_options(po::options_description& options);
+
+    void show_output_arguments(osmium::util::VerboseOutput& vout);
 
     const osmium::io::File& output_file() const {
         return m_output_file;

@@ -81,22 +81,11 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandCat::show_arguments() {
-    m_vout << "Started osmium cat\n";
+    show_multiple_inputs_arguments(m_vout);
+    show_output_arguments(m_vout);
 
-    m_vout << "Command line options and default settings:\n";
-    m_vout << "  generator: " << m_generator << "\n";
-    m_vout << "  input filenames: \n";
-    for (const auto& fn : m_input_filenames) {
-        m_vout << "    " << fn << "\n";
-    }
-    m_vout << "  output filename: " << m_output_filename << "\n";
-    m_vout << "  input format: " << m_input_format << "\n";
-    m_vout << "  output format: " << m_output_format << "\n";
-    m_vout << "  output header: \n";
-    for (const auto& h : m_output_headers) {
-        m_vout << "    " << h << "\n";
-    }
-    m_vout << "  object types:";
+    m_vout << "  other options:\n";
+    m_vout << "    object types:";
     if (m_osm_entity_bits & osmium::osm_entity_bits::node) {
         m_vout << " node";
     }

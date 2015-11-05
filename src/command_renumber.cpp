@@ -80,19 +80,11 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandRenumber::show_arguments() {
-    m_vout << "Started osmium renumber\n";
+    show_single_input_arguments(m_vout);
+    show_output_arguments(m_vout);
 
-    m_vout << "Command line options and default settings:\n";
-    m_vout << "  generator: " << m_generator << "\n";
-    m_vout << "  input filename: " << m_input_filename << "\n";
-    m_vout << "  output filename: " << m_output_filename << "\n";
-    m_vout << "  input format: " << m_input_format << "\n";
-    m_vout << "  output format: " << m_output_format << "\n";
-    m_vout << "  output header: \n";
-    for (const auto& h : m_output_headers) {
-        m_vout << "    " << h << "\n";
-    }
-    m_vout << "  index directory: " << m_index_directory << "\n";
+    m_vout << "  other options:\n";
+    m_vout << "    index directory: " << m_index_directory << "\n";
 }
 
 osmium::object_id_type CommandRenumber::lookup(osmium::item_type type, osmium::object_id_type id) {

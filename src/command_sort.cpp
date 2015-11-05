@@ -67,17 +67,8 @@ bool CommandSort::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandSort::show_arguments() {
-    m_vout << "Started osmium sort\n";
-
-    m_vout << "Command line options and default settings:\n";
-    m_vout << "  generator: " << m_generator << "\n";
-    m_vout << "  input file names: \n";
-    for (const auto& fn : m_filenames) {
-        m_vout << "    " << fn << "\n";
-    }
-    m_vout << "  output filename: " << m_output_filename << "\n";
-    m_vout << "  input format: " << m_input_format << "\n";
-    m_vout << "  output format: " << m_output_format << "\n";
+    show_multiple_inputs_arguments(m_vout);
+    show_output_arguments(m_vout);
 }
 
 bool CommandSort::run() {

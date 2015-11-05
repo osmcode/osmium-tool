@@ -45,6 +45,12 @@ void with_single_osm_input::add_single_input_options(po::options_description& op
     ;
 }
 
+void with_single_osm_input::show_single_input_arguments(osmium::util::VerboseOutput& vout) {
+    vout << "  input options:\n";
+    vout << "    file name: " << m_input_filename << "\n";
+    vout << "    file format: " << m_input_format << "\n";
+}
+
 void with_multiple_osm_inputs::setup_input_files(const boost::program_options::variables_map& vm) {
     if (vm.count("input-filenames")) {
         m_input_filenames = vm["input-filenames"].as<std::vector<std::string>>();
@@ -78,6 +84,15 @@ void with_multiple_osm_inputs::add_multiple_inputs_options(po::options_descripti
     options.add_options()
     ("input-format,F", po::value<std::string>(), "Format of input files")
     ;
+}
+
+void with_multiple_osm_inputs::show_multiple_inputs_arguments(osmium::util::VerboseOutput& vout) {
+    vout << "  input options:\n";
+    vout << "    file names: \n";
+    for (const auto& fn : m_input_filenames) {
+        vout << "      " << fn << "\n";
+    }
+    vout << "    file format: " << m_input_format << "\n";
 }
 
 void with_osm_output::setup_output_file(const po::variables_map& vm) {
@@ -122,5 +137,20 @@ void with_osm_output::add_output_options(po::options_description& options) {
     ("overwrite,O", "Allow existing output file to be overwritten")
     ("fsync", "Call fsync after writing file")
     ;
+}
+
+void with_osm_output::show_output_arguments(osmium::util::VerboseOutput& vout) {
+    vout << "  output options:\n";
+    vout << "    file name: " << m_output_filename << "\n";
+    vout << "    file format: " << m_output_format << "\n";
+    vout << "    generator: " << m_generator << "\n";
+    vout << "    overwrite: " << (m_output_overwrite == osmium::io::overwrite::allow ? "yes" : "no") << "\n";
+    vout << "    fsync: " << (m_fsync == osmium::io::fsync::yes ? "yes" : "no") << "\n";
+    if (!m_output_headers.empty()) {
+        vout << "    output header:\n";
+        for (const auto& h : m_output_headers) {
+            vout << "      " << h << "\n";
+        }
+    }
 }
 

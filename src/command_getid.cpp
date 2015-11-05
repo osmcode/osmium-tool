@@ -103,26 +103,22 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandGetId::show_arguments() {
-    m_vout << "Started osmium apply-changes\n";
+    show_single_input_arguments(m_vout);
+    show_output_arguments(m_vout);
 
-    m_vout << "Command line options and default settings:\n";
-    m_vout << "  generator: " << m_generator << "\n";
-    m_vout << "  input data file name: " << m_input_filename << "\n";
-    m_vout << "  output filename: " << m_output_filename << "\n";
-    m_vout << "  input format: " << m_input_format << "\n";
-    m_vout << "  output format: " << m_output_format << "\n";
-    m_vout << "  looking for these ids:\n";
-    m_vout << "    nodes:";
+    m_vout << "  other options:\n";
+    m_vout << "    looking for these ids:\n";
+    m_vout << "      nodes:";
     for (osmium::object_id_type id : ids(osmium::item_type::node)) {
         m_vout << " " << id;
     }
     m_vout << "\n";
-    m_vout << "    ways:";
+    m_vout << "      ways:";
     for (osmium::object_id_type id : ids(osmium::item_type::way)) {
         m_vout << " " << id;
     }
     m_vout << "\n";
-    m_vout << "    relations:";
+    m_vout << "      relations:";
     for (osmium::object_id_type id : ids(osmium::item_type::relation)) {
         m_vout << " " << id;
     }

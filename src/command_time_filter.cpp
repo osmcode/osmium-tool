@@ -92,8 +92,10 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
 }
 
 void CommandTimeFilter::show_arguments() {
-    m_vout << "Started osmium time-filter\n";
-    m_vout << "Filtering from time " << m_from.to_iso() << " to " << m_to.to_iso() << "\n";
+    show_single_input_arguments(m_vout);
+    show_output_arguments(m_vout);
+    m_vout << "  other options:\n";
+    m_vout << "    Filtering from time " << m_from.to_iso() << " to " << m_to.to_iso() << "\n";
 }
 
 bool CommandTimeFilter::run() {
