@@ -148,6 +148,7 @@ protected:
     std::string m_output_format;
     osmium::io::File m_output_file;
     osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
+    osmium::io::fsync m_fsync = osmium::io::fsync::no;
 
 public:
 

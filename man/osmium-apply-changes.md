@@ -51,6 +51,10 @@ so the data has to fit in there!
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
+--fsync
+:   Call fsync after writing the output file to force the OS to flush buffers
+    to disk.
+
 -r, --remove-deleted
 :   Remove deleted objects from the output. If this is not set, deleted objects
     will be in the output with the visible flag set to false.

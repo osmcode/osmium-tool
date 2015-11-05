@@ -47,6 +47,10 @@ in what order the change files are given or in what order they contain the data.
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
+--fsync
+:   Call fsync after writing the output file to force the OS to flush buffers
+    to disk.
+
 -s, --simplify
 :   Only write the last version of any object to the output.
 

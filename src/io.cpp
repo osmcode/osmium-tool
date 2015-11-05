@@ -101,6 +101,10 @@ void with_osm_output::setup_output_file(const po::variables_map& vm) {
         m_output_overwrite = osmium::io::overwrite::allow;
     }
 
+    if (vm.count("fsync")) {
+        m_fsync = osmium::io::fsync::yes;
+    }
+
     if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
         throw argument_error("When writing to STDOUT you need to use the --output-format/-f option to declare the file format.");
     }
@@ -116,6 +120,7 @@ void with_osm_output::add_output_options(po::options_description& options) {
     ("output-format,f", po::value<std::string>(), "Format of output file")
     ("output-header", po::value<std::vector<std::string>>(), "Add output header")
     ("overwrite,O", "Allow existing output file to be overwritten")
+    ("fsync", "Call fsync after writing file")
     ;
 }
 

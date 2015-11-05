@@ -213,7 +213,7 @@ bool CommandRenumber::run() {
     for (const auto& h : m_output_headers) {
         header.set(h);
     }
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
     auto input = osmium::io::make_input_iterator_range<osmium::Relation>(reader_pass1);
     for (const osmium::Relation& relation : input) {

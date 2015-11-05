@@ -104,7 +104,7 @@ bool CommandTimeFilter::run() {
     header.set("generator", m_generator);
 
     m_vout << "Opening output file...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
     auto out = osmium::io::make_output_iterator(writer);
 
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);

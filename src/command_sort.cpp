@@ -108,7 +108,7 @@ bool CommandSort::run() {
     objects.sort(osmium::object_order_type_id_version());
 
     m_vout << "Opening output file...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
     auto out = osmium::io::make_output_iterator(writer);
 
     m_vout << "Writing out sorted data...\n";

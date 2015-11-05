@@ -170,7 +170,7 @@ bool CommandGetId::run() {
     }
 
     m_vout << "Writing out results...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite);
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
     writer(std::move(output_buffer));
     writer.close();
 

@@ -65,6 +65,10 @@ IDs.
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
+--fsync
+:   Call fsync after writing the output file to force the OS to flush buffers
+    to disk.
+
 -v, --verbose
 :   Set verbose mode. The program will output information about what it is
     doing to *stderr*.

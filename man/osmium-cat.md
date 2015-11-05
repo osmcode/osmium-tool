@@ -43,6 +43,10 @@ can be used to convert OSM files from one format into another.
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
+--fsync
+:   Call fsync after writing the output file to force the OS to flush buffers
+    to disk.
+
 --output-header=OPTION
 :   Add output header option. This option can be given several times. See the
     *libosmium manual* for a list of allowed header options.

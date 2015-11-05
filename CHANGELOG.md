@@ -11,6 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Add new `sort` subcommand for sorting OSM data files, history files,
   and change files.
 - Add new `changeset-filter` subcommand.
+- New option `--fsync` on all subcommands that write an OSM file. Will call
+  fsync after writing any file.
 
 ### Changed
 
