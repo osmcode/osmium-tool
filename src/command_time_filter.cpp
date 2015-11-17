@@ -110,22 +110,24 @@ bool CommandTimeFilter::run() {
     auto out = osmium::io::make_output_iterator(writer);
 
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
-    typedef osmium::DiffIterator<decltype(input.begin())> diff_iterator;
+
+    auto diff_begin = osmium::make_diff_iterator(input.begin(), input.end());
+    auto diff_end   = osmium::make_diff_iterator(input.end(), input.end());
 
     m_vout << "Filtering data...\n";
 
     if (m_from == m_to) {
         std::copy_if(
-            diff_iterator(input.begin(), input.end()),
-            diff_iterator(input.end(), input.end()),
+            diff_begin,
+            diff_end,
             out,
             [this](const osmium::DiffObject& d){
                 return d.is_visible_at(m_from);
         });
     } else {
         std::copy_if(
-            diff_iterator(input.begin(), input.end()),
-            diff_iterator(input.end(), input.end()),
+            diff_begin,
+            diff_end,
             out,
             [this](const osmium::DiffObject& d){
                 return d.is_between(m_from, m_to);

@@ -16,7 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Uses new libosmium version now (use at least libosmium version 2.5.0).
+- Uses new libosmium version now (use at least libosmium version 2.5.3).
 
 ### Fixed
 
