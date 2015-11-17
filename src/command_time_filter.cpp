@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <stdexcept>
+
 #include <boost/program_options.hpp>
 
 #include <osmium/io/any_input.hpp>
@@ -65,15 +67,26 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     m_to = m_from;
 
     if (vm.count("time-from")) {
-        m_from = osmium::Timestamp(vm["time-from"].as<std::string>());
+        auto ts = vm["time-from"].as<std::string>();
+        try {
+            m_from = osmium::Timestamp(ts);
+        } catch (std::invalid_argument&) {
+            throw argument_error("Wrong format for (first) timestamp (use YYYY-MM-DDThh:mm:ssZ).");
+        }
         m_to = m_from;
     }
 
     if (vm.count("time-to")) {
-        m_to = osmium::Timestamp(vm["time-to"].as<std::string>());
-        if (m_to < m_from) {
-            throw argument_error("Second timestamp is before first one.");
+        auto ts = vm["time-to"].as<std::string>();
+        try {
+            m_to = osmium::Timestamp(ts);
+        } catch (std::invalid_argument&) {
+            throw argument_error("Wrong format for second timestamp (use YYYY-MM-DDThh:mm:ssZ).");
         }
+    }
+
+    if (m_from > m_to) {
+        throw argument_error("Second timestamp is before first one.");
     }
 
     if (m_from == m_to) { // point in time

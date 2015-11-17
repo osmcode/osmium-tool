@@ -20,6 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <stdexcept>
+
 #include <boost/program_options.hpp>
 
 #include <osmium/io/any_input.hpp>
@@ -41,8 +43,8 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     ("closed", "Closed changesets")
     ("user,u", po::value<std::string>(), "Changesets by given user")
     ("uid,U", po::value<osmium::user_id_type>(), "Changesets by given user ID")
-    ("after,a", po::value<std::string>(), "Changesets opened after")
-    ("before,b", po::value<std::string>(), "Changesets closed before")
+    ("after,a", po::value<std::string>(), "Changesets opened after this time")
+    ("before,b", po::value<std::string>(), "Changesets closed before this time")
     ;
 
     add_common_options(cmdline);
@@ -104,7 +106,7 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
         auto ts = vm["after"].as<std::string>();
         try {
             m_after = osmium::Timestamp(ts);
-        } catch (...) {
+        } catch (std::invalid_argument&) {
             throw argument_error("Wrong format for --after/-a timestamp (use YYYY-MM-DDThh:mm:ssZ).");
         }
     }
@@ -113,7 +115,7 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
         auto ts = vm["before"].as<std::string>();
         try {
             m_before = osmium::Timestamp(ts);
-        } catch (...) {
+        } catch (std::invalid_argument&) {
             throw argument_error("Wrong format for --before/-b timestamp (use YYYY-MM-DDThh:mm:ssZ).");
         }
     }
