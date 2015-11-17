@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.3.0] - 2015-11-17
+
+### Added
+
 - Add new `sort` subcommand for sorting OSM data files, history files,
   and change files.
 - Add new `changeset-filter` subcommand.
@@ -17,8 +26,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Uses new libosmium version now (use at least libosmium version 2.5.3).
-
-### Fixed
 
 
 ## [1.2.1] - 2015-08-31
@@ -98,7 +105,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.2.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/osmcode/osmium-tool/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/osmcode/osmium-tool/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/osmcode/osmium-tool/compare/v1.1.0...v1.2.0
 [1.1.1]: https://github.com/osmcode/osmium-tool/compare/v1.1.0...v1.1.1
