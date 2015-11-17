@@ -199,6 +199,7 @@ bool CommandRenumber::run() {
     m_vout << "First pass through input file (reading relations)...\n";
     osmium::io::Reader reader_pass1(m_input_file, osmium::osm_entity_bits::relation);
 
+    m_vout << "Opening output file...\n";
     osmium::io::Header header = reader_pass1.header();
     header.set("generator", m_generator);
     header.set("xml_josm_upload", "false");
@@ -222,6 +223,7 @@ bool CommandRenumber::run() {
     }
     reader_pass2.close();
 
+    m_vout << "Closing output file...\n";
     writer.close();
 
     if (!m_index_directory.empty()) {

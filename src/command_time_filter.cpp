@@ -102,19 +102,16 @@ bool CommandTimeFilter::run() {
     m_vout << "Opening input file...\n";
     osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::object);
 
+    m_vout << "Opening output file...\n";
     osmium::io::Header header = reader.header();
     header.set("generator", m_generator);
-
-    m_vout << "Opening output file...\n";
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
-    auto out = osmium::io::make_output_iterator(writer);
 
+    m_vout << "Filter data while copying it from input to output...\n";
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
-
     auto diff_begin = osmium::make_diff_iterator(input.begin(), input.end());
     auto diff_end   = osmium::make_diff_iterator(input.end(), input.end());
-
-    m_vout << "Filtering data...\n";
+    auto out = osmium::io::make_output_iterator(writer);
 
     if (m_from == m_to) {
         std::copy_if(
@@ -134,7 +131,10 @@ bool CommandTimeFilter::run() {
         });
     }
 
+    m_vout << "Closing output file...\n";
     writer.close();
+
+    m_vout << "Closing input file...\n";
     reader.close();
 
     m_vout << "Done.\n";

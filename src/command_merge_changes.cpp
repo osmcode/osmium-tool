@@ -74,6 +74,12 @@ void CommandMergeChanges::show_arguments() {
 }
 
 bool CommandMergeChanges::run() {
+    m_vout << "Opening output file...\n";
+    osmium::io::Header header;
+    header.set("generator", m_generator);
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    auto out = osmium::io::make_output_iterator(writer);
+
     // this will contain all the buffers with the input data
     std::vector<osmium::memory::Buffer> changes;
 
@@ -90,13 +96,6 @@ bool CommandMergeChanges::run() {
         }
         reader.close();
     }
-
-    osmium::io::Header header;
-    header.set("generator", m_generator);
-
-    m_vout << "Opening output file...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
-    auto out = osmium::io::make_output_iterator(writer);
 
     // Now we sort all objects and write them in order into the
     // output_buffer, flushing the output_buffer whenever it is full.
@@ -117,6 +116,7 @@ bool CommandMergeChanges::run() {
         std::copy(objects.cbegin(), objects.cend(), out);
     }
 
+    m_vout << "Closing output file...\n";
     writer.close();
 
     m_vout << "Done.\n";

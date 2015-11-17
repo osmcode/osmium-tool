@@ -77,7 +77,7 @@ bool CommandSort::run() {
 
     osmium::Box bounding_box;
 
-    m_vout << "Reading file contents...\n";
+    m_vout << "Reading contents of input files...\n";
     for (const std::string& file_name : m_filenames) {
         osmium::io::Reader reader(file_name, osmium::osm_entity_bits::object);
         auto header = reader.header();
@@ -89,22 +89,22 @@ bool CommandSort::run() {
         reader.close();
     }
 
+    m_vout << "Opening output file...\n";
     osmium::io::Header header;
     if (bounding_box) {
         header.add_box(bounding_box);
     }
     header.set("generator", m_generator);
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
     m_vout << "Sorting data...\n";
     objects.sort(osmium::object_order_type_id_version());
 
-    m_vout << "Opening output file...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
-    auto out = osmium::io::make_output_iterator(writer);
-
     m_vout << "Writing out sorted data...\n";
+    auto out = osmium::io::make_output_iterator(writer);
     std::copy(objects.begin(), objects.end(), out);
 
+    m_vout << "Closing output file...\n";
     writer.close();
 
     m_vout << "Done.\n";

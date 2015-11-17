@@ -142,12 +142,15 @@ osmium::osm_entity_bits::type CommandGetId::get_needed_types() const {
 }
 
 bool CommandGetId::run() {
-    m_vout << "Reading input file...\n";
+    m_vout << "Opening input file...\n";
     osmium::io::Reader reader(m_input_file, get_needed_types());
 
+    m_vout << "Opening output file...\n";
     osmium::io::Header header;
     header.set("generator", m_generator);
+    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
+    m_vout << "Reading input file...\n";
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
 
     osmium::memory::Buffer output_buffer(10240);
@@ -166,8 +169,9 @@ bool CommandGetId::run() {
     }
 
     m_vout << "Writing out results...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
     writer(std::move(output_buffer));
+
+    m_vout << "Closing output file...\n";
     writer.close();
 
     if (num_ids == 0) {
@@ -176,7 +180,9 @@ bool CommandGetId::run() {
         m_vout << "Did not find " << num_ids << " objects.\n";
     }
 
+    m_vout << "Closing input file...\n";
     reader.close();
+
     m_vout << "Done.\n";
 
     return num_ids == 0;
