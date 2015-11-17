@@ -143,7 +143,37 @@ void CommandChangesetFilter::show_arguments() {
     show_single_input_arguments(m_vout);
     show_output_arguments(m_vout);
     m_vout << "  other options:\n";
-    // XXX
+    m_vout << "    changesets must\n";
+    if (m_with_discussion) {
+        m_vout << "      - have a discussion\n";
+    }
+    if (m_without_discussion) {
+        m_vout << "      - not have a discussion\n";
+    }
+    if (m_with_changes) {
+        m_vout << "      - have at least one change\n";
+    }
+    if (m_without_changes) {
+        m_vout << "      - not have any changes\n";
+    }
+    if (m_open) {
+        m_vout << "      - be open\n";
+    }
+    if (m_closed) {
+        m_vout << "      - be closed\n";
+    }
+    if (m_uid != 0) {
+        m_vout << "      - be from uid " << m_uid << "\n";
+    }
+    if (!m_user.empty()) {
+        m_vout << "      - be from user '" << m_user << "'\n";
+    }
+    if (m_after > osmium::start_of_time()) {
+        m_vout << "      - be closed after " << m_after.to_iso() << " or still open\n";
+    }
+    if (m_before < osmium::end_of_time()) {
+        m_vout << "      - be created before " << m_before.to_iso() << "\n";
+    }
 }
 
 bool changeset_after(const osmium::Changeset& changeset, osmium::Timestamp time) {
