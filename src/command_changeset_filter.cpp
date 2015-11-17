@@ -103,7 +103,7 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     if (vm.count("after")) {
         auto ts = vm["after"].as<std::string>();
         try {
-            m_after = osmium::Timestamp(ts.c_str());
+            m_after = osmium::Timestamp(ts);
         } catch (...) {
             throw argument_error("Wrong format for --after/-a timestamp (use YYYY-MM-DDThh:mm:ssZ).");
         }
@@ -112,7 +112,7 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     if (vm.count("before")) {
         auto ts = vm["before"].as<std::string>();
         try {
-            m_before = osmium::Timestamp(ts.c_str());
+            m_before = osmium::Timestamp(ts);
         } catch (...) {
             throw argument_error("Wrong format for --before/-b timestamp (use YYYY-MM-DDThh:mm:ssZ).");
         }

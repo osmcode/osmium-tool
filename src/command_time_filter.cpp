@@ -65,12 +65,12 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     m_to = m_from;
 
     if (vm.count("time-from")) {
-        m_from = osmium::Timestamp(vm["time-from"].as<std::string>().c_str());
+        m_from = osmium::Timestamp(vm["time-from"].as<std::string>());
         m_to = m_from;
     }
 
     if (vm.count("time-to")) {
-        m_to = osmium::Timestamp(vm["time-to"].as<std::string>().c_str());
+        m_to = osmium::Timestamp(vm["time-to"].as<std::string>());
         if (m_to < m_from) {
             throw argument_error("Second timestamp is before first one.");
         }
