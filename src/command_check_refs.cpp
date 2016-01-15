@@ -213,7 +213,7 @@ public:
                         }
                         break;
                     case osmium::item_type::relation:
-                        m_member_relation_ids.insert(uint32_t(relation.id()));
+                        m_member_relation_ids.insert(uint32_t(member.ref()));
                         break;
                     default:
                         break;
