@@ -86,8 +86,7 @@ class RefCheckHandler : public osmium::handler::Handler {
     osmium::index::BoolVector<osmium::unsigned_object_id_type> m_ways;
 
     std::vector<uint32_t> m_relation_ids;
-    std::set<uint32_t> m_member_relation_ids;
-    std::vector<uint32_t> m_missing_relation_ids;
+    std::vector<std::pair<uint32_t, uint32_t>> m_relation_refs;
 
     uint64_t m_node_count = 0;
     uint64_t m_way_count = 0;
@@ -100,7 +99,6 @@ class RefCheckHandler : public osmium::handler::Handler {
     osmium::util::VerboseOutput& m_vout;
     bool m_show_ids;
     bool m_check_relations;
-    bool m_relations_done = false;
 
 public:
 
@@ -134,25 +132,26 @@ public:
         return m_missing_ways_in_relations;
     }
 
-    uint64_t missing_relations_in_relations() {
-        if (!m_relations_done) {
-            std::sort(m_relation_ids.begin(), m_relation_ids.end());
-
-            std::set_difference(m_member_relation_ids.cbegin(), m_member_relation_ids.cend(),
-                                m_relation_ids.cbegin(), m_relation_ids.cend(),
-                                std::back_inserter(m_missing_relation_ids));
-
-            m_relations_done = true;
-        }
-
-        return m_missing_relation_ids.size();
+    uint64_t missing_relations_in_relations() const {
+        return m_relation_refs.size();
     }
 
-    bool any_errors() {
-        return missing_nodes_in_ways()          > 0 ||
-               missing_nodes_in_relations()     > 0 ||
-               missing_ways_in_relations()      > 0 ||
-               missing_relations_in_relations() > 0;
+    void find_missing_relations() {
+        std::sort(m_relation_refs.begin(), m_relation_refs.end());
+
+        m_relation_refs.erase(
+            std::remove_if(m_relation_refs.begin(), m_relation_refs.end(), [this](std::pair<uint32_t, uint32_t> refs){
+                return std::binary_search(m_relation_ids.begin(), m_relation_ids.end(), refs.first);
+                }),
+                m_relation_refs.end()
+            );
+    }
+
+    bool no_errors() {
+        return missing_nodes_in_ways()          == 0 &&
+               missing_nodes_in_relations()     == 0 &&
+               missing_ways_in_relations()      == 0 &&
+               missing_relations_in_relations() == 0;
     }
 
     void node(const osmium::Node& node) {
@@ -213,7 +212,9 @@ public:
                         }
                         break;
                     case osmium::item_type::relation:
-                        m_member_relation_ids.insert(uint32_t(member.ref()));
+                        if (member.ref() > relation.id() || !std::binary_search(m_relation_ids.begin(), m_relation_ids.end(), uint32_t(member.ref()))) {
+                            m_relation_refs.emplace_back(uint32_t(member.ref()), uint32_t(relation.id()));
+                        }
                         break;
                     default:
                         break;
@@ -223,8 +224,8 @@ public:
     }
 
     void show_missing_relation_ids() {
-        for (auto id : m_missing_relation_ids) {
-            std::cout << "r" << id << " in r\n";
+        for (const auto& refs : m_relation_refs) {
+            std::cout << "r" << refs.first << " in r" << refs.second << "\n";
         }
     }
 
@@ -235,6 +236,14 @@ bool CommandCheckRefs::run() {
 
     RefCheckHandler handler(m_vout, m_show_ids, m_check_relations);
     osmium::apply(reader, handler);
+
+    if (m_check_relations) {
+        handler.find_missing_relations();
+
+        if (m_show_ids) {
+            handler.show_missing_relation_ids();
+        }
+    }
 
     std::cerr << "There are " << handler.node_count() << " nodes, " << handler.way_count() << " ways, and " << handler.relation_count() << " relations in this file.\n";
 
@@ -247,14 +256,10 @@ bool CommandCheckRefs::run() {
         std::cerr << "Nodes in ways missing: " << handler.missing_nodes_in_ways() << "\n";
     }
 
-    if (m_show_ids) {
-        handler.show_missing_relation_ids();
-    }
-
     reader.close();
     m_vout << "Done.\n";
 
-    return !handler.any_errors();
+    return handler.no_errors();
 }
 
 namespace {
