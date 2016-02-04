@@ -100,15 +100,18 @@ void CommandRenumber::renumber(osmium::memory::Buffer& buffer) {
     for (auto it = buffer.begin<osmium::OSMObject>(); it != buffer.end<osmium::OSMObject>(); ++it) {
         switch (it->type()) {
             case osmium::item_type::node:
+                m_check_order.node(static_cast<const osmium::Node&>(*it));
                 it->set_id(lookup(osmium::item_type::node, it->id()));
                 break;
             case osmium::item_type::way:
+                m_check_order.way(static_cast<const osmium::Way&>(*it));
                 it->set_id(lookup(osmium::item_type::way, it->id()));
                 for (auto& ref : static_cast<osmium::Way&>(*it).nodes()) {
                     ref.set_ref(lookup(osmium::item_type::node, ref.ref()));
                 }
                 break;
             case osmium::item_type::relation:
+                m_check_order.relation(static_cast<const osmium::Relation&>(*it));
                 it->set_id(lookup(osmium::item_type::relation, it->id()));
                 for (auto& member : static_cast<osmium::Relation&>(*it).members()) {
                     member.set_ref(lookup(member.type(), member.ref()));
@@ -217,9 +220,15 @@ bool CommandRenumber::run() {
 
     m_vout << "Second pass through input file...\n";
     osmium::io::Reader reader_pass2(m_input_file);
-    while (osmium::memory::Buffer buffer = reader_pass2.read()) {
-        renumber(buffer);
-        writer(std::move(buffer));
+    try {
+        while (osmium::memory::Buffer buffer = reader_pass2.read()) {
+            renumber(buffer);
+            writer(std::move(buffer));
+        }
+    } catch (osmium::out_of_order_error& e) {
+        std::cerr << e.what() << "\n";
+        std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\nthen ways in order of ID, then relations in order of ID.\n";
+        exit(1);
     }
     reader_pass2.close();
 

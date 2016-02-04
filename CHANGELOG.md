@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Check that input files are correctly ordered in the renumber and
+  check-refs subcommands.
+
 ### Changed
 
 ### Fixed

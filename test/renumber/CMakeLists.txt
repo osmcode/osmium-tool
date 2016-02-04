@@ -31,3 +31,23 @@ check_renumber(sorted input-sorted.osm output-sorted.osm)
 check_renumber2(change input-sorted.osm input-change.osc output-change.osc)
 
 #-----------------------------------------------------------------------------
+
+# input data not ordered properly
+
+add_test(NAME renumber-fail-order-n COMMAND osmium renumber ${CMAKE_SOURCE_DIR}/test/order/fail-order-n.osm -f osm)
+set_tests_properties(renumber-fail-order-n PROPERTIES WILL_FAIL true)
+
+add_test(NAME renumber-fail-order-w COMMAND osmium renumber ${CMAKE_SOURCE_DIR}/test/order/fail-order-w.osm -f osm)
+set_tests_properties(renumber-fail-order-w PROPERTIES WILL_FAIL true)
+
+add_test(NAME renumber-fail-order-r COMMAND osmium renumber ${CMAKE_SOURCE_DIR}/test/order/fail-order-r.osm -f osm)
+set_tests_properties(renumber-fail-order-r PROPERTIES WILL_FAIL true)
+
+add_test(NAME renumber-fail-order-wn COMMAND osmium renumber ${CMAKE_SOURCE_DIR}/test/order/fail-order-wn.osm -f osm)
+set_tests_properties(renumber-fail-order-wn PROPERTIES WILL_FAIL true)
+
+add_test(NAME renumber-fail-order-rw COMMAND osmium renumber ${CMAKE_SOURCE_DIR}/test/order/fail-order-rw.osm -f osm)
+set_tests_properties(renumber-fail-order-rw PROPERTIES WILL_FAIL true)
+
+
+#-----------------------------------------------------------------------------

@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
+#include <osmium/handler/check_order.hpp>
 #include <osmium/index/bool_vector.hpp>
 #include <osmium/io/any_input.hpp>
 #include <osmium/io/any_output.hpp>
@@ -87,6 +88,8 @@ class RefCheckHandler : public osmium::handler::Handler {
 
     std::vector<uint32_t> m_relation_ids;
     std::vector<std::pair<uint32_t, uint32_t>> m_relation_refs;
+
+    osmium::handler::CheckOrder m_check_order;
 
     uint64_t m_node_count = 0;
     uint64_t m_way_count = 0;
@@ -155,6 +158,8 @@ public:
     }
 
     void node(const osmium::Node& node) {
+        m_check_order.node(node);
+
         if (m_node_count == 0) {
             m_vout << "Reading nodes...\n";
         }
@@ -164,6 +169,8 @@ public:
     }
 
     void way(const osmium::Way& way) {
+        m_check_order.way(way);
+
         if (m_way_count == 0) {
             m_vout << "Reading ways...\n";
         }
@@ -184,6 +191,8 @@ public:
     }
 
     void relation(const osmium::Relation& relation) {
+        m_check_order.relation(relation);
+
         if (m_relation_count == 0) {
             m_vout << "Reading relations...\n";
         }
@@ -235,7 +244,14 @@ bool CommandCheckRefs::run() {
     osmium::io::Reader reader(m_input_file);
 
     RefCheckHandler handler(m_vout, m_show_ids, m_check_relations);
-    osmium::apply(reader, handler);
+
+    try {
+        osmium::apply(reader, handler);
+    } catch (osmium::out_of_order_error& e) {
+        std::cerr << e.what() << "\n";
+        std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\nthen ways in order of ID, then relations in order of ID.\n";
+        exit(1);
+    }
 
     if (m_check_relations) {
         handler.find_missing_relations();

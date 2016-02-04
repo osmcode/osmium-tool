@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+#include <osmium/handler/check_order.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/types.hpp>
@@ -39,6 +40,8 @@ typedef remap_index_type::value_type remap_index_value_type;
 class CommandRenumber : public Command, public with_single_osm_input, public with_osm_output {
 
     std::string m_index_directory;
+
+    osmium::handler::CheckOrder m_check_order;
 
     remap_index_type m_id_index[3];
     osmium::object_id_type m_last_id[3];
