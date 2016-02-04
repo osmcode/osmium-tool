@@ -150,6 +150,7 @@ bool CommandTimeFilter::run() {
     m_vout << "Closing input file...\n";
     reader.close();
 
+    show_memory_used();
     m_vout << "Done.\n";
 
     return true;

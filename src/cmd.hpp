@@ -98,6 +98,8 @@ public:
         }
     }
 
+    void show_memory_used();
+
 }; // class Command
 
 class with_single_osm_input {

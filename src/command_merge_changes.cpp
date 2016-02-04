@@ -119,6 +119,7 @@ bool CommandMergeChanges::run() {
     m_vout << "Closing output file...\n";
     writer.close();
 
+    show_memory_used();
     m_vout << "Done.\n";
 
     return true;

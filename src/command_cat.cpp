@@ -137,6 +137,7 @@ bool CommandCat::run() {
         writer.close();
     }
 
+    show_memory_used();
     m_vout << "Done.\n";
 
     return true;

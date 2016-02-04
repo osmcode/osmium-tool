@@ -217,6 +217,7 @@ bool CommandChangesetFilter::run() {
     writer.close();
     reader.close();
 
+    show_memory_used();
     m_vout << "Done.\n";
 
     return true;

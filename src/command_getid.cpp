@@ -183,6 +183,7 @@ bool CommandGetId::run() {
     m_vout << "Closing input file...\n";
     reader.close();
 
+    show_memory_used();
     m_vout << "Done.\n";
 
     return num_ids == 0;

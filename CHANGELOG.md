@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Check that input files are correctly ordered in the renumber and
   check-refs subcommands.
+- Most subcommands now show the memory used in verbose mode.
 
 ### Changed
 

@@ -273,6 +273,8 @@ bool CommandCheckRefs::run() {
     }
 
     reader.close();
+
+    show_memory_used();
     m_vout << "Done.\n";
 
     return handler.no_errors();
