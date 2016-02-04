@@ -24,6 +24,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "cmd.hpp"
 
+void Command::add_common_options(po::options_description& options) {
+    options.add_options()
+    ("verbose,v", "Set verbose mode")
+    ;
+}
+
+void Command::setup_common(const boost::program_options::variables_map& vm) {
+    if (vm.count("verbose")) {
+        m_vout.verbose(true);
+    }
+}
+
+void Command::print_arguments(const std::string& command) {
+    if (m_vout.verbose()) {
+        m_vout << "Started osmium " << command << "\n";
+        m_vout << "Command line options and default settings:\n";
+        show_arguments();
+    }
+}
+
 void Command::show_memory_used() {
     osmium::MemoryUsage mem;
     if (mem.current() > 0) {
