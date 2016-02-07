@@ -11,5 +11,8 @@ distclean:
 deb:
 	debuild -I -us -uc
 
-.PHONY: clean distclean deb
+test:
+	cd build && ctest
+
+.PHONY: clean distclean deb test
 

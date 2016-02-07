@@ -70,7 +70,7 @@ will be built, if not they will not be built.
 
 ## Tests
 
-Call `ctest` to run the tests after build.
+Call `ctest` in the build directory to run the tests after build.
 
 More extensive tests of the libosmium I/O system can also be run. See
 `test/io/Makefile.in` for instructions.
@@ -78,7 +78,7 @@ More extensive tests of the libosmium I/O system can also be run. See
 
 ## License
 
-Copyright (C) 2013-2015  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013-2016  Jochen Topf <jochen@topf.org>
 
 This program is available under the GNU GENERAL PUBLIC LICENSE Version 3.
 See the file LICENSE.txt for the complete text of the license.
