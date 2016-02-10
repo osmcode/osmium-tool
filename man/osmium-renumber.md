@@ -16,9 +16,9 @@ IDs. This can make some kinds of postprocessing difficult. This command will
 renumber all objects using IDs starting at 1. Referential integrity will be
 kept.
 
-This command can only be run on OSM files sorted in the usual way (nodes first,
-then ways, then IDs). It will read the input file twice, so it will not work
-with STDIN.
+This command expects the input file to be ordered in the usual way: First
+nodes in order of ID, then ways in order of ID, then relations in order of ID.
+The input file will be read twice, so it will not work with STDIN.
 
 This command needs quite a bit of main memory to keep the mapping between old
 and new IDs. It is intended for small extracts. Don't try to run this on a full
