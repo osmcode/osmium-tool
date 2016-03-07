@@ -65,6 +65,9 @@ Data
 -G, --show-variables
 :   Show a list of all variable names.
 
+-h, --help
+:   Show usage help.
+
 -j, --json
 :   Output in JSON format. Can not be used together with --get.
 

@@ -6,7 +6,7 @@ osmium-getid - get objects from OSM file by ID
 
 # SYNOPSIS
 
-**osmium getid** \[*OPTIONS*\] *INPUT-FILE* *ID*...
+**osmium getid** \[*OPTIONS*\] *OSM-FILE* *ID*...
 
 
 # DESCRIPTION
@@ -40,6 +40,9 @@ characters (|).
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the version
     of osmium.
+
+-h, --help
+:   Show usage help.
 
 -i, --id-file=FILE
 :   Read IDs from file instead of from the command line. Each line of the

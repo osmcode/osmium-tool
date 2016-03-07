@@ -6,7 +6,7 @@ osmium-check-refs - check referential integrity of OSM file
 
 # SYNOPSIS
 
-**osmium check-refs** \[*OPTIONS*\] *INPUT-FILE*
+**osmium check-refs** \[*OPTIONS*\] *OSM-DATA-FILE*
 
 
 # DESCRIPTION
@@ -37,6 +37,9 @@ nodes in order of ID, then ways in order of ID, then relations in order of ID.
 :   The format of the input file. Can be used to set the input format if it
     can't be autodetected from the file name. See **osmium-file-formats**(5)
     or the libosmium manual for details.
+
+-h, --help
+:   Show usage help.
 
 -i, --show-ids
 :   Print all missing IDs to stdout. If you don't give this option, only a

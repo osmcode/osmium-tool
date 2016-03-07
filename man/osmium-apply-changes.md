@@ -40,6 +40,9 @@ so the data has to fit in there!
     added to the header of the output file. Default is "*osmium/*" and the version
     of osmium.
 
+-h, --help
+:   Show usage help.
+
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
 

@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_apply_changes.hpp"
 
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Allowed options");
+    po::options_description cmdline("Available options");
     cmdline.add_options()
     ("simplify,s", "Simplify change")
     ("remove-deleted,r", "Remove deleted objects from output")
@@ -58,6 +58,12 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << "Usage: osmium apply-changes [OPTIONS] OSM-DATA-FILE OSM-CHANGE-FILE...\n\n";
+        std::cout << cmdline << "\n";
+        exit(0);
+    }
 
     setup_common(vm);
     setup_input_file(vm);

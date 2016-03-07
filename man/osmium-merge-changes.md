@@ -6,7 +6,7 @@ osmium-merge-changes - merge several OSM change files into one
 
 # SYNOPSIS
 
-**osmium merge-changes** \[*OPTIONS*\] *CHANGE-FILE*...
+**osmium merge-changes** \[*OPTIONS*\] *OSM-CHANGE-FILE*...
 
 
 # DESCRIPTION
@@ -35,6 +35,9 @@ in what order the change files are given or in what order they contain the data.
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the version
     of osmium.
+
+-h, --help
+:   Show usage help.
 
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).

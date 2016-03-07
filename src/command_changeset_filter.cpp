@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "exception.hpp"
 
 bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Allowed options");
+    po::options_description cmdline("Available options");
     cmdline.add_options()
     ("with-discussion,d", "Changesets with discussions (comments)")
     ("without-discussion,D", "Changesets without discussions (no comments)")
@@ -65,6 +65,12 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << "Usage: osmium changeset-filter [OPTIONS] OSM-CHANGESET-FILE\n\n";
+        std::cout << cmdline << "\n";
+        exit(0);
+    }
 
     setup_common(vm);
     setup_input_file(vm);

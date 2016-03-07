@@ -6,7 +6,7 @@ osmium-changeset-filter - filter changesets from OSM changeset file
 
 # SYNOPSIS
 
-**osmium changeset-filter** \[*OPTIONS*\] *INPUT-FILE*
+**osmium changeset-filter** \[*OPTIONS*\] *OSM-CHANGESET-FILE*
 
 
 # DESCRIPTION
@@ -31,6 +31,9 @@ criteria are given through command line options.
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the version
     of osmium.
+
+-h, --help
+:   Show usage help.
 
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).

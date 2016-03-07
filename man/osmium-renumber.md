@@ -6,7 +6,7 @@ osmium-renumber - renumber object IDs
 
 # SYNOPSIS
 
-**osmium renumber** \[*OPTIONS*\] *INPUT-FILE*
+**osmium renumber** \[*OPTIONS*\] *OSM-DATA-FILE*
 
 
 # DESCRIPTION
@@ -45,6 +45,9 @@ IDs.
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the
     version of osmium.
+
+-h, --help
+:   Show usage help.
 
 -i, --index-directory=DIR
 :   Directory where the index files for mapping between old and news IDs are

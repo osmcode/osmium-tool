@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "exception.hpp"
 
 bool CommandCat::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Allowed options");
+    po::options_description cmdline("Available options");
     cmdline.add_options()
     ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
     ;
@@ -55,6 +55,12 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << "Usage: osmium cat [OPTIONS] OSM-FILE...\n\n";
+        std::cout << cmdline << "\n";
+        exit(0);
+    }
 
     setup_common(vm);
     setup_input_files(vm);

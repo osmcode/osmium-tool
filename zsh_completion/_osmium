@@ -34,6 +34,8 @@ _osmium() {
 }
 
 _osmium-common-options() {
+    echo '(--help)-h[show usage help]'
+    echo '(-h)--help[show usage help]'
     echo '(--verbose)-v[set verbose mode]'
     echo '(-v)--verbose[set verbose mode]'
 }

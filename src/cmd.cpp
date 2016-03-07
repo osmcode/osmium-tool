@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void Command::add_common_options(po::options_description& options) {
     options.add_options()
     ("verbose,v", "Set verbose mode")
+    ("help,h", "Show usage help")
     ;
 }
 

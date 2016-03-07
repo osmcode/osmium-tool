@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_check_refs.hpp"
 
 bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Allowed options");
+    po::options_description cmdline("Available options");
     cmdline.add_options()
     ("show-ids,i", "Show IDs of missing objects")
     ("check-relations,r", "Also check relations")
@@ -59,6 +59,12 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << "Usage: osmium check-refs [OPTIONS] OSM-DATA-FILE\n\n";
+        std::cout << cmdline << "\n";
+        exit(0);
+    }
 
     setup_common(vm);
     setup_input_file(vm);

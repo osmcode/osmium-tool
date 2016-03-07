@@ -65,6 +65,27 @@ endfunction()
 
 #-----------------------------------------------------------------------------
 #
+#  Check "osmium SUBCOMMAND -h" for most subcommands.
+#
+#-----------------------------------------------------------------------------
+function(check_cmd_help _command)
+    do_test(help_cmd_${_command} "osmium ${_command} -h" "Usage: osmium ${_command}.*Available options:")
+endfunction()
+
+check_cmd_help(apply-changes)
+check_cmd_help(cat)
+check_cmd_help(changeset-filter)
+check_cmd_help(check-refs)
+check_cmd_help(fileinfo)
+check_cmd_help(getid)
+check_cmd_help(merge-changes)
+check_cmd_help(renumber)
+check_cmd_help(sort)
+check_cmd_help(time-filter)
+
+
+#-----------------------------------------------------------------------------
+#
 #  Configure tests in all subdirectories
 #
 #-----------------------------------------------------------------------------

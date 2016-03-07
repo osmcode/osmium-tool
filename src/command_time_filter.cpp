@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "exception.hpp"
 
 bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Allowed options");
+    po::options_description cmdline("Available options");
 
     add_common_options(cmdline);
     add_single_input_options(cmdline);
@@ -58,6 +58,13 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << "Usage: osmium time-filter [OPTIONS] OSM-HISTORY-FILE [TIME]\n"
+                  << "       osmium time-filter [OPTIONS] OSM-HISTORY-FILE FROM-TIME TO-TIME\n\n";
+        std::cout << cmdline << "\n";
+        exit(0);
+    }
 
     setup_common(vm);
     setup_input_file(vm);

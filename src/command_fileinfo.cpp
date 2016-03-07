@@ -484,7 +484,7 @@ public:
 /*************************************************************************/
 
 bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Allowed options");
+    po::options_description cmdline("Available options");
     cmdline.add_options()
     ("extended,e", "Extended output")
     ("get,g", po::value<std::string>(), "Get value")
@@ -492,6 +492,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     ("json,j", "JSON output")
     ;
 
+    add_common_options(cmdline);
     add_single_input_options(cmdline);
 
     po::options_description hidden("Hidden options");
@@ -508,6 +509,12 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
     po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << "Usage: osmium fileinfo [OPTIONS] OSM-FILE\n\n";
+        std::cout << cmdline << "\n";
+        exit(0);
+    }
 
     if (vm.count("extended")) {
         m_extended = true;
