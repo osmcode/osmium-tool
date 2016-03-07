@@ -45,6 +45,8 @@ public:
 
     void sort_unique(osmium::item_type type);
 
+    void parse_id(const std::string& s);
+
     bool setup(const std::vector<std::string>& arguments) override final;
 
     void show_arguments() override final;

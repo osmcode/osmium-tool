@@ -11,7 +11,16 @@ osmium-getid - get objects from OSM file by ID
 
 # DESCRIPTION
 
-Get objects with the given IDs from the input and write them to the output
+Get objects with the given IDs from the input and write them to the output.
+
+IDs have the form: *TYPE-LETTER* *NUMBER*. The type letter is 'n' for nodes,
+'w' for ways, and 'r' for relations. If there is no type letter, 'n' for nodes
+is assumed. So "n13 w22 17 r21" will match the nodes 13 and 17, the way 22 and
+the relation 21. The order in which the IDs appear does not matter.
+
+The list of IDs can be in separate arguments or in a single argument separated
+by spaces, tabs, commas (,), semicolons (;), forward slashes (/) or pipe
+characters (|).
 
 
 # OPTIONS
@@ -31,6 +40,13 @@ Get objects with the given IDs from the input and write them to the output
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the version
     of osmium.
+
+-i, --id-file=FILE
+:   Read IDs from file instead of from the command line. Each line of the
+    file must start with an ID in the format described above. Lines can
+    optionally contain a space character after the ID. Any characters after
+    that are ignored. (This allows files in OPL format to be read.) Empty
+    lines and lines starting with '#' are also ignored.
 
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).

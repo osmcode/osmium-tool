@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
+#include <fstream>
 #include <numeric>
 #include <string>
 #include <vector>
@@ -50,8 +51,19 @@ void CommandGetId::sort_unique(osmium::item_type type) {
     index.erase(last, index.end());
 }
 
+void CommandGetId::parse_id(const std::string& s) {
+    auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr);
+    if (p.first == osmium::item_type::undefined) {
+        p.first = osmium::item_type::node;
+    }
+    ids(p.first).push_back(p.second);
+}
+
 bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Allowed options");
+    cmdline.add_options()
+    ("id-file,i", po::value<std::string>(), "Read OSM IDs from given file")
+    ;
 
     add_common_options(cmdline);
     add_single_input_options(cmdline);
@@ -60,7 +72,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     po::options_description hidden("Hidden options");
     hidden.add_options()
     ("input-filename", po::value<std::string>(), "OSM input file")
-    ("ids", po::value<std::vector<std::string>>(), "OSM ids")
+    ("ids", po::value<std::vector<std::string>>(), "OSM IDs")
     ;
 
     po::options_description desc("Allowed options");
@@ -78,26 +90,45 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     setup_input_file(vm);
     setup_output_file(vm);
 
+    if (vm.count("id-file")) {
+        std::string filename = vm["id-file"].as<std::string>();
+
+        std::ifstream id_file{filename};
+        if (!id_file.is_open()) {
+            throw argument_error("Could not open file '" + filename + "'");
+        }
+
+        for (std::string line; std::getline(id_file, line); ) {
+            if (line.empty() || line[0] == '#') {
+                continue;
+            }
+            auto pos = line.find(' ');
+            if (pos != std::string::npos) {
+                line = line.erase(pos);
+            }
+            parse_id(line);
+        }
+    }
+
     if (vm.count("ids")) {
         std::string sids;
         for (const auto& s : vm["ids"].as<std::vector<std::string>>()) {
             sids += s + " ";
         }
-        auto vids = osmium::split_string(sids, "\t ;,/|", true);
-        for (const auto& s : vids) {
-            auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr);
-            if (p.first == osmium::item_type::undefined) {
-                p.first = osmium::item_type::node;
-            }
-            ids(p.first).push_back(p.second);
+        for (const auto& s : osmium::split_string(sids, "\t ;,/|", true)) {
+            parse_id(s);
         }
+    }
 
-        sort_unique(osmium::item_type::node);
-        sort_unique(osmium::item_type::way);
-        sort_unique(osmium::item_type::relation);
-    } else {
+    if (ids(osmium::item_type::node).empty() &&
+        ids(osmium::item_type::way).empty() &&
+        ids(osmium::item_type::relation).empty()) {
         throw argument_error("Need at least one id to look for...");
     }
+
+    sort_unique(osmium::item_type::node);
+    sort_unique(osmium::item_type::way);
+    sort_unique(osmium::item_type::relation);
 
     return true;
 }
