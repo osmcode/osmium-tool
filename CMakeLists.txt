@@ -116,6 +116,7 @@ if(PANDOC)
     set(PANDOC_HTML_OPTIONS -s -t html)
 
     add_man_page(1 osmium)
+    add_man_page(1 osmium-add-refs)
     add_man_page(1 osmium-apply-changes)
     add_man_page(1 osmium-cat)
     add_man_page(1 osmium-check-refs)

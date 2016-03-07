@@ -12,6 +12,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   check-refs subcommands.
 - Most subcommands now show the memory used in verbose mode.
 - New option -h/--help on most subcommands shows command line options.
+- New add-refs subcommand that adds all objects referenced from ways
+  and relations to an input file.
 
 ### Changed
 

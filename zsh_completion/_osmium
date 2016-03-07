@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter)
+    osmium_commands=(add-refs apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -60,6 +60,18 @@ _osmium-output-options() {
     echo '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats'
     echo '(--overwrite)-O[allow overwriting of existing output file]'
     echo '(-O)--overwrite[allow overwriting of existing output file]'
+}
+
+_osmium-add-refs() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-options)"} \
+        '(--id-file)-i[read OSM IDs from given file]' \
+        '(-i)--id-file[read OSM IDs from given file]' \
+        '(--source)-s[source file supplying the references objects]' \
+        '(-s)--source[source file supplying the references objects]' \
+        '--source-format[format of source file]'
 }
 
 _osmium-apply-changes() {
@@ -203,7 +215,7 @@ _osmium_fileinfo_variables() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter file-formats)
+    osmium_help_topics=(add-refs apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 
