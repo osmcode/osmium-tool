@@ -31,6 +31,10 @@ in what order the change files are given or in what order they contain the data.
     all input files, there is no way to set the format for some input files
     only. See **osmium-file-formats**(5) or the libosmium manual for details.
 
+--fsync
+:   Call fsync after writing the output file to force the OS to flush buffers
+    to disk.
+
 --generator=NAME
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the version
@@ -42,17 +46,13 @@ in what order the change files are given or in what order they contain the data.
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
 
---output-header=OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed header options.
-
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
---fsync
-:   Call fsync after writing the output file to force the OS to flush buffers
-    to disk.
+--output-header=OPTION
+:   Add output header option. This option can be given several times. See the
+    *libosmium manual* for a list of allowed header options.
 
 -s, --simplify
 :   Only write the last version of any object to the output.

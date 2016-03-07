@@ -27,6 +27,10 @@ criteria are given through command line options.
     can't be autodetected from the file names. See **osmium-file-formats**(5)
     or the libosmium manual for details.
 
+--fsync
+:   Call fsync after writing the output file to force the OS to flush buffers
+    to disk.
+
 --generator=NAME
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the version
@@ -42,10 +46,6 @@ criteria are given through command line options.
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
---fsync
-:   Call fsync after writing the output file to force the OS to flush buffers
-    to disk.
-
 --output-header=OPTION
 :   Add output header option. This option can be given several times. See the
     *libosmium manual* for a list of allowed header options.
@@ -54,6 +54,22 @@ criteria are given through command line options.
 :   Set verbose mode. The program will output information about what it is
     doing to *stderr*.
 
+
+# FILTER OPTIONS
+
+-a, --after=TIMESTAMP
+:   Only copy changesets closed after the given time.
+    This will always include all open changesets.
+
+-b, --before=TIMESTAMP
+:   Only copy changesets created before the given time.
+
+-c, --with-changes
+:   Only copy changesets with changes.
+
+-C, --without-changes
+:   Only copy changesets without changes.
+
 -d, --with-discussion
 :   Only copy changesets with discussions, ie changesets with at least one
     comment.
@@ -61,12 +77,6 @@ criteria are given through command line options.
 -D, --without-discussion
 :   Only copy changesets without discussions, ie changesets without any
     comments.
-
--c, --with-changes
-:   Only copy changesets with changes.
-
--C, --without-changes
-:   Only copy changesets without changes.
 
 --open
 :   Only copy open changesets.
@@ -79,13 +89,6 @@ criteria are given through command line options.
 
 -U, --uid=UID
 :   Only copy changesets by the given user ID.
-
--a, --after=TIMESTAMP
-:   Only copy changesets closed after the given time.
-    This will always include all open changesets.
-
--b, --before=TIMESTAMP
-:   Only copy changesets created before the given time.
 
 
 # DIAGNOSTICS

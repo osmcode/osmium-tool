@@ -31,6 +31,10 @@ can be used to convert OSM files from one format into another.
     all input files, there is no way to set the format for some input files
     only. See **osmium-file-formats**(5) or the libosmium manual for details.
 
+--fsync
+:   Call fsync after writing the output file to force the OS to flush buffers
+    to disk.
+
 --generator=NAME
 :   The name and version of the program generating the output file. It will be
     added to the header of the output file. Default is "*osmium/*" and the version
@@ -45,10 +49,6 @@ can be used to convert OSM files from one format into another.
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
-
---fsync
-:   Call fsync after writing the output file to force the OS to flush buffers
-    to disk.
 
 --output-header=OPTION
 :   Add output header option. This option can be given several times. See the

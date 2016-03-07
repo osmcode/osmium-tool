@@ -130,12 +130,12 @@ void with_osm_output::setup_output_file(const po::variables_map& vm) {
 
 void with_osm_output::add_output_options(po::options_description& options) {
     options.add_options()
+    ("output-format,f", po::value<std::string>(), "Format of output file")
+    ("fsync", "Call fsync after writing file")
     ("generator", po::value<std::string>(), "Generator setting for file header")
     ("output,o", po::value<std::string>(), "Output file")
-    ("output-format,f", po::value<std::string>(), "Format of output file")
-    ("output-header", po::value<std::vector<std::string>>(), "Add output header")
     ("overwrite,O", "Allow existing output file to be overwritten")
-    ("fsync", "Call fsync after writing file")
+    ("output-header", po::value<std::vector<std::string>>(), "Add output header")
     ;
 }
 
