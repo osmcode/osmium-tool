@@ -51,10 +51,10 @@ void with_single_osm_input::show_single_input_arguments(osmium::util::VerboseOut
     vout << "    file format: " << m_input_format << "\n";
 }
 
-void with_multiple_osm_inputs::setup_input_files(const boost::program_options::variables_map& vm) {
+void with_multiple_osm_inputs::setup_input_files(const boost::program_options::variables_map& vm, bool optional) {
     if (vm.count("input-filenames")) {
         m_input_filenames = vm["input-filenames"].as<std::vector<std::string>>();
-    } else {
+    } else if (!optional) {
         m_input_filenames.push_back("-"); // default is stdin
     }
 

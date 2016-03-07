@@ -117,7 +117,7 @@ protected:
 
 public:
 
-    void setup_input_files(const boost::program_options::variables_map& vm);
+    void setup_input_files(const boost::program_options::variables_map& vm, bool optional = false);
 
     void add_multiple_inputs_options(po::options_description& options);
 
