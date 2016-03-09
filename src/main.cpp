@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
     std::unique_ptr<Command> cmd = CommandFactory::instance().create_command(command);
 
     if (!cmd) {
-        std::cerr << "Unknown command '" << command << "'. Try 'osmium help'." << std::endl;
+        std::cerr << "Unknown command or option '" << command << "'. Try 'osmium help'.\n";
         return return_code::fatal;
     }
 
@@ -110,6 +110,8 @@ int main(int argc, char *argv[]) {
         if (cmd->run()) {
             return return_code::okay;
         }
+    } catch (std::bad_alloc& e) {
+        std::cerr << "Out of memory. Read the MEMORY USAGE section of the osmium(1) manpage.\n";
     } catch (std::exception& e) {
         std::cerr << e.what() << "\n";
     }

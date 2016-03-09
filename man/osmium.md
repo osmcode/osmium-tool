@@ -61,6 +61,33 @@ time-filter
 :   filter OSM data by time from a history file
 
 
+# COMMON OPTIONS
+
+Most commands support the following options:
+
+-h, --help
+:   Show short usage information.
+
+-v, --verbose
+:   Set verbose mode. The program will output information about what it is
+    doing to *stderr*.
+
+
+# MEMORY USAGE
+
+Osmium commands try to do their work as memory efficient as possible. But some
+osmium commands still need to load quite a bit of data into main memory. In
+some cases this means that only smaller datasets can be handled. Look into the
+man pages for the individual commands to learn more about their memory use.
+
+If you use the **-v**, **--verbose** option on most commands they will print
+out their peak memory usage at the end. This is the actual amount of memory
+used including the program code itself, any needed libraries and the data.
+
+If an osmium command exits with an "Out of memory" error, try running it with
+**--verbose** on smaller datasets to get an idea how much memory it needs.
+
+
 # SEE ALSO
 
 * **osmium-apply-changes**(1),

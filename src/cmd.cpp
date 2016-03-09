@@ -48,7 +48,7 @@ void Command::print_arguments(const std::string& command) {
 void Command::show_memory_used() {
     osmium::MemoryUsage mem;
     if (mem.current() > 0) {
-        m_vout << "Memory used: current: " << mem.current() << " MBytes, peak: " << mem.peak() << " MBytes\n";
+        m_vout << "Peak memory used: " << mem.peak() << " MBytes\n";
     }
 }
 

@@ -12,23 +12,22 @@ osmium-check-refs - check referential integrity of OSM file
 # DESCRIPTION
 
 Ways in OSM files refer to OSM nodes; relations refer to nodes, ways, or other
-relations. This command checks whether all objects referenced in the input
-file are also present in the input file.
+relations. This command checks whether all objects *referenced* in the input
+file are also *present* in the input file.
 
 Referential integrity is often broken in extracts. This can lead to problems
 with some uses of the OSM data. Use this command to make sure your data is
 good.
 
-This command will do the check in one pass through the input data. It needs
-enough main memory to store all temporary data. Largest memory need will be
-1 bit for each node ID, thats roughly 500 MB these days (Summer 2015).
-
 If the option -r is not given, this command will only check if all nodes
-references in ways are in the file, with the option, relations will also be
+referenced in ways are in the file, with the option, relations will also be
 checked.
 
 This command expects the input file to be ordered in the usual way: First
 nodes in order of ID, then ways in order of ID, then relations in order of ID.
+
+This command will only work for OSM data files, not OSM history files or
+change files.
 
 
 # OPTIONS
@@ -42,7 +41,7 @@ nodes in order of ID, then ways in order of ID, then relations in order of ID.
 :   Show usage help.
 
 -i, --show-ids
-:   Print all missing IDs to stdout. If you don't give this option, only a
+:   Print all missing IDs to *stdout*. If you don't give this option, only a
     summary is shown.
 
 -r, --check-relations
@@ -52,6 +51,16 @@ nodes in order of ID, then ways in order of ID, then relations in order of ID.
 -v, --verbose
 :   Set verbose mode. The program will output information about what it is
     doing to *stderr*.
+
+
+# MEMORY USAGE
+
+**osmium check-refs** will do the check in one pass through the input data. It
+needs enough main memory to store all temporary data.
+
+Largest memory need will be about 1 bit for each node ID, for a full planet
+thats roughly 500 MB these days (Summer 2015). With the **-r**,
+**--check-relations** option memory use will be a bit bigger.
 
 
 # DIAGNOSTICS

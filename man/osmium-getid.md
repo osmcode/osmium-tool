@@ -85,6 +85,12 @@ characters (|).
   ~ if there was a problem with the command line arguments.
 
 
+# MEMORY USAGE
+
+**osmium getid** does all its work on the fly and doesn't keep much data in
+main memory.
+
+
 # EXAMPLES
 
 Output nodes 17 and 1234, way 42, and relation 111 to *stdout* in OPL format:

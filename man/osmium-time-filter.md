@@ -80,6 +80,12 @@ The format for the timestamps is "yyyy-mm-ddThh:mm::ssZ".
   ~ if there was a problem with the command line arguments.
 
 
+# MEMORY USAGE
+
+**osmium time-filter** does all its work on the fly and doesn't keep much data
+in main memory.
+
+
 # EXAMPLES
 
 Extract current planet file from history planet:

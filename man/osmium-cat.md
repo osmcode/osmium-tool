@@ -77,6 +77,12 @@ can be used to convert OSM files from one format into another.
   ~ if there was a problem with the command line arguments.
 
 
+# MEMORY USAGE
+
+**osmium cat** does all its work on the fly and doesn't keep much data in
+main memory.
+
+
 # EXAMPLES
 
 Convert a PBF file to a compressed XML file:

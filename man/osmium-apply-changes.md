@@ -18,9 +18,6 @@ Objects in change files will be sorted by type, ID, and version, so it doesn't
 matter in what order the change files are given or in what order they contain
 the data.
 
-**osmium apply-changes** keeps the contents of the change files in main memory,
-so the data has to fit in there!
-
 
 # OPTIONS
 
@@ -82,6 +79,13 @@ so the data has to fit in there!
 
 2
   ~ if there was a problem with the command line arguments.
+
+
+# MEMORY USAGE
+
+**osmium apply-changes** keeps the contents of all the change files in main
+memory. This will take roughly 10 times as much memory as the files take on
+disk in *.osm.bz2* format.
 
 
 # EXAMPLES

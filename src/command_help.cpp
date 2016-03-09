@@ -71,7 +71,7 @@ bool CommandHelp::run() {
                       << "\n";
         }
 
-        std::cout << "\nSee 'osmium help COMMAND' for more information on a specific command." << std::endl;
+        std::cout << "\nUse 'osmium COMMAND -h' for short usage information or\nuse 'osmium help COMMAND' for detailed information on a specific command." << std::endl;
         return true;
     }
 

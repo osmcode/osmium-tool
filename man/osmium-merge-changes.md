@@ -15,8 +15,6 @@ Merges the content of all change files given on the command line into one large
 change file. Objects are sorted by type, ID, and version, so it doesn't matter
 in what order the change files are given or in what order they contain the data.
 
-**osmium merge** does its work in main memory, so all data has to fit in there!
-
 
 # OPTIONS
 
@@ -74,6 +72,13 @@ in what order the change files are given or in what order they contain the data.
 
 2
   ~ if there was a problem with the command line arguments.
+
+
+# MEMORY USAGE
+
+**osmium merge-changes** keeps the contents of all the change files in main
+memory. This will take roughly 10 times as much memory as the files take on
+disk in *.osm.bz2* format.
 
 
 # EXAMPLES

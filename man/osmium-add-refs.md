@@ -100,6 +100,10 @@ Objects will be written out in the order they are found in the source file.
 2
   ~ if there was a problem with the command line arguments.
 
+# MEMORY USAGE
+
+This command has to keep the list of all needed objects IDs in memory.
+
 
 # EXAMPLES
 

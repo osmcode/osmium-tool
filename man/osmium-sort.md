@@ -16,8 +16,6 @@ result. Objects are sorted by type, ID, and version.
 
 This works with normal OSM data files, history files, and change files.
 
-**osmium sort** does its work in main memory, so all data has to fit in there!
-
 
 # OPTIONS
 
@@ -72,6 +70,13 @@ This works with normal OSM data files, history files, and change files.
 
 2
   ~ if there was a problem with the command line arguments.
+
+
+# MEMORY USAGE
+
+**osmium sort** keeps the contents of all the input files in main memory. This
+will take roughly 10 times as much memory as the files take on disk in
+*.osm.bz2* or *osm.pbf* format.
 
 
 # EXAMPLES
