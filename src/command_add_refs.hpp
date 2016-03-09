@@ -39,6 +39,7 @@ class CommandAddRefs : public Command, public with_multiple_osm_inputs, public w
     std::string m_source_filename;
     std::string m_source_format;
     osmium::io::File m_source_file;
+    bool m_work_with_history = false;
 
     std::set<osmium::object_id_type> m_node_ids;
     std::set<osmium::object_id_type> m_way_ids;

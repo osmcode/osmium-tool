@@ -27,6 +27,9 @@ Run **osmium help** *COMMAND* to get more information about a command.
 
 # COMMANDS
 
+add-refs
+:   add referenced objects to OSM file
+
 apply-changes
 :   apply OSM change file(s) to OSM data file
 

@@ -52,6 +52,7 @@ void CommandAddRefs::parse_and_add_id(const std::string& s) {
 bool CommandAddRefs::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Available options");
     cmdline.add_options()
+    ("history,H", "Make it work with history files")
     ("id-file,i", po::value<std::string>(), "Read OSM IDs from given file")
     ("source,s", po::value<std::string>(), "Source file supplying the referenced objects")
     ("source-format", po::value<std::string>(), "Format of source file")
@@ -86,6 +87,10 @@ bool CommandAddRefs::setup(const std::vector<std::string>& arguments) {
     setup_common(vm);
     setup_input_files(vm, true);
     setup_output_file(vm);
+
+    if (vm.count("history")) {
+        m_work_with_history = true;
+    }
 
     if (vm.count("id-file")) {
         std::string filename = vm["id-file"].as<std::string>();
@@ -321,19 +326,25 @@ bool CommandAddRefs::run() {
             switch (it->type()) {
                 case osmium::item_type::node:
                     if (m_node_ids.count(it->id())) {
-                        m_node_ids.erase(it->id());
+                        if (!m_work_with_history) {
+                            m_node_ids.erase(it->id());
+                        }
                         writer(*it);
                     }
                     break;
                 case osmium::item_type::way:
                     if (m_way_ids.count(it->id())) {
-                        m_way_ids.erase(it->id());
+                        if (!m_work_with_history) {
+                            m_way_ids.erase(it->id());
+                        }
                         writer(*it);
                     }
                     break;
                 case osmium::item_type::relation:
                     if (m_relation_ids.count(it->id())) {
-                        m_relation_ids.erase(it->id());
+                        if (!m_work_with_history) {
+                            m_relation_ids.erase(it->id());
+                        }
                         writer(*it);
                     }
                     break;
@@ -346,12 +357,18 @@ bool CommandAddRefs::run() {
     writer.close();
     reader.close();
 
-    print_missing_ids("node", m_node_ids);
-    print_missing_ids("way", m_way_ids);
-    print_missing_ids("relation", m_relation_ids);
+    if (!m_work_with_history) {
+        print_missing_ids("node", m_node_ids);
+        print_missing_ids("way", m_way_ids);
+        print_missing_ids("relation", m_relation_ids);
+    }
 
     show_memory_used();
     m_vout << "Done.\n";
+
+    if (m_work_with_history) {
+        return true;
+    }
 
     return m_node_ids.empty() && m_way_ids.empty() && m_relation_ids.empty();
 }

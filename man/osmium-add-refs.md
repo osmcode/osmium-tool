@@ -38,6 +38,13 @@ times to resolve all references.
 
 Objects will be written out in the order they are found in the source file.
 
+The source file can not be a history file unless the **-H**, **--history**
+option is given.
+
+If referenced objects are missing from the source file, the type and IDs
+of those objects is written out to *stderr* at the end of the program unless
+the **-H**, **--history** option was given.
+
 
 # OPTIONS
 
@@ -63,6 +70,9 @@ Objects will be written out in the order they are found in the source file.
 
 -h, --help
 :   Show usage help.
+
+-H, --history
+    Make this program work on history files.
 
 -i, --id-file=FILE
 :   Read IDs from given file instead of from OSM files.
@@ -95,7 +105,8 @@ Objects will be written out in the order they are found in the source file.
   ~ if everything went alright,
 
 1
-  ~ if some referred to objects could not be found in the source file,
+  ~ if some referred to objects could not be found in the source file (this is
+    only detected when the **-h**, **--history** option was not used),
 
 2
   ~ if there was a problem with the command line arguments.
