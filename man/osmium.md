@@ -86,6 +86,7 @@ man pages for the individual commands to learn more about their memory use.
 If you use the **-v**, **--verbose** option on most commands they will print
 out their peak memory usage at the end. This is the actual amount of memory
 used including the program code itself, any needed libraries and the data.
+(Printing of memory usage is currently only available on Linux systems.)
 
 If an osmium command exits with an "Out of memory" error, try running it with
 **--verbose** on smaller datasets to get an idea how much memory it needs.
