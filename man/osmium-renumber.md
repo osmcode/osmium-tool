@@ -14,7 +14,9 @@ osmium-renumber - renumber object IDs
 The objects (nodes, ways, and relations) in an OSM file often have very large
 IDs. This can make some kinds of postprocessing difficult. This command will
 renumber all objects using IDs starting at 1. Referential integrity will be
-kept.
+kept. All objects which appear in the source file will be in the same order
+in the output file. IDs of objects which are not in the file but referenced
+from ways or relations are not guaranteed to be in the correct order.
 
 This command expects the input file to be ordered in the usual way: First
 nodes in order of ID, then ways in order of ID, then relations in order of ID.
@@ -90,18 +92,21 @@ IDs.
 # MEMORY USAGE
 
 **osmium renumber** needs quite a bit of main memory to keep the mapping
-between old and new IDs. It is intended for small extracts. Don't try to run
-this on a full planet!
+between old and new IDs. It is intended for small to medium sized extracts.
+You will need more than 32 GB RAM to run this on a full planet.
+
+Memory use is at least 8 bytes per node, way, and relation ID in the input
+file.
 
 
 # EXAMPLES
 
 Renumber a PBF file and output to a compressed XML file:
 
-    osmium renumber -o ch.osm.bz2 switzerland.osm.pbf
+    osmium renumber -o ch.osm.bz2 germany.osm.pbf
 
-Renumbering Switzerland currently (summer 2015) takes only about a minute and
-needs a bit more than 2 GB RAM.
+Renumbering Germany currently (spring 2016) takes less than three minutes and
+needs about 3 GB RAM.
 
 Renumber an OSM file storing the indexes on disk:
 

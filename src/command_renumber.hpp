@@ -23,19 +23,66 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include <map>
+#include <algorithm>
+#include <iterator>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <osmium/handler/check_order.hpp>
 #include <osmium/memory/buffer.hpp>
-#include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/types.hpp>
 
 #include "cmd.hpp"
 
-typedef std::map<osmium::unsigned_object_id_type, osmium::unsigned_object_id_type> remap_index_type;
-typedef remap_index_type::value_type remap_index_value_type;
+/**
+ * Holds the mapping from old IDs to new IDs of one object type.
+ */
+class id_map {
+
+    // Internally this uses two different means of storing the mapping:
+    //
+    // Most of the old IDs are stored in a sorted vector. The index into the
+    // vector is the new ID. All IDs from the nodes, ways, and relations
+    // themselves will end up here.
+    std::vector<osmium::object_id_type> m_ids;
+
+    // For IDs that can't be written into the sorted vector because this would
+    // destroy the sorting, a hash map is used. These are the IDs not read
+    // in order, ie the node IDs referenced from the ways and the member IDs
+    // referenced from the relations.
+    std::unordered_map<osmium::object_id_type, osmium::object_id_type> m_extra_ids;
+
+    // Because we still have to allocate unique new IDs for the mappings
+    // ending up in m_extra_ids, we add dummy IDs of the same value as the
+    // last one to the end of the m_ids vector. This gives us new IDs without
+    // destroying the ordering of m_ids. But to find a new ID from an old ID
+    // in m_ids we have to take the first of potentially several identical
+    // IDs we find (using std::lower_bound), its position is then the new ID.
+
+public:
+
+    id_map() = default;
+
+    // Map from old ID to new ID. If the old ID has been seen before, it will
+    // be returned, otherwise a new ID will be allocated and stored.
+    osmium::object_id_type operator()(osmium::object_id_type id);
+
+    // Write the mappings into a file in binary form. This will first copy
+    // the mappings from m_extra_ids into the m_ids vector. After this
+    // operation this object becomes unusable!
+    void write(int fd);
+
+    // Read the mappings from a binary file into m_ids and m_extra_ids.
+    void read(int fd, size_t file_size);
+
+    // The number of mappings currently existing. Also the last allocated
+    // new ID.
+    size_t size() const noexcept {
+        return m_ids.size();
+    }
+
+}; // class id_map
 
 class CommandRenumber : public Command, public with_single_osm_input, public with_osm_output {
 
@@ -43,34 +90,28 @@ class CommandRenumber : public Command, public with_single_osm_input, public wit
 
     osmium::handler::CheckOrder m_check_order;
 
-    remap_index_type m_id_index[3];
-    osmium::object_id_type m_last_id[3];
+    // id mappings for nodes, ways, and relations
+    id_map m_id_map[3];
 
 public:
 
-    CommandRenumber() {
-        // workaround for MSVC
-        m_last_id[0] = 0;
-        m_last_id[1] = 0;
-        m_last_id[2] = 0;
-    }
+    CommandRenumber() = default;
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
     void show_arguments() override final;
 
-    osmium::object_id_type lookup(osmium::item_type type, osmium::object_id_type id);
+    id_map& map(osmium::item_type type) noexcept {
+        return m_id_map[osmium::item_type_to_nwr_index(type)];
+    }
 
     void renumber(osmium::memory::Buffer& buffer);
 
-    std::string filename(const std::string& name);
+    std::string filename(const char* name) const;
 
-    remap_index_type& index(osmium::item_type type);
-    osmium::object_id_type& last_id(osmium::item_type type);
+    void read_index(osmium::item_type type);
 
-    void read_index(osmium::item_type type, const std::string& name);
-
-    void write_index(osmium::item_type type, const std::string& name);
+    void write_index(osmium::item_type type);
 
     bool run() override final;
 
