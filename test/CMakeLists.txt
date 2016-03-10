@@ -47,7 +47,7 @@ function(check_output _dir _name _command _reference)
     )
 endfunction()
 
-function(check_output2 _dir _name _command1 _command2 _reference)
+function(check_output2 _dir _name _tmpdir _command1 _command2 _reference)
     set(_cmd1 "$<TARGET_FILE:osmium> ${_command1}")
     set(_cmd2 "$<TARGET_FILE:osmium> ${_command2}")
     add_test(
@@ -56,6 +56,7 @@ function(check_output2 _dir _name _command1 _command2 _reference)
         -D cmd:FILEPATH=${_cmd1}
         -D cmd2:FILEPATH=${_cmd2}
         -D dir:PATH=${PROJECT_SOURCE_DIR}/test
+        -D tmpdir:PATH=${_tmpdir}
         -D reference:FILEPATH=${PROJECT_SOURCE_DIR}/test/${_reference}
         -D output:FILEPATH=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
         -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake

@@ -12,14 +12,12 @@ endfunction()
 
 function(check_renumber2 _name _in1 _in2 _out)
     set(_idxdir "${PROJECT_BINARY_DIR}/test/renumber/index")
-    file(REMOVE_RECURSE ${_idxdir})
-    file(MAKE_DIRECTORY ${_idxdir})
     if(WIN32)
         set(_devnull "nul")
     else()
         set(_devnull "/dev/null")
     endif()
-    check_output2(renumber ${_name}
+    check_output2(renumber ${_name} ${_idxdir}
                   "renumber --index-directory=${_idxdir} --generator=test -f osm --overwrite -o ${_devnull} renumber/${_in1}"
                   "renumber --index-directory=${_idxdir} --generator=test -f osc renumber/${_in2}"
                   "renumber/${_out}"

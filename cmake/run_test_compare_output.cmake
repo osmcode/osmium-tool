@@ -1,7 +1,12 @@
 #
-#  Runs a test command given in the variable 'cmd' in directory 'dir'.
+#  First, if variable 'tmpdir' ist set, this directory will be removed with
+#  all its content and recreated.
+#
+#  Then runs a test command given in the variable 'cmd' in directory 'dir'.
 #  Checks that the return code is 0.
 #  Checks that there is nothing on stderr.
+#  If the variable 'cmd2' is set, the command will be run and checked in the
+#  same manner.
 #  Compares output on stdout with reference file in variable 'reference'.
 #
 
@@ -19,6 +24,11 @@ endif()
 
 if(NOT output)
     message(FATAL_ERROR "Variable 'output' not defined")
+endif()
+
+if(tmpdir)
+    file(REMOVE_RECURSE ${tmpdir})
+    file(MAKE_DIRECTORY ${tmpdir})
 endif()
 
 message("Executing: ${cmd}")
