@@ -150,7 +150,7 @@ _osmium-getid() {
         ${(f)"$(_osmium-output-options)"} \
         '(--id-file)-i[get ids from file]' \
         '(-i)--id-file[get ids from file]' \
-        "*:IDs (format\: [nwr]NUM):"
+        "*:IDs (format\: [nwr]ID):"
 }
 
 _osmium-merge-changes() {

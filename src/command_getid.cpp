@@ -51,7 +51,7 @@ void CommandGetId::sort_unique(osmium::item_type type) {
     index.erase(last, index.end());
 }
 
-void CommandGetId::parse_id(const std::string& s) {
+void CommandGetId::parse_and_add_id(const std::string& s) {
     auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr);
     if (p.first == osmium::item_type::undefined) {
         p.first = m_default_item_type;
@@ -59,10 +59,22 @@ void CommandGetId::parse_id(const std::string& s) {
     ids(p.first).push_back(p.second);
 }
 
+void CommandGetId::read_id_file(std::istream& stream) {
+    for (std::string line; std::getline(stream, line); ) {
+        auto pos = line.find_first_of(" #");
+        if (pos != std::string::npos) {
+            line.erase(pos);
+        }
+        if (!line.empty()) {
+            parse_and_add_id(line);
+        }
+    }
+}
+
 bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Available options");
     cmdline.add_options()
-    ("id-file,i", po::value<std::string>(), "Read OSM IDs from given file")
+    ("id-file,i", po::value<std::string>()->implicit_value("-"), "Read OSM IDs from given file")
     ("default-type", po::value<std::string>(), "Default item type")
     ;
 
@@ -114,20 +126,14 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     if (vm.count("id-file")) {
         std::string filename = vm["id-file"].as<std::string>();
 
-        std::ifstream id_file{filename};
-        if (!id_file.is_open()) {
-            throw argument_error("Could not open file '" + filename + "'");
-        }
-
-        for (std::string line; std::getline(id_file, line); ) {
-            if (line.empty() || line[0] == '#') {
-                continue;
+        if (filename == "-") {
+            read_id_file(std::cin);
+        } else {
+            std::ifstream id_file{filename};
+            if (!id_file.is_open()) {
+                throw argument_error("Could not open file '" + filename + "'");
             }
-            auto pos = line.find(' ');
-            if (pos != std::string::npos) {
-                line = line.erase(pos);
-            }
-            parse_id(line);
+            read_id_file(id_file);
         }
     }
 
@@ -137,14 +143,19 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
             sids += s + " ";
         }
         for (const auto& s : osmium::split_string(sids, "\t ;,/|", true)) {
-            parse_id(s);
+            parse_and_add_id(s);
         }
     }
 
     if (ids(osmium::item_type::node).empty() &&
         ids(osmium::item_type::way).empty() &&
         ids(osmium::item_type::relation).empty()) {
-        throw argument_error("Need at least one id to look for...");
+        if (vm.count("id-file")) {
+            std::cerr << "Warning: No IDs found in ID file '" << vm["id-file"].as<std::string>() << "'.\n";
+            return false;
+        } else {
+            throw argument_error("Please specify IDs to look for on command line or with option -i/--id-file.");
+        }
     }
 
     sort_unique(osmium::item_type::node);

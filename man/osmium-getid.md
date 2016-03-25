@@ -52,12 +52,13 @@ characters (|).
 -h, --help
 :   Show usage help.
 
--i, --id-file=FILE
-:   Read IDs from file instead of from the command line. Each line of the
+-i, --id-file[=FILE]
+:   Read IDs from file instead of from the command line. Use without a filename
+    or the special name "-" to read from *stdin*. Each line of the
     file must start with an ID in the format described above. Lines can
-    optionally contain a space character after the ID. Any characters after
-    that are ignored. (This allows files in OPL format to be read.) Empty
-    lines and lines starting with '#' are also ignored.
+    optionally contain a space character or a hash sign ('#') after the ID.
+    Any characters after that are ignored. (This allows files in OPL format
+    to be read.) Empty lines are also ignored.
 
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).

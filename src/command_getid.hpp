@@ -47,7 +47,9 @@ public:
 
     void sort_unique(osmium::item_type type);
 
-    void parse_id(const std::string& s);
+    void parse_and_add_id(const std::string& s);
+
+    void read_id_file(std::istream& stream);
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
