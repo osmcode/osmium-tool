@@ -8,18 +8,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Check that input files are correctly ordered in the renumber and
-  check-refs commands.
+- Check that input files are correctly ordered in the `renumber` and
+  `check-refs` commands.
 - Most commands now show the memory used in verbose mode.
-- New option -h/--help on most commands shows command line options.
-- New add-refs command that adds all objects referenced from ways
+- New option `-h`/`--help` on most commands shows command line options.
+- New `add-refs` command that adds all objects referenced from ways
   and relations to an input file.
-- New --default-type option to getid command.
+- New `--default-type` option to getid command.
 
 ### Changed
 
-- Much faster and more memory efficient implementation of the renumber
+- Much faster and more memory efficient implementation of the `renumber`
   command.
+- The `getid` command can now read IDs from *stdin*.
 
 ### Fixed
 
