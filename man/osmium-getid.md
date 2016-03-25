@@ -25,6 +25,10 @@ characters (|).
 
 # OPTIONS
 
+--default-type=TYPE
+:   Use TYPE ('node', 'way', or 'relation') as type when an ID was given
+    without the type prefix (default: 'node').
+
 -f, --output-format=FORMAT
 :   The format of the output file. Can be used to set the output file format
     if it can't be autodetected from the output file name.

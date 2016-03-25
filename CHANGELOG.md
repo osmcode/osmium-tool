@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - New option -h/--help on most commands shows command line options.
 - New add-refs command that adds all objects referenced from ways
   and relations to an input file.
+- New --default-type option to getid command.
 
 ### Changed
 

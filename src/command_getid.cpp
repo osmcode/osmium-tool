@@ -54,7 +54,7 @@ void CommandGetId::sort_unique(osmium::item_type type) {
 void CommandGetId::parse_id(const std::string& s) {
     auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr);
     if (p.first == osmium::item_type::undefined) {
-        p.first = osmium::item_type::node;
+        p.first = m_default_item_type;
     }
     ids(p.first).push_back(p.second);
 }
@@ -63,6 +63,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     po::options_description cmdline("Available options");
     cmdline.add_options()
     ("id-file,i", po::value<std::string>(), "Read OSM IDs from given file")
+    ("default-type", po::value<std::string>(), "Default item type")
     ;
 
     add_common_options(cmdline);
@@ -95,6 +96,20 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     setup_common(vm);
     setup_input_file(vm);
     setup_output_file(vm);
+
+    if (vm.count("default-type")) {
+        std::string t{vm["default-type"].as<std::string>()};
+
+        if (t == "n" || t == "node") {
+            m_default_item_type = osmium::item_type::node;
+        } else if (t == "w" || t == "way") {
+            m_default_item_type = osmium::item_type::way;
+        } else if (t == "r" || t == "relation") {
+            m_default_item_type = osmium::item_type::relation;
+        } else {
+            throw argument_error(std::string("Unknown default type '") + t + "' (Allowed are 'node', 'way', and 'relation').");
+        }
+    }
 
     if (vm.count("id-file")) {
         std::string filename = vm["id-file"].as<std::string>();
@@ -144,6 +159,7 @@ void CommandGetId::show_arguments() {
     show_output_arguments(m_vout);
 
     m_vout << "  other options:\n";
+    m_vout << "    default object type: " << osmium::item_type_to_name(m_default_item_type) << "\n";
     m_vout << "    looking for these ids:\n";
     m_vout << "      nodes:";
     for (osmium::object_id_type id : ids(osmium::item_type::node)) {

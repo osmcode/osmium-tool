@@ -69,13 +69,13 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     if (vm.count("object-type")) {
         m_osm_entity_bits = osmium::osm_entity_bits::nothing;
         for (const auto& t : vm["object-type"].as<std::vector<std::string>>()) {
-            if (t == "node") {
+            if (t == "n" || t == "node") {
                 m_osm_entity_bits |= osmium::osm_entity_bits::node;
-            } else if (t == "way") {
+            } else if (t == "w" || t == "way") {
                 m_osm_entity_bits |= osmium::osm_entity_bits::way;
-            } else if (t == "relation") {
+            } else if (t == "r" || t == "relation") {
                 m_osm_entity_bits |= osmium::osm_entity_bits::relation;
-            } else if (t == "changeset") {
+            } else if (t == "c" || t == "changeset") {
                 m_osm_entity_bits |= osmium::osm_entity_bits::changeset;
             } else {
                 throw argument_error(std::string("Unknown object type '") + t + "' (Allowed are 'node', 'way', 'relation', and 'changeset').");

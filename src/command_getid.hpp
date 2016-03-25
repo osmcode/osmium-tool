@@ -36,6 +36,8 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
 
     std::vector<osmium::object_id_type> m_ids[3];
 
+    osmium::item_type m_default_item_type = osmium::item_type::node;
+
 public:
 
     CommandGetId() = default;
