@@ -35,7 +35,14 @@ po::options_description Command::add_common_options() {
     return options;
 }
 
-void Command::setup_common(const boost::program_options::variables_map& vm) {
+void Command::setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc) {
+    if (vm.count("help")) {
+        std::cout << "Usage: " << synopsis() << "\n\n"
+                  << CommandFactory::get_description(name()) << "\n"
+                  << desc
+                  << "\nUse 'osmium help " << name() << "' to display the manual page.\n";
+        exit(0);
+    }
     if (vm.count("verbose")) {
         m_vout.verbose(true);
     }

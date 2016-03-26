@@ -76,6 +76,16 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "getid";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium getid [OPTIONS] OSM-FILE ID...\n"
+               "       osmium getid [OPTIONS] OSM-FILE -i ID-FILE\n"
+               "       osmium getid [OPTIONS] OSM-FILE -I ID-OSM-FILE";
+    }
+
 }; // class CommandGetId
 
 

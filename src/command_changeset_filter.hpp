@@ -54,6 +54,14 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "changeset-filter";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium changeset-filter [OPTIONS] OSM-CHANGESET-FILE";
+    }
+
 }; // class CommandChangesetFilter
 
 

@@ -42,6 +42,14 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "check-refs";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium check-refs [OPTIONS] OSM-DATA-FILE";
+    }
+
 }; // class CommandCheckRefs
 
 

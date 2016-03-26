@@ -45,6 +45,15 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "time-filter";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium time-filter [OPTIONS] OSM-HISTORY-FILE [TIME]\n"
+               "       osmium time-filter [OPTIONS] OSM-HISTORY-FILE FROM-TIME TO-TIME";
+    }
+
 }; // class CommandTimeFilter
 
 

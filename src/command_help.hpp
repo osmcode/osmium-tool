@@ -35,6 +35,15 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "help";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium COMMAND [ARG...]\n"
+               "       osmium --version";
+    }
+
 }; // class CommandHelp
 
 

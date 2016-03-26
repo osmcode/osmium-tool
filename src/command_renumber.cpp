@@ -124,13 +124,7 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
-    if (vm.count("help")) {
-        std::cout << "Usage: osmium renumber [OPTIONS] OSM-FILE\n";
-        std::cout << desc << "\n";
-        exit(0);
-    }
-
-    setup_common(vm);
+    setup_common(vm, desc);
     setup_input_file(vm);
     setup_output_file(vm);
 

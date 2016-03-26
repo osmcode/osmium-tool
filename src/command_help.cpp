@@ -56,8 +56,8 @@ bool CommandHelp::run() {
     auto commands = CommandFactory::help();
 
     if (m_topic == "help") {
-        std::cout << "Usage: osmium COMMAND [ARG...]\n";
-        std::cout << "       osmium --version\n\nCommands are:\n";
+        std::cout << "Usage: " << synopsis()
+                  << "\n\nCOMMANDS:\n";
 
         // print command names and descriptions in a nice table
         for (const auto& cmd : commands) {
@@ -71,7 +71,8 @@ bool CommandHelp::run() {
                       << "\n";
         }
 
-        std::cout << "\nUse 'osmium COMMAND -h' for short usage information or\nuse 'osmium help COMMAND' for detailed information on a specific command." << std::endl;
+        std::cout << "\nUse 'osmium COMMAND -h' for short usage information.\n"
+                     "Use 'osmium help COMMAND' for detailed information on a specific command.\n";
         return true;
     }
 

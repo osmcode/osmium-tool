@@ -51,6 +51,14 @@ public:
         return m_osm_entity_bits;
     }
 
+    const char* name() const noexcept override final {
+        return "cat";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium cat [OPTIONS] OSM-FILE...";
+    }
+
 }; // class CommandCat
 
 

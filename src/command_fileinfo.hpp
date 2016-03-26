@@ -45,6 +45,14 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "fileinfo";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium fileinfo [OPTIONS] OSM-FILE";
+    }
+
 }; // class CommandFileinfo
 
 

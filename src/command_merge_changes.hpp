@@ -42,6 +42,14 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "merge-changes";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium merge-changes [OPTIONS] OSM-CHANGE-FILE...";
+    }
+
 }; // class CommandMergeChanges
 
 

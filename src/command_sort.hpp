@@ -42,6 +42,14 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "sort";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium sort [OPTIONS] OSM-FILE...";
+    }
+
 }; // class CommandSort
 
 

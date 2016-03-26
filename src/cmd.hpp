@@ -78,8 +78,14 @@ public:
     // It returns false if there was an error.
     virtual bool run() = 0;
 
+    // The name of the command.
+    virtual const char* name() const noexcept = 0;
+
+    // The command line usage synopsis of the command.
+    virtual const char* synopsis() const noexcept = 0;
+
     po::options_description add_common_options();
-    void setup_common(const boost::program_options::variables_map& vm);
+    void setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
     void print_arguments(const std::string& command);
     void show_memory_used();
 

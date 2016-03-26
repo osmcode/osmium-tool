@@ -115,6 +115,14 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "renumber";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium renumber [OPTIONS] OSM-FILE";
+    }
+
 }; // class CommandRenumber
 
 

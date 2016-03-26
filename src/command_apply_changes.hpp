@@ -45,6 +45,14 @@ public:
 
     bool run() override final;
 
+    const char* name() const noexcept override final {
+        return "apply-changes";
+    }
+
+    const char* synopsis() const noexcept override final {
+        return "osmium apply-changes [OPTIONS] OSM-DATA-FILE OSM-CHANGE-FILE...";
+    }
+
 }; // class CommandApplyChanges
 
 

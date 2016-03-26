@@ -513,11 +513,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
-    if (vm.count("help")) {
-        std::cout << "Usage: osmium fileinfo [OPTIONS] OSM-FILE\n";
-        std::cout << desc << "\n";
-        exit(0);
-    }
+    setup_common(vm, desc);
 
     if (vm.count("extended")) {
         m_extended = true;
@@ -611,6 +607,8 @@ bool CommandFileinfo::run() {
 
     reader.close();
     output->output();
+
+    m_vout << "Done.\n";
 
     return true;
 }
