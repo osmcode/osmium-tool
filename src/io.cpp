@@ -39,10 +39,14 @@ void with_single_osm_input::setup_input_file(const boost::program_options::varia
     m_input_file = osmium::io::File(m_input_filename, m_input_format);
 }
 
-void with_single_osm_input::add_single_input_options(po::options_description& options) {
+po::options_description with_single_osm_input::add_single_input_options() {
+    po::options_description options{"INPUT OPTIONS"};
+
     options.add_options()
     ("input-format,F", po::value<std::string>(), "Format of input file")
     ;
+
+    return options;
 }
 
 void with_single_osm_input::show_single_input_arguments(osmium::util::VerboseOutput& vout) {
@@ -80,10 +84,15 @@ void with_multiple_osm_inputs::setup_input_files(const boost::program_options::v
     }
 }
 
-void with_multiple_osm_inputs::add_multiple_inputs_options(po::options_description& options) {
+
+po::options_description with_multiple_osm_inputs::add_multiple_inputs_options() {
+    po::options_description options{"INPUT OPTIONS"};
+
     options.add_options()
     ("input-format,F", po::value<std::string>(), "Format of input files")
     ;
+
+    return options;
 }
 
 void with_multiple_osm_inputs::show_multiple_inputs_arguments(osmium::util::VerboseOutput& vout) {
@@ -128,7 +137,9 @@ void with_osm_output::setup_output_file(const po::variables_map& vm) {
     m_output_file.check();
 }
 
-void with_osm_output::add_output_options(po::options_description& options) {
+po::options_description with_osm_output::add_output_options() {
+    po::options_description options("OUTPUT OPTIONS");
+
     options.add_options()
     ("output-format,f", po::value<std::string>(), "Format of output file")
     ("fsync", "Call fsync after writing file")
@@ -137,6 +148,8 @@ void with_osm_output::add_output_options(po::options_description& options) {
     ("overwrite,O", "Allow existing output file to be overwritten")
     ("output-header", po::value<std::vector<std::string>>(), "Add output header")
     ;
+
+    return options;
 }
 
 void with_osm_output::show_output_arguments(osmium::util::VerboseOutput& vout) {

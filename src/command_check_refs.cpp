@@ -36,33 +36,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_check_refs.hpp"
 
 bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Available options");
-    cmdline.add_options()
+    po::options_description opts_cmd{"COMMAND OPTIONS"};
+    opts_cmd.add_options()
     ("show-ids,i", "Show IDs of missing objects")
     ("check-relations,r", "Also check relations")
     ;
 
-    add_common_options(cmdline);
-    add_single_input_options(cmdline);
+    po::options_description opts_common{add_common_options()};
+    po::options_description opts_input{add_single_input_options()};
 
-    po::options_description hidden("Hidden options");
+    po::options_description hidden;
     hidden.add_options()
     ("input-filename", po::value<std::string>(), "Input file")
     ;
 
-    po::options_description desc("Allowed options");
-    desc.add(cmdline).add(hidden);
+    po::options_description desc;
+    desc.add(opts_cmd).add(opts_common).add(opts_input);
+
+    po::options_description parsed_options;
+    parsed_options.add(desc).add(hidden);
 
     po::positional_options_description positional;
     positional.add("input-filename", 1);
 
     po::variables_map vm;
-    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
     if (vm.count("help")) {
-        std::cout << "Usage: osmium check-refs [OPTIONS] OSM-DATA-FILE\n\n";
-        std::cout << cmdline << "\n";
+        std::cout << "Usage: osmium check-refs [OPTIONS] OSM-DATA-FILE\n";
+        std::cout << desc << "\n";
         exit(0);
     }
 

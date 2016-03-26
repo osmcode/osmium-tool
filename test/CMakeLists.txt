@@ -70,7 +70,7 @@ endfunction()
 #
 #-----------------------------------------------------------------------------
 function(check_cmd_help _command)
-    do_test(help_cmd_${_command} "osmium ${_command} -h" "Usage: osmium ${_command}.*Available options:")
+    do_test(help_cmd_${_command} "osmium ${_command} -h" "Usage: osmium ${_command}.*OPTIONS:")
 endfunction()
 
 check_cmd_help(apply-changes)

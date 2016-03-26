@@ -32,32 +32,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_sort.hpp"
 
 bool CommandSort::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Available options");
-    cmdline.add_options()
-    ;
+    po::options_description opts_common{add_common_options()};
+    po::options_description opts_input{add_multiple_inputs_options()};
+    po::options_description opts_output{add_output_options()};
 
-    add_common_options(cmdline);
-    add_multiple_inputs_options(cmdline);
-    add_output_options(cmdline);
-
-    po::options_description hidden("Hidden options");
+    po::options_description hidden;
     hidden.add_options()
     ("input-filenames", po::value<std::vector<std::string>>(), "OSM input files")
     ;
 
-    po::options_description desc("Allowed options");
-    desc.add(cmdline).add(hidden);
+    po::options_description desc;
+    desc.add(opts_common).add(opts_input).add(opts_output);
+
+    po::options_description parsed_options;
+    parsed_options.add(desc).add(hidden);
 
     po::positional_options_description positional;
     positional.add("input-filenames", -1);
 
     po::variables_map vm;
-    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
     if (vm.count("help")) {
-        std::cout << "Usage: osmium sort [OPTIONS] OSM-FILE...\n\n";
-        std::cout << cmdline << "\n";
+        std::cout << "Usage: osmium sort [OPTIONS] OSM-FILE...\n";
+        std::cout << desc << "\n";
         exit(0);
     }
 

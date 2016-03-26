@@ -79,41 +79,44 @@ size_t CommandGetId::count_ids() const {
 }
 
 bool CommandGetId::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Available options");
-    cmdline.add_options()
+    po::options_description opts_cmd{"COMMAND OPTIONS"};
+    opts_cmd.add_options()
+    ("default-type", po::value<std::string>()->default_value("node"), "Default item type")
     ("id-file,i", po::value<std::string>()->implicit_value("-"), "Read OSM IDs from text file")
     ("id-osm-file,I", po::value<std::string>()->implicit_value("-"), "Read OSM IDs from OSM file")
-    ("default-type", po::value<std::string>(), "Default item type")
-    ("add-referenced,r", "Recursively add referenced objects")
     ("history,H", "Make it work with history files")
+    ("add-referenced,r", "Recursively add referenced objects")
     ;
 
-    add_common_options(cmdline);
-    add_single_input_options(cmdline);
-    add_output_options(cmdline);
+    po::options_description opts_common{add_common_options()};
+    po::options_description opts_input{add_single_input_options()};
+    po::options_description opts_output{add_output_options()};
 
-    po::options_description hidden("Hidden options");
+    po::options_description hidden;
     hidden.add_options()
     ("input-filename", po::value<std::string>(), "OSM input file")
     ("ids", po::value<std::vector<std::string>>(), "OSM IDs")
     ;
 
-    po::options_description desc("Allowed options");
-    desc.add(cmdline).add(hidden);
+    po::options_description desc;
+    desc.add(opts_cmd).add(opts_common).add(opts_input).add(opts_output);
+
+    po::options_description parsed_options;
+    parsed_options.add(desc).add(hidden);
 
     po::positional_options_description positional;
     positional.add("input-filename", 1);
     positional.add("ids", -1);
 
     po::variables_map vm;
-    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
     if (vm.count("help")) {
         std::cout << "Usage: osmium getid [OPTIONS] OSM-FILE ID...\n"
                   << "       osmium getid [OPTIONS] OSM-FILE -i ID-FILE\n"
-                  << "       osmium getid [OPTIONS] OSM-FILE -I ID-OSM-FILE\n\n"
-                  << cmdline << "\n";
+                  << "       osmium getid [OPTIONS] OSM-FILE -I ID-OSM-FILE\n"
+                  << desc << "\n";
         exit(0);
     }
 

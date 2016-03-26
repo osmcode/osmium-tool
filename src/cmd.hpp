@@ -78,7 +78,7 @@ public:
     // It returns false if there was an error.
     virtual bool run() = 0;
 
-    void add_common_options(po::options_description& options);
+    po::options_description add_common_options();
     void setup_common(const boost::program_options::variables_map& vm);
     void print_arguments(const std::string& command);
     void show_memory_used();
@@ -97,7 +97,7 @@ public:
 
     void setup_input_file(const boost::program_options::variables_map& vm);
 
-    void add_single_input_options(po::options_description& options);
+    po::options_description add_single_input_options();
 
     void show_single_input_arguments(osmium::util::VerboseOutput& vout);
 
@@ -119,7 +119,7 @@ public:
 
     void setup_input_files(const boost::program_options::variables_map& vm, bool optional = false);
 
-    void add_multiple_inputs_options(po::options_description& options);
+    po::options_description add_multiple_inputs_options();
 
     void show_multiple_inputs_arguments(osmium::util::VerboseOutput& vout);
 
@@ -149,7 +149,7 @@ public:
 
     void setup_output_file(const po::variables_map& vm);
 
-    void add_output_options(po::options_description& options);
+    po::options_description add_output_options();
 
     void show_output_arguments(osmium::util::VerboseOutput& vout);
 

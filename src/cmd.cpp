@@ -24,11 +24,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "cmd.hpp"
 
-void Command::add_common_options(po::options_description& options) {
+po::options_description Command::add_common_options() {
+    po::options_description options("COMMON OPTIONS");
+
     options.add_options()
     ("help,h", "Show usage help")
     ("verbose,v", "Set verbose mode")
     ;
+
+    return options;
 }
 
 void Command::setup_common(const boost::program_options::variables_map& vm) {

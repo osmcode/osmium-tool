@@ -32,36 +32,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "command_apply_changes.hpp"
 
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
-    po::options_description cmdline("Available options");
-    cmdline.add_options()
+    po::options_description opts_cmd{"COMMAND OPTIONS"};
+    opts_cmd.add_options()
     ("simplify,s", "Simplify change")
     ("remove-deleted,r", "Remove deleted objects from output")
     ;
 
-    add_common_options(cmdline);
-    add_single_input_options(cmdline);
-    add_output_options(cmdline);
+    po::options_description opts_common{add_common_options()};
+    po::options_description opts_input{add_single_input_options()};
+    po::options_description opts_output{add_output_options()};
 
-    po::options_description hidden("Hidden options");
+    po::options_description hidden;
     hidden.add_options()
     ("input-filename", po::value<std::string>(), "OSM input file")
     ("change-filenames", po::value<std::vector<std::string>>(), "OSM change input files")
     ;
 
-    po::options_description desc("Allowed options");
-    desc.add(cmdline).add(hidden);
+    po::options_description desc;
+    desc.add(opts_cmd).add(opts_common).add(opts_input).add(opts_output);
+
+    po::options_description parsed_options;
+    parsed_options.add(desc).add(hidden);
 
     po::positional_options_description positional;
     positional.add("input-filename", 1);
     positional.add("change-filenames", -1);
 
     po::variables_map vm;
-    po::store(po::command_line_parser(arguments).options(desc).positional(positional).run(), vm);
+    po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
     if (vm.count("help")) {
-        std::cout << "Usage: osmium apply-changes [OPTIONS] OSM-DATA-FILE OSM-CHANGE-FILE...\n\n";
-        std::cout << cmdline << "\n";
+        std::cout << "Usage: osmium apply-changes [OPTIONS] OSM-DATA-FILE OSM-CHANGE-FILE...\n";
+        std::cout << desc << "\n";
         exit(0);
     }
 
