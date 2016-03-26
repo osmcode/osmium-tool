@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - New `add-refs` command that adds all objects referenced from ways
   and relations to an input file.
 - New `--default-type` option to getid command.
+- The `getid` command can now recursively add all referenced objects.
 
 ### Changed
 
