@@ -41,6 +41,7 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
 
     bool m_add_referenced_objects = false;
     bool m_work_with_history = false;
+    bool m_verbose_ids = false;
 
     std::set<osmium::object_id_type> m_ids[3];
 

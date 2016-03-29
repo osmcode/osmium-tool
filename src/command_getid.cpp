@@ -86,6 +86,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     ("id-osm-file,I", po::value<std::string>()->implicit_value("-"), "Read OSM IDs from OSM file")
     ("history,H", "Make it work with history files")
     ("add-referenced,r", "Recursively add referenced objects")
+    ("verbose-ids", "Print all requested and missing IDs")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -141,6 +142,11 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         }
     }
 
+    if (vm.count("verbose-ids")) {
+        m_vout.verbose(true);
+        m_verbose_ids = true;
+    }
+
     if (vm.count("id-file")) {
         std::string filename = vm["id-file"].as<std::string>();
 
@@ -187,22 +193,28 @@ void CommandGetId::show_arguments() {
     m_vout << "    add referenced objects: " << (m_add_referenced_objects ? "yes" : "no") << "\n";
     m_vout << "    work with history files: " << (m_work_with_history ? "yes" : "no") << "\n";
     m_vout << "    default object type: " << osmium::item_type_to_name(m_default_item_type) << "\n";
-    m_vout << "    looking for these ids:\n";
-    m_vout << "      nodes:";
-    for (osmium::object_id_type id : ids(osmium::item_type::node)) {
-        m_vout << " " << id;
+    if (m_verbose_ids) {
+        m_vout << "    looking for these ids:\n";
+        m_vout << "      nodes:";
+        for (osmium::object_id_type id : ids(osmium::item_type::node)) {
+            m_vout << " " << id;
+        }
+        m_vout << "\n";
+        m_vout << "      ways:";
+        for (osmium::object_id_type id : ids(osmium::item_type::way)) {
+            m_vout << " " << id;
+        }
+        m_vout << "\n";
+        m_vout << "      relations:";
+        for (osmium::object_id_type id : ids(osmium::item_type::relation)) {
+            m_vout << " " << id;
+        }
+        m_vout << "\n";
+    } else {
+        m_vout << "    looking for " << ids(osmium::item_type::node).size() << " node ID(s), "
+                                     << ids(osmium::item_type::way).size() << " way ID(s), and "
+                                     << ids(osmium::item_type::relation).size() << " relation ID(s)\n";
     }
-    m_vout << "\n";
-    m_vout << "      ways:";
-    for (osmium::object_id_type id : ids(osmium::item_type::way)) {
-        m_vout << " " << id;
-    }
-    m_vout << "\n";
-    m_vout << "      relations:";
-    for (osmium::object_id_type id : ids(osmium::item_type::relation)) {
-        m_vout << " " << id;
-    }
-    m_vout << "\n";
 }
 
 osmium::osm_entity_bits::type CommandGetId::get_needed_types() const {
@@ -391,9 +403,11 @@ bool CommandGetId::run() {
             m_vout << "Found all objects.\n";
         } else {
             m_vout << "Did not find " << count_ids() << " object(s).\n";
-            print_missing_ids("node",     ids(osmium::item_type::node));
-            print_missing_ids("way",      ids(osmium::item_type::way));
-            print_missing_ids("relation", ids(osmium::item_type::relation));
+            if (m_verbose_ids) {
+                print_missing_ids("node",     ids(osmium::item_type::node));
+                print_missing_ids("way",      ids(osmium::item_type::way));
+                print_missing_ids("relation", ids(osmium::item_type::relation));
+            }
         }
     }
 

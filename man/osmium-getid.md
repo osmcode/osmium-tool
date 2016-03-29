@@ -124,6 +124,10 @@ the **-H**, **--history** option was given.
 :   Set verbose mode. The program will output information about what it is
     doing to *stderr*.
 
+--verbose-ids
+:   Also print all requested and missing IDs. This is usually disabled, because
+    the lists can get quite long. (This option implies `--verbose`.)
+
 
 # DIAGNOSTICS
 
