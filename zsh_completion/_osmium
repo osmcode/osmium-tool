@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter)
+    osmium_commands=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber show sort time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -166,6 +166,23 @@ _osmium-renumber() {
         '(-i)--index-directory[read/write index files in this directory]:directory:_path_files -/'
 }
 
+_osmium-show() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-single-input-options)"} \
+        '(--output-format --format-debug -d --format-opl -o --format-xml -x)-f[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(-f --format-debug -d --format-opl -o --format-xml -x)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(--output-format -f -d --format-opl -o --format-xml -x)--format-debug[set format of output OSM file to debug]' \
+        '(--output-format -f --format-debug --format-opl -o --format-xml -x)-d[set format of output OSM file to debug]' \
+        '(--output-format -f --format-debug -d -o --format-xml -x)--format-opl[set format of output OSM file to OPL]' \
+        '(--output-format -f --format-debug -d --format-opl --format-xml -x)-o[set format of output OSM file to OPL]' \
+        '(--output-format -f --format-debug -d --format-opl -o -x)--format-xml[set format of output OSM file to XML]' \
+        '(--output-format -f --format-debug -d --format-opl -o --format-xml)-x[set format of output OSM file to XML]' \
+        '--no-pager[disable pager]' \
+        '*-t[read only object of given output types]:OSM entity type:_osmium_entity_type' \
+        '*--object-type[read only object of given output types]:OSM entity type:_osmium_entity_type'
+}
+
 _osmium-sort() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
@@ -210,7 +227,7 @@ _osmium_fileinfo_variables() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber sort time-filter file-formats)
+    osmium_help_topics=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber show sort time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 

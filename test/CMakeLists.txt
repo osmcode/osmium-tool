@@ -81,6 +81,7 @@ check_cmd_help(fileinfo)
 check_cmd_help(getid)
 check_cmd_help(merge-changes)
 check_cmd_help(renumber)
+check_cmd_help(show)
 check_cmd_help(sort)
 check_cmd_help(time-filter)
 
