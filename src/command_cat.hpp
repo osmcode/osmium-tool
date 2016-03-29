@@ -33,6 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class CommandCat : public Command, public with_multiple_osm_inputs, public with_osm_output {
 
+    void setup_header(osmium::io::Header& header) const;
+
 public:
 
     CommandCat() = default;
@@ -42,8 +44,6 @@ public:
     void show_arguments() override final;
 
     bool run() override final;
-
-    void setup_header(osmium::io::Header& header) const;
 
     const char* name() const noexcept override final {
         return "cat";

@@ -93,14 +93,6 @@ class CommandRenumber : public Command, public with_single_osm_input, public wit
     // id mappings for nodes, ways, and relations
     id_map m_id_map[3];
 
-public:
-
-    CommandRenumber() = default;
-
-    bool setup(const std::vector<std::string>& arguments) override final;
-
-    void show_arguments() override final;
-
     id_map& map(osmium::item_type type) noexcept {
         return m_id_map[osmium::item_type_to_nwr_index(type)];
     }
@@ -112,6 +104,14 @@ public:
     void read_index(osmium::item_type type);
 
     void write_index(osmium::item_type type);
+
+public:
+
+    CommandRenumber() = default;
+
+    bool setup(const std::vector<std::string>& arguments) override final;
+
+    void show_arguments() override final;
 
     bool run() override final;
 
