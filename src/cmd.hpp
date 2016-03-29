@@ -34,6 +34,7 @@ namespace po = boost::program_options;
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/writer_options.hpp>
+#include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/minmax.hpp>
 #include <osmium/util/verbose_output.hpp>
 
@@ -41,6 +42,8 @@ namespace po = boost::program_options;
  * Virtual base class for commands that can be called from the command line.
  */
 class Command {
+
+    osmium::osm_entity_bits::type m_osm_entity_bits {osmium::osm_entity_bits::all};
 
 protected:
 
@@ -88,6 +91,10 @@ public:
     void setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
     void print_arguments(const std::string& command);
     void show_memory_used();
+
+    osmium::osm_entity_bits::type osm_entity_bits() const {
+        return m_osm_entity_bits;
+    }
 
 }; // class Command
 

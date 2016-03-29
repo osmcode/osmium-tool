@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <osmium/util/memory.hpp>
 
 #include "cmd.hpp"
+#include "exception.hpp"
 
 po::options_description Command::add_common_options() {
     po::options_description options("COMMON OPTIONS");
@@ -43,8 +44,26 @@ void Command::setup_common(const boost::program_options::variables_map& vm, cons
                   << "\nUse 'osmium help " << name() << "' to display the manual page.\n";
         exit(0);
     }
+
     if (vm.count("verbose")) {
         m_vout.verbose(true);
+    }
+
+    if (vm.count("object-type")) {
+        m_osm_entity_bits = osmium::osm_entity_bits::nothing;
+        for (const auto& t : vm["object-type"].as<std::vector<std::string>>()) {
+            if (t == "n" || t == "node") {
+                m_osm_entity_bits |= osmium::osm_entity_bits::node;
+            } else if (t == "w" || t == "way") {
+                m_osm_entity_bits |= osmium::osm_entity_bits::way;
+            } else if (t == "r" || t == "relation") {
+                m_osm_entity_bits |= osmium::osm_entity_bits::relation;
+            } else if (t == "c" || t == "changeset") {
+                m_osm_entity_bits |= osmium::osm_entity_bits::changeset;
+            } else {
+                throw argument_error(std::string("Unknown object type '") + t + "' (Allowed are 'node', 'way', 'relation', and 'changeset').");
+            }
+        }
     }
 }
 

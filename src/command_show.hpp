@@ -1,5 +1,5 @@
-#ifndef COMMAND_CAT_HPP
-#define COMMAND_CAT_HPP
+#ifndef COMMAND_SHOW_HPP
+#define COMMAND_SHOW_HPP
 
 /*
 
@@ -27,33 +27,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <osmium/io/header.hpp>
-#include <osmium/osm/entity_bits.hpp>
 
 #include "cmd.hpp"
 
-class CommandCat : public Command, public with_multiple_osm_inputs, public with_osm_output {
+class CommandShow : public Command, public with_single_osm_input {
+
+    std::string m_output_format{"debug,color=true"};
+    std::string m_pager;
+
+    void setup_pager_from_env() noexcept;
 
 public:
 
-    CommandCat() = default;
+    CommandShow() = default;
 
     bool setup(const std::vector<std::string>& arguments) override final;
 
-    void show_arguments() override final;
-
     bool run() override final;
 
-    void setup_header(osmium::io::Header& header) const;
-
     const char* name() const noexcept override final {
-        return "cat";
+        return "show";
     }
 
     const char* synopsis() const noexcept override final {
-        return "osmium cat [OPTIONS] OSM-FILE...";
+        return "osmium show [OPTIONS] OSM-FILE";
     }
 
-}; // class CommandCat
+}; // class CommandShow
 
 
-#endif // COMMAND_CAT_HPP
+#endif // COMMAND_SHOW_HPP
