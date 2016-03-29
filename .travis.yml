@@ -23,9 +23,13 @@ matrix:
           compiler: gcc
           env: BUILD_TYPE=Release
         - os: osx
+          # https://docs.travis-ci.com/user/languages/objective-c/#Supported-OS-X-iOS-SDK-versions
+          osx_image: xcode7.3 # upgrades clang from 6 -> 7
           compiler: clang
           env: BUILD_TYPE=Dev
         - os: osx
+          # https://docs.travis-ci.com/user/languages/objective-c/#Supported-OS-X-iOS-SDK-versions
+          osx_image: xcode7.3 # upgrades clang from 6 -> 7
           compiler: clang
           env: BUILD_TYPE=Release
 
