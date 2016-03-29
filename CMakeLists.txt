@@ -85,7 +85,6 @@ function(add_man_page _section _name)
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/man/man${_section})
     set(_output_file ${CMAKE_BINARY_DIR}/man/man${_section}/${_name}.${_section})
     set(_source_file ${CMAKE_SOURCE_DIR}/man/${_name}.md)
-    set(_install_dir "share/man/man{$_section}")
     string(TOUPPER ${_name} _name_upcase)
     add_custom_command(OUTPUT ${_output_file}
         COMMAND ${PANDOC}
