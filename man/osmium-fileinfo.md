@@ -54,27 +54,17 @@ Data
 :   Read the complete file and show additional information. The default
     is to read only the header of the file.
 
--F, --input-format=FORMAT
-:   The format of the input file. Can be used to set the input file format
-    if it can't be autodetected from the file name.
-    See **osmium-file-formats**(5) or the libosmium manual for details.
-
 -g, --get=VARIABLE
 :   Get value of VARIABLE. Can not be used together with --json.
 
 -G, --show-variables
 :   Show a list of all variable names.
 
--h, --help
-:   Show usage help.
-
 -j, --json
 :   Output in JSON format. Can not be used together with --get.
 
--v, --verbose
-:   Set verbose mode. The program will output information about what it is
-    doing to *stderr*.
-
+@MAN_COMMON_OPTIONS@
+@MAN_INPUT_OPTIONS@
 
 # VARIABLES
 

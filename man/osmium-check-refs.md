@@ -32,14 +32,6 @@ change files.
 
 # OPTIONS
 
--F, --input-format=FORMAT
-:   The format of the input file. Can be used to set the input format if it
-    can't be autodetected from the file name. See **osmium-file-formats**(5)
-    or the libosmium manual for details.
-
--h, --help
-:   Show usage help.
-
 -i, --show-ids
 :   Print all missing IDs to *stdout*. If you don't give this option, only a
     summary is shown.
@@ -48,10 +40,8 @@ change files.
 :   Also check referential integrity of relations. Without this option, only
     nodes in ways are checked.
 
--v, --verbose
-:   Set verbose mode. The program will output information about what it is
-    doing to *stderr*.
-
+@MAN_COMMON_OPTIONS@
+@MAN_INPUT_OPTIONS@
 
 # MEMORY USAGE
 

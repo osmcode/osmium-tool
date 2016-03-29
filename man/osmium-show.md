@@ -21,23 +21,12 @@ variable. If neither is set, the default `less` is used unless the option
 to `cat`, no pager is used. On Windows there is no pager support at all.
 
 
-
-
 # OPTIONS
 
 -f, --output-format=FORMAT
 :   The format of the output file. Can be used to set the output file format
     if it can't be autodetected from the output file name.
     **See osmium-file-formats**(5) or the libosmium manual for details.
-
--F, --input-format=FORMAT
-:   The format of the input files. Can be used to set the input format if it
-    can't be autodetected from the file names. This will set the format for
-    all input files, there is no way to set the format for some input files
-    only. See **osmium-file-formats**(5) or the libosmium manual for details.
-
--h, --help
-:   Show usage help.
 
 --no-pager
 :   Disable pager.
@@ -55,6 +44,13 @@ to `cat`, no pager is used. On Windows there is no pager support at all.
 :   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
     By default all types are read. This option can be given multiple times.
 
+
+# COMMON OPTIONS
+
+-h, --help
+:   Show usage help.
+
+@MAN_INPUT_OPTIONS@
 
 # DIAGNOSTICS
 

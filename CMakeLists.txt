@@ -85,6 +85,11 @@ function(add_man_page _section _name)
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/man/man${_section})
     set(_output_file ${CMAKE_BINARY_DIR}/man/man${_section}/${_name}.${_section})
     set(_source_file ${CMAKE_SOURCE_DIR}/man/${_name}.md)
+    set(_dest_file ${CMAKE_BINARY_DIR}/man-source/${_name}.md)
+    file(READ ${CMAKE_SOURCE_DIR}/man/common-options.md MAN_COMMON_OPTIONS)
+    file(READ ${CMAKE_SOURCE_DIR}/man/input-options.md MAN_INPUT_OPTIONS)
+    file(READ ${CMAKE_SOURCE_DIR}/man/output-options.md MAN_OUTPUT_OPTIONS)
+    configure_file(${_source_file} ${_dest_file} @ONLY)
     string(TOUPPER ${_name} _name_upcase)
     add_custom_command(OUTPUT ${_output_file}
         COMMAND ${PANDOC}
@@ -92,8 +97,8 @@ function(add_man_page _section _name)
             --variable "title=${_name_upcase}"
             --variable "section=${_section}"
             -o ${_output_file}
-            ${_source_file}
-        DEPENDS ${_source_file} man/manpage.template
+            ${_dest_file}
+        DEPENDS ${_source_file} man/manpage.template man/common-options.md man/input-options.md man/output-options.md
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMENT "Building manpage ${_name}.${_section}"
         VERBATIM)

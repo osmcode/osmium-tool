@@ -21,40 +21,6 @@ the data.
 
 # OPTIONS
 
--f, --output-format=FORMAT
-:   The format of the output file. Can be used to set the output file format
-    if it can't be autodetected from the output file name.
-    See **osmium-file-formats**(5) or the libosmium manual for details.
-
--F, --input-format=FORMAT
-:   The format of the input files. Can be used to set the input format if it
-    can't be autodetected from the file names. This will set the format for
-    all input files, there is no way to set the format for some input files
-    only. See **osmium-file-formats**(5) or the libosmium manual for details.
-
---fsync
-:   Call fsync after writing the output file to force the OS to flush buffers
-    to disk.
-
---generator=NAME
-:   The name and version of the program generating the output file. It will be
-    added to the header of the output file. Default is "*osmium/*" and the version
-    of osmium.
-
--h, --help
-:   Show usage help.
-
--o, --output=FILE
-:   Name of the output file. Default is '-' (*stdout*).
-
--O, --overwrite
-:   Allow an existing output file to be overwritten. Normally **osmium** will
-    refuse to write over an existing file.
-
---output-header=OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed header options.
-
 -r, --remove-deleted
 :   Remove deleted objects from the output. If this is not set, deleted objects
     will be in the output with the visible flag set to false.
@@ -62,10 +28,9 @@ the data.
 -s, --simplify
 :   Only write the last version of any object to the output.
 
--v, --verbose
-:   Set verbose mode. The program will output information about what it is
-    doing to *stderr*.
-
+@MAN_COMMON_OPTIONS@
+@MAN_INPUT_OPTIONS@
+@MAN_OUTPUT_OPTIONS@
 
 # DIAGNOSTICS
 

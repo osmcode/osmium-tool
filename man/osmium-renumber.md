@@ -29,28 +29,6 @@ IDs.
 
 # OPTIONS
 
--f, --output-format=FORMAT
-:   The format of the output file. Can be used to set the output file format
-    if it can't be autodetected from the output file name.
-    **See osmium-file-formats**(5) or the libosmium manual for details.
-
--F, --input-format=FORMAT
-:   The format of the input file. Can be used to set the input format if it
-    can't be autodetected from the file name. See **osmium-file-formats**(5)
-    or the libosmium manual for details.
-
---fsync
-:   Call fsync after writing the output file to force the OS to flush buffers
-    to disk.
-
---generator=NAME
-:   The name and version of the program generating the output file. It will be
-    added to the header of the output file. Default is "*osmium/*" and the
-    version of osmium.
-
--h, --help
-:   Show usage help.
-
 -i, --index-directory=DIR
 :   Directory where the index files for mapping between old and news IDs are
     read from and written to, respectively. Use this if you want to map IDs
@@ -59,21 +37,9 @@ IDs.
     directory. The files written will be named `nodes.idx`, `ways.idx`, and
     `relations.idx`.
 
--o, --output=FILE
-:   Name of the output file. Default is '-' (*stdout*).
-
--O, --overwrite
-:   Allow an existing output file to be overwritten. Normally **osmium** will
-    refuse to write over an existing file.
-
---output-header=OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed header options.
-
--v, --verbose
-:   Set verbose mode. The program will output information about what it is
-    doing to *stderr*.
-
+@MAN_COMMON_OPTIONS@
+@MAN_INPUT_OPTIONS@
+@MAN_OUTPUT_OPTIONS@
 
 # DIAGNOSTICS
 

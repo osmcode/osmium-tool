@@ -54,6 +54,9 @@ merge-changes
 renumber
 :   renumber object IDs
 
+show
+:   show OSM file
+
 sort
 :   sort OSM files
 
@@ -93,11 +96,14 @@ If an osmium command exits with an "Out of memory" error, try running it with
 
 * **osmium-apply-changes**(1),
   **osmium-cat**(1),
+  **osmium-changeset-filter**(1),
   **osmium-check-refs**(1),
   **osmium-fileinfo**(1),
   **osmium-getid**(1),
   **osmium-merge-changes**(1),
   **osmium-renumber**(1),
+  **osmium-show**(1),
+  **osmium-sort**(1),
   **osmium-time-filter**(1),
   **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium)

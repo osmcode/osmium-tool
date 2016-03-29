@@ -66,29 +66,6 @@ the **-H**, **--history** option was given.
     (default: 'node'). It is also allowed to just use the first character
     of the type here.
 
--f, --output-format=FORMAT
-:   The format of the output file. Can be used to set the output file format
-    if it can't be autodetected from the output file name.
-    See **osmium-file-formats**(5) or the libosmium manual for details.
-
--F, --input-format=FORMAT
-:   The format of the input files. Can be used to set the input format if it
-    can't be autodetected from the file names. This will set the format for
-    all input files, there is no way to set the format for some input files
-    only. See **osmium-file-formats**(5) or the libosmium manual for details.
-
---fsync
-:   Call fsync after writing the output file to force the OS to flush buffers
-    to disk.
-
---generator=NAME
-:   The name and version of the program generating the output file. It will be
-    added to the header of the output file. Default is "*osmium/*" and the version
-    of osmium.
-
--h, --help
-:   Show usage help.
-
 -H, --history
     Make this program work on history files. This is only needed when using
     the **-r** option.
@@ -104,30 +81,18 @@ the **-H**, **--history** option was given.
 -I, --id-osm-file=OSMFILE
 :   Like **-i** but get the IDs from an OSM file.
 
--o, --output=FILE
-:   Name of the output file. Default is '-' (*stdout*).
-
--O, --overwrite
-:   Allow an existing output file to be overwritten. Normally **osmium** will
-    refuse to write over an existing file.
-
---output-header=OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed header options.
-
 -r, --add-referenced
 :   Recursively find all objects referenced by the objects of the given IDs
     and include them in the output. This only works correctly on non-history
     files unless the `-H` option is also used.
 
--v, --verbose
-:   Set verbose mode. The program will output information about what it is
-    doing to *stderr*.
-
 --verbose-ids
 :   Also print all requested and missing IDs. This is usually disabled, because
     the lists can get quite long. (This option implies `--verbose`.)
 
+@MAN_COMMON_OPTIONS@
+@MAN_INPUT_OPTIONS@
+@MAN_OUTPUT_OPTIONS@
 
 # DIAGNOSTICS
 
