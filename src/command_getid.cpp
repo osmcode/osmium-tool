@@ -46,10 +46,7 @@ const std::set<osmium::object_id_type>& CommandGetId::ids(osmium::item_type type
 }
 
 void CommandGetId::parse_and_add_id(const std::string& s) {
-    auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr);
-    if (p.first == osmium::item_type::undefined) {
-        p.first = m_default_item_type;
-    }
+    auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr, m_default_item_type);
     ids(p.first).insert(p.second);
 }
 
