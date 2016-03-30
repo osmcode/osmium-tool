@@ -3,6 +3,8 @@
 #  travis_script.sh
 #
 
+set -e
+
 mkdir build
 cd build
 
