@@ -144,23 +144,23 @@ void CommandRenumber::show_arguments() {
 }
 
 void CommandRenumber::renumber(osmium::memory::Buffer& buffer) {
-    for (auto it = buffer.begin<osmium::OSMObject>(); it != buffer.end<osmium::OSMObject>(); ++it) {
-        switch (it->type()) {
+    for (auto& object : buffer.select<osmium::OSMObject>()) {
+        switch (object.type()) {
             case osmium::item_type::node:
-                m_check_order.node(static_cast<const osmium::Node&>(*it));
-                it->set_id(map(osmium::item_type::node)(it->id()));
+                m_check_order.node(static_cast<const osmium::Node&>(object));
+                object.set_id(map(osmium::item_type::node)(object.id()));
                 break;
             case osmium::item_type::way:
-                m_check_order.way(static_cast<const osmium::Way&>(*it));
-                it->set_id(map(osmium::item_type::way)(it->id()));
-                for (auto& ref : static_cast<osmium::Way&>(*it).nodes()) {
+                m_check_order.way(static_cast<const osmium::Way&>(object));
+                object.set_id(map(osmium::item_type::way)(object.id()));
+                for (auto& ref : static_cast<osmium::Way&>(object).nodes()) {
                     ref.set_ref(map(osmium::item_type::node)(ref.ref()));
                 }
                 break;
             case osmium::item_type::relation:
-                m_check_order.relation(static_cast<const osmium::Relation&>(*it));
-                it->set_id(map(osmium::item_type::relation)(it->id()));
-                for (auto& member : static_cast<osmium::Relation&>(*it).members()) {
+                m_check_order.relation(static_cast<const osmium::Relation&>(object));
+                object.set_id(map(osmium::item_type::relation)(object.id()));
+                for (auto& member : static_cast<osmium::Relation&>(object).members()) {
                     member.set_ref(map(member.type())(member.ref()));
                 }
                 break;

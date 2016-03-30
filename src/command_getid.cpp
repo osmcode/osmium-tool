@@ -257,12 +257,12 @@ void CommandGetId::read_id_osm_file(const std::string& file_name) {
     m_vout << "Reading OSM ID file...\n";
     osmium::io::Reader reader(file_name, osmium::osm_entity_bits::object);
     while (osmium::memory::Buffer buffer = reader.read()) {
-        for (auto it = buffer.begin<osmium::OSMObject>(); it != buffer.end<osmium::OSMObject>(); ++it) {
-            ids(it->type()).insert(it->id());
-            if (it->type() == osmium::item_type::way) {
-                add_nodes(static_cast<const osmium::Way&>(*it));
-            } else if (it->type() == osmium::item_type::relation) {
-                add_members(static_cast<const osmium::Relation&>(*it));
+        for (const auto& object : buffer.select<osmium::OSMObject>()) {
+            ids(object.type()).insert(object.id());
+            if (object.type() == osmium::item_type::way) {
+                add_nodes(static_cast<const osmium::Way&>(object));
+            } else if (object.type() == osmium::item_type::relation) {
+                add_members(static_cast<const osmium::Relation&>(object));
             }
         }
     }
@@ -285,11 +285,11 @@ bool CommandGetId::find_relations_in_relations() {
 
     osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::relation);
     while (osmium::memory::Buffer buffer = reader.read()) {
-        for (auto it = buffer.begin<osmium::Relation>(); it != buffer.end<osmium::Relation>(); ++it) {
-            for (const auto& member : it->members()) {
+        for (const auto& relation : buffer.select<osmium::Relation>()) {
+            for (const auto& member : relation.members()) {
                 if (member.type() == osmium::item_type::relation) {
-                    rel_in_rel.emplace(it->id(), member.ref());
-                } else if (ids(osmium::item_type::relation).count(it->id())) {
+                    rel_in_rel.emplace(relation.id(), member.ref());
+                } else if (ids(osmium::item_type::relation).count(relation.id())) {
                     if (member.type() == osmium::item_type::node) {
                         ids(osmium::item_type::node).insert(member.ref());
                     } else if (member.type() == osmium::item_type::way) {
@@ -317,9 +317,9 @@ void CommandGetId::find_nodes_and_ways_in_relations() {
 
     osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::relation);
     while (osmium::memory::Buffer buffer = reader.read()) {
-        for (auto it = buffer.begin<osmium::Relation>(); it != buffer.end<osmium::Relation>(); ++it) {
-            if (ids(osmium::item_type::relation).count(it->id())) {
-                for (const auto& member : it->members()) {
+        for (const auto& relation : buffer.select<osmium::Relation>()) {
+            if (ids(osmium::item_type::relation).count(relation.id())) {
+                for (const auto& member : relation.members()) {
                     if (member.type() == osmium::item_type::node) {
                         ids(osmium::item_type::node).insert(member.ref());
                     } else if (member.type() == osmium::item_type::way) {
@@ -337,9 +337,9 @@ void CommandGetId::find_nodes_in_ways() {
 
     osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::way);
     while (osmium::memory::Buffer buffer = reader.read()) {
-        for (auto it = buffer.begin<osmium::Way>(); it != buffer.end<osmium::Way>(); ++it) {
-            if (ids(osmium::item_type::way).count(it->id())) {
-                add_nodes(*it);
+        for (const auto& way : buffer.select<osmium::Way>()) {
+            if (ids(osmium::item_type::way).count(way.id())) {
+                add_nodes(way);
             }
         }
     }
@@ -378,13 +378,13 @@ bool CommandGetId::run() {
 
     m_vout << "Copying from source to output file...\n";
     while (osmium::memory::Buffer buffer = reader.read()) {
-        for (auto it = buffer.begin<osmium::OSMObject>(); it != buffer.end<osmium::OSMObject>(); ++it) {
-            auto& index = ids(it->type());
-            if (index.count(it->id())) {
+        for (const auto& object : buffer.select<osmium::OSMObject>()) {
+            auto& index = ids(object.type());
+            if (index.count(object.id())) {
                 if (!m_work_with_history) {
-                    index.erase(it->id());
+                    index.erase(object.id());
                 }
-                writer(*it);
+                writer(object);
             }
         }
     }
