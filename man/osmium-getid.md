@@ -71,12 +71,12 @@ the **-H**, **--history** option was given.
     the **-r** option.
 
 -i, --id-file[=FILE]
-:   Read IDs from text file instead of from the command line. Use without a
-    filename or the special name "-" to read from *stdin*. Each line of the
-    file must start with an ID in the format described above. Lines can
-    optionally contain a space character or a hash sign ('#') after the ID.
-    This character and all following characters are ignored. (This allows
-    files in OPL format to be read.) Empty lines are also ignored.
+:   Read IDs from text file instead of from the command line. Use the special
+    name "-" to read from *stdin*. Each line of the file must start with an
+    ID in the format described above. Lines can optionally contain a space
+    character or a hash sign ('#') after the ID. This character and all
+    following characters are ignored. (This allows files in OPL format to be
+    read.) Empty lines are also ignored.
 
 -I, --id-osm-file=OSMFILE
 :   Like **-i** but get the IDs from an OSM file.

@@ -82,8 +82,8 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("default-type", po::value<std::string>()->default_value("node"), "Default item type")
-    ("id-file,i", po::value<std::string>()->implicit_value("-"), "Read OSM IDs from text file")
-    ("id-osm-file,I", po::value<std::string>()->implicit_value("-"), "Read OSM IDs from OSM file")
+    ("id-file,i", po::value<std::string>(), "Read OSM IDs from text file")
+    ("id-osm-file,I", po::value<std::string>(), "Read OSM IDs from OSM file")
     ("history,H", "Make it work with history files")
     ("add-referenced,r", "Recursively add referenced objects")
     ("verbose-ids", "Print all requested and missing IDs")
