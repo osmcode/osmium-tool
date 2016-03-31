@@ -15,10 +15,9 @@ osmium-getid - get objects from OSM file by ID
 
 Get objects with the given IDs from the input and write them to the output.
 
-IDs can be
-* given on the command line (first case in synopsis), or
-* read from a text file with one ID per line (second case in synopsis), or
-* read from an OSM file (third cases in synopsis).
+IDs can be given on the command line (first case in synopsis), or read from
+a text file with one ID per line (second case in synopsis), or read from an
+OSM file (third cases in synopsis).
 
 All objects with these IDs will be read from *OSM-FILE* and written to the
 output. If the option **-r**, **--add-referenced** is used all objects
