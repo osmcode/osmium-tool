@@ -6,8 +6,8 @@ osmium-getid - get objects from OSM file by ID
 
 # SYNOPSIS
 
-**osmium getid** \[*OPTIONS*\] *OSM-FILE* *ID*...
-**osmium getid** \[*OPTIONS*\] *OSM-FILE* -i *ID-FILE*
+**osmium getid** \[*OPTIONS*\] *OSM-FILE* *ID*...\
+**osmium getid** \[*OPTIONS*\] *OSM-FILE* -i *ID-FILE*\
 **osmium getid** \[*OPTIONS*\] *OSM-FILE* -I *ID-OSM-FILE*
 
 
