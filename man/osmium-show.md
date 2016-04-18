@@ -12,8 +12,9 @@ osmium-show - show OSM file
 # DESCRIPTION
 
 Show the contents of the *OSM-FILE* on *stdout*, usually in a pager. The
-output format can be set using the **-f**, **output-format** option, or its
-shortcuts **-d** (debug format with colors), **-o** (OPL), or **-x** (XML).
+output format can be set using the **-f**, **output-format** option, its
+shortcuts **-d** (debug format with colors), **-o** (OPL), or **-x** (XML),
+or the `OSMIUM_SHOW_FORMAT` environment variable.
 
 The pager can be set with the `OSMIUM_PAGER` or the `PAGER` environment
 variable. If neither is set, the default `less` is used unless the option

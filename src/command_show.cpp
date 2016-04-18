@@ -115,6 +115,11 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
         m_output_format = "opl";
     } else if (vm.count("format-xml")) {
         m_output_format = "xml";
+    } else {
+        const char* output_format_from_env = ::getenv("OSMIUM_SHOW_FORMAT");
+        if (output_format_from_env) {
+            m_output_format = output_format_from_env;
+        }
     }
 
     return true;
