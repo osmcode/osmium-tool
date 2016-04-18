@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber show sort time-filter)
+    osmium_commands=(add-locations-to-ways apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber show sort time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -60,6 +60,19 @@ _osmium-output-options() {
     echo '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats'
     echo '(--overwrite)-O[allow overwriting of existing output file]'
     echo '(-O)--overwrite[allow overwriting of existing output file]'
+}
+
+_osmium-add-locations-to-ways() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-options)"} \
+        '(--index-type -I --show-index-types)-i[set index type]:index_types:_osmium_index_types' \
+        '(-i -I --show-index-types)--index-type[set index type]:index_types:_osmium_index_types' \
+        '(--show-index-types -i --index-type -n --keep-untagged-nodes)-I[show available index types]' \
+        '(-I -i --index-type -n --keep-untagged-nodes)--show-index-types[show available index types]' \
+        '(--keep-untagged-nodes -I --show-index-types)-n[keep untagged nodes in output]' \
+        '(-n -I --show-index-types)--keep-untagged-nodes[keep untagged nodes in output]'
 }
 
 _osmium-apply-changes() {
@@ -225,11 +238,15 @@ _osmium_fileinfo_variables() {
     _values 'variable' $(osmium fileinfo --show-variables)
 }
 
+_osmium_index_types() {
+    _values 'index-types' $(osmium add-locations-to-ways --show-index-types)
+}
+
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber show sort time-filter file-formats)
+    osmium_help_topics=(add-locations-to-ways apply-changes cat changeset-filter check-refs fileinfo getid help merge-changes renumber show sort time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 
-_osmium "$@"
+#_osmium "$@"
 

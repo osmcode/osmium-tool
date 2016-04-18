@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - New `--default-type` option to getid command.
 - The `getid` command can now recursively add all referenced objects.
 - New `show` command to quickly see OSM file contents.
+- New `add-locations-to-ways` command.
 
 ### Changed
 

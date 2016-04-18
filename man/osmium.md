@@ -27,6 +27,9 @@ Run **osmium help** *COMMAND* to get more information about a command.
 
 # COMMANDS
 
+add-locations-to-ways
+:   add node locations to ways in OSM file
+
 apply-changes
 :   apply OSM change file(s) to OSM data file
 
