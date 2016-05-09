@@ -12,14 +12,17 @@ osmium-merge-changes - merge several OSM change files into one
 # DESCRIPTION
 
 Merges the content of all change files given on the command line into one large
-change file. Objects are sorted by type, ID, and version, so it doesn't matter
-in what order the change files are given or in what order they contain the data.
+change file. Objects are sorted by type, ID, version, and timestamp so it
+doesn't matter in what order the change files are given or in what order they
+contain the data.
 
 
 # OPTIONS
 
 -s, --simplify
-:   Only write the last version of any object to the output.
+:   Only write the last version of any object to the output. For an object
+    created in one of the change files and removed in a later one, the deleted
+    version of the object will still appear because it is the latest version.
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
