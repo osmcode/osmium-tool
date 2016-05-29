@@ -66,7 +66,7 @@ the **-H**, **--history** option was given.
     of the type here.
 
 -H, --history
-    Make this program work on history files. This is only needed when using
+:   Make this program work on history files. This is only needed when using
     the **-r** option.
 
 -i, --id-file[=FILE]
