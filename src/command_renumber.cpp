@@ -290,10 +290,5 @@ namespace {
         return new CommandRenumber();
     });
 
-    // dummy function to silence the unused variable warning from above
-    inline bool get_register_renumber_command() noexcept {
-        return register_renumber_command;
-    }
-
 }
 

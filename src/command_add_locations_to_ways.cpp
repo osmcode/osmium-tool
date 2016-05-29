@@ -165,14 +165,9 @@ bool CommandAddLocationsToWays::run() {
 
 namespace {
 
-    const bool register_add_locations_to_ways_command = CommandFactory::add("add-locations-to-ways", "Add node locations to ways", []() {
+    const bool register_cat_command = CommandFactory::add("add-locations-to-ways", "Add node locations to ways", []() {
         return new CommandAddLocationsToWays();
     });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_register_add_locations_to_ways_command() noexcept {
-        return register_add_locations_to_ways_command;
-    }
 
 }
 

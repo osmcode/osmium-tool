@@ -289,10 +289,5 @@ namespace {
         return new CommandCheckRefs();
     });
 
-    // dummy function to silence the unused variable warning from above
-    inline bool get_register_check_refs_command() noexcept {
-        return register_check_refs_command;
-    }
-
 }
 

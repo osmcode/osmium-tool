@@ -200,10 +200,5 @@ namespace {
         return new CommandApplyChanges();
     });
 
-    // dummy function to silence the unused variable warning from above
-    inline bool get_register_apply_changes_command() noexcept {
-        return register_apply_changes_command;
-    }
-
 }
 

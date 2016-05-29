@@ -221,10 +221,5 @@ namespace {
         return new CommandShow();
     });
 
-    // dummy function to silence the unused variable warning from above
-    inline bool get_register_show_command() noexcept {
-        return register_show_command;
-    }
-
 }
 

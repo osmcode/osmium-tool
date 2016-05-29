@@ -619,10 +619,5 @@ namespace {
         return new CommandFileinfo();
     });
 
-    // dummy function to silence the unused variable warning from above
-    inline bool get_fileinfo_command() noexcept {
-        return register_fileinfo_command;
-    }
-
 }
 

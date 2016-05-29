@@ -135,10 +135,5 @@ namespace {
         return new CommandCat();
     });
 
-    // dummy function to silence the unused variable warning from above
-    inline bool get_register_cat_command() noexcept {
-        return register_cat_command;
-    }
-
 }
 
