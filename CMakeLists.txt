@@ -201,7 +201,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Dev")
     if(NOT MSVC)
         add_definitions(-Werror)
     endif()
-    add_definitions(${OSMIUM_WARNING_OPTIONS})
+    add_definitions(${OSMIUM_WARNING_OPTIONS} -Wno-unused-variable)
 endif()
 
 # Force RelWithDebInfo build type if none was given
