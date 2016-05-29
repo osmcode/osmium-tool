@@ -199,9 +199,9 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${USUAL_COMPILE_OPTIONS}"
 # In 'Dev' mode: compile with very strict warnings and turn them into errors.
 if(CMAKE_BUILD_TYPE STREQUAL "Dev")
     if(NOT MSVC)
-        add_definitions(-Werror)
+        add_definitions(-Werror -Wno-unused-variable)
     endif()
-    add_definitions(${OSMIUM_WARNING_OPTIONS} -Wno-unused-variable)
+    add_definitions(${OSMIUM_WARNING_OPTIONS})
 endif()
 
 # Force RelWithDebInfo build type if none was given
