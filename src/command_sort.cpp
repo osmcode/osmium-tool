@@ -118,5 +118,10 @@ namespace {
         return new CommandSort();
     });
 
+    // dummy function to silence the unused variable warning from above
+    inline bool get_register_sort_command() noexcept {
+        return register_sort_command;
+    }
+
 }
 

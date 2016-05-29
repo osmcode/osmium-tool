@@ -97,5 +97,10 @@ namespace {
         return new CommandHelp();
     });
 
+    // dummy function to silence the unused variable warning from above
+    inline bool get_register_help_command() noexcept {
+        return register_help_command;
+    }
+
 }
 

@@ -134,5 +134,10 @@ namespace {
         return new CommandMergeChanges();
     });
 
+    // dummy function to silence the unused variable warning from above
+    inline bool get_register_merge_changes_command() noexcept {
+        return register_merge_changes_command;
+    }
+
 }
 
