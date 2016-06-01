@@ -71,7 +71,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Remove license thats not applicable from LICENSE-rapidjson.txt.
+- Remove license that's not applicable from LICENSE-rapidjson.txt.
 - Renumbering didn't work properly in some cases.
 - Fix error checking in renumber command.
 
