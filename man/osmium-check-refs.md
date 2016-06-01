@@ -49,7 +49,7 @@ change files.
 needs enough main memory to store all temporary data.
 
 Largest memory need will be about 1 bit for each node ID, for a full planet
-thats roughly 500 MB these days (Summer 2015). With the **-r**,
+that's roughly 500 MB these days (Summer 2015). With the **-r**,
 **--check-relations** option memory use will be a bit bigger.
 
 
