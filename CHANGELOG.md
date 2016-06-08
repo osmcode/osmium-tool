@@ -22,6 +22,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Much faster and more memory efficient implementation of the `renumber`
   command.
 - The `getid` command can now read IDs from *stdin*.
+- Also show libosmium version when running `version` subcommand.
 
 ### Fixed
 
