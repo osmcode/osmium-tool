@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.3.1] - 2016-06-08
+
+### Added
+
 - Check that input files are correctly ordered in the `renumber` and
   `check-refs` commands.
 - Most commands now show the memory used in verbose mode.
@@ -23,8 +32,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   command.
 - The `getid` command can now read IDs from *stdin*.
 - Also show libosmium version when running `version` subcommand.
-
-### Fixed
 
 
 ## [1.3.0] - 2015-11-17
@@ -119,7 +126,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.3.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/osmcode/osmium-tool/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/osmcode/osmium-tool/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/osmcode/osmium-tool/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/osmcode/osmium-tool/compare/v1.1.0...v1.2.0
