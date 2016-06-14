@@ -31,8 +31,6 @@ set(OSMIUM_VERSION_PATCH 1)
 
 set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERSION_PATCH})
 
-add_definitions(-DOSMIUM_VERSION="${OSMIUM_VERSION}")
-
 set(AUTHOR "Jochen Topf <jochen@topf.org>")
 
 
@@ -218,12 +216,37 @@ set(CMAKE_BUILD_TYPE ${build_type}
 
 
 #-----------------------------------------------------------------------------
+#
+#  Version
+#
+#-----------------------------------------------------------------------------
+
+find_package(Git)
+
+if(GIT_FOUND)
+    execute_process(COMMAND "${GIT_EXECUTABLE}" describe --tags --dirty=-changed
+                    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+                    OUTPUT_VARIABLE VERSION_FROM_GIT
+                    ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if(VERSION_FROM_GIT)
+        set(VERSION_FROM_GIT " (${VERSION_FROM_GIT})")
+    endif()
+endif()
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/src/version.cpp.in
+    ${PROJECT_BINARY_DIR}/src/version.cpp
+)
+
+#-----------------------------------------------------------------------------
 
 configure_file(
     ${PROJECT_SOURCE_DIR}/osmium-wrapper.in
     ${PROJECT_BINARY_DIR}/osmium
 )
 
+include_directories(include)
+include_directories(${PROJECT_BINARY_DIR}/src)
 
 #-----------------------------------------------------------------------------
 #
@@ -235,9 +258,6 @@ enable_testing()
 add_subdirectory(test)
 
 #-----------------------------------------------------------------------------
-
-include_directories(include)
-include_directories(${PROJECT_BINARY_DIR}/src)
 
 add_subdirectory(src)
 
