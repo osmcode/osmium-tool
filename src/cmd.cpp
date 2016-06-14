@@ -69,8 +69,10 @@ void Command::setup_common(const boost::program_options::variables_map& vm, cons
 
 void Command::print_arguments(const std::string& command) {
     if (m_vout.verbose()) {
-        m_vout << "Started osmium " << command << "\n";
-        m_vout << "Command line options and default settings:\n";
+        m_vout << "Started osmium " << command << '\n'
+               << "  " << get_osmium_long_version() << '\n'
+               << "  " << get_libosmium_version() << '\n'
+               << "Command line options and default settings:\n";
         show_arguments();
     }
 }
