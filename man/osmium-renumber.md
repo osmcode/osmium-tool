@@ -39,6 +39,11 @@ IDs.
     directory. The files written will be named `nodes.idx`, `ways.idx`, and
     `relations.idx`.
 
+-t, --object-type=TYPE
+:   Renumber only objects of given type (*node*, *way*, or *relation*). By
+    default all objects of all types are renumbered. This option can be given
+    multiple times.
+
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@

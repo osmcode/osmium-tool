@@ -60,6 +60,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_object_type_nrwc(vm);
     setup_input_files(vm);
     setup_output_file(vm);
 

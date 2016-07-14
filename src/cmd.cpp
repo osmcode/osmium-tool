@@ -48,7 +48,9 @@ void Command::setup_common(const boost::program_options::variables_map& vm, cons
     if (vm.count("verbose")) {
         m_vout.verbose(true);
     }
+}
 
+void Command::setup_object_type_nrwc(const boost::program_options::variables_map& vm) {
     if (vm.count("object-type")) {
         m_osm_entity_bits = osmium::osm_entity_bits::nothing;
         for (const auto& t : vm["object-type"].as<std::vector<std::string>>()) {
@@ -62,6 +64,23 @@ void Command::setup_common(const boost::program_options::variables_map& vm, cons
                 m_osm_entity_bits |= osmium::osm_entity_bits::changeset;
             } else {
                 throw argument_error(std::string("Unknown object type '") + t + "' (Allowed are 'node', 'way', 'relation', and 'changeset').");
+            }
+        }
+    }
+}
+
+void Command::setup_object_type_nrw(const boost::program_options::variables_map& vm) {
+    if (vm.count("object-type")) {
+        m_osm_entity_bits = osmium::osm_entity_bits::nothing;
+        for (const auto& t : vm["object-type"].as<std::vector<std::string>>()) {
+            if (t == "n" || t == "node") {
+                m_osm_entity_bits |= osmium::osm_entity_bits::node;
+            } else if (t == "w" || t == "way") {
+                m_osm_entity_bits |= osmium::osm_entity_bits::way;
+            } else if (t == "r" || t == "relation") {
+                m_osm_entity_bits |= osmium::osm_entity_bits::relation;
+            } else {
+                throw argument_error(std::string("Unknown object type '") + t + "' (Allowed are 'node', 'way', and 'relation').");
             }
         }
     }

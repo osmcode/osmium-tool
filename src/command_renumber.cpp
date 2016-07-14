@@ -100,6 +100,7 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("index-directory,i", po::value<std::string>(), "Index directory")
+    ("object-type,t", po::value<std::vector<std::string>>(), "Renumber only objects of given type (node, way, relation)")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -125,6 +126,7 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_object_type_nrw(vm);
     setup_input_file(vm);
     setup_output_file(vm);
 
@@ -141,27 +143,48 @@ void CommandRenumber::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    index directory: " << m_index_directory << "\n";
+    m_vout << "    object types that will be renumbered:";
+    if (osm_entity_bits() & osmium::osm_entity_bits::node) {
+        m_vout << " node";
+    }
+    if (osm_entity_bits() & osmium::osm_entity_bits::way) {
+        m_vout << " way";
+    }
+    if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
+        m_vout << " relation";
+    }
+    m_vout << "\n";
 }
 
 void CommandRenumber::renumber(osmium::memory::Buffer& buffer) {
     for (auto& object : buffer.select<osmium::OSMObject>()) {
         switch (object.type()) {
             case osmium::item_type::node:
-                m_check_order.node(static_cast<const osmium::Node&>(object));
-                object.set_id(map(osmium::item_type::node)(object.id()));
+                if (osm_entity_bits() & osmium::osm_entity_bits::node) {
+                    m_check_order.node(static_cast<const osmium::Node&>(object));
+                    object.set_id(map(osmium::item_type::node)(object.id()));
+                }
                 break;
             case osmium::item_type::way:
-                m_check_order.way(static_cast<const osmium::Way&>(object));
-                object.set_id(map(osmium::item_type::way)(object.id()));
-                for (auto& ref : static_cast<osmium::Way&>(object).nodes()) {
-                    ref.set_ref(map(osmium::item_type::node)(ref.ref()));
+                if (osm_entity_bits() & osmium::osm_entity_bits::way) {
+                    m_check_order.way(static_cast<const osmium::Way&>(object));
+                    object.set_id(map(osmium::item_type::way)(object.id()));
+                }
+                if (osm_entity_bits() & osmium::osm_entity_bits::node) {
+                    for (auto& ref : static_cast<osmium::Way&>(object).nodes()) {
+                        ref.set_ref(map(osmium::item_type::node)(ref.ref()));
+                    }
                 }
                 break;
             case osmium::item_type::relation:
-                m_check_order.relation(static_cast<const osmium::Relation&>(object));
-                object.set_id(map(osmium::item_type::relation)(object.id()));
+                if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
+                    m_check_order.relation(static_cast<const osmium::Relation&>(object));
+                    object.set_id(map(osmium::item_type::relation)(object.id()));
+                }
                 for (auto& member : static_cast<osmium::Relation&>(object).members()) {
-                    member.set_ref(map(member.type())(member.ref()));
+                    if (osm_entity_bits() & osmium::osm_entity_bits::from_item_type(member.type())) {
+                        member.set_ref(map(member.type())(member.ref()));
+                    }
                 }
                 break;
             default:
@@ -200,6 +223,10 @@ void CommandRenumber::read_index(osmium::item_type type) {
 }
 
 void CommandRenumber::write_index(osmium::item_type type) {
+    if (!(osm_entity_bits() & osmium::osm_entity_bits::from_item_type(type))) {
+        return;
+    }
+
     std::string f { filename(osmium::item_type_to_name(type)) };
     int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
     if (fd < 0) {
@@ -237,8 +264,12 @@ bool CommandRenumber::run() {
         m_vout << "  Relations index contains " << map(osmium::item_type::relation).size() << " items\n";
     }
 
-    m_vout << "First pass through input file (reading relations)...\n";
-    read_relations(m_input_file, map(osmium::item_type::relation));
+    if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
+        m_vout << "First pass through input file (reading relations)...\n";
+        read_relations(m_input_file, map(osmium::item_type::relation));
+    } else {
+        m_vout << "No first pass through input file, because relation IDs are not mapped.\n";
+    }
 
     m_vout << "Second pass through input file...\n";
     osmium::io::Reader reader_pass2(m_input_file);
@@ -274,9 +305,17 @@ bool CommandRenumber::run() {
         write_index(osmium::item_type::relation);
     }
 
-    m_vout << "Largest (referenced) node id: "     << map(osmium::item_type::node).size()     << "\n";
-    m_vout << "Largest (referenced) way id: "      << map(osmium::item_type::way).size()      << "\n";
-    m_vout << "Largest (referenced) relation id: " << map(osmium::item_type::relation).size() << "\n";
+    if (osm_entity_bits() & osmium::osm_entity_bits::node) {
+        m_vout << "Largest (referenced) node id: "     << map(osmium::item_type::node).size()     << "\n";
+    }
+
+    if (osm_entity_bits() & osmium::osm_entity_bits::way) {
+        m_vout << "Largest (referenced) way id: "      << map(osmium::item_type::way).size()      << "\n";
+    }
+
+    if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
+        m_vout << "Largest (referenced) relation id: " << map(osmium::item_type::relation).size() << "\n";
+    }
 
     show_memory_used();
     m_vout << "Done.\n";
