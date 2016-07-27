@@ -24,12 +24,13 @@ Which format a file has is usually autodetected from the file name suffix.
 
 If this doesn't work, either because you are reading from stdin or writing to
 stdout, or because you have an unusual file name, you have to set the format
-manually. You can also set the format manually if you want to set special
+manually. You can also set the format manually if you want to specify special
 format options.
 
-Most **osmium** commands support the **--input-format** and **--output-format**
-options to set the format. They take a comma-separated list of arguments, the
-first is the format, further arguments set additional options.
+Most **osmium** commands support the **--input-format** (**--F**) and
+**--output-format** (**-f**) options to set the format. They take a
+comma-separated list of arguments, the first is the format, further arguments
+set additional options.
 
 # SPECIAL FORMAT OPTIONS
 
@@ -59,6 +60,9 @@ Here are some examples:
 
 pbf
 :   PBF format.
+
+pbf,add_metadata=false
+:   PBF format, dont' write metadata
 
 osm.bz2
 :   XML format, compressed with bzip2.
