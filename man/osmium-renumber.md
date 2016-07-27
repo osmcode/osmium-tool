@@ -37,7 +37,7 @@ IDs.
     in several OSM files. Without this option, the indexes are not read from
     or written to disk. The directory must exist. Use '.' for the current
     directory. The files written will be named `nodes.idx`, `ways.idx`, and
-    `relations.idx`.
+    `relations.idx`. See also the section INDEX FILES below.
 
 -t, --object-type=TYPE
 :   Renumber only objects of given type (*node*, *way*, or *relation*). By
@@ -47,6 +47,21 @@ IDs.
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
+
+
+# INDEX FILES
+
+When the `-i` or `--index-directory` option is used, index files named
+`nodes.idx`, `ways.idx`, and `relations.idx` are read from and written to the
+given directory. This can be used to force consistent mapping over several
+invocations of `osmium renumber`, for instance when you want to remap an OSM
+data file and a corresponding OSM change file.
+
+The index files are in binary format, but you can use the following command
+line to convert them into something readable:
+
+    od -An -td8 -w8 TYPE.idx | cat -n
+
 
 # DIAGNOSTICS
 
