@@ -63,6 +63,8 @@ defaults is RelWithDebInfo.
 
 ## Documentation
 
+See the [manual](doc/manual.md).
+
 There are man pages in the 'man' directory. To build them you need 'pandoc'.
 If the `pandoc` command was found during the CMake config step, the manpages
 will be built, if not they will not be built.
