@@ -40,7 +40,7 @@ set(AUTHOR "Jochen Topf <jochen@topf.org>")
 #
 #-----------------------------------------------------------------------------
 
-find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(Boost 1.55.0 REQUIRED COMPONENTS program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 find_package(Osmium REQUIRED COMPONENTS io)
