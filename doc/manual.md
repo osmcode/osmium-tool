@@ -397,7 +397,7 @@ and want to find all changesets in January 2015 by any of those users. You can
 first use `changeset-filter` to filter out the time window and then use `grep`
 to check for those users:
 
-    osmium changeset-filter -a 2015-01-01T00:00:00Z -b 2015-01-31T23:59:59T \
+    osmium changeset-filter -a 2015-01-01T00:00:00Z -b 2015-01-31T23:59:59Z \
         -f opl | grep ' u\(foo\|bar\|baz\) '
 
 This way you can use the fast, but not very flexible filtering options of the
