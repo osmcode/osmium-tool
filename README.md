@@ -9,12 +9,24 @@ library.
 
 ## Prerequisites
 
-You need a C++11 compliant compiler. GCC 4.8 and later as well as clang 3.4 and
+You need a C++11 compliant compiler. GCC 4.8 and later as well as clang 3.5 and
 later are known to work. You also need the following libraries:
 
-    Osmium Library
-        Need at least version 2.5.1
+    Libosmium
+        Need at least version 2.7.2
         http://osmcode.org/libosmium
+
+    Protozero
+        This is included in the libosmium repository and might or might not
+        have been installed with it. See the libosmium README.
+        https://github.com/mapbox/protozero
+        Debian/Ubuntu: protozero
+
+    Utfcpp
+        This is included in the libosmium repository and might or might not
+        have been installed with it. See the libosmium README.
+        http://utfcpp.sourceforge.net/
+        Debian/Ubuntu: libutfcpp-dev
 
     boost-program-options (for parsing command line options)
         http://www.boost.org/doc/libs/1_54_0/doc/html/program_options.html
