@@ -1,58 +1,78 @@
 
 # Osmium Command Line Tool
 
-Command line tool for working with OpenStreetMap data based on the Osmium
-library.
+A multipurpose command line tool for working with OpenStreetMap data based on
+the Osmium library.
 
 [![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.png)](http://travis-ci.org/osmcode/osmium-tool)
 [![Build Status](https://ci.appveyor.com/api/projects/status/ttem4j2gxa64p3w8?svg=true)](https://ci.appveyor.com/project/Mapbox/osmium-tool)
 
 ## Prerequisites
 
-You need a C++11 compliant compiler. GCC 4.8 and later as well as clang 3.5 and
-later are known to work. You also need the following libraries:
+You need a C++11 compliant compiler. GCC 4.8 and later as well as clang 3.6 and
+later are known to work. It also works on modern Visual Studio C++ compilers.
 
-    Libosmium
-        Need at least version 2.7.2
+You also need the following libraries:
+
+    Libosmium (>= 2.7.2)
         http://osmcode.org/libosmium
+        Debian/Ubuntu: libosmium2-dev
 
-    Protozero
+    Protozero (>= 1.3.0)
         This is included in the libosmium repository and might or might not
         have been installed with it. See the libosmium README.
         https://github.com/mapbox/protozero
         Debian/Ubuntu: protozero
+        Fedora: protozero-devel
 
     Utfcpp
         This is included in the libosmium repository and might or might not
         have been installed with it. See the libosmium README.
         http://utfcpp.sourceforge.net/
         Debian/Ubuntu: libutfcpp-dev
+        openSUSE: utfcpp
+        Fedora: utf8cpp-devel
 
-    boost-program-options (for parsing command line options)
-        http://www.boost.org/doc/libs/1_54_0/doc/html/program_options.html
+    boost-program-options (>= 1.55)
+        http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
 
     boost-crc
-        http://www.boost.org/doc/libs/1_57_0/libs/crc/
+        http://www.boost.org/doc/libs/1_55_0/libs/crc/
         Debian/Ubuntu: libboost-dev
 
-    zlib (for PBF support)
+    bz2lib
+        http://www.bzip.org/
+        Debian/Ubuntu: libbz2-dev
+        Fedora: bzip2-devel
+        CentOS: bzip2-devel
+
+    zlib
         http://www.zlib.net/
         Debian/Ubuntu: zlib1g-dev
         openSUSE: zlib-devel
+        Fedora: zlib-devel
+        CentOS: zlib-devel
 
-    Expat (for parsing XML files)
+    Expat
         http://expat.sourceforge.net/
         Debian/Ubuntu: libexpat1-dev
         openSUSE: libexpat-devel
+        Fedora: expat-devel
+        CentOS: expat-devel
 
-    cmake (for building)
+    cmake
         http://www.cmake.org/
         Debian/Ubuntu: cmake
+        openSUSE: cmake
+        Fedora: cmake
 
-    Pandoc (optional, to build documentation)
+    Pandoc
+        (Needed to build documentation, optional)
         http://johnmacfarlane.net/pandoc/
         Debian/Ubuntu: pandoc
+        openSUSE: pandoc
+        Fedora: pandoc
 
 
 ## Building
@@ -70,7 +90,7 @@ Or you can go the long route explicitly calling CMake as follows:
 
 To set the build type call cmake with `-DCMAKE_BUILD_TYPE=type`. Possible
 values are empty, Debug, Release, RelWithDebInfo, MinSizeRel, and Dev. The
-defaults is RelWithDebInfo.
+default is RelWithDebInfo.
 
 
 ## Documentation
@@ -79,7 +99,7 @@ See the [manual](doc/manual.md).
 
 There are man pages in the 'man' directory. To build them you need 'pandoc'.
 If the `pandoc` command was found during the CMake config step, the manpages
-will be built, if not they will not be built.
+will be built automatically.
 
 
 ## Tests
