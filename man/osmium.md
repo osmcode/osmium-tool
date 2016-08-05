@@ -51,6 +51,9 @@ getid
 help
 :   show help about commands
 
+merge
+:   merge several OSM files into one
+
 merge-changes
 :   merge several OSM change files into one
 

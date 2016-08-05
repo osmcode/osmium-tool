@@ -13,11 +13,17 @@ osmium-merge - merge several sorted OSM files into one
 
 Merges the content of all OSM files given on the command line into one large
 OSM file. Objects in all files must be sorted by type, ID, and version. The
-results will also be sorted in the same way.
+results will also be sorted in the same way. Objects that appear in multiple
+input files will only be in the output once.
 
 If there is only a single input file, its contents will be copied to the
 output.
 
+If there are different versions of the same object in the input files, all
+versions will appear in the output. So this command will work fine with history
+files as input creating a new history file. Do not use this command to merge
+non-history files with data from different points in time. It will not work
+correctly.
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
