@@ -103,6 +103,7 @@ If an osmium command exits with an "Out of memory" error, try running it with
   **osmium-check-refs**(1),
   **osmium-fileinfo**(1),
   **osmium-getid**(1),
+  **osmium-merge**(1),
   **osmium-merge-changes**(1),
   **osmium-renumber**(1),
   **osmium-show**(1),

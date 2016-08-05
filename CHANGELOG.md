@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- New `merge` command to merge any number of sorted OSM files.
+
 ### Changed
 
 ### Fixed
