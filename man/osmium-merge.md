@@ -58,6 +58,6 @@ Merge several extracts into one:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-merge-changes**(1), **osmium-file-formats**(5)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-merge-changes**(1)
 * [Osmium website](http://osmcode.org/osmium)
 
