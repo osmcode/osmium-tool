@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The new manual is a more gentle introduction into the capabilities of
   Osmium Tool.
 - New `merge` command to merge any number of sorted OSM files.
+- New `derive-changes` command to create change file from two OSM data files.
 - The `renumber` command can now optionally only renumber some object types.
 - Version information is now printed including the git commit id and always
   shown in verbose mode.
