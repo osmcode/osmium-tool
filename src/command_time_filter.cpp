@@ -92,12 +92,12 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
 
     if (m_from == m_to) { // point in time
         if (m_output_file.has_multiple_object_versions()) {
-            std::cerr << "Warning! You are writing to a file marked as having multiple object versions,\n";
+            std::cerr << "WARNING! You are writing to a file marked as having multiple object versions,\n";
             std::cerr << "but there will be only a single version of each object.\n";
         }
     } else { // time range
         if (!m_output_file.has_multiple_object_versions()) {
-            std::cerr << "Warning! You are writing to a file marked as having a single object version,\n";
+            std::cerr << "WARNING! You are writing to a file marked as having a single object version,\n";
             std::cerr << "but there might be multiple versions of each object.\n";
         }
     }

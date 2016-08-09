@@ -137,7 +137,7 @@ bool CommandDeriveChanges::run() {
 
     m_vout << "Opening output file...\n";
     if (m_output_file.format() != osmium::io::file_format::xml || !m_output_file.is_true("xml_change_format")) {
-        std::cerr << "Warning: Output format chosen is not the XML change format. Use .osc(.gz|bz2) as suffix or -f option.\n";
+        std::cerr << "WARNING: Output format chosen is not the XML change format. Use .osc(.gz|bz2) as suffix or -f option.\n";
     }
     osmium::io::Header header;
     header.set("generator", m_generator);
