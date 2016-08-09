@@ -7,26 +7,41 @@ osmium-apply-changes - apply OSM change file(s) to OSM data file
 # SYNOPSIS
 
 **osmium apply-changes** \[*OPTIONS*\] *OSM-DATA-FILE* *OSM-CHANGE-FILE*...
+**osmium apply-changes** \[*OPTIONS*\] *OSM-HISTORY-FILE* *OSM-CHANGE-FILE*...
 
 
 # DESCRIPTION
 
 Merges the content of all OSM change files and applies those changes to the OSM
-data file.
+data or history file.
 
-Objects in the data file must be sorted by type, ID, and version. Objects in
-change files need not be sorted, so it doesn't matter in what order the change
-files are given or in what order they contain the data.
+Objects in the data or historyy file must be sorted by type, ID, and version.
+Objects in change files need not be sorted, so it doesn't matter in what order
+the change files are given or in what order they contain the data.
+
+Changes can be applied to normal OSM data files or OSM history files with this
+command. File formats will be autodetected from the file name suffixes, see
+the **--with-history** option if that doesn't work.
 
 
 # OPTIONS
 
 -r, --remove-deleted
-:   Remove deleted objects from the output. If this is not set, deleted objects
-    will be in the output with the visible flag set to false.
+:   Deprecated. Remove deleted objects from the output. This is now the
+    default if your input file is a normal OSM data file ('.osm').
 
 -s, --simplify
-:   Only write the last version of any object to the output.
+:   Deprecated. Only write the last version of any object to the output.
+    This is now the default if your input file is a normal OSM data file
+    ('.osm').
+
+--with-history
+:   Update an OSM history file (instead of a normal OSM data file). Both
+    input and output must be history files. This option is usually not
+    necessary, because history files will be detected from their file name
+    suffixes, but if this detection doesn't work, you can force this mode
+    with this option.
+
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@

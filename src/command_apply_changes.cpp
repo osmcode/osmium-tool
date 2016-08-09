@@ -30,12 +30,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/object_comparisons.hpp>
 
 #include "command_apply_changes.hpp"
+#include "exception.hpp"
 
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
-    ("simplify,s", "Simplify change")
-    ("remove-deleted,r", "Remove deleted objects from output")
+    ("simplify,s",       "Simplify change (deprecated)")
+    ("remove-deleted,r", "Remove deleted objects from output (deprecated)")
+    ("with-history",     "Apply changes to history file")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -70,12 +72,25 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         m_change_filenames = vm["change-filenames"].as<std::vector<std::string>>();
     }
 
+    if (vm.count("with-history")) {
+        m_with_history = true;
+        m_output_file.set_has_multiple_object_versions(true);
+    } else {
+        if (m_input_file.has_multiple_object_versions() && m_output_file.has_multiple_object_versions()) {
+            m_with_history = true;
+        } else if (m_input_file.has_multiple_object_versions() != m_output_file.has_multiple_object_versions()) {
+            throw argument_error("Input and output file must both be OSM data files or both OSM history files (force with --with-history).");
+        }
+    }
+
     if (vm.count("simplify")) {
-        m_simplify_change = true;
+        std::cerr << "WARNING: -s, --simplify option is deprecated. Please see manual page.\n";
+        m_with_history = false;
     }
 
     if (vm.count("remove-deleted")) {
-        m_remove_deleted = true;
+        std::cerr << "WARNING: -r, --remove-deleted option is deprecated. Please see manual page.\n";
+        m_with_history = false;
     }
 
     return true;
@@ -89,35 +104,31 @@ void CommandApplyChanges::show_arguments() {
     }
     m_vout << "  input format: " << m_input_format << "\n";
     show_output_arguments(m_vout);
+    m_vout << "  reading and writing history file: " << (m_with_history ? "yes\n" : "no\n");
 }
 
 /**
- *  Copy the first OSM object with a given Id to the output iterator. Keep
+ *  Copy the first OSM object with a given Id to the output. Keep
  *  track of the Id of each object to do this.
- *
- *  If kd is set to true, it will copy deleted objects, too. Otherwise those
- *  are suppressed.
  *
  *  We are using this functor class instead of a simple lambda, because the
  *  lambda doesn't build on MSVC.
  */
 class copy_first_with_id {
 
-    osmium::io::OutputIterator<osmium::io::Writer> out;
+    osmium::io::Writer& writer;
     osmium::object_id_type id = 0;
-    bool keep_deleted;
 
 public:
 
-    copy_first_with_id(osmium::io::OutputIterator<osmium::io::Writer> oi, bool kd) :
-        out(oi),
-        keep_deleted(kd) {
+    copy_first_with_id(osmium::io::Writer& w) :
+        writer(w) {
     }
 
     void operator()(const osmium::OSMObject& obj) {
         if (obj.id() != id) {
-            if (keep_deleted || obj.visible()) {
-                *out = obj;
+            if (obj.visible()) {
+                writer(obj);
             }
             id = obj.id();
         }
@@ -148,19 +159,31 @@ bool CommandApplyChanges::run() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
-    auto out = osmium::io::make_output_iterator(writer);
 
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
 
-    if (m_simplify_change) {
-        // If the --simplify option was given we sort with the
-        // largest version of each object first and then only
-        // copy this last version of any object to the output_buffer.
+    if (m_with_history) {
+        // For history files this is a straightforward sort of the change
+        // files followed by a merge with the input file.
+        m_vout << "Sorting change data...\n";
+        objects.sort(osmium::object_order_type_id_version());
+
+        auto out = osmium::io::make_output_iterator(writer);
+        m_vout << "Applying changes and writing them to output...\n";
+        std::set_union(objects.begin(),
+                       objects.end(),
+                       input.begin(),
+                       input.end(),
+                       out);
+    } else {
+        // For normal data files we sort with the largest version of each
+        // object first and then only copy this last version of any object
+        // to the output.
         m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_reverse_version());
 
         auto output_it = boost::make_function_output_iterator(
-                            copy_first_with_id(out, !m_remove_deleted)
+                            copy_first_with_id(writer)
         );
 
         m_vout << "Applying changes and writing them to output...\n";
@@ -170,19 +193,6 @@ bool CommandApplyChanges::run() {
                        input.end(),
                        output_it,
                        osmium::object_order_type_id_reverse_version());
-    } else {
-        // If the --simplify option was not given, this
-        // is a straightforward sort of the change files
-        // and then a merge with the input file.
-        m_vout << "Sorting change data...\n";
-        objects.sort(osmium::object_order_type_id_version());
-
-        m_vout << "Applying changes and writing them to output...\n";
-        std::set_union(objects.begin(),
-                       objects.end(),
-                       input.begin(),
-                       input.end(),
-                       out);
     }
 
     writer.close();

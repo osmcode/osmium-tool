@@ -18,6 +18,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- The `apply-changes` subcommand now detects whether it is updating a normal
+  OSM file or an OSM history file based on file name suffix (can be forced
+  with `--with-history`). The options `--simplify` and `--remove-deleted`
+  are now deprecated (a warning will be written to stderr). For normal OSM
+  files, output is always simplified and deleted objects are removed, for
+  OSM history files, all versions of all objects are kept.
+
 ### Fixed
 
 

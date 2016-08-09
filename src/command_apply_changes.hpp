@@ -32,8 +32,7 @@ class CommandApplyChanges : public Command, public with_single_osm_input, public
 
     std::vector<std::string> m_change_filenames;
 
-    bool m_simplify_change = false;
-    bool m_remove_deleted = false;
+    bool m_with_history = false;
 
 public:
 
@@ -50,7 +49,7 @@ public:
     }
 
     const char* synopsis() const noexcept override final {
-        return "osmium apply-changes [OPTIONS] OSM-DATA-FILE OSM-CHANGE-FILE...";
+        return "osmium apply-changes [OPTIONS] OSM-FILE OSM-CHANGE-FILE...";
     }
 
 }; // class CommandApplyChanges
