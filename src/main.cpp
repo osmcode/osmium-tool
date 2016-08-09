@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
         if (cmd->run()) {
             return return_code::okay;
         }
-    } catch (std::bad_alloc& e) {
+    } catch (std::bad_alloc&) {
         std::cerr << "Out of memory. Read the MEMORY USAGE section of the osmium(1) manpage.\n";
     } catch (std::exception& e) {
         std::cerr << e.what() << "\n";
