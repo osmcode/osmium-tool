@@ -16,7 +16,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
         std::cout << get_osmium_long_version() << '\n'
                   << get_libosmium_version() << '\n'
                   << "Copyright (C) 2013-2016  Jochen Topf <jochen@topf.org>\n"
-                  << "License: GNU GENERAL PUBLIC LICENSE Version 3 <http://gnu.org/licenses/gpl.html>.\n"
+                  << "License: GNU GENERAL PUBLIC LICENSE Version 3 <https://gnu.org/licenses/gpl.html>.\n"
                   << "This is free software: you are free to change and redistribute it.\n"
                   << "There is NO WARRANTY, to the extent permitted by law.\n";
 

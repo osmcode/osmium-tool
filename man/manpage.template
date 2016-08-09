@@ -15,10 +15,10 @@ $endfor$
 $if(author)$
 .SH COPYRIGHT
 .PP
-Copyright (C) 2013\-2015 Jochen Topf <jochen@topf.org>.
+Copyright (C) 2013\-2016 Jochen Topf <jochen@topf.org>.
 
 License GPLv3+: GNU GPL version 3 or later
-<http://gnu.org/licenses/gpl.html>.
+<https://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 .SH CONTACT
