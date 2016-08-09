@@ -116,19 +116,19 @@ void CommandApplyChanges::show_arguments() {
  */
 class copy_first_with_id {
 
-    osmium::io::Writer& writer;
+    osmium::io::Writer* writer;
     osmium::object_id_type id = 0;
 
 public:
 
     copy_first_with_id(osmium::io::Writer& w) :
-        writer(w) {
+        writer(&w) {
     }
 
     void operator()(const osmium::OSMObject& obj) {
         if (obj.id() != id) {
             if (obj.visible()) {
-                writer(obj);
+                (*writer)(obj);
             }
             id = obj.id();
         }
