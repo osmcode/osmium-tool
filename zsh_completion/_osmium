@@ -80,10 +80,7 @@ _osmium-apply-changes() {
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-options)"} \
-        '(--remove-deleted)-r[remove deleted objects]' \
-        '(-r)--remove-deleted[remove deleted objects]' \
-        '(--simplify)-s[only write last version of any object]' \
-        '(-s)--simplify[only write last version of any object]'
+        '--with-history[update OSM history file]'
 }
 
 _osmium-cat() {
