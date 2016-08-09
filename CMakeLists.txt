@@ -116,6 +116,7 @@ if(PANDOC)
     set(PANDOC_HTML_OPTIONS -s -t html)
 
     add_man_page(1 osmium)
+    add_man_page(1 osmium-add-locations-to-ways)
     add_man_page(1 osmium-apply-changes)
     add_man_page(1 osmium-cat)
     add_man_page(1 osmium-changeset-filter)

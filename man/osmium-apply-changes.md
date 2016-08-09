@@ -14,9 +14,9 @@ osmium-apply-changes - apply OSM change file(s) to OSM data file
 Merges the content of all OSM change files and applies those changes to the OSM
 data file.
 
-Objects in change files will be sorted by type, ID, and version, so it doesn't
-matter in what order the change files are given or in what order they contain
-the data.
+Objects in the data file must be sorted by type, ID, and version. Objects in
+change files need not be sorted, so it doesn't matter in what order the change
+files are given or in what order they contain the data.
 
 
 # OPTIONS
