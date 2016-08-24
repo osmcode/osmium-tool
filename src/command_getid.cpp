@@ -116,7 +116,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("add-referenced")) {
         if (m_input_filename == "-") {
-            throw argument_error("Can not read OSM input from STDIN when -r/--add-referenced option is used.");
+            throw argument_error("Can not read OSM input from STDIN when --add-referenced/-r option is used.");
         }
         m_add_referenced_objects = true;
     }
@@ -176,7 +176,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     }
 
     if (no_ids()) {
-        throw argument_error("Please specify IDs to look for on command line or with option -i/--id-file or -I/--id-osm-file.");
+        throw argument_error("Please specify IDs to look for on command line or with option --id-file/-i or --id-osm-file/-I.");
     }
 
     return true;

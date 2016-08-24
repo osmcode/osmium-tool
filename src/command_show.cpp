@@ -105,7 +105,7 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
         vm.count("format-debug") &&
         vm.count("format-opl") &&
         vm.count("format-xml")) {
-        throw argument_error("You can only use at most one of the following options: -f/--output-format, -d/--format-debug, -o/--format-opl, and -x/--format-xml.");
+        throw argument_error("You can only use at most one of the following options: --output-format/-f, --format-debug/-d, --format-opl/-o, and --format-xml/-x.");
     }
 
     if (vm.count("output-format")) {
