@@ -35,6 +35,8 @@ flags = [
 '/usr/lib/ycmd/clang_includes/',
 
 '-I%s/include' % basedir,
+'-I%s/test/include' % basedir,
+'-I%s/src' % basedir,
 
 # libosmium include dirs
 '-I%s/../libosmium/include' % basedir,
