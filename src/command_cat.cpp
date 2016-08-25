@@ -72,20 +72,7 @@ void CommandCat::show_arguments() {
     show_output_arguments(m_vout);
 
     m_vout << "  other options:\n";
-    m_vout << "    object types:";
-    if (osm_entity_bits() & osmium::osm_entity_bits::node) {
-        m_vout << " node";
-    }
-    if (osm_entity_bits() & osmium::osm_entity_bits::way) {
-        m_vout << " way";
-    }
-    if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
-        m_vout << " relation";
-    }
-    if (osm_entity_bits() & osmium::osm_entity_bits::changeset) {
-        m_vout << " changeset";
-    }
-    m_vout << "\n";
+    show_object_types(m_vout);
 }
 
 void CommandCat::setup_header(osmium::io::Header& header) const {
