@@ -88,8 +88,8 @@ _osmium-cat() {
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-options)"} \
-        '*-t[read only object of given output types]:OSM entity type:_osmium_entity_type' \
-        '*--object-type[read only object of given output types]:OSM entity type:_osmium_entity_type'
+        '*-t[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
+        '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type'
 }
 
 _osmium-changeset-filter() {
@@ -190,7 +190,9 @@ _osmium-renumber() {
         ${(f)"$(_osmium-single-input-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '(--index-directory)-i[read/write index files in this directory]:directory:_path_files -/' \
-        '(-i)--index-directory[read/write index files in this directory]:directory:_path_files -/'
+        '(-i)--index-directory[read/write index files in this directory]:directory:_path_files -/' \
+        '*-t[renumber only objects of given output types]:OSM entity type:_osmium_object_type' \
+        '*--object-type[renumber only objects of given output types]:OSM entity type:_osmium_object_type'
 }
 
 _osmium-show() {
@@ -206,8 +208,8 @@ _osmium-show() {
         '(--output-format -f --format-debug -d --format-opl -o -x)--format-xml[set format of output OSM file to XML]' \
         '(--output-format -f --format-debug -d --format-opl -o --format-xml)-x[set format of output OSM file to XML]' \
         '--no-pager[disable pager]' \
-        '*-t[read only object of given output types]:OSM entity type:_osmium_entity_type' \
-        '*--object-type[read only object of given output types]:OSM entity type:_osmium_entity_type'
+        '*-t[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
+        '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type'
 }
 
 _osmium-sort() {
@@ -238,6 +240,13 @@ _osmium_file_formats() {
         'osc.gz[XML change format (compressed with gzip)]' \
         'osc.bz2[XML change format (compressed with bzip2)]' \
         'pbf[PBF format]'
+}
+
+_osmium_object_type() {
+    _values 'OSM object type' \
+        'node' \
+        'way' \
+        'relation'
 }
 
 _osmium_entity_type() {
