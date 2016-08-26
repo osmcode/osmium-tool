@@ -38,9 +38,9 @@ namespace po = boost::program_options;
 #include <osmium/util/minmax.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-const char* get_osmium_version();
-const char* get_osmium_long_version();
-const char* get_libosmium_version();
+const char* get_osmium_version() noexcept;
+const char* get_osmium_long_version() noexcept;
+const char* get_libosmium_version() noexcept;
 
 /**
  * Virtual base class for commands that can be called from the command line.
