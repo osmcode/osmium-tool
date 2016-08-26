@@ -94,9 +94,9 @@ void CommandDeriveChanges::show_arguments() {
     show_output_arguments(m_vout);
     m_vout << "  other options:\n";
     m_vout << "    on deleted objects:\n";
-    m_vout << "      increment version: " << (m_increment_version ? "yes" : "no") << '\n';
-    m_vout << "      keep details: "      << (m_keep_details      ? "yes" : "no") << '\n';
-    m_vout << "      update timestamp: "  << (m_update_timestamp  ? "yes" : "no") << '\n';
+    m_vout << "      increment version: " << yes_no(m_increment_version);
+    m_vout << "      keep details: "      << yes_no(m_keep_details);
+    m_vout << "      update timestamp: "  << yes_no(m_update_timestamp);
 }
 
 void CommandDeriveChanges::write_deleted(osmium::io::Writer& writer, osmium::OSMObject& object) {

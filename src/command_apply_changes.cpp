@@ -104,7 +104,7 @@ void CommandApplyChanges::show_arguments() {
     }
     m_vout << "  input format: " << m_input_format << "\n";
     show_output_arguments(m_vout);
-    m_vout << "  reading and writing history file: " << (m_with_history ? "yes\n" : "no\n");
+    m_vout << "  reading and writing history file: " << yes_no(m_with_history);
 }
 
 /**

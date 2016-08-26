@@ -42,6 +42,8 @@ const char* get_osmium_version() noexcept;
 const char* get_osmium_long_version() noexcept;
 const char* get_libosmium_version() noexcept;
 
+const char* yes_no(bool choice) noexcept;
+
 /**
  * Virtual base class for commands that can be called from the command line.
  */

@@ -157,8 +157,8 @@ void with_osm_output::show_output_arguments(osmium::util::VerboseOutput& vout) {
     vout << "    file name: " << m_output_filename << "\n";
     vout << "    file format: " << m_output_format << "\n";
     vout << "    generator: " << m_generator << "\n";
-    vout << "    overwrite: " << (m_output_overwrite == osmium::io::overwrite::allow ? "yes" : "no") << "\n";
-    vout << "    fsync: " << (m_fsync == osmium::io::fsync::yes ? "yes" : "no") << "\n";
+    vout << "    overwrite: " << yes_no(m_output_overwrite == osmium::io::overwrite::allow);
+    vout << "    fsync: " << yes_no(m_fsync == osmium::io::fsync::yes);
     if (!m_output_headers.empty()) {
         vout << "    output header:\n";
         for (const auto& h : m_output_headers) {

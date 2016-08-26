@@ -95,7 +95,7 @@ void CommandAddLocationsToWays::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    index type: " << m_index_type_name << "\n";
-    m_vout << "    keep untagged nodes: " << (m_keep_untagged_nodes ? "yes" : "no") << "\n";
+    m_vout << "    keep untagged nodes: " << yes_no(m_keep_untagged_nodes);
     m_vout << "\n";
 }
 

@@ -25,6 +25,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cmd.hpp"
 #include "exception.hpp"
 
+const char* yes_no(bool choice) noexcept {
+    return choice ? "yes\n" : "no\n";
+}
+
 po::options_description Command::add_common_options() {
     po::options_description options("COMMON OPTIONS");
 

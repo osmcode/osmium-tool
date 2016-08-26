@@ -183,7 +183,7 @@ public:
         for (const auto& box : header.boxes()) {
             std::cout << "    " << box << "\n";
         }
-        std::cout << "  With history: " << (header.has_multiple_object_versions() ? "yes" : "no") << "\n";
+        std::cout << "  With history: " << yes_no(header.has_multiple_object_versions());
 
         std::cout << "  Options:\n";
         for (const auto& option : header) {
@@ -201,11 +201,11 @@ public:
             std::cout << "    Last: " << info_handler.last_timestamp() << "\n";
         }
 
-        std::cout << "  Objects ordered (by type and id): " << (info_handler.ordered ? "yes\n" : "no\n");
+        std::cout << "  Objects ordered (by type and id): " << yes_no(info_handler.ordered);
 
         std::cout << "  Multiple versions of same object: ";
         if (info_handler.ordered) {
-            std::cout << (info_handler.multiple_versions ? "yes\n" : "no\n");
+            std::cout << yes_no(info_handler.multiple_versions);
             if (info_handler.multiple_versions != header.has_multiple_object_versions()) {
                 std::cout << "    WARNING! This is different from the setting in the header.\n";
             }
@@ -402,7 +402,7 @@ public:
 
     void header(const osmium::io::Header& header) override final {
         if (m_get_value == "header.with_history") {
-            std::cout << (header.has_multiple_object_versions() ? "yes" : "no") << "\n";
+            std::cout << yes_no(header.has_multiple_object_versions());
         }
 
         for (const auto& option : header) {

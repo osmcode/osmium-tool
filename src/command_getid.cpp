@@ -187,8 +187,8 @@ void CommandGetId::show_arguments() {
     show_output_arguments(m_vout);
 
     m_vout << "  other options:\n";
-    m_vout << "    add referenced objects: " << (m_add_referenced_objects ? "yes" : "no") << "\n";
-    m_vout << "    work with history files: " << (m_work_with_history ? "yes" : "no") << "\n";
+    m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
+    m_vout << "    work with history files: " << yes_no(m_work_with_history);
     m_vout << "    default object type: " << osmium::item_type_to_name(m_default_item_type) << "\n";
     if (m_verbose_ids) {
         m_vout << "    looking for these ids:\n";

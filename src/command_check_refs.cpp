@@ -80,8 +80,8 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
 void CommandCheckRefs::show_arguments() {
     show_single_input_arguments(m_vout);
     m_vout << "  other options:\n";
-    m_vout << "    show ids: " << (m_show_ids ? "yes\n" : "no\n");
-    m_vout << "    check relations: " << (m_check_relations ? "yes\n" : "no\n");
+    m_vout << "    show ids: " << yes_no(m_show_ids);
+    m_vout << "    check relations: " << yes_no(m_check_relations);
 }
 
 class RefCheckHandler : public osmium::handler::Handler {
