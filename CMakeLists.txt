@@ -9,8 +9,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 
 #-----------------------------------------------------------------------------
 #
@@ -32,6 +30,8 @@ set(OSMIUM_VERSION_PATCH 1)
 set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERSION_PATCH})
 
 set(AUTHOR "Jochen Topf <jochen@topf.org>")
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 #-----------------------------------------------------------------------------
