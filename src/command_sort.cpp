@@ -20,14 +20,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <boost/function_output_iterator.hpp>
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
 #include <osmium/io/output_iterator.hpp>
 #include <osmium/object_pointer_collection.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/visitor.hpp>
 
 #include "command_sort.hpp"
 

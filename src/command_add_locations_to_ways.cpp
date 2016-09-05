@@ -22,11 +22,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
 #include <iterator>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
+#include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/memory/buffer.hpp>
+#include <osmium/visitor.hpp>
 
 #include "command_add_locations_to_ways.hpp"
 #include "exception.hpp"

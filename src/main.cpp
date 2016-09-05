@@ -20,7 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <exception>
 #include <iostream>
+#include <memory>
+#include <new>
 #include <string>
 #include <vector>
 
@@ -29,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # include <io.h>
 #endif
 
-#include <osmium/version.hpp>
+#include <boost/program_options/errors.hpp>
 
 #include "cmd.hpp"
 

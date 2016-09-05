@@ -20,13 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <cstring>
 #include <iostream>
 #include <iomanip>
-#include <map>
-#include <numeric>
 #include <string>
+#include <vector>
 
 #ifndef _MSC_VER
 # include <unistd.h>

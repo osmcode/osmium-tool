@@ -20,16 +20,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <iostream>
-#include <iterator>
+#include <algorithm>
 
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
+#include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/memory/buffer.hpp>
 
 #include "command_cat.hpp"
-#include "exception.hpp"
 
 bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

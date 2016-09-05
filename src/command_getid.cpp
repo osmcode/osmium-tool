@@ -20,19 +20,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cstddef>
 #include <fstream>
 #include <iterator>
 #include <numeric>
+#include <set>
 #include <string>
 #include <vector>
 
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/types_from_string.hpp>
 #include <osmium/util/string.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/memory/buffer.hpp>
+#include <osmium/osm.hpp>
 
 #include "command_getid.hpp"
 #include "exception.hpp"

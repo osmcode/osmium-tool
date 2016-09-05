@@ -21,12 +21,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <algorithm>
+#include <cerrno>
+#include <cstdint>
 #include <iostream>
 #include <iterator>
+#include <memory>
 #include <sstream>
+#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <system_error>
+#include <utility>
 #include <vector>
 
 #ifndef _MSC_VER
@@ -42,8 +47,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <boost/crc.hpp>
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
 #include <osmium/handler.hpp>
+#include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/reader.hpp>
 #include <osmium/osm/crc.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/minmax.hpp>

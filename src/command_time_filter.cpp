@@ -24,8 +24,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
+#include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
 #include <osmium/diff_iterator.hpp>

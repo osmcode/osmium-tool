@@ -22,16 +22,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <iostream>
-#include <iterator>
-#include <set>
 #include <vector>
 
 #include <boost/program_options.hpp>
 
 #include <osmium/handler/check_order.hpp>
 #include <osmium/index/bool_vector.hpp>
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/visitor.hpp>
 
 #include "command_check_refs.hpp"
 

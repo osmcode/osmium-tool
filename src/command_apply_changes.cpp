@@ -20,14 +20,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
+
 #include <boost/function_output_iterator.hpp>
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
+#include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
 #include <osmium/io/output_iterator.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
 #include <osmium/object_pointer_collection.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/visitor.hpp>
 
 #include "command_apply_changes.hpp"
 #include "exception.hpp"
