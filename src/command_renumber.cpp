@@ -81,7 +81,7 @@ void id_map::write(int fd) {
     );
 }
 
-void id_map::read(int fd, size_t file_size) {
+void id_map::read(int fd, std::size_t file_size) {
     auto num_elements = file_size / sizeof(osmium::object_id_type);
     m_ids.reserve(num_elements);
     osmium::util::TypedMemoryMapping<osmium::object_id_type> mapping{num_elements, osmium::util::MemoryMapping::mapping_mode::readonly, fd};
@@ -213,7 +213,7 @@ void CommandRenumber::read_index(osmium::item_type type) {
     _setmode(fd, _O_BINARY);
 #endif
 
-    size_t file_size = osmium::util::file_size(fd);
+    std::size_t file_size = osmium::util::file_size(fd);
 
     if (file_size % sizeof(osmium::object_id_type) != 0) {
         throw std::runtime_error(std::string("index file '") + f + "' has wrong file size");

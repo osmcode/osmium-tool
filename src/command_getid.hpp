@@ -55,7 +55,7 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
 
     osmium::osm_entity_bits::type get_needed_types() const;
     bool no_ids() const;
-    size_t count_ids() const;
+    std::size_t count_ids() const;
 
     void find_referenced_objects();
 

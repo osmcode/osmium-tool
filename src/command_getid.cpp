@@ -75,7 +75,7 @@ bool CommandGetId::no_ids() const {
            ids(osmium::item_type::relation).empty();
 }
 
-size_t CommandGetId::count_ids() const {
+std::size_t CommandGetId::count_ids() const {
     return ids(osmium::item_type::node).size() +
            ids(osmium::item_type::way).size() +
            ids(osmium::item_type::relation).size();

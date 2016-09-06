@@ -74,11 +74,11 @@ public:
     void write(int fd);
 
     // Read the mappings from a binary file into m_ids and m_extra_ids.
-    void read(int fd, size_t file_size);
+    void read(int fd, std::size_t file_size);
 
     // The number of mappings currently existing. Also the last allocated
     // new ID.
-    size_t size() const noexcept {
+    std::size_t size() const noexcept {
         return m_ids.size();
     }
 
