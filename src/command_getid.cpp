@@ -84,8 +84,8 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("default-type", po::value<std::string>()->default_value("node"), "Default item type")
-    ("id-file,i", po::value<std::string>(), "Read OSM IDs from text file")
-    ("id-osm-file,I", po::value<std::string>(), "Read OSM IDs from OSM file")
+    ("id-file,i", po::value<std::vector<std::string>>(), "Read OSM IDs from text file")
+    ("id-osm-file,I", po::value<std::vector<std::string>>(), "Read OSM IDs from OSM file")
     ("history,H", "Make it work with history files")
     ("add-referenced,r", "Recursively add referenced objects")
     ("verbose-ids", "Print all requested and missing IDs")
@@ -150,24 +150,26 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     }
 
     if (vm.count("id-file")) {
-        std::string filename = vm["id-file"].as<std::string>();
-
-        if (filename == "-") {
-            if (m_input_filename == "-") {
-                throw argument_error("Can not read OSM input and IDs both from STDIN.");
+        for (const std::string& filename : vm["id-file"].as<std::vector<std::string>>()) {
+            if (filename == "-") {
+                if (m_input_filename == "-") {
+                    throw argument_error("Can not read OSM input and IDs both from STDIN.");
+                }
+                read_id_file(std::cin);
+            } else {
+                std::ifstream id_file{filename};
+                if (!id_file.is_open()) {
+                    throw argument_error("Could not open file '" + filename + "'");
+                }
+                read_id_file(id_file);
             }
-            read_id_file(std::cin);
-        } else {
-            std::ifstream id_file{filename};
-            if (!id_file.is_open()) {
-                throw argument_error("Could not open file '" + filename + "'");
-            }
-            read_id_file(id_file);
         }
     }
 
     if (vm.count("id-osm-file")) {
-        read_id_osm_file(vm["id-osm-file"].as<std::string>());
+        for (const std::string& filename : vm["id-osm-file"].as<std::vector<std::string>>()) {
+            read_id_osm_file(filename);
+        }
     }
 
     if (vm.count("ids")) {

@@ -16,8 +16,8 @@ osmium-getid - get objects from OSM file by ID
 Get objects with the given IDs from the input and write them to the output.
 
 IDs can be given on the command line (first case in synopsis), or read from
-a text file with one ID per line (second case in synopsis), or read from an
-OSM file (third cases in synopsis).
+text files with one ID per line (second case in synopsis), or read from
+OSM files (third cases in synopsis). A mixture of these cases is also allowed.
 
 All objects with these IDs will be read from *OSM-FILE* and written to the
 output. If the option **-r**, **--add-referenced** is used all objects
@@ -35,7 +35,8 @@ relations. If there is no type letter, 'n' for nodes is assumed (or whatever
 the **--default-type** option says). So "n13 w22 17 r21" will match the nodes
 13 and 17, the way 22 and the relation 21.
 
-The order in which the IDs appear does not matter.
+The order in which the IDs appear does not matter. Identical IDs can appear
+multiple times on the command file or in the ID file(s).
 
 On the command line, the list of IDs can be in separate arguments or in a
 single argument separated by spaces, tabs, commas (,), semicolons (;), forward
@@ -75,10 +76,12 @@ the **-H**, **--history** option was given.
     ID in the format described above. Lines can optionally contain a space
     character or a hash sign ('#') after the ID. This character and all
     following characters are ignored. (This allows files in OPL format to be
-    read.) Empty lines are also ignored.
+    read.) Empty lines are also ignored. This option can be used multiple
+    times.
 
 -I, --id-osm-file=OSMFILE
-:   Like **-i** but get the IDs from an OSM file.
+:   Like **-i** but get the IDs from an OSM file. This option can be used
+    multiple times.
 
 -r, --add-referenced
 :   Recursively find all objects referenced by the objects of the given IDs
