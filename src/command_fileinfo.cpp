@@ -87,6 +87,15 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::object_id_type last_id = 0;
 
     void changeset(const osmium::Changeset& changeset) {
+        if (last_type == osmium::item_type::changeset) {
+            if (last_id > changeset.id()) {
+                ordered = false;
+            }
+        } else {
+            last_type = osmium::item_type::changeset;
+        }
+
+        last_id = changeset.id();
         crc32.update(changeset);
         ++changesets;
 
@@ -104,7 +113,7 @@ struct InfoHandler : public osmium::handler::Handler {
             if (last_id > object.id()) {
                 ordered = false;
             }
-        } else if (last_type > object.type()) {
+        } else if (last_type != osmium::item_type::changeset && last_type > object.type()) {
             ordered = false;
         }
 
