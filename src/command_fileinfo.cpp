@@ -378,10 +378,6 @@ class SimpleOutput : public Output {
 
     std::string m_get_value;
 
-    bool output_variable(const std::string& name) {
-        return m_get_value == name;
-    }
-
 public:
 
     explicit SimpleOutput(const std::string& get_value) :
