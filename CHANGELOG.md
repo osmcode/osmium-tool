@@ -9,7 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - The new manual is a more gentle introduction into the capabilities of
-  Osmium Tool.
+  Osmium Tool. Numerous man page additions.
 - New `merge` command to merge any number of sorted OSM files.
 - New `derive-changes` command to create change file from two OSM data files.
 - The `renumber` command can now optionally only renumber some object types.
@@ -24,8 +24,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   are now deprecated (a warning will be written to stderr). For normal OSM
   files, output is always simplified and deleted objects are removed, for
   OSM history files, all versions of all objects are kept.
+- Also check ordering of changesets in `osmium fileinfo -e`.
+- The `getid` options `-i` and `-I` can now be used multiple times.
+- More consistent warning messages.
+- Compiles much faster due to include optimizations.
 
 ### Fixed
+
+- CMake now creates `compile_commands.json`.
 
 
 ## [1.3.1] - 2016-06-08
