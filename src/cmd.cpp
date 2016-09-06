@@ -20,6 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <iostream>
+
 #include <osmium/util/memory.hpp>
 
 #include "cmd.hpp"
@@ -27,6 +29,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 const char* yes_no(bool choice) noexcept {
     return choice ? "yes\n" : "no\n";
+}
+
+void warning(const char* text) {
+    std::cerr << "WARNING: " << text;
 }
 
 po::options_description Command::add_common_options() {

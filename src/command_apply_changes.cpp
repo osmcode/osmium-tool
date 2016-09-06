@@ -21,7 +21,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <algorithm>
-#include <iostream>
 #include <string>
 #include <vector>
 #include <utility>
@@ -93,12 +92,12 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     }
 
     if (vm.count("simplify")) {
-        std::cerr << "WARNING: -s, --simplify option is deprecated. Please see manual page.\n";
+        warning("-s, --simplify option is deprecated. Please see manual page.\n");
         m_with_history = false;
     }
 
     if (vm.count("remove-deleted")) {
-        std::cerr << "WARNING: -r, --remove-deleted option is deprecated. Please see manual page.\n";
+        warning("-r, --remove-deleted option is deprecated. Please see manual page.\n");
         m_with_history = false;
     }
 
