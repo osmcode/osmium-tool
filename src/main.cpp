@@ -102,10 +102,10 @@ int main(int argc, char *argv[]) {
         if (!cmd->setup(arguments)) {
             return return_code::okay;
         }
-    } catch (boost::program_options::error& e) {
+    } catch (const boost::program_options::error& e) {
         std::cerr << "Error parsing command line: " << e.what() << std::endl;
         return return_code::fatal;
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         return return_code::fatal;
     }
@@ -116,9 +116,9 @@ int main(int argc, char *argv[]) {
         if (cmd->run()) {
             return return_code::okay;
         }
-    } catch (std::bad_alloc&) {
+    } catch (const std::bad_alloc&) {
         std::cerr << "Out of memory. Read the MEMORY USAGE section of the osmium(1) manpage.\n";
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         std::cerr << e.what() << "\n";
     }
 

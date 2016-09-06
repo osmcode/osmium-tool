@@ -288,7 +288,7 @@ bool CommandRenumber::run() {
             renumber(buffer);
             writer(std::move(buffer));
         }
-    } catch (osmium::out_of_order_error& e) {
+    } catch (const osmium::out_of_order_error& e) {
         std::cerr << e.what() << "\n";
         std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\n"
                   << "then ways in order of ID, then relations in order of ID.\n";

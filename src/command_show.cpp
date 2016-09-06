@@ -190,7 +190,7 @@ bool CommandShow::run() {
             while (osmium::memory::Buffer buffer = reader.read()) {
                 writer(std::move(buffer));
             }
-        } catch (std::system_error& e) {
+        } catch (const std::system_error& e) {
             if (e.code().value() != EPIPE) {
                 throw;
             }

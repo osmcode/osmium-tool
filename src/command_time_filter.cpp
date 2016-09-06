@@ -73,7 +73,7 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
         auto ts = vm["time-from"].as<std::string>();
         try {
             m_from = osmium::Timestamp(ts);
-        } catch (std::invalid_argument&) {
+        } catch (const std::invalid_argument&) {
             throw argument_error("Wrong format for (first) timestamp (use YYYY-MM-DDThh:mm:ssZ).");
         }
         m_to = m_from;
@@ -83,7 +83,7 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
         auto ts = vm["time-to"].as<std::string>();
         try {
             m_to = osmium::Timestamp(ts);
-        } catch (std::invalid_argument&) {
+        } catch (const std::invalid_argument&) {
             throw argument_error("Wrong format for second timestamp (use YYYY-MM-DDThh:mm:ssZ).");
         }
     }
