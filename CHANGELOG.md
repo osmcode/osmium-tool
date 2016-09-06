@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The `renumber` command can now optionally only renumber some object types.
 - Version information is now printed including the git commit id and always
   shown in verbose mode.
+- Added `iwyu` target to CMake config.
 
 ### Changed
 
@@ -28,6 +29,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The `getid` options `-i` and `-I` can now be used multiple times.
 - More consistent warning messages.
 - Compiles much faster due to include optimizations.
+- Update the included RapidJSON to version 1.1.0.
 
 ### Fixed
 
