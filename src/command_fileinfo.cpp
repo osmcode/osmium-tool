@@ -384,7 +384,7 @@ class SimpleOutput : public Output {
 
 public:
 
-    SimpleOutput(const std::string& get_value) :
+    explicit SimpleOutput(const std::string& get_value) :
         m_get_value(get_value) {
     }
 

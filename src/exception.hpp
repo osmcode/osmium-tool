@@ -30,11 +30,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 struct argument_error : std::runtime_error {
 
-    argument_error(const char* message) :
+    explicit argument_error(const char* message) :
         std::runtime_error(message) {
     }
 
-    argument_error(const std::string& message) :
+    explicit argument_error(const std::string& message) :
         std::runtime_error(message) {
     }
 

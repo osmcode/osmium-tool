@@ -80,7 +80,7 @@ class DataSource {
 
 public:
 
-    DataSource(const osmium::io::File& file) :
+    explicit DataSource(const osmium::io::File& file) :
         reader(new osmium::io::Reader{file}),
         iterator(*reader) {
     }

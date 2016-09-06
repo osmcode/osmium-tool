@@ -129,7 +129,7 @@ class copy_first_with_id {
 
 public:
 
-    copy_first_with_id(osmium::io::Writer& w) :
+    explicit copy_first_with_id(osmium::io::Writer& w) :
         writer(&w) {
     }
 
