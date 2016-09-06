@@ -157,10 +157,10 @@ _osmium-getid() {
         ${(f)"$(_osmium-single-input-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '--default-type[default item type]' \
-        '(--id-file)-i[read OSM IDs from text file]' \
-        '(-i)--id-file[read OSM IDs from text file]' \
-        '(--id-osm-file)-I[read OSM IDs from OSM file]' \
-        '(-I)--id-osm-file[read OSM IDs from OSM file]' \
+        'i[read OSM IDs from text file]' \
+        '--id-file[read OSM IDs from text file]' \
+        '-I[read OSM IDs from OSM file]' \
+        '--id-osm-file[read OSM IDs from OSM file]' \
         '(--add-referenced)-r[recursively add referenced objects]' \
         '(-r)--add-referenced[recursively add referenced objects]' \
         '(--with-history)-H[make it work with history files]' \
