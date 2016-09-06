@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/io/file.hpp>
 
-#include "cmd.hpp"
+#include "cmd.hpp" // IWYU pragma: export
 
 class CommandFileinfo : public Command, public with_single_osm_input {
 

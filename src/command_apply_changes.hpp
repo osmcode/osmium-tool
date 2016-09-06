@@ -26,7 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include "cmd.hpp"
+#include "cmd.hpp" // IWYU pragma: export
 
 class CommandApplyChanges : public Command, public with_single_osm_input, public with_osm_output {
 

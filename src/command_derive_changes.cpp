@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/io/input_iterator.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "command_derive_changes.hpp"
 #include "exception.hpp"

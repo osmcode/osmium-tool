@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/io/header.hpp>
 
-#include "cmd.hpp"
+#include "cmd.hpp" // IWYU pragma: export
 
 class CommandShow : public Command, public with_single_osm_input {
 

@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/handler/check_order.hpp>
 #include <osmium/index/bool_vector.hpp>
 #include <osmium/io/reader.hpp>
+#include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
 #include "command_check_refs.hpp"

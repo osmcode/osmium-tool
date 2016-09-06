@@ -54,6 +54,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/crc.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/minmax.hpp>
+#include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
 #include "command_fileinfo.hpp"

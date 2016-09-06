@@ -35,6 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 #include <osmium/object_pointer_collection.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
 #include "command_apply_changes.hpp"

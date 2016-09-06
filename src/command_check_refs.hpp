@@ -25,7 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-#include "cmd.hpp"
+#include "cmd.hpp" // IWYU pragma: export
 
 class CommandCheckRefs : public Command, public with_single_osm_input {
 

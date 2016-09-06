@@ -22,8 +22,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/any_output.hpp>
+#include <osmium/io/any_input.hpp> // IWYU pragma: keep
+#include <osmium/io/any_output.hpp> // IWYU pragma: keep
 #include <osmium/io/file.hpp>
 #include <osmium/io/writer_options.hpp>
 #include <osmium/util/verbose_output.hpp>

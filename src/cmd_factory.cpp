@@ -20,6 +20,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include <osmium/util/minmax.hpp>
 
 #include "cmd.hpp"

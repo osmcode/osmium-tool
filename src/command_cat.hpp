@@ -26,10 +26,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <osmium/io/header.hpp>
-#include <osmium/osm/entity_bits.hpp>
+#include "cmd.hpp" // IWYU pragma: export
 
-#include "cmd.hpp"
+namespace osmium { namespace io {
+    class Header;
+}}
 
 class CommandCat : public Command, public with_multiple_osm_inputs, public with_osm_output {
 

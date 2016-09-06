@@ -22,8 +22,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstddef>
 #include <fstream>
-#include <iterator>
-#include <numeric>
+#include <iostream>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -38,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "command_getid.hpp"
 #include "exception.hpp"

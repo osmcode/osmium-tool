@@ -40,6 +40,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/memory_mapping.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "command_renumber.hpp"
 

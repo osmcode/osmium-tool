@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
 #include <osmium/diff_iterator.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "command_time_filter.hpp"
 #include "exception.hpp"

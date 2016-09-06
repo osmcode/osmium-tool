@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "command_cat.hpp"
 

@@ -1,0 +1,17 @@
+#-----------------------------------------------------------------------------
+#
+#  Configuration for Include-What-You-Use tool
+#
+#  http://include-what-you-use.org/
+#
+#-----------------------------------------------------------------------------
+[
+    { "include": ["<boost/program_options/detail/parsers.hpp>", "private", "<boost/program_options.hpp>", "public"] },
+    { "include": ["<boost/program_options/detail/value_semantic.hpp>", "private", "<boost/program_options.hpp>", "public"] },
+    { "include": ["<boost/program_options/options_description.hpp>", "private", "<boost/program_options.hpp>", "public"] },
+    { "include": ["<boost/program_options/parsers.hpp>", "private", "<boost/program_options.hpp>", "public"] },
+    { "include": ["<boost/program_options/positional_options.hpp>", "private", "<boost/program_options.hpp>", "public"] },
+    { "include": ["<boost/program_options/value_semantic.hpp>", "private", "<boost/program_options.hpp>", "public"] },
+    { "include": ["<boost/program_options/variables_map.hpp>", "private", "<boost/program_options.hpp>", "public"] }
+]
+

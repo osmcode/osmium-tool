@@ -33,7 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
 
-#include "cmd.hpp"
+#include "cmd.hpp" // IWYU pragma: export
 
 class CommandGetId : public Command, public with_single_osm_input, public with_osm_output {
 

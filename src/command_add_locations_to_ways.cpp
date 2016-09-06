@@ -34,6 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/visitor.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "command_add_locations_to_ways.hpp"
 #include "exception.hpp"

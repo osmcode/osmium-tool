@@ -33,7 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/types.hpp>
 
-#include "cmd.hpp"
+#include "cmd.hpp" // IWYU pragma: export
 
 /**
  * Holds the mapping from old IDs to new IDs of one object type.

@@ -26,23 +26,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <osmium/index/map/dense_mem_array.hpp>
-#include <osmium/index/map/dense_mmap_array.hpp>
-#include <osmium/index/map/sparse_mem_array.hpp>
-#include <osmium/index/map/sparse_mmap_array.hpp>
+#include <osmium/index/map/dense_mem_array.hpp> // IWYU pragma: keep
+#include <osmium/index/map/dense_mmap_array.hpp> // IWYU pragma: keep
+#include <osmium/index/map/sparse_mem_array.hpp> // IWYU pragma: keep
+#include <osmium/index/map/sparse_mmap_array.hpp> // IWYU pragma: keep
 #include <osmium/handler/node_locations_for_ways.hpp>
-#include <osmium/io/header.hpp>
-#include <osmium/osm/entity_bits.hpp>
 
-#include "cmd.hpp"
+namespace osmium { namespace io {
+    class Header;
+    class Reader;
+    class Writer;
+}}
+
+#include "cmd.hpp" // IWYU pragma: export
 
 using index_type = osmium::index::map::Map<osmium::unsigned_object_id_type, osmium::Location>;
 using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;
-
-namespace osmium { namespace io {
-    class Reader;
-    class Writer;
-} }
 
 class CommandAddLocationsToWays : public Command, public with_multiple_osm_inputs, public with_osm_output {
 

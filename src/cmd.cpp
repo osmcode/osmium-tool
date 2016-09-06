@@ -20,9 +20,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cstdlib>
 #include <iostream>
 
+#include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/memory.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "cmd.hpp"
 #include "exception.hpp"
@@ -52,7 +55,7 @@ void Command::setup_common(const boost::program_options::variables_map& vm, cons
                   << CommandFactory::get_description(name()) << "\n"
                   << desc
                   << "\nUse 'osmium help " << name() << "' to display the manual page.\n";
-        exit(0);
+        std::exit(0);
     }
 
     if (vm.count("verbose")) {

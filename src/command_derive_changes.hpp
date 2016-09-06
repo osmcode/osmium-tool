@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/memory/buffer.hpp>
 
-#include "cmd.hpp"
+#include "cmd.hpp" // IWYU pragma: export
 
 class CommandDeriveChanges : public Command, public with_multiple_osm_inputs, public with_osm_output {
 

@@ -66,7 +66,24 @@ if(CPPCHECK)
 else()
     message(STATUS "Looking for cppcheck - not found")
     message(STATUS "  Make target cppcheck not available")
-endif(CPPCHECK)
+endif()
+
+
+#-----------------------------------------------------------------------------
+#
+#  Optional "iwyu" target to check headers
+#  http://include-what-you-use.org/
+#
+#-----------------------------------------------------------------------------
+find_program(IWYU_TOOL iwyu_tool.py)
+
+if(IWYU_TOOL)
+    message(STATUS "Looking for iwyu_tool.py - found")
+    add_custom_target(iwyu ${IWYU_TOOL} -p ${CMAKE_BINARY_DIR} -- --mapping_file=${CMAKE_SOURCE_DIR}/iwyu.imp)
+else()
+    message(STATUS "Looking for iwyu_tool.py - not found")
+    message(STATUS "  Make target iwyu not available")
+endif()
 
 
 #-----------------------------------------------------------------------------
@@ -138,7 +155,7 @@ if(PANDOC)
 else()
     message(STATUS "Looking for pandoc - not found")
     message(STATUS "  Manual pages will not be built")
-endif(PANDOC)
+endif()
 
 
 #-----------------------------------------------------------------------------

@@ -31,6 +31,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
 #include <osmium/osm/changeset.hpp>
+#include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/timestamp.hpp>
+#include <osmium/osm/types.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include "command_changeset_filter.hpp"
 #include "exception.hpp"
