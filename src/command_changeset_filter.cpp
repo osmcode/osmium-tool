@@ -22,6 +22,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 #include <boost/program_options.hpp>
 

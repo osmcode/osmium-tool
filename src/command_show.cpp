@@ -20,6 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cstdlib>
+
 #ifndef _MSC_VER
 # include <signal.h>
 # include <unistd.h>
@@ -142,7 +144,7 @@ static int execute_pager(const std::string& pager) {
         ::close(pipefd[1]); // close write end of the pipe
         ::close(0); // close stdin
         if (::dup2(pipefd[0], 0) < 0) { // put end of pipe as stdin
-            exit(1);
+            std::exit(1);
         }
 
         // execute pager without arguments
@@ -150,7 +152,7 @@ static int execute_pager(const std::string& pager) {
 
         // Exec will either succeed and never return here, or it fails and
         // we'll exit.
-        exit(1);
+        std::exit(1);
     }
 
     // parent

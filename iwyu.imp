@@ -12,6 +12,8 @@
     { "include": ["<boost/program_options/parsers.hpp>", "private", "<boost/program_options.hpp>", "public"] },
     { "include": ["<boost/program_options/positional_options.hpp>", "private", "<boost/program_options.hpp>", "public"] },
     { "include": ["<boost/program_options/value_semantic.hpp>", "private", "<boost/program_options.hpp>", "public"] },
-    { "include": ["<boost/program_options/variables_map.hpp>", "private", "<boost/program_options.hpp>", "public"] }
+    { "include": ["<boost/program_options/variables_map.hpp>", "private", "<boost/program_options.hpp>", "public"] },
+    { "include": ["<boost/lexical_cast.hpp>", "public", "<boost/program_options/value_semantic.hpp>", "private"] },
+    { "include": ["<boost/lexical_cast/bad_lexical_cast.hpp>", "private", "<boost/lexical_cast.hpp>", "public"] }
 ]
 

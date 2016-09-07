@@ -28,13 +28,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
+#include <osmium/index/map.hpp>
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
-#include <osmium/visitor.hpp>
+#include <osmium/osm/item_type.hpp>
+#include <osmium/osm/location.hpp>
+#include <osmium/osm/node.hpp>
+#include <osmium/osm/types.hpp>
 #include <osmium/util/verbose_output.hpp>
+#include <osmium/visitor.hpp>
 
 #include "command_add_locations_to_ways.hpp"
 #include "exception.hpp"

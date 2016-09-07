@@ -21,19 +21,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <algorithm>
+#include <string>
+#include <vector>
 
 #include <boost/program_options.hpp>
 
 #include <osmium/io/header.hpp>
+#include <osmium/io/output_iterator.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
-#include <osmium/io/output_iterator.hpp>
+#include <osmium/memory/buffer.hpp>
 #include <osmium/object_pointer_collection.hpp>
+#include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/object_comparisons.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
 #include "command_merge_changes.hpp"
+
+namespace osmium { namespace io {
+    class File;
+}}
 
 bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

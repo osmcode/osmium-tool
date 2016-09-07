@@ -44,7 +44,7 @@ find_package(Boost 1.55.0 REQUIRED COMPONENTS program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 find_package(Osmium REQUIRED COMPONENTS io)
-include_directories(${OSMIUM_INCLUDE_DIRS})
+include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
 
 
 #-----------------------------------------------------------------------------

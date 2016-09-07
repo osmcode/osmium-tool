@@ -26,18 +26,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <boost/program_options.hpp>
 
-#include <osmium/osm/entity_bits.hpp>
-#include <osmium/osm/types_from_string.hpp>
-#include <osmium/util/string.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
+#include <osmium/osm/types_from_string.hpp>
+#include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_getid.hpp"

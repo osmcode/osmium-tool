@@ -30,11 +30,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
+#include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
+#include <osmium/memory/buffer.hpp>
 #include <osmium/object_pointer_collection.hpp>
+#include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/object.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/osm/types.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 

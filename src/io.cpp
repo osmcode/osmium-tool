@@ -20,6 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <string>
+#include <vector>
+
 #include <boost/program_options.hpp>
 
 #include <osmium/io/any_input.hpp> // IWYU pragma: keep

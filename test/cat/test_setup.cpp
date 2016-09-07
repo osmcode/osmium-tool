@@ -1,5 +1,5 @@
 
-#include "test.hpp"
+#include "test.hpp" // IWYU pragma: keep
 
 #include "command_cat.hpp"
 

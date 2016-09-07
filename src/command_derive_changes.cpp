@@ -21,15 +21,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <ctime>
+#include <string>
+#include <vector>
 
 #include <boost/program_options.hpp>
 
 #include <osmium/builder/attr.hpp>
 #include <osmium/io/file.hpp>
+#include <osmium/io/file_format.hpp>
 #include <osmium/io/header.hpp>
+#include <osmium/io/input_iterator.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
-#include <osmium/io/input_iterator.hpp>
+#include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/object.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_derive_changes.hpp"

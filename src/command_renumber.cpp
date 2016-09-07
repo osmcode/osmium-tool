@@ -20,11 +20,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <algorithm>
+#include <cerrno>
+#include <cstring>
 #include <fcntl.h>
 #include <iostream>
 #include <iterator>
+#include <string>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <utility>
+#include <vector>
 
 #ifdef _WIN32
 # include <io.h>
@@ -37,12 +42,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/input_iterator.hpp>
-#include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/memory_mapping.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_renumber.hpp"
+
+namespace osmium { namespace io {
+    class File;
+}}
 
 osmium::object_id_type id_map::operator()(osmium::object_id_type id) {
     // Search for id in m_extra_ids and return if found.
@@ -207,7 +216,7 @@ void CommandRenumber::read_index(osmium::item_type type) {
         if (errno == ENOENT) {
             return;
         }
-        throw std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
+        throw std::runtime_error(std::string("Can't open file '") + f + "': " + std::strerror(errno));
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);
@@ -232,7 +241,7 @@ void CommandRenumber::write_index(osmium::item_type type) {
     std::string f { filename(osmium::item_type_to_name(type)) };
     int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
     if (fd < 0) {
-        throw std::runtime_error(std::string("Can't open file '") + f + "': " + strerror(errno));
+        throw std::runtime_error(std::string("Can't open file '") + f + "': " + std::strerror(errno));
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);

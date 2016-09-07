@@ -23,6 +23,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <memory>
 #include <queue>
+#include <string>
+#include <vector>
 
 #include <boost/program_options.hpp>
 
@@ -31,9 +33,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
+#include <osmium/memory/buffer.hpp>
+#include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/object.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_merge.hpp"
+
+namespace osmium { namespace io {
+    class File;
+}}
 
 bool CommandMerge::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

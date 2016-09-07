@@ -20,15 +20,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cstdint>
 #include <algorithm>
 #include <iostream>
+#include <string>
+#include <utility>
 #include <vector>
 
 #include <boost/program_options.hpp>
 
+#include <osmium/handler.hpp>
 #include <osmium/handler/check_order.hpp>
 #include <osmium/index/bool_vector.hpp>
 #include <osmium/io/reader.hpp>
+#include <osmium/osm.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 

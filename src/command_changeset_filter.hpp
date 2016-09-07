@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <string>
+#include <vector>
 
 #include <osmium/osm/timestamp.hpp>
 #include <osmium/osm/types.hpp>
