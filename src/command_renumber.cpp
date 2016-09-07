@@ -284,16 +284,9 @@ bool CommandRenumber::run() {
     }
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
-    try {
-        while (osmium::memory::Buffer buffer = reader_pass2.read()) {
-            renumber(buffer);
-            writer(std::move(buffer));
-        }
-    } catch (const osmium::out_of_order_error& e) {
-        std::cerr << e.what() << "\n";
-        std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\n"
-                  << "then ways in order of ID, then relations in order of ID.\n";
-        exit(1);
+    while (osmium::memory::Buffer buffer = reader_pass2.read()) {
+        renumber(buffer);
+        writer(std::move(buffer));
     }
     reader_pass2.close();
 

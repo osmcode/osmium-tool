@@ -247,13 +247,7 @@ bool CommandCheckRefs::run() {
 
     RefCheckHandler handler(m_vout, m_show_ids, m_check_relations);
 
-    try {
-        osmium::apply(reader, handler);
-    } catch (const osmium::out_of_order_error& e) {
-        std::cerr << e.what() << "\n";
-        std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\nthen ways in order of ID, then relations in order of ID.\n";
-        exit(1);
-    }
+    osmium::apply(reader, handler);
 
     if (m_check_relations) {
         handler.find_missing_relations();

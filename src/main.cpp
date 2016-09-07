@@ -34,6 +34,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options/errors.hpp>
 
+#include <osmium/handler/check_order.hpp>
+
 #include "cmd.hpp"
 
 enum return_code : int {
@@ -118,6 +120,10 @@ int main(int argc, char *argv[]) {
         }
     } catch (const std::bad_alloc&) {
         std::cerr << "Out of memory. Read the MEMORY USAGE section of the osmium(1) manpage.\n";
+    } catch (const osmium::out_of_order_error& e) {
+        std::cerr << e.what() << "\n";
+        std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\n"
+                  << "then ways in order of ID, then relations in order of ID.\n";
     } catch (const std::exception& e) {
         std::cerr << e.what() << "\n";
     }
