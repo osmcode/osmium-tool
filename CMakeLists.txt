@@ -16,11 +16,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #
 #-----------------------------------------------------------------------------
 
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev"
-    CACHE STRING
-    "List of available configuration types"
-    FORCE)
-
 project(osmium)
 
 set(OSMIUM_VERSION_MAJOR 1)
@@ -65,7 +60,7 @@ if(CPPCHECK)
     add_custom_target(cppcheck ${CPPCHECK} --std=c++11 ${CPPCHECK_OPTIONS} ${CMAKE_SOURCE_DIR}/src/*pp)
 else()
     message(STATUS "Looking for cppcheck - not found")
-    message(STATUS "  Make target cppcheck not available")
+    message(STATUS "  Build target 'cppcheck' will not be available")
 endif()
 
 
@@ -82,7 +77,7 @@ if(IWYU_TOOL)
     add_custom_target(iwyu ${IWYU_TOOL} -p ${CMAKE_BINARY_DIR} -- --mapping_file=${CMAKE_SOURCE_DIR}/iwyu.imp)
 else()
     message(STATUS "Looking for iwyu_tool.py - not found")
-    message(STATUS "  Make target iwyu not available")
+    message(STATUS "  Make target 'iwyu' will not be available")
 endif()
 
 
@@ -213,6 +208,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${USUAL_COMPILE_OPTIONS}"
 #  Build Type
 #
 #-----------------------------------------------------------------------------
+set(CMAKE_CONFIGURATION_TYPES "Debug Release RelWithDebInfo MinSizeRel Dev")
 
 # In 'Dev' mode: compile with very strict warnings and turn them into errors.
 if(CMAKE_BUILD_TYPE STREQUAL "Dev")
