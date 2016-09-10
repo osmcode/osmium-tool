@@ -9,5 +9,5 @@
 
 export MANPATH=$MANPATH:@PROJECT_BINARY_DIR@/man:
 
-exec @PROJECT_BINARY_DIR@/src/osmium $*
+exec @PROJECT_BINARY_DIR@/src/osmium "$@"
 
