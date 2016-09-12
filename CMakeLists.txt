@@ -208,7 +208,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${USUAL_COMPILE_OPTIONS}"
 #  Build Type
 #
 #-----------------------------------------------------------------------------
-set(CMAKE_CONFIGURATION_TYPES "Debug Release RelWithDebInfo MinSizeRel Dev")
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev")
 
 # In 'Dev' mode: compile with very strict warnings and turn them into errors.
 if(CMAKE_BUILD_TYPE STREQUAL "Dev")
