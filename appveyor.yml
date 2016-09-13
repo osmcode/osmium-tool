@@ -24,5 +24,4 @@ platform: x64
 
 build_script:
   - build-appveyor.bat
-  - ctest --output-on-failure -C %config%
 

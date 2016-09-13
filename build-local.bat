@@ -4,6 +4,11 @@ SET EL=0
 
 ECHO ~~~~~~ %~f0 ~~~~~~
 
+ECHO.
+ECHO build-local ["config=Dev"]
+ECHO default config^: RelWithDebInfo
+ECHO.
+
 SET platform=x64
 SET config=RelWithDebInfo
 

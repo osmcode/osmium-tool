@@ -4,7 +4,7 @@ SET EL=0
 
 ECHO ~~~~~~ %~f0 ~~~~~~
 
-
+SET CUSTOM_CMAKE=cmake-3.6.2-win64-x64
 ::show all available env vars
 SET
 ECHO cmake on AppVeyor
@@ -14,7 +14,7 @@ ECHO activating VS cmd prompt && CALL "C:\Program Files (x86)\Microsoft Visual S
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 SET otdir=%CD%
-SET PATH=%otdir%\cmake-3.1.0-win32-x86\bin;%PATH%
+SET PATH=%otdir%\%CUSTOM_CMAKE%\bin;%PATH%
 SET LODEPSDIR=%otdir%\libosmium-deps
 ::libexpat.dll
 SET PATH=%LODEPSDIR%\expat\lib;%PATH%
@@ -25,13 +25,13 @@ SET PATH=%LODEPSDIR%\zlib\lib;%PATH%
 SET LIBBZIP2=%LODEPSDIR%\bzip2\lib\libbz2.lib
 SET LIBBZIP2=%LIBBZIP2:\=/%
 
-IF NOT EXIST cm.7z ECHO downloading cmake... && powershell Invoke-WebRequest https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/cmake-3.1.0-win32-x86.7z -OutFile cm.7z
+IF NOT EXIST cm.7z ECHO downloading cmake... && powershell Invoke-WebRequest https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/%CUSTOM_CMAKE%.7z -OutFile cm.7z
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 IF NOT EXIST lodeps.7z ECHO downloading binary dependencies... && powershell Invoke-WebRequest https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/libosmium-deps-win-14.0-x64.7z -OutFile lodeps.7z
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-IF NOT EXIST cmake-3.1.0-win32-x86 ECHO extracting cmake... && 7z x cm.7z | %windir%\system32\find "ing archive"
+IF NOT EXIST %CUSTOM_CMAKE% ECHO extracting cmake... && 7z x cm.7z | %windir%\system32\find "ing archive"
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 IF NOT EXIST %LODEPSDIR% ECHO extracting binary dependencies... && 7z x lodeps.7z | %windir%\system32\find "ing archive"
@@ -40,6 +40,13 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 ECHO %LODEPSDIR%
 DIR %LODEPSDIR%
 ::TREE %LODEPSDIR%
+
+::powershell (Get-ChildItem $env:LODEPSDIR\boost\lib -Filter *boost*.dll)[0].BaseName.split('_')[-1]
+FOR /F "tokens=1 usebackq" %%i in (`powershell ^(Get-ChildItem %LODEPSDIR%\boost\lib -Filter *boost*.dll^)[0].BaseName.split^('_'^)[-1]`) DO SET BOOST_VERSION=%%i
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
+ECHO BOOST_VERSION^: %BOOST_VERSION%
+
 ECHO our own cmake
 cmake -version
 
@@ -63,17 +70,20 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 CD build
 ECHO config^: %config%
 
-cmake .. -LA -G "Visual Studio 14 Win64" ^
+SET CMAKE_CMD=cmake .. -LA -G "Visual Studio 14 Win64" ^
 -DOsmium_DEBUG=TRUE ^
 -DCMAKE_BUILD_TYPE=%config% ^
 -DBOOST_ROOT=%LODEPSDIR%\boost ^
--DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_58.lib ^
+-DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_%BOOST_VERSION%.lib ^
 -DZLIB_LIBRARY=%LODEPSDIR%\zlib\lib\zlibwapi.lib ^
 -DZLIB_INCLUDE_DIR=%LODEPSDIR%\zlib\include ^
 -DEXPAT_LIBRARY=%LODEPSDIR%\expat\lib\libexpat.lib ^
 -DEXPAT_INCLUDE_DIR=%LODEPSDIR%\expat\include ^
 -DBZIP2_LIBRARIES=%LIBBZIP2% ^
 -DBZIP2_INCLUDE_DIR=%LODEPSDIR%\bzip2\include
+
+ECHO calling^: %CMAKE_CMD%
+%CMAKE_CMD%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 msbuild osmium.sln ^

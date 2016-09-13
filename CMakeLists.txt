@@ -208,7 +208,10 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${USUAL_COMPILE_OPTIONS}"
 #  Build Type
 #
 #-----------------------------------------------------------------------------
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev")
+#set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev")
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev" CACHE STRING "" FORCE)
+#set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
+MESSAGE(STATUS "CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES}")
 
 # In 'Dev' mode: compile with very strict warnings and turn them into errors.
 if(CMAKE_BUILD_TYPE STREQUAL "Dev")
@@ -220,8 +223,10 @@ endif()
 
 # Force RelWithDebInfo build type if none was given
 if(CMAKE_BUILD_TYPE)
+    MESSAGE( STATUS "setting CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE} )
     set(build_type ${CMAKE_BUILD_TYPE})
 else()
+    MESSAGE( STATUS "forcing CMAKE_BUILD_TYPE: RelWithDebInfo" )
     set(build_type "RelWithDebInfo")
 endif()
 
