@@ -22,64 +22,6 @@ clone_folder: c:\projects\osmium-tool
 
 platform: x64
 
-install:
-  # show all available env vars
-  - set
-  - echo cmake on AppVeyor
-  - cmake -version
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - set PATH=c:\projects\osmium-tool\cmake-3.1.0-win32-x86\bin;%PATH%
-  - set LODEPSDIR=c:\projects\osmium-tool\libosmium-deps
-  #libexpat.dll
-  - set PATH=%LODEPSDIR%\expat\lib;%PATH%
-  #zlibwapi.dll
-  - set PATH=%LODEPSDIR%\zlib\lib;%PATH%
-  #convert backslashes in bzip2 path to forward slashes
-  #cmake cannot find it otherwise
-  - set LIBBZIP2=%LODEPSDIR%\bzip2\lib\libbz2.lib
-  - set LIBBZIP2=%LIBBZIP2:\=/%
-  - ps: Start-FileDownload https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/cmake-3.1.0-win32-x86.7z -FileName cm.7z
-  - ps: Start-FileDownload https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/libosmium-deps-win-14.0-x64.7z -FileName lodeps.7z
-  - 7z x cm.7z | %windir%\system32\find "ing archive"
-  - 7z x lodeps.7z | %windir%\system32\find "ing archive"
-  - echo %LODEPSDIR%
-  - dir %LODEPSDIR%
-  #- tree %LODEPSDIR%
-  - echo our own cmake
-  - cmake -version
-  - cd c:\projects
-  - git clone --depth 1 https://github.com/osmcode/libosmium.git
-
 build_script:
-  - cd c:\projects\osmium-tool
-  - mkdir build
-  - cd build
-  - echo %config%
-  - cmake .. -LA -G "Visual Studio 14 Win64"
-    -DOsmium_DEBUG=TRUE
-    -DCMAKE_BUILD_TYPE=%config%
-    -DBOOST_ROOT=%LODEPSDIR%\boost
-    -DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_58.lib
-    -DZLIB_LIBRARY=%LODEPSDIR%\zlib\lib\zlibwapi.lib
-    -DZLIB_INCLUDE_DIR=%LODEPSDIR%\zlib\include
-    -DEXPAT_LIBRARY=%LODEPSDIR%\expat\lib\libexpat.lib
-    -DEXPAT_INCLUDE_DIR=%LODEPSDIR%\expat\include
-    -DBZIP2_LIBRARIES=%LIBBZIP2%
-    -DBZIP2_INCLUDE_DIR=%LODEPSDIR%\bzip2\include
-  - msbuild osmium.sln /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
-#  - cmake .. -LA -G "NMake Makefiles"
-#    -DOsmium_DEBUG=TRUE
-#    -DCMAKE_BUILD_TYPE=%CONFIGURATION%
-#    -DBOOST_ROOT=%LODEPSDIR%\boost
-#    -DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_57.lib
-#    -DZLIB_LIBRARY=%LODEPSDIR%\zlib\lib\zlibwapi.lib
-#    -DZLIB_INCLUDE_DIR=%LODEPSDIR%\zlib\include
-#    -DEXPAT_LIBRARY=%LODEPSDIR%\expat\lib\libexpat.lib
-#    -DEXPAT_INCLUDE_DIR=%LODEPSDIR%\expat\include
-#    -DBZIP2_LIBRARIES=%LIBBZIP2%
-#    -DBZIP2_INCLUDE_DIR=%LODEPSDIR%\bzip2\include
-#  - nmake VERBOSE=1
-
-test_script:
-  - ctest --output-on-failure -C %config%
+  - build-appveyor.bat
 
