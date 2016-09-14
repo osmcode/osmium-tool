@@ -20,17 +20,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <algorithm>
+#include <ctime>
 #include <stdexcept>
 
 #include <boost/program_options.hpp>
 
+#include <osmium/diff_iterator.hpp>
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
-#include <osmium/diff_iterator.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/osm/diff_object.hpp>
+#include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/object.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_time_filter.hpp"
@@ -67,7 +72,7 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     setup_input_file(vm);
     setup_output_file(vm);
 
-    m_from = osmium::Timestamp(time(0));
+    m_from = osmium::Timestamp(std::time(0));
     m_to = m_from;
 
     if (vm.count("time-from")) {

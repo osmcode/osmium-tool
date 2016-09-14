@@ -45,7 +45,7 @@ const char* get_libosmium_version() noexcept;
 
 const char* yes_no(bool choice) noexcept;
 void warning(const char* text);
-size_t file_size_sum(std::vector<osmium::io::File> files);
+std::size_t file_size_sum(std::vector<osmium::io::File> files);
 
 /**
  * Virtual base class for commands that can be called from the command line.

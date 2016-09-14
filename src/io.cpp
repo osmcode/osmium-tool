@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cstddef>
 #include <string>
 #include <vector>
 
@@ -29,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/any_output.hpp> // IWYU pragma: keep
 #include <osmium/io/file.hpp>
 #include <osmium/io/writer_options.hpp>
+#include <osmium/util/file.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "cmd.hpp"
@@ -178,8 +180,8 @@ void with_osm_output::show_output_arguments(osmium::util::VerboseOutput& vout) {
     }
 }
 
-size_t file_size_sum(std::vector<osmium::io::File> files) {
-    size_t sum = 0;
+std::size_t file_size_sum(std::vector<osmium::io::File> files) {
+    std::size_t sum = 0;
 
     for (const auto& file : files) {
         sum += osmium::util::file_size(file.filename());
