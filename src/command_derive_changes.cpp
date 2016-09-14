@@ -75,7 +75,7 @@ bool CommandDeriveChanges::setup(const std::vector<std::string>& arguments) {
     setup_output_file(vm);
 
     if (m_input_files.size() != 2) {
-        throw argument_error("You need exactly two input files for this command.");
+        throw argument_error{"You need exactly two input files for this command."};
     }
 
     if (vm.count("increment-version")) {
@@ -145,7 +145,7 @@ bool CommandDeriveChanges::run() {
     }
     osmium::io::Header header;
     header.set("generator", m_generator);
-    osmium::io::Writer writer(m_output_file, header);
+    osmium::io::Writer writer{m_output_file, header};
 
     m_vout << "Deriving changes...\n";
     while (it1 != end1 || it2 != end2) {

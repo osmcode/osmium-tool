@@ -124,7 +124,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("add-referenced")) {
         if (m_input_filename == "-") {
-            throw argument_error("Can not read OSM input from STDIN when --add-referenced/-r option is used.");
+            throw argument_error{"Can not read OSM input from STDIN when --add-referenced/-r option is used."};
         }
         m_add_referenced_objects = true;
     }
@@ -143,7 +143,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         } else if (t == "r" || t == "relation") {
             m_default_item_type = osmium::item_type::relation;
         } else {
-            throw argument_error(std::string("Unknown default type '") + t + "' (Allowed are 'node', 'way', and 'relation').");
+            throw argument_error{std::string{"Unknown default type '"} + t + "' (Allowed are 'node', 'way', and 'relation')."};
         }
     }
 
@@ -156,13 +156,13 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         for (const std::string& filename : vm["id-file"].as<std::vector<std::string>>()) {
             if (filename == "-") {
                 if (m_input_filename == "-") {
-                    throw argument_error("Can not read OSM input and IDs both from STDIN.");
+                    throw argument_error{"Can not read OSM input and IDs both from STDIN."};
                 }
                 read_id_file(std::cin);
             } else {
                 std::ifstream id_file{filename};
                 if (!id_file.is_open()) {
-                    throw argument_error("Could not open file '" + filename + "'");
+                    throw argument_error{"Could not open file '" + filename + "'"};
                 }
                 read_id_file(id_file);
             }
@@ -186,7 +186,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     }
 
     if (no_ids()) {
-        throw argument_error("Please specify IDs to look for on command line or with option --id-file/-i or --id-osm-file/-I.");
+        throw argument_error{"Please specify IDs to look for on command line or with option --id-file/-i or --id-osm-file/-I."};
     }
 
     return true;
@@ -265,7 +265,7 @@ static void print_missing_ids(const char* type, std::set<osmium::object_id_type>
 
 void CommandGetId::read_id_osm_file(const std::string& file_name) {
     m_vout << "Reading OSM ID file...\n";
-    osmium::io::Reader reader(file_name, osmium::osm_entity_bits::object);
+    osmium::io::Reader reader{file_name, osmium::osm_entity_bits::object};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& object : buffer.select<osmium::OSMObject>()) {
             ids(object.type()).insert(object.id());
@@ -293,7 +293,7 @@ bool CommandGetId::find_relations_in_relations() {
     m_vout << "  Reading input file to find relations in relations...\n";
     std::multimap<osmium::object_id_type, osmium::object_id_type> rel_in_rel;
 
-    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::relation);
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             for (const auto& member : relation.members()) {
@@ -325,7 +325,7 @@ bool CommandGetId::find_relations_in_relations() {
 void CommandGetId::find_nodes_and_ways_in_relations() {
     m_vout << "  Reading input file to find nodes/ways in relations...\n";
 
-    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::relation);
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             if (ids(osmium::item_type::relation).count(relation.id())) {
@@ -345,7 +345,7 @@ void CommandGetId::find_nodes_and_ways_in_relations() {
 void CommandGetId::find_nodes_in_ways() {
     m_vout << "  Reading input file to find nodes in ways...\n";
 
-    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::way);
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::way};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& way : buffer.select<osmium::Way>()) {
             if (ids(osmium::item_type::way).count(way.id())) {
@@ -379,12 +379,12 @@ bool CommandGetId::run() {
     }
 
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader(m_input_file, get_needed_types());
+    osmium::io::Reader reader{m_input_file, get_needed_types()};
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header = reader.header();
     header.set("generator", m_generator);
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     m_vout << "Copying from source to output file...\n";
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};

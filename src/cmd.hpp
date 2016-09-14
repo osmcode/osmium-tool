@@ -225,7 +225,7 @@ public:
  */
 class CommandFactory {
 
-    typedef std::function<Command*()> create_command_type;
+    using create_command_type = std::function<Command*()>;
 
     struct command_info {
         std::string description; // description of command for help

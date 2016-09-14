@@ -39,7 +39,7 @@ bool CommandHelp::setup(const std::vector<std::string>& arguments) {
 void show_help(const std::string& topic, const std::string& info) {
 #ifndef _MSC_VER
     // show man page on non-Windows systems
-    std::string manpage("osmium-");
+    std::string manpage{"osmium-"};
     manpage += topic;
     ::execlp("man", "man", manpage.c_str(), nullptr);
     // if exec fails, fall thru
@@ -75,7 +75,7 @@ bool CommandHelp::run() {
 
     std::string description = CommandFactory::get_description(m_topic);
     if (!description.empty()) {
-        show_help(m_topic, std::string("osmium ") + m_topic + ": " + description);
+        show_help(m_topic, std::string{"osmium "} + m_topic + ": " + description);
         return true;
     }
 

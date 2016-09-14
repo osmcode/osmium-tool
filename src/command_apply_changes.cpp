@@ -93,7 +93,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         if (m_input_file.has_multiple_object_versions() && m_output_file.has_multiple_object_versions()) {
             m_with_history = true;
         } else if (m_input_file.has_multiple_object_versions() != m_output_file.has_multiple_object_versions()) {
-            throw argument_error("Input and output file must both be OSM data files or both OSM history files (force with --with-history).");
+            throw argument_error{"Input and output file must both be OSM data files or both OSM history files (force with --with-history)."};
         }
     }
 
@@ -157,7 +157,7 @@ bool CommandApplyChanges::run() {
     m_vout << "Reading change file contents...\n";
 
     for (const std::string& change_file_name : m_change_filenames) {
-        osmium::io::Reader reader(change_file_name, osmium::osm_entity_bits::object);
+        osmium::io::Reader reader{change_file_name, osmium::osm_entity_bits::object};
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));
@@ -166,13 +166,13 @@ bool CommandApplyChanges::run() {
     }
 
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::object);
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::object};
 
-    osmium::io::Header header = reader.header();
+    osmium::io::Header header{reader.header()};
     header.set("generator", m_generator);
 
     m_vout << "Opening output file...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
 

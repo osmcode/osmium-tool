@@ -91,8 +91,8 @@ void CommandCat::setup_header(osmium::io::Header& header) const {
 bool CommandCat::run() {
     if (m_input_files.size() == 1) { // single input file
         m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";
-        osmium::io::Reader reader(m_input_files[0], osm_entity_bits());
-        osmium::io::Header header = reader.header();
+        osmium::io::Reader reader{m_input_files[0], osm_entity_bits()};
+        osmium::io::Header header{reader.header()};
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
@@ -108,12 +108,12 @@ bool CommandCat::run() {
     } else { // multiple input files
         osmium::io::Header header;
         setup_header(header);
-        osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {
             m_vout << "Copying input file '" << input_file.filename() << "'\n";
-            osmium::io::Reader reader(input_file, osm_entity_bits());
+            osmium::io::Reader reader{input_file, osm_entity_bits()};
             while (osmium::memory::Buffer buffer = reader.read()) {
                 progress_bar.update(reader.offset());
                 writer(std::move(buffer));

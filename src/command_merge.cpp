@@ -148,11 +148,11 @@ bool CommandMerge::run() {
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
     header.set("generator", m_generator);
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     if (m_input_files.size() == 1) {
         m_vout << "Single input file. Copying to output file...\n";
-        osmium::io::Reader reader(m_input_files[0]);
+        osmium::io::Reader reader{m_input_files[0]};
         while (osmium::memory::Buffer buffer = reader.read()) {
             writer(std::move(buffer));
         }

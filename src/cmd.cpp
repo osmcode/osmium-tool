@@ -92,7 +92,7 @@ void Command::setup_object_type_nrwc(const boost::program_options::variables_map
             } else if (t == "c" || t == "changeset") {
                 m_osm_entity_bits |= osmium::osm_entity_bits::changeset;
             } else {
-                throw argument_error(std::string("Unknown object type '") + t + "' (Allowed are 'node', 'way', 'relation', and 'changeset').");
+                throw argument_error{std::string{"Unknown object type '"} + t + "' (Allowed are 'node', 'way', 'relation', and 'changeset')."};
             }
         }
     } else {
@@ -111,7 +111,7 @@ void Command::setup_object_type_nrw(const boost::program_options::variables_map&
             } else if (t == "r" || t == "relation") {
                 m_osm_entity_bits |= osmium::osm_entity_bits::relation;
             } else {
-                throw argument_error(std::string("Unknown object type '") + t + "' (Allowed are 'node', 'way', and 'relation').");
+                throw argument_error{std::string{"Unknown object type '"} + t + "' (Allowed are 'node', 'way', and 'relation')."};
             }
         }
     } else {

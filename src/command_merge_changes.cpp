@@ -91,7 +91,7 @@ bool CommandMergeChanges::run() {
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
     header.set("generator", m_generator);
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
     auto out = osmium::io::make_output_iterator(writer);
 
     // this will contain all the buffers with the input data
@@ -103,7 +103,7 @@ bool CommandMergeChanges::run() {
     // to each object to objects collection.
     m_vout << "Reading change file contents...\n";
     for (osmium::io::File& change_file : m_input_files) {
-        osmium::io::Reader reader(change_file, osmium::osm_entity_bits::object);
+        osmium::io::Reader reader{change_file, osmium::osm_entity_bits::object};
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));

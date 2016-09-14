@@ -157,7 +157,7 @@ off_t filesize(const std::string& filename) {
 
     struct stat s;
     if (::stat(filename.c_str(), &s) == -1) {
-        throw std::system_error(errno, std::system_category(), "stat failed");
+        throw std::system_error{errno, std::system_category(), "stat failed"};
     }
 
     return s.st_size;
@@ -250,7 +250,7 @@ public:
 
 class JSONOutput : public Output {
 
-    typedef rapidjson::PrettyWriter<rapidjson::StringBuffer> writer_type;
+    using writer_type = rapidjson::PrettyWriter<rapidjson::StringBuffer>;
 
     rapidjson::StringBuffer m_stream;
     writer_type m_writer;
@@ -421,7 +421,7 @@ public:
         }
 
         for (const auto& option : header) {
-            std::string value_name = "header.option.";
+            std::string value_name{"header.option."};
             value_name.append(option.first);
             if (m_get_value == value_name) {
                 std::cout << option.second << "\n";
@@ -578,15 +578,15 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         m_get_value = vm["get"].as<std::string>();
         const auto& f = std::find(known_values.cbegin(), known_values.cend(), m_get_value);
         if (f == known_values.cend()) {
-            throw argument_error(std::string("Unknown value for --get/-g option '") + m_get_value + "'. Use --show-variables/-G to see list of known values.");
+            throw argument_error{std::string{"Unknown value for --get/-g option '"} + m_get_value + "'. Use --show-variables/-G to see list of known values."};
         }
         if (m_get_value.substr(0, 5) == "data." && ! m_extended) {
-            throw argument_error("You need to set --extended/-e for any 'data.*' variables to be available.");
+            throw argument_error{"You need to set --extended/-e for any 'data.*' variables to be available."};
         }
     }
 
     if (vm.count("get") && vm.count("json")) {
-        throw argument_error("You can not use --get/-g and --json/-j together.");
+        throw argument_error{"You can not use --get/-g and --json/-j together."};
     }
 
     return true;
@@ -611,8 +611,8 @@ bool CommandFileinfo::run() {
 
     output->file(m_input_filename, m_input_file);
 
-    osmium::io::Reader reader(m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing);
-    osmium::io::Header header = reader.header();
+    osmium::io::Reader reader{m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing};
+    osmium::io::Header header{reader.header()};
     output->header(header);
 
     if (m_extended) {

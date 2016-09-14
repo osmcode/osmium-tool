@@ -121,7 +121,7 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
         try {
             m_after = osmium::Timestamp(ts);
         } catch (const std::invalid_argument&) {
-            throw argument_error("Wrong format for --after/-a timestamp (use YYYY-MM-DDThh:mm:ssZ).");
+            throw argument_error{"Wrong format for --after/-a timestamp (use YYYY-MM-DDThh:mm:ssZ)."};
         }
     }
 
@@ -130,24 +130,24 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
         try {
             m_before = osmium::Timestamp(ts);
         } catch (const std::invalid_argument&) {
-            throw argument_error("Wrong format for --before/-b timestamp (use YYYY-MM-DDThh:mm:ssZ).");
+            throw argument_error{"Wrong format for --before/-b timestamp (use YYYY-MM-DDThh:mm:ssZ)."};
         }
     }
 
     if (m_with_discussion && m_without_discussion) {
-        throw argument_error("You can not use --with-discussion/-d and --without-discussion/-D together.");
+        throw argument_error{"You can not use --with-discussion/-d and --without-discussion/-D together."};
     }
 
     if (m_with_changes && m_without_changes) {
-        throw argument_error("You can not use --with-changes/-c and --without-changes/-C together.");
+        throw argument_error{"You can not use --with-changes/-c and --without-changes/-C together."};
     }
 
     if (m_open && m_closed) {
-        throw argument_error("You can not use --open and --closed together.");
+        throw argument_error{"You can not use --open and --closed together."};
     }
 
     if (m_after > m_before) {
-        throw argument_error("Timestamp 'after' is after 'before'.");
+        throw argument_error{"Timestamp 'after' is after 'before'."};
     }
 
     return true;
@@ -200,15 +200,15 @@ bool changeset_before(const osmium::Changeset& changeset, osmium::Timestamp time
 
 bool CommandChangesetFilter::run() {
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::changeset);
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::changeset};
 
     auto input = osmium::io::make_input_iterator_range<osmium::Changeset>(reader);
 
-    osmium::io::Header header = reader.header();
+    osmium::io::Header header{reader.header()};
     header.set("generator", m_generator);
 
     m_vout << "Opening output file...\n";
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
     auto out = osmium::io::make_output_iterator(writer);
 
     m_vout << "Filtering data...\n";

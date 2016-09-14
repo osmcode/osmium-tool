@@ -71,26 +71,26 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     m_to = m_from;
 
     if (vm.count("time-from")) {
-        auto ts = vm["time-from"].as<std::string>();
+        const auto ts = vm["time-from"].as<std::string>();
         try {
-            m_from = osmium::Timestamp(ts);
+            m_from = osmium::Timestamp{ts};
         } catch (const std::invalid_argument&) {
-            throw argument_error("Wrong format for (first) timestamp (use YYYY-MM-DDThh:mm:ssZ).");
+            throw argument_error{"Wrong format for (first) timestamp (use YYYY-MM-DDThh:mm:ssZ)."};
         }
         m_to = m_from;
     }
 
     if (vm.count("time-to")) {
-        auto ts = vm["time-to"].as<std::string>();
+        const auto ts = vm["time-to"].as<std::string>();
         try {
-            m_to = osmium::Timestamp(ts);
+            m_to = osmium::Timestamp{ts};
         } catch (const std::invalid_argument&) {
-            throw argument_error("Wrong format for second timestamp (use YYYY-MM-DDThh:mm:ssZ).");
+            throw argument_error{"Wrong format for second timestamp (use YYYY-MM-DDThh:mm:ssZ)."};
         }
     }
 
     if (m_from > m_to) {
-        throw argument_error("Second timestamp is before first one.");
+        throw argument_error{"Second timestamp is before first one."};
     }
 
     if (m_from == m_to) { // point in time
@@ -117,12 +117,12 @@ void CommandTimeFilter::show_arguments() {
 
 bool CommandTimeFilter::run() {
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader(m_input_file, osmium::osm_entity_bits::object);
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::object};
 
     m_vout << "Opening output file...\n";
-    osmium::io::Header header = reader.header();
+    osmium::io::Header header{reader.header()};
     header.set("generator", m_generator);
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     m_vout << "Filter data while copying it from input to output...\n";
     auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);

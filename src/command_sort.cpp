@@ -80,8 +80,8 @@ bool CommandSort::run() {
 
     m_vout << "Reading contents of input files...\n";
     for (const std::string& file_name : m_filenames) {
-        osmium::io::Reader reader(file_name, osmium::osm_entity_bits::object);
-        auto header = reader.header();
+        osmium::io::Reader reader{file_name, osmium::osm_entity_bits::object};
+        osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);
@@ -96,7 +96,7 @@ bool CommandSort::run() {
         header.add_box(bounding_box);
     }
     header.set("generator", m_generator);
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     m_vout << "Sorting data...\n";
     objects.sort(osmium::object_order_type_id_version());

@@ -106,7 +106,7 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
         vm.count("format-debug") &&
         vm.count("format-opl") &&
         vm.count("format-xml")) {
-        throw argument_error("You can only use at most one of the following options: --output-format/-f, --format-debug/-d, --format-opl/-o, and --format-xml/-x.");
+        throw argument_error{"You can only use at most one of the following options: --output-format/-f, --format-debug/-d, --format-opl/-o, and --format-xml/-x."};
     }
 
     if (vm.count("output-format")) {
@@ -131,12 +131,12 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
 static int execute_pager(const std::string& pager) {
     int pipefd[2];
     if (::pipe(pipefd) < 0) {
-        throw std::system_error(errno, std::system_category(), "opening pipe failed");
+        throw std::system_error{errno, std::system_category(), "opening pipe failed"};
     }
 
     pid_t pid = fork();
     if (pid < 0) {
-        throw std::system_error(errno, std::system_category(), "fork failed");
+        throw std::system_error{errno, std::system_category(), "fork failed"};
     }
 
     if (pid == 0) {
@@ -159,7 +159,7 @@ static int execute_pager(const std::string& pager) {
     ::close(pipefd[0]); // close read end of the pipe
 
     if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
-        throw std::system_error(errno, std::system_category(), "signal call failed");
+        throw std::system_error{errno, std::system_category(), "signal call failed"};
     }
 
     return pipefd[1];
@@ -167,8 +167,8 @@ static int execute_pager(const std::string& pager) {
 #endif
 
 bool CommandShow::run() {
-    osmium::io::Reader reader(m_input_file, osm_entity_bits());
-    osmium::io::Header header = reader.header();
+    osmium::io::Reader reader{m_input_file, osm_entity_bits()};
+    osmium::io::Header header{reader.header()};
 
     if (m_pager.empty()) {
         osmium::io::File file("-", m_output_format);
@@ -183,11 +183,11 @@ bool CommandShow::run() {
 
         ::close(1); // close stdout
         if (::dup2(fd, 1) < 0) { // put end of pipe as stdout
-            throw std::system_error(errno, std::system_category(), "dup2 failed");
+            throw std::system_error{errno, std::system_category(), "dup2 failed"};
         }
 
-        osmium::io::File file("-", m_output_format);
-        osmium::io::Writer writer(file, header);
+        osmium::io::File file{"-", m_output_format};
+        osmium::io::Writer writer{file, header};
         try {
             while (osmium::memory::Buffer buffer = reader.read()) {
                 writer(std::move(buffer));
@@ -202,12 +202,12 @@ bool CommandShow::run() {
         writer.close();
 
         int status = 0;
-        int pid = ::wait(&status);
+        const int pid = ::wait(&status);
         if (pid < 0) {
-            throw std::system_error(errno, std::system_category(), "wait failed");
+            throw std::system_error{errno, std::system_category(), "wait failed"};
         }
         if (WIFEXITED(status) && WEXITSTATUS(status) == 1) {
-            throw argument_error(std::string{"Could not execute pager '"} + m_pager + "'");
+            throw argument_error{std::string{"Could not execute pager '"} + m_pager + "'"};
         }
 #endif
     }

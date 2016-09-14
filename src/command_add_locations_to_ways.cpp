@@ -88,7 +88,7 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     if (vm.count("index-type")) {
         m_index_type_name = vm["index-type"].as<std::string>();
         if (!map_factory.has_map_type(m_index_type_name)) {
-            throw argument_error(std::string{"Unknown index type '"} + m_index_type_name + "'. Use --show-index-types or -I to get a list.");
+            throw argument_error{std::string{"Unknown index type '"} + m_index_type_name + "'. Use --show-index-types or -I to get a list."};
         }
     }
 
@@ -148,8 +148,8 @@ bool CommandAddLocationsToWays::run() {
 
     if (m_input_files.size() == 1) { // single input file
         m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";
-        osmium::io::Reader reader(m_input_files[0]);
-        osmium::io::Header header = reader.header();
+        osmium::io::Reader reader{m_input_files[0]};
+        osmium::io::Header header{reader.header()};
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
@@ -162,7 +162,7 @@ bool CommandAddLocationsToWays::run() {
     } else { // multiple input files
         osmium::io::Header header;
         setup_header(header);
-        osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {

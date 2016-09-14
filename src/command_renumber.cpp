@@ -211,23 +211,23 @@ std::string CommandRenumber::filename(const char* name) const {
 }
 
 void CommandRenumber::read_index(osmium::item_type type) {
-    std::string f { filename(osmium::item_type_to_name(type)) };
-    int fd = ::open(f.c_str(), O_RDONLY);
+    const std::string f{filename(osmium::item_type_to_name(type))};
+    const int fd = ::open(f.c_str(), O_RDONLY);
     if (fd < 0) {
         // if the file is not there we don't have to read anything and can return
         if (errno == ENOENT) {
             return;
         }
-        throw std::runtime_error(std::string("Can't open file '") + f + "': " + std::strerror(errno));
+        throw std::runtime_error{std::string{"Can't open file '"} + f + "': " + std::strerror(errno)};
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);
 #endif
 
-    std::size_t file_size = osmium::util::file_size(fd);
+    const std::size_t file_size = osmium::util::file_size(fd);
 
     if (file_size % sizeof(osmium::object_id_type) != 0) {
-        throw std::runtime_error(std::string("index file '") + f + "' has wrong file size");
+        throw std::runtime_error{std::string{"index file '"} + f + "' has wrong file size"};
     }
 
     map(type).read(fd, file_size);
@@ -240,10 +240,10 @@ void CommandRenumber::write_index(osmium::item_type type) {
         return;
     }
 
-    std::string f { filename(osmium::item_type_to_name(type)) };
-    int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
+    const std::string f{filename(osmium::item_type_to_name(type))};
+    const int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
     if (fd < 0) {
-        throw std::runtime_error(std::string("Can't open file '") + f + "': " + std::strerror(errno));
+        throw std::runtime_error{std::string{"Can't open file '"} + f + "': " + std::strerror(errno)};
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);
@@ -285,7 +285,7 @@ bool CommandRenumber::run() {
     }
 
     m_vout << "Second pass through input file...\n";
-    osmium::io::Reader reader_pass2(m_input_file);
+    osmium::io::Reader reader_pass2{m_input_file};
 
     osmium::io::Header header = reader_pass2.header();
     header.set("generator", m_generator);
@@ -293,7 +293,7 @@ bool CommandRenumber::run() {
     for (const auto& h : m_output_headers) {
         header.set(h);
     }
-    osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     osmium::ProgressBar progress_bar{reader_pass2.file_size(), display_progress()};
     while (osmium::memory::Buffer buffer = reader_pass2.read()) {
