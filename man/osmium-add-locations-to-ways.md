@@ -47,6 +47,7 @@ This program will not work on full history files.
 :   Keep the untagged nodes in the output file.
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
 

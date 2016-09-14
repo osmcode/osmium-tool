@@ -36,6 +36,7 @@ namespace po = boost::program_options;
 #include <osmium/io/file.hpp>
 #include <osmium/io/writer_options.hpp>
 #include <osmium/osm/entity_bits.hpp>
+#include <osmium/util/file.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 const char* get_osmium_version() noexcept;
@@ -44,6 +45,7 @@ const char* get_libosmium_version() noexcept;
 
 const char* yes_no(bool choice) noexcept;
 void warning(const char* text);
+size_t file_size_sum(std::vector<osmium::io::File> files);
 
 /**
  * Virtual base class for commands that can be called from the command line.
@@ -51,6 +53,12 @@ void warning(const char* text);
 class Command {
 
     osmium::osm_entity_bits::type m_osm_entity_bits {osmium::osm_entity_bits::all};
+
+    enum class display_progress {
+        never  = 0,
+        on_tty = 1,
+        always = 2
+    } m_display_progress = display_progress::on_tty;
 
 protected:
 
@@ -96,6 +104,7 @@ public:
 
     po::options_description add_common_options();
     void setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
+    void setup_progress(const boost::program_options::variables_map& vm);
     void setup_object_type_nrwc(const boost::program_options::variables_map& vm);
     void setup_object_type_nrw(const boost::program_options::variables_map& vm);
     void show_object_types(osmium::util::VerboseOutput& vout);
@@ -104,6 +113,18 @@ public:
 
     osmium::osm_entity_bits::type osm_entity_bits() const {
         return m_osm_entity_bits;
+    }
+
+    bool display_progress() const {
+        switch (m_display_progress) {
+            case display_progress::on_tty:
+                return osmium::util::isatty(2); // if STDERR is a TTY
+            case display_progress::always:
+                return true;
+            default:
+                break;
+        }
+        return false;
     }
 
 }; // class Command

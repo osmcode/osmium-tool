@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_cat.hpp"
@@ -64,6 +65,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_object_type_nrwc(vm);
     setup_input_files(vm);
     setup_output_file(vm);
@@ -94,9 +96,13 @@ bool CommandCat::run() {
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
+        osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
         while (osmium::memory::Buffer buffer = reader.read()) {
+            progress_bar.update(reader.offset());
             writer(std::move(buffer));
         }
+        progress_bar.done();
+
         writer.close();
         reader.close();
     } else { // multiple input files
@@ -104,15 +110,19 @@ bool CommandCat::run() {
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
+        osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {
             m_vout << "Copying input file '" << input_file.filename() << "'\n";
             osmium::io::Reader reader(input_file, osm_entity_bits());
             while (osmium::memory::Buffer buffer = reader.read()) {
+                progress_bar.update(reader.offset());
                 writer(std::move(buffer));
             }
+            progress_bar.file_done(reader.file_size());
             reader.close();
         }
         writer.close();
+        progress_bar.done();
     }
 
     show_memory_used();

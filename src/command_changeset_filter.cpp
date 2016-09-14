@@ -36,6 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/timestamp.hpp>
 #include <osmium/osm/types.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_changeset_filter.hpp"
@@ -79,6 +80,7 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_file(vm);
     setup_output_file(vm);
 
@@ -211,8 +213,15 @@ bool CommandChangesetFilter::run() {
 
     m_vout << "Filtering data...\n";
 
+    osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+
+    int count = 0;
     std::copy_if(input.begin(), input.end(), out,
-        [this](const osmium::Changeset& changeset) {
+        [this, &count, &progress_bar, &reader](const osmium::Changeset& changeset) {
+            if (++count > 10000) {
+                progress_bar.update(reader.offset());
+                count = 0;
+            }
             return (!m_with_discussion    || changeset.num_comments() > 0) &&
                    (!m_without_discussion || changeset.num_comments() == 0) &&
                    (!m_with_changes       || changeset.num_changes() > 0) &&
@@ -225,6 +234,8 @@ bool CommandChangesetFilter::run() {
                    changeset_before(changeset, m_before);
 
     });
+
+    progress_bar.done();
 
     writer.close();
     reader.close();

@@ -25,6 +25,7 @@ can be used to convert OSM files from one format into another.
     By default all types are read. This option can be given multiple times.
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
 

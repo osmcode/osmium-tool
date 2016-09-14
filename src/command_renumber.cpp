@@ -44,6 +44,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/util/file.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/memory_mapping.hpp>
 #include <osmium/util/verbose_output.hpp>
 
@@ -137,6 +138,7 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_object_type_nrw(vm);
     setup_input_file(vm);
     setup_output_file(vm);
@@ -253,7 +255,7 @@ void CommandRenumber::write_index(osmium::item_type type) {
 }
 
 void read_relations(const osmium::io::File& input_file, id_map& map) {
-    osmium::io::Reader reader_pass1(input_file, osmium::osm_entity_bits::relation);
+    osmium::io::Reader reader_pass1{input_file, osmium::osm_entity_bits::relation};
 
     auto input = osmium::io::make_input_iterator_range<osmium::Relation>(reader_pass1);
     for (const osmium::Relation& relation : input) {
@@ -293,10 +295,13 @@ bool CommandRenumber::run() {
     }
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
+    osmium::ProgressBar progress_bar{reader_pass2.file_size(), display_progress()};
     while (osmium::memory::Buffer buffer = reader_pass2.read()) {
+        progress_bar.update(reader_pass2.offset());
         renumber(buffer);
         writer(std::move(buffer));
     }
+    progress_bar.done();
     reader_pass2.close();
 
     m_vout << "Closing output file...\n";

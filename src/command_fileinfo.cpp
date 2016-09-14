@@ -55,6 +55,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/crc.hpp>
 #include <osmium/util/minmax.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -528,6 +529,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
 
     if (vm.count("extended")) {
         m_extended = true;
@@ -615,7 +617,12 @@ bool CommandFileinfo::run() {
 
     if (m_extended) {
         InfoHandler info_handler;
-        osmium::apply(reader, info_handler);
+        osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+        while (osmium::memory::Buffer buffer = reader.read()) {
+            progress_bar.update(reader.offset());
+            osmium::apply(buffer, info_handler);
+        }
+        progress_bar.done();
         output->data(header, info_handler);
     }
 

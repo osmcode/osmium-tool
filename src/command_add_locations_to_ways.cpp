@@ -38,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/location.hpp>
 #include <osmium/osm/node.hpp>
 #include <osmium/osm/types.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -92,6 +93,7 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     }
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_files(vm);
     setup_output_file(vm);
 
@@ -119,8 +121,9 @@ void CommandAddLocationsToWays::setup_header(osmium::io::Header& header) const {
     }
 }
 
-void CommandAddLocationsToWays::copy_data(osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler) {
+void CommandAddLocationsToWays::copy_data(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler) {
     while (osmium::memory::Buffer buffer = reader.read()) {
+        progress_bar.update(reader.offset());
         osmium::apply(buffer, location_handler);
 
         if (m_keep_untagged_nodes) {
@@ -150,7 +153,9 @@ bool CommandAddLocationsToWays::run() {
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
-        copy_data(reader, writer, location_handler);
+        osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+        copy_data(progress_bar, reader, writer, location_handler);
+        progress_bar.done();
 
         writer.close();
         reader.close();
@@ -159,14 +164,17 @@ bool CommandAddLocationsToWays::run() {
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
+        osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {
             m_vout << "Copying input file '" << input_file.filename() << "'\n";
             osmium::io::Reader reader(input_file);
 
-            copy_data(reader, writer, location_handler);
+            copy_data(progress_bar, reader, writer, location_handler);
 
+            progress_bar.file_done(reader.file_size());
             reader.close();
         }
+        progress_bar.done();
         writer.close();
     }
 

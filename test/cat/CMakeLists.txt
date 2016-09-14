@@ -7,11 +7,11 @@
 #-----------------------------------------------------------------------------
 
 function(check_cat _name _in1 _in2 _output)
-    check_output(cat ${_name} "cat --generator=test -f osm cat/${_in1} cat/${_in2}" "cat/${_output}")
+    check_output(cat ${_name} "cat --no-progress --generator=test -f osm cat/${_in1} cat/${_in2}" "cat/${_output}")
 endfunction()
 
 function(check_convert _name _input _output _format)
-    check_output(cat ${_name} "cat --generator=test cat/${_input} -f ${_format}" "cat/${_output}")
+    check_output(cat ${_name} "cat --no-progress --generator=test cat/${_input} -f ${_format}" "cat/${_output}")
 endfunction()
 
 

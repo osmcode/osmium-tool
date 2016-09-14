@@ -43,6 +43,8 @@ po::options_description Command::add_common_options() {
 
     options.add_options()
     ("help,h", "Show usage help")
+    ("progress", "Display progress bar")
+    ("no-progress", "Suppress display of progress bar")
     ("verbose,v", "Set verbose mode")
     ;
 
@@ -60,6 +62,20 @@ void Command::setup_common(const boost::program_options::variables_map& vm, cons
 
     if (vm.count("verbose")) {
         m_vout.verbose(true);
+    }
+}
+
+void Command::setup_progress(const boost::program_options::variables_map& vm) {
+    if (vm.count("progress") && vm.count("no-progress")) {
+        throw argument_error{"Can not use --progress and --no-progress together."};
+    }
+
+    if (vm.count("progress")) {
+        m_display_progress = display_progress::always;
+    }
+
+    if (vm.count("no-progress")) {
+        m_display_progress = display_progress::never;
     }
 }
 

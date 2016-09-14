@@ -64,6 +64,7 @@ Data
 :   Output in JSON format. Can not be used together with --get.
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 
 # VARIABLES

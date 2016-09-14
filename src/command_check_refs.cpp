@@ -34,6 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/index/bool_vector.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/osm.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -68,6 +69,7 @@ bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_file(vm);
 
     if (vm.count("show-ids")) {
@@ -152,9 +154,9 @@ public:
         m_relation_refs.erase(
             std::remove_if(m_relation_refs.begin(), m_relation_refs.end(), [this](std::pair<uint32_t, uint32_t> refs){
                 return std::binary_search(m_relation_ids.begin(), m_relation_ids.end(), refs.first);
-                }),
-                m_relation_refs.end()
-            );
+            }),
+            m_relation_refs.end()
+        );
     }
 
     bool no_errors() {
@@ -248,11 +250,17 @@ public:
 }; // class RefCheckHandler
 
 bool CommandCheckRefs::run() {
-    osmium::io::Reader reader(m_input_file);
+    osmium::io::Reader reader{m_input_file};
+    RefCheckHandler handler{m_vout, m_show_ids, m_check_relations};
 
-    RefCheckHandler handler(m_vout, m_show_ids, m_check_relations);
+    osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+    while (osmium::memory::Buffer buffer = reader.read()) {
+        progress_bar.update(reader.offset());
+        osmium::apply(buffer, handler);
+    }
+    progress_bar.done();
 
-    osmium::apply(reader, handler);
+    reader.close();
 
     if (m_check_relations) {
         handler.find_missing_relations();
@@ -272,8 +280,6 @@ bool CommandCheckRefs::run() {
     } else {
         std::cerr << "Nodes in ways missing: " << handler.missing_nodes_in_ways() << "\n";
     }
-
-    reader.close();
 
     show_memory_used();
     m_vout << "Done.\n";

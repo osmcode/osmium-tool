@@ -93,6 +93,7 @@ the **-H**, **--history** option was given.
     the lists can get quite long. (This option implies `--verbose`.)
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
 

@@ -50,6 +50,7 @@ criteria are given through command line options.
 :   Only copy changesets by the given user ID.
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
 

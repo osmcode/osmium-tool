@@ -41,6 +41,7 @@ change files.
     nodes in ways are checked.
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 
 # MEMORY USAGE

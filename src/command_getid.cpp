@@ -37,6 +37,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/osm/types_from_string.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
@@ -117,6 +118,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_file(vm);
     setup_output_file(vm);
 
@@ -385,7 +387,9 @@ bool CommandGetId::run() {
     osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
     m_vout << "Copying from source to output file...\n";
+    osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
     while (osmium::memory::Buffer buffer = reader.read()) {
+        progress_bar.update(reader.offset());
         for (const auto& object : buffer.select<osmium::OSMObject>()) {
             auto& index = ids(object.type());
             if (index.count(object.id())) {
@@ -396,6 +400,7 @@ bool CommandGetId::run() {
             }
         }
     }
+    progress_bar.done();
 
     m_vout << "Closing output file...\n";
     writer.close();
