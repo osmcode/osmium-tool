@@ -16,6 +16,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Version information is now printed including the git commit id and always
   shown in verbose mode.
 - Added `iwyu` target to CMake config.
+- Progress bars will be shown on some commands. (This is configurable at
+  run time with the --progress and --no-progress options.)
 
 ### Changed
 
@@ -34,6 +36,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - CMake now creates `compile_commands.json`.
+- Wrapper script now works with quoted arguments.
 
 
 ## [1.3.1] - 2016-06-08
