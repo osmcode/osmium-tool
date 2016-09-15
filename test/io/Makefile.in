@@ -99,7 +99,7 @@ $(DIR)/osmium-DCbmg-fake.osm.opl: $(DIR)/osmium-DCbMg.osm.opl
 	sed -e 's/ v.* T/ v0 dV c0 t i0 u T/' $^ >$@
 
 $(DIR)/osmium-DCbMG-fake.osm.opl: $(DIR)/osmium-DCbMg.osm.opl
-	grep '^n' $^ | sed -e 's/[0-9][0-9] y/00 y/' -e 's/[0-9][0-9]$$/00/' >$@
+	grep '^n' $^ | sed -e 's/[0-9][0-9] y/ y/' -e 's/\(.*\) y\([0-9]\.[0-9][0-9][0-9][0-9][0-9]\).*/\1 y\2/' -e 's/0\+$$//' >$@
 	grep '^[wr]' $^ >>$@
 
 $(DIR)/report_opl: opl_input opl_files \
