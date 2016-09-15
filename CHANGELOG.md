@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.4.0] - 2016-09-15
+
+### Added
+
 - The new manual is a more gentle introduction into the capabilities of
   Osmium Tool. Numerous man page additions.
 - New `merge` command to merge any number of sorted OSM files.
@@ -153,7 +162,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.3.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/osmcode/osmium-tool/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/osmcode/osmium-tool/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/osmcode/osmium-tool/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/osmcode/osmium-tool/compare/v1.2.0...v1.2.1
