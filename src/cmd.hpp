@@ -54,11 +54,11 @@ class Command {
 
     osmium::osm_entity_bits::type m_osm_entity_bits {osmium::osm_entity_bits::all};
 
-    enum class display_progress {
+    enum class display_progress_type {
         never  = 0,
         on_tty = 1,
         always = 2
-    } m_display_progress = display_progress::on_tty;
+    } m_display_progress = display_progress_type::on_tty;
 
 protected:
 
@@ -117,9 +117,9 @@ public:
 
     bool display_progress() const {
         switch (m_display_progress) {
-            case display_progress::on_tty:
+            case display_progress_type::on_tty:
                 return osmium::util::isatty(2); // if STDERR is a TTY
-            case display_progress::always:
+            case display_progress_type::always:
                 return true;
             default:
                 break;

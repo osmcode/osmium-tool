@@ -71,11 +71,11 @@ void Command::setup_progress(const boost::program_options::variables_map& vm) {
     }
 
     if (vm.count("progress")) {
-        m_display_progress = display_progress::always;
+        m_display_progress = display_progress_type::always;
     }
 
     if (vm.count("no-progress")) {
-        m_display_progress = display_progress::never;
+        m_display_progress = display_progress_type::never;
     }
 }
 
