@@ -4,8 +4,8 @@
 A multipurpose command line tool for working with OpenStreetMap data based on
 the Osmium library.
 
-[![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.png)](http://travis-ci.org/osmcode/osmium-tool)
-[![Build Status](https://ci.appveyor.com/api/projects/status/ttem4j2gxa64p3w8?svg=true)](https://ci.appveyor.com/project/Mapbox/osmium-tool)
+[![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.svg)](http://travis-ci.org/osmcode/osmium-tool)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/osmcode/osmium-tool?svg=true)](https://ci.appveyor.com/project/Mapbox/osmium-tool)
 
 ## Prerequisites
 
@@ -112,7 +112,7 @@ More extensive tests of the libosmium I/O system can also be run. See
 
 ## License
 
-Copyright (C) 2013-2016  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013-2016  Jochen Topf (jochen@topf.org)
 
 This program is available under the GNU GENERAL PUBLIC LICENSE Version 3.
 See the file LICENSE.txt for the complete text of the license.
@@ -120,5 +120,5 @@ See the file LICENSE.txt for the complete text of the license.
 
 ## Authors
 
-This program was written and is maintained by Jochen Topf <jochen@topf.org>.
+This program was written and is maintained by Jochen Topf (jochen@topf.org).
 
