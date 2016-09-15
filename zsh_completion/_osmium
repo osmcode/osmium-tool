@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(add-locations-to-ways apply-changes cat changeset-filter check-refs derive-changes fileinfo getid help merge merge-changes renumber show sort time-filter)
+    osmium_commands=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes fileinfo getid help merge merge-changes renumber show sort time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -41,14 +41,14 @@ _osmium-common-options() {
 }
 
 _osmium-single-input-options() {
-    echo '(--input-format)-F[format of input OSM file]:OSM file format:_osmium_file_formats'
-    echo '(-F)--input-format[format of input OSM file]:OSM file format:_osmium_file_formats'
+    echo '(--input-format)-F[format of input OSM file]:OSM file format:_osmium_input_file_formats'
+    echo '(-F)--input-format[format of input OSM file]:OSM file format:_osmium_input_file_formats'
     echo "1:input OSM files:_files -g ${osmium_file_glob}"
 }
 
 _osmium-multiple-inputs-options() {
-    echo '(--input-format)-F[format of input OSM files]:OSM file format:_osmium_file_formats'
-    echo '(-F)--input-format[format of input OSM files]:OSM file format:_osmium_file_formats'
+    echo '(--input-format)-F[format of input OSM files]:OSM file format:_osmium_input_file_formats'
+    echo '(-F)--input-format[format of input OSM files]:OSM file format:_osmium_input_file_formats'
     echo "*:input OSM files:_files -g ${osmium_file_glob}"
 }
 
@@ -56,16 +56,25 @@ _osmium-output-options() {
     echo '--generator[generator setting for output file header]:generator:'
     echo "(--output)-o[output file name]:output OSM file:_files -g ${osmium_file_glob}"
     echo "(-o)--output[output file name]:output OSM file:_files -g ${osmium_file_glob}"
-    echo '(--output-format)-f[format of output OSM file]:OSM file format:_osmium_file_formats'
-    echo '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats'
     echo '(--overwrite)-O[allow overwriting of existing output file]'
     echo '(-O)--overwrite[allow overwriting of existing output file]'
+}
+
+_osmium-output-format-options() {
+    echo '(--output-format)-f[format of output OSM file]:OSM file format:_osmium_output_file_formats'
+    echo '(-f)--output-format[format of output OSM file]:OSM file format:_osmium_output_file_formats'
+}
+
+_osmium-diff-output-format-options() {
+    echo '(--output-format)-f[format of output file]:OSM file format:_osmium_diff_file_formats'
+    echo '(-f)--output-format[format of output file]:OSM file format:_osmium_diff_file_formats'
 }
 
 _osmium-add-locations-to-ways() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '(--index-type -I --show-index-types)-i[set index type]:index_types:_osmium_index_types' \
         '(-i -I --show-index-types)--index-type[set index type]:index_types:_osmium_index_types' \
@@ -79,6 +88,7 @@ _osmium-apply-changes() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '--with-history[update OSM history file]'
 }
@@ -87,6 +97,7 @@ _osmium-cat() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
         '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type'
@@ -96,6 +107,7 @@ _osmium-changeset-filter() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '(--with-discussions)-d[changesets with discussions]' \
         '(-d)--with-discussions[changesets with discussions]' \
@@ -131,10 +143,27 @@ _osmium-derive-changes() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '--increment-version[increment version of deleted objects]' \
         '--keep-details[keep details of deleted objects]' \
         '--update-timestamp[update timestamp of deleted objects]'
+}
+
+_osmium-diff() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-diff-output-format-options)"} \
+        ${(f)"$(_osmium-output-options)"} \
+        '(--quiet)-q[report only when files differ]' \
+        '(-q)--quiet[report only when files differ]' \
+        '(--suppress-common)-c[suppress common objects]' \
+        '(-c)--suppress-common[suppress common objects]' \
+        '(--summary)-s[Show summary on STDERR]' \
+        '(-s)--summary[Show summary on STDERR]' \
+        '*-t[read only objects of given output types]:OSM entity type:_osmium_object_type' \
+        '*--object-type[read only objects of given output types]:OSM entity type:_osmium_object_type'
 }
 
 _osmium-fileinfo() {
@@ -155,6 +184,7 @@ _osmium-getid() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '--default-type[default item type]' \
         'i[read OSM IDs from text file]' \
@@ -172,6 +202,7 @@ _osmium-merge() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"}
 }
 
@@ -179,6 +210,7 @@ _osmium-merge-changes() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '(--simplify)-s[only write last version of any object]' \
         '(-s)--simplify[only write last version of any object]'
@@ -188,6 +220,7 @@ _osmium-renumber() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '(--index-directory)-i[read/write index files in this directory]:directory:_path_files -/' \
         '(-i)--index-directory[read/write index files in this directory]:directory:_path_files -/' \
@@ -199,8 +232,8 @@ _osmium-show() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-single-input-options)"} \
-        '(--output-format --format-debug -d --format-opl -o --format-xml -x)-f[format of output OSM file]:OSM file format:_osmium_file_formats' \
-        '(-f --format-debug -d --format-opl -o --format-xml -x)--output-format[format of output OSM file]:OSM file format:_osmium_file_formats' \
+        '(--output-format --format-debug -d --format-opl -o --format-xml -x)-f[format of output OSM file]:OSM file format:_osmium_output_file_formats' \
+        '(-f --format-debug -d --format-opl -o --format-xml -x)--output-format[format of output OSM file]:OSM file format:_osmium_output_file_formats' \
         '(--output-format -f -d --format-opl -o --format-xml -x)--format-debug[set format of output OSM file to debug]' \
         '(--output-format -f --format-debug --format-opl -o --format-xml -x)-d[set format of output OSM file to debug]' \
         '(--output-format -f --format-debug -d -o --format-xml -x)--format-opl[set format of output OSM file to OPL]' \
@@ -216,6 +249,7 @@ _osmium-sort() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"}
 }
 
@@ -223,13 +257,36 @@ _osmium-time-filter() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         "2::start time (format\: yyyy-mm-ddThh\:mm\:ssZ):" \
         "3::end time (format\: yyyy-mm-ddThh\:mm\:ssZ):"
 }
 
-_osmium_file_formats() {
-    _values 'OSM file formats' \
+_osmium_input_file_formats() {
+    _values 'OSM input file formats' \
+        'osm[XML data format]' \
+        'osm.gz[XML data format (compressed with gzip)]' \
+        'osm.bz2[XML data format (compressed with bzip2)]' \
+        'osh[XML history format]' \
+        'osh.gz[XML history format (compressed with gzip)]' \
+        'osh.bz2[XML history format (compressed with bzip2)]' \
+        'osc[XML change format]' \
+        'osc.gz[XML change format (compressed with gzip)]' \
+        'osc.bz2[XML change format (compressed with bzip2)]' \
+        'o5m[o5m data format]' \
+        'o5c[o5c change format]' \
+        'pbf[PBF format]'
+}
+
+_osmium_output_file_formats() {
+    _values 'OSM output file formats' \
+        'debug[Debug data format]' \
+        'debug.gz[Debug data format (compressed with gzip)]' \
+        'debug.bz2[Debug data format (compressed with bzip2)]' \
+        'opl[OPL data format]' \
+        'opl.gz[OPL data format (compressed with gzip)]' \
+        'opl.bz2[OPL data format (compressed with bzip2)]' \
         'osm[XML data format]' \
         'osm.gz[XML data format (compressed with gzip)]' \
         'osm.bz2[XML data format (compressed with bzip2)]' \
@@ -240,6 +297,14 @@ _osmium_file_formats() {
         'osc.gz[XML change format (compressed with gzip)]' \
         'osc.bz2[XML change format (compressed with bzip2)]' \
         'pbf[PBF format]'
+}
+
+_osmium_diff_file_formats() {
+    _values 'Diff file formats' \
+        'opl[One object per line]' \
+        'debug[Debug format]' \
+        'debug,color[Debug format with color]' \
+        'compact[Compact format]'
 }
 
 _osmium_object_type() {
@@ -267,7 +332,7 @@ _osmium_index_types() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(add-locations-to-ways apply-changes cat changeset-filter check-refs derive-changes fileinfo getid help merge merge-changes renumber show sort time-filter file-formats)
+    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes fileinfo getid help merge merge-changes renumber show sort time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 

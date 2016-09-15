@@ -45,6 +45,9 @@ check-refs
 derive-changes
 :   create OSM change file from two OSM files
 
+diff
+:   display differences between OSM files
+
 fileinfo
 :   show information about an OSM file
 
@@ -108,6 +111,7 @@ If an osmium command exits with an "Out of memory" error, try running it with
   **osmium-changeset-filter**(1),
   **osmium-check-refs**(1),
   **osmium-derive-changes**(1),
+  **osmium-diff**(1),
   **osmium-fileinfo**(1),
   **osmium-getid**(1),
   **osmium-merge**(1),
