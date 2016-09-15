@@ -46,7 +46,7 @@ correctly.
 # MEMORY USAGE
 
 **osmium merge** doesn't keep a lot of data in memory, but if you are merging
-many files, the buffers might take a noticable amount of memory.
+many files, the buffers might take a noticeable amount of memory.
 
 
 # EXAMPLES

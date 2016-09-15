@@ -40,12 +40,12 @@ compact
     file, respectively.
 
 opl
-:   The usual OPL format with all lines preceeded by space (' '), minus
+:   The usual OPL format with all lines preceded by space (' '), minus
     ('-'), or plus ('+') characters depending on whether the object is in both,
     the first, or the second file.
 
 debug
-:   The usual debug format with all lines preceeded by space (' '), minus
+:   The usual debug format with all lines preceded by space (' '), minus
     ('-'), or plus ('+') characters depending on whether the object is in both,
     the first, or the second file. Color support can be enabled ('debug,color').
 
