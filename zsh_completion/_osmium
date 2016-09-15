@@ -81,7 +81,9 @@ _osmium-add-locations-to-ways() {
         '(--show-index-types -i --index-type -n --keep-untagged-nodes)-I[show available index types]' \
         '(-I -i --index-type -n --keep-untagged-nodes)--show-index-types[show available index types]' \
         '(--keep-untagged-nodes -I --show-index-types)-n[keep untagged nodes in output]' \
-        '(-n -I --show-index-types)--keep-untagged-nodes[keep untagged nodes in output]'
+        '(-n -I --show-index-types)--keep-untagged-nodes[keep untagged nodes in output]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-apply-changes() {
@@ -100,7 +102,9 @@ _osmium-cat() {
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
-        '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type'
+        '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-changeset-filter() {
@@ -126,7 +130,9 @@ _osmium-changeset-filter() {
         '-a[changesets closed after]:timestamp:' \
         '--after[changesets closed after]:timestamp:' \
         '-b[changesets opened before]:timestamp:' \
-        '--before[changesets opened before]:timestamp:'
+        '--before[changesets opened before]:timestamp:' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-check-refs() {
@@ -136,7 +142,9 @@ _osmium-check-refs() {
         '(--show-ids)-i[show ids of missing objects]' \
         '(-i)--show-ids[show ids of missing objects]' \
         '(--check-relations)-r[also check referential integrity of relations]' \
-        '(-r)--check-relations[also check referential integrity of relations]'
+        '(-r)--check-relations[also check referential integrity of relations]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-derive-changes() {
@@ -177,7 +185,9 @@ _osmium-fileinfo() {
         '(--get -g --json)-j[output variables in JSON format]' \
         '(--get -g -j)--json[output variables in JSON format]' \
         '(--get -g --json -j --extended -e --show-variables)-G[show a list of all variable names]' \
-        '(--get -g --json -j --extended -e -G)--show-variables[show a list of all variable names]'
+        '(--get -g --json -j --extended -e -G)--show-variables[show a list of all variable names]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-getid() {
@@ -195,6 +205,8 @@ _osmium-getid() {
         '(-r)--add-referenced[recursively add referenced objects]' \
         '(--with-history)-H[make it work with history files]' \
         '(-H)--with-history[make it work with history files]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
         "*:IDs (format\: [nwr]ID):"
 }
 
@@ -224,6 +236,8 @@ _osmium-renumber() {
         ${(f)"$(_osmium-output-options)"} \
         '(--index-directory)-i[read/write index files in this directory]:directory:_path_files -/' \
         '(-i)--index-directory[read/write index files in this directory]:directory:_path_files -/' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
         '*-t[renumber only objects of given output types]:OSM entity type:_osmium_object_type' \
         '*--object-type[renumber only objects of given output types]:OSM entity type:_osmium_object_type'
 }
