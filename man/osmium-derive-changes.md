@@ -18,7 +18,7 @@ applied on *OSM-FILE1* to re-create *OSM-FILE2*.
 Objects in both input files must be sorted by type, ID, and version. The first
 input file must be from a point in time before the second input file.
 
-For this command to create a proper chnage file you have to set the
+For this command to create a proper change file you have to set the
 **--output** option or **--output-format** option in a way that it will
 generate an .osc file, typically by using something like '-o out.osc.gz'.
 You can create any other OSM file format, but that is usually not what you
