@@ -105,10 +105,10 @@ int main(int argc, char *argv[]) {
             return return_code::okay;
         }
     } catch (const boost::program_options::error& e) {
-        std::cerr << "Error parsing command line: " << e.what() << std::endl;
+        std::cerr << "Error parsing command line: " << e.what() << '\n';
         return return_code::fatal;
     } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << e.what() << '\n';
         return return_code::fatal;
     }
 
@@ -121,11 +121,11 @@ int main(int argc, char *argv[]) {
     } catch (const std::bad_alloc&) {
         std::cerr << "Out of memory. Read the MEMORY USAGE section of the osmium(1) manpage.\n";
     } catch (const osmium::out_of_order_error& e) {
-        std::cerr << e.what() << "\n";
+        std::cerr << e.what() << '\n';
         std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\n"
                   << "then ways in order of ID, then relations in order of ID.\n";
     } catch (const std::exception& e) {
-        std::cerr << e.what() << "\n";
+        std::cerr << e.what() << '\n';
     }
 
     return return_code::error;

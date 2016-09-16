@@ -157,7 +157,7 @@ off_t filesize(const std::string& filename) {
 
     struct stat s;
     if (::stat(filename.c_str(), &s) == -1) {
-        throw std::system_error{errno, std::system_category(), "stat failed"};
+        throw std::system_error{errno, std::system_category(), std::string{"Could not get file size of file '"} + filename + "'"};
     }
 
     return s.st_size;

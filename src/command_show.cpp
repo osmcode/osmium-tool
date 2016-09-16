@@ -131,12 +131,12 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
 static int execute_pager(const std::string& pager) {
     int pipefd[2];
     if (::pipe(pipefd) < 0) {
-        throw std::system_error{errno, std::system_category(), "opening pipe failed"};
+        throw std::system_error{errno, std::system_category(), "Could not run pager: pipe() call failed"};
     }
 
     pid_t pid = fork();
     if (pid < 0) {
-        throw std::system_error{errno, std::system_category(), "fork failed"};
+        throw std::system_error{errno, std::system_category(), "Could not run pager: fork() call failed"};
     }
 
     if (pid == 0) {
@@ -159,7 +159,7 @@ static int execute_pager(const std::string& pager) {
     ::close(pipefd[0]); // close read end of the pipe
 
     if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
-        throw std::system_error{errno, std::system_category(), "signal call failed"};
+        throw std::system_error{errno, std::system_category(), "Could not run pager: signal() call failed"};
     }
 
     return pipefd[1];
@@ -183,7 +183,7 @@ bool CommandShow::run() {
 
         ::close(1); // close stdout
         if (::dup2(fd, 1) < 0) { // put end of pipe as stdout
-            throw std::system_error{errno, std::system_category(), "dup2 failed"};
+            throw std::system_error{errno, std::system_category(), "Could not run pager: dup2() call failed"};
         }
 
         osmium::io::File file{"-", m_output_format};
@@ -204,10 +204,10 @@ bool CommandShow::run() {
         int status = 0;
         const int pid = ::wait(&status);
         if (pid < 0) {
-            throw std::system_error{errno, std::system_category(), "wait failed"};
+            throw std::system_error{errno, std::system_category(), "Could not run pager: wait() call failed"};
         }
         if (WIFEXITED(status) && WEXITSTATUS(status) == 1) {
-            throw argument_error{std::string{"Could not execute pager '"} + m_pager + "'"};
+            throw argument_error{std::string{"Could not run pager '"} + m_pager + "'"};
         }
 #endif
     }

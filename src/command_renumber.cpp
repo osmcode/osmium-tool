@@ -218,7 +218,7 @@ void CommandRenumber::read_index(osmium::item_type type) {
         if (errno == ENOENT) {
             return;
         }
-        throw std::runtime_error{std::string{"Can't open file '"} + f + "': " + std::strerror(errno)};
+        throw std::runtime_error{std::string{"Could not open file '"} + f + "': " + std::strerror(errno)};
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);
@@ -227,7 +227,7 @@ void CommandRenumber::read_index(osmium::item_type type) {
     const std::size_t file_size = osmium::util::file_size(fd);
 
     if (file_size % sizeof(osmium::object_id_type) != 0) {
-        throw std::runtime_error{std::string{"index file '"} + f + "' has wrong file size"};
+        throw std::runtime_error{std::string{"Index file '"} + f + "' has wrong file size"};
     }
 
     map(type).read(fd, file_size);
@@ -243,7 +243,7 @@ void CommandRenumber::write_index(osmium::item_type type) {
     const std::string f{filename(osmium::item_type_to_name(type))};
     const int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
     if (fd < 0) {
-        throw std::runtime_error{std::string{"Can't open file '"} + f + "': " + std::strerror(errno)};
+        throw std::runtime_error{std::string{"Could not open file '"} + f + "': " + std::strerror(errno)};
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);
