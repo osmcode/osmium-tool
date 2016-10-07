@@ -144,10 +144,35 @@ bool operator!=(const QueueElement& lhs, const QueueElement& rhs) noexcept {
     return ! (lhs == rhs);
 }
 
+osmium::Box merge_box(std::vector<osmium::io::File> m_input_files) {
+    osmium::Box box;
+    for (const osmium::io::File& file : m_input_files) {
+        osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
+        osmium::io::Header header{reader.header()};
+        if (header.box()) {
+            box.extend(header.box());
+        } else {
+            return osmium::Box();
+        }
+    }
+    return box;
+}
+
 bool CommandMerge::run() {
     m_vout << "Opening output file...\n";
+
     osmium::io::Header header;
+
+    osmium::Box box = merge_box(m_input_files);
+    if (box.valid()) {
+        header.add_box(box);
+    }
+
     header.set("generator", m_generator);
+    for (const auto& h : m_output_headers) {
+        header.set(h);
+    }
+
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     if (m_input_files.size() == 1) {
