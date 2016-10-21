@@ -31,7 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/handler.hpp>
 #include <osmium/handler/check_order.hpp>
-#include <osmium/index/bool_vector.hpp>
+#include <osmium/index/id_set.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/util/progress_bar.hpp>
@@ -92,8 +92,8 @@ void CommandCheckRefs::show_arguments() {
 
 class RefCheckHandler : public osmium::handler::Handler {
 
-    osmium::index::BoolVector<osmium::unsigned_object_id_type> m_nodes;
-    osmium::index::BoolVector<osmium::unsigned_object_id_type> m_ways;
+    osmium::index::IdSet<osmium::unsigned_object_id_type> m_nodes;
+    osmium::index::IdSet<osmium::unsigned_object_id_type> m_ways;
 
     std::vector<uint32_t> m_relation_ids;
     std::vector<std::pair<uint32_t, uint32_t>> m_relation_refs;
