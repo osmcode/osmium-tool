@@ -109,13 +109,15 @@ class RefCheckHandler : public osmium::handler::Handler {
     uint64_t m_missing_ways_in_relations = 0;
 
     osmium::util::VerboseOutput& m_vout;
+    osmium::ProgressBar& m_progress_bar;
     bool m_show_ids;
     bool m_check_relations;
 
 public:
 
-    RefCheckHandler(osmium::util::VerboseOutput& vout, bool show_ids, bool check_relations) :
+    RefCheckHandler(osmium::util::VerboseOutput& vout, osmium::ProgressBar& progress_bar, bool show_ids, bool check_relations) :
         m_vout(vout),
+        m_progress_bar(progress_bar),
         m_show_ids(show_ids),
         m_check_relations(check_relations) {
     }
@@ -170,6 +172,7 @@ public:
         m_check_order.node(node);
 
         if (m_node_count == 0) {
+            m_progress_bar.remove();
             m_vout << "Reading nodes...\n";
         }
         ++m_node_count;
@@ -181,6 +184,7 @@ public:
         m_check_order.way(way);
 
         if (m_way_count == 0) {
+            m_progress_bar.remove();
             m_vout << "Reading ways...\n";
         }
         ++m_way_count;
@@ -203,6 +207,7 @@ public:
         m_check_order.relation(relation);
 
         if (m_relation_count == 0) {
+            m_progress_bar.remove();
             m_vout << "Reading relations...\n";
         }
         ++m_relation_count;
@@ -251,9 +256,9 @@ public:
 
 bool CommandCheckRefs::run() {
     osmium::io::Reader reader{m_input_file};
-    RefCheckHandler handler{m_vout, m_show_ids, m_check_relations};
-
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+    RefCheckHandler handler{m_vout, progress_bar, m_show_ids, m_check_relations};
+
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
         osmium::apply(buffer, handler);
