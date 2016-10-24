@@ -58,6 +58,8 @@ If referenced objects are missing from the input file, the type and IDs
 of those objects is written out to *stderr* at the end of the program unless
 the **-H**, **--history** option was given.
 
+This command will not work with negative IDs.
+
 
 # OPTIONS
 

@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <osmium/fwd.hpp>
+#include <osmium/index/id_set.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
@@ -43,10 +44,7 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
     bool m_work_with_history = false;
     bool m_verbose_ids = false;
 
-    std::set<osmium::object_id_type> m_ids[3];
-
-    std::set<osmium::object_id_type>& ids(osmium::item_type type) noexcept;
-    const std::set<osmium::object_id_type>& ids(osmium::item_type type) const noexcept;
+    osmium::index::NWRIdSet<osmium::index::IdSetDense> m_ids;
 
     void parse_and_add_id(const std::string& s);
 
