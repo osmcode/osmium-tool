@@ -166,6 +166,7 @@ bool CommandAddLocationsToWays::run() {
 
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {
+            progress_bar.remove();
             m_vout << "Copying input file '" << input_file.filename() << "'\n";
             osmium::io::Reader reader(input_file);
 
