@@ -92,10 +92,10 @@ void CommandCheckRefs::show_arguments() {
 
 class RefCheckHandler : public osmium::handler::Handler {
 
-    osmium::index::IdSet<osmium::unsigned_object_id_type> m_nodes;
-    osmium::index::IdSet<osmium::unsigned_object_id_type> m_ways;
+    osmium::index::IdSetDense<osmium::unsigned_object_id_type> m_nodes;
+    osmium::index::IdSetDense<osmium::unsigned_object_id_type> m_ways;
+    osmium::index::IdSetDense<osmium::unsigned_object_id_type> m_relations;
 
-    std::vector<uint32_t> m_relation_ids;
     std::vector<std::pair<uint32_t, uint32_t>> m_relation_refs;
 
     osmium::handler::CheckOrder m_check_order;
@@ -155,7 +155,7 @@ public:
 
         m_relation_refs.erase(
             std::remove_if(m_relation_refs.begin(), m_relation_refs.end(), [this](std::pair<uint32_t, uint32_t> refs){
-                return std::binary_search(m_relation_ids.begin(), m_relation_ids.end(), refs.first);
+                return m_relations.get(refs.first);
             }),
             m_relation_refs.end()
         );
@@ -213,7 +213,7 @@ public:
         ++m_relation_count;
 
         if (m_check_relations) {
-            m_relation_ids.push_back(uint32_t(relation.id()));
+            m_relations.set(relation.positive_id());
             for (const auto& member : relation.members()) {
                 switch (member.type()) {
                     case osmium::item_type::node:
@@ -235,7 +235,7 @@ public:
                         }
                         break;
                     case osmium::item_type::relation:
-                        if (member.ref() > relation.id() || !std::binary_search(m_relation_ids.begin(), m_relation_ids.end(), uint32_t(member.ref()))) {
+                        if (member.ref() > relation.id() || !m_relations.get(member.positive_ref())) {
                             m_relation_refs.emplace_back(uint32_t(member.ref()), uint32_t(relation.id()));
                         }
                         break;
@@ -275,7 +275,9 @@ bool CommandCheckRefs::run() {
         }
     }
 
-    std::cerr << "There are " << handler.node_count() << " nodes, " << handler.way_count() << " ways, and " << handler.relation_count() << " relations in this file.\n";
+    std::cerr << "There are " << handler.node_count() << " nodes, "
+                              << handler.way_count() << " ways, and "
+                              << handler.relation_count() << " relations in this file.\n";
 
     if (m_check_relations) {
         std::cerr << "Nodes     in ways      missing: " << handler.missing_nodes_in_ways()          << "\n";
