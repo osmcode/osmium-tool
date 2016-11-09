@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cerrno>
 #include <exception>
 #include <iostream>
 #include <memory>
@@ -124,6 +125,12 @@ int main(int argc, char *argv[]) {
         std::cerr << e.what() << '\n';
         std::cerr << "This command expects the input file to be ordered: First nodes in order of ID,\n"
                   << "then ways in order of ID, then relations in order of ID.\n";
+    } catch (const std::system_error& e) {
+        std::cerr << e.what();
+        if (e.code().value() == EEXIST) {
+            std::cerr << ". Try using --overwrite if you are sure you want to overwrite the file.";
+        }
+        std::cerr << '\n';
     } catch (const std::exception& e) {
         std::cerr << e.what() << '\n';
     }
