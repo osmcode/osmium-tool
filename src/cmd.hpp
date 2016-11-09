@@ -47,6 +47,10 @@ const char* yes_no(bool choice) noexcept;
 void warning(const char* text);
 std::size_t file_size_sum(std::vector<osmium::io::File> files);
 
+namespace osmium { namespace io {
+    class Header;
+}}
+
 /**
  * Virtual base class for commands that can be called from the command line.
  */
@@ -202,13 +206,7 @@ public:
         return m_output_file;
     }
 
-    const std::string& generator() const {
-        return m_generator;
-    }
-
-    const std::vector<std::string>& output_headers() const {
-        return m_output_headers;
-    }
+    void setup_header(osmium::io::Header& header) const;
 
     osmium::io::overwrite output_overwrite() const {
         return m_output_overwrite;

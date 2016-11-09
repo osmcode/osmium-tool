@@ -99,10 +99,11 @@ bool CommandSort::run() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
+    setup_header(header);
     if (bounding_box) {
         header.add_box(bounding_box);
     }
-    header.set("generator", m_generator);
+
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     m_vout << "Sorting data...\n";

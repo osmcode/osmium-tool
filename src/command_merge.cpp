@@ -147,10 +147,8 @@ bool operator!=(const QueueElement& lhs, const QueueElement& rhs) noexcept {
 bool CommandMerge::run() {
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
-    header.set("generator", m_generator);
-    for (const auto& h : m_output_headers) {
-        header.set(h);
-    }
+    setup_header(header);
+
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     if (m_input_files.size() == 1) {

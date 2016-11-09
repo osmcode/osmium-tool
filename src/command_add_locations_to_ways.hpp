@@ -45,7 +45,6 @@ using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;
 
 class CommandAddLocationsToWays : public Command, public with_multiple_osm_inputs, public with_osm_output {
 
-    void setup_header(osmium::io::Header& header) const;
     void copy_data(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler);
 
     std::string m_index_type_name;

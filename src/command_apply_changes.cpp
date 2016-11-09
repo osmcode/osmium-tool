@@ -169,7 +169,7 @@ bool CommandApplyChanges::run() {
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::object};
 
     osmium::io::Header header{reader.header()};
-    header.set("generator", m_generator);
+    setup_header(header);
 
     m_vout << "Opening output file...\n";
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};

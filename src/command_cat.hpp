@@ -34,8 +34,6 @@ namespace osmium { namespace io {
 
 class CommandCat : public Command, public with_multiple_osm_inputs, public with_osm_output {
 
-    void setup_header(osmium::io::Header& header) const;
-
 public:
 
     CommandCat() = default;

@@ -81,13 +81,6 @@ void CommandCat::show_arguments() {
     show_object_types(m_vout);
 }
 
-void CommandCat::setup_header(osmium::io::Header& header) const {
-    header.set("generator", m_generator);
-    for (const auto& h : m_output_headers) {
-        header.set(h);
-    }
-}
-
 bool CommandCat::run() {
     if (m_input_files.size() == 1) { // single input file
         m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";

@@ -377,7 +377,8 @@ bool CommandGetId::run() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header = reader.header();
-    header.set("generator", m_generator);
+    setup_header(header);
+
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     m_vout << "Copying from source to output file...\n";

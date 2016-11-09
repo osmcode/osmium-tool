@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/any_input.hpp> // IWYU pragma: keep
 #include <osmium/io/any_output.hpp> // IWYU pragma: keep
 #include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/verbose_output.hpp>
@@ -177,6 +178,13 @@ void with_osm_output::show_output_arguments(osmium::util::VerboseOutput& vout) {
         for (const auto& h : m_output_headers) {
             vout << "      " << h << "\n";
         }
+    }
+}
+
+void with_osm_output::setup_header(osmium::io::Header& header) const {
+    header.set("generator", m_generator);
+    for (const auto& h : m_output_headers) {
+        header.set(h);
     }
 }
 

@@ -143,8 +143,10 @@ bool CommandDeriveChanges::run() {
     if (m_output_file.format() != osmium::io::file_format::xml || !m_output_file.is_true("xml_change_format")) {
         warning("Output format chosen is not the XML change format. Use .osc(.gz|bz2) as suffix or -f option.\n");
     }
+
     osmium::io::Header header;
-    header.set("generator", m_generator);
+    setup_header(header);
+
     osmium::io::Writer writer{m_output_file, header};
 
     m_vout << "Deriving changes...\n";

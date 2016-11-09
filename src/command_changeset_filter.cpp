@@ -205,7 +205,7 @@ bool CommandChangesetFilter::run() {
     auto input = osmium::io::make_input_iterator_range<osmium::Changeset>(reader);
 
     osmium::io::Header header{reader.header()};
-    header.set("generator", m_generator);
+    setup_header(header);
 
     m_vout << "Opening output file...\n";
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};

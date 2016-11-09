@@ -288,11 +288,9 @@ bool CommandRenumber::run() {
     osmium::io::Reader reader_pass2{m_input_file};
 
     osmium::io::Header header = reader_pass2.header();
-    header.set("generator", m_generator);
+    setup_header(header);
     header.set("xml_josm_upload", "false");
-    for (const auto& h : m_output_headers) {
-        header.set(h);
-    }
+
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     osmium::ProgressBar progress_bar{reader_pass2.file_size(), display_progress()};

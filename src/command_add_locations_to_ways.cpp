@@ -119,13 +119,6 @@ void CommandAddLocationsToWays::show_arguments() {
     m_vout << "\n";
 }
 
-void CommandAddLocationsToWays::setup_header(osmium::io::Header& header) const {
-    header.set("generator", m_generator);
-    for (const auto& h : m_output_headers) {
-        header.set(h);
-    }
-}
-
 void CommandAddLocationsToWays::copy_data(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler) {
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
