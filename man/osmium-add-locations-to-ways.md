@@ -16,6 +16,10 @@ IDs of the nodes. This program will copy the input file(s) to the output,
 taking the locations from the nodes and adding them to the ways. This makes
 it easier for other programs to assemble the way geometries.
 
+The input file must contain all nodes needed for the ways, otherwise there will
+be an error. You can change this behaviour using the `--ignore-missing-nodes`
+option.
+
 Nodes without any tags will not be copied (unless the **--keep-untagged-nodes**,
 **-n** option is used). The size of the output file will be similar or a bit
 smaller than the input file (unless the **--keep-untagged-nodes**,
@@ -45,6 +49,11 @@ This program will not work on full history files.
 
 -n, --keep-untagged-nodes
 :   Keep the untagged nodes in the output file.
+
+--ignore-missing-nodes
+:   If this is not set a missing node needed for a way results in an error.
+    If this is set, errors are ignored and the way will have an invalid
+    location set for the missing node.
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@

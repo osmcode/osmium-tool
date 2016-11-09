@@ -50,6 +50,7 @@ class CommandAddLocationsToWays : public Command, public with_multiple_osm_input
 
     std::string m_index_type_name;
     bool m_keep_untagged_nodes = false;
+    bool m_ignore_missing_nodes = false;
 
 public:
 

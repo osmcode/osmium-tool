@@ -54,6 +54,7 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     ("index-type,i", po::value<std::string>()->default_value(default_index_type), "Index type to use")
     ("show-index-types,I", "Show available index types")
     ("keep-untagged-nodes,n", "Keep untagged nodes")
+    ("ignore-missing-nodes", "Ignore missing nodes")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -101,6 +102,10 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
         m_keep_untagged_nodes = true;
     }
 
+    if (vm.count("ignore-missing-nodes")) {
+        m_ignore_missing_nodes = true;
+    }
+
     return true;
 }
 
@@ -142,7 +147,10 @@ bool CommandAddLocationsToWays::run() {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
     auto location_index = map_factory.create_map(m_index_type_name);
     location_handler_type location_handler(*location_index);
-    location_handler.ignore_errors(); // XXX
+
+    if (m_ignore_missing_nodes) {
+        location_handler.ignore_errors();
+    }
 
     m_output_file.set("locations_on_ways");
 
