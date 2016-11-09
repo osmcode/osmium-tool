@@ -57,6 +57,16 @@ None of the output formats print the headers of the input files.
 -c, --suppress-common
 :   Do not output objects that are the same in both files.
 
+-f, --output-format=FORMAT
+:   See section OUTPUT FORMATS.
+
+-o, --output=FILE
+:   Name of the output file. Default is '-' (*stdout*).
+
+-O, --overwrite
+:   Allow an existing output file to be overwritten. Normally **osmium** will
+    refuse to write over an existing file.
+
 -q, --quiet
 :   No output. Just report when files differ through the return code.
 
@@ -69,10 +79,8 @@ None of the output formats print the headers of the input files.
     By default all types are read. This option can be given multiple times.
     This affects the output as well as the return code of the command.
 
-
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
-@MAN_OUTPUT_OPTIONS@
 
 # DIAGNOSTICS
 

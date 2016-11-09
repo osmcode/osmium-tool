@@ -7,7 +7,7 @@ TEST_CASE("diff") {
 
     CommandDiff cmd;
 
-    SECTION("no argments - need exactly two arguments") {
+    SECTION("no arguments - need exactly two arguments") {
         REQUIRE_THROWS_AS(cmd.setup({}), argument_error);
     }
 
@@ -27,12 +27,8 @@ TEST_CASE("diff") {
         REQUIRE_THROWS_AS(cmd.setup({"-q", "-f", "opl"}), argument_error);
     }
 
-    SECTION("quiet with output parameter --fsync") {
-        REQUIRE_THROWS_AS(cmd.setup({"-q", "--fsync"}), argument_error);
-    }
-
-    SECTION("quiet with output parameter --output-header") {
-        REQUIRE_THROWS_AS(cmd.setup({"-q", "--output-header", "foo"}), argument_error);
+    SECTION("parameter --fsync") {
+        REQUIRE_THROWS_AS(cmd.setup({"--fsync"}), boost::program_options::unknown_option);
     }
 
     SECTION("quiet with output parameter -O") {

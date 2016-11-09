@@ -49,15 +49,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
-    ("suppress-common,c", "Suppress common objects")
+    ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation)")
+    ("output,o", po::value<std::string>(), "Output file")
+    ("output-format,f", po::value<std::string>(), "Format of output file")
+    ("overwrite,O", "Allow existing output file to be overwritten")
     ("quiet,q", "Report only when files differ")
     ("summary,s", "Show summary on STDERR")
-    ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation)")
+    ("suppress-common,c", "Suppress common objects")
     ;
 
     po::options_description opts_common{add_common_options()};
     po::options_description opts_input{add_multiple_inputs_options()};
-    po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -65,7 +67,7 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     ;
 
     po::options_description desc;
-    desc.add(opts_cmd).add(opts_common).add(opts_input).add(opts_output);
+    desc.add(opts_cmd).add(opts_common).add(opts_input);
 
     po::options_description parsed_options;
     parsed_options.add(desc).add(hidden);
@@ -93,16 +95,8 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
         m_output_format = vm["output-format"].as<std::string>();
     }
 
-    if (vm.count("output-header")) {
-        m_output_headers = vm["output-header"].as<std::vector<std::string>>();
-    }
-
     if (vm.count("overwrite")) {
         m_output_overwrite = osmium::io::overwrite::allow;
-    }
-
-    if (vm.count("fsync")) {
-        m_fsync = osmium::io::fsync::yes;
     }
 
     if (vm.count("summary")) {
@@ -110,7 +104,7 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     }
 
     if (vm.count("quiet")) {
-        if (vm.count("output") || vm.count("output-format") || vm.count("output-header") || vm.count("overwrite") || vm.count("fsync") || vm.count("suppress-common")) {
+        if (vm.count("output") || vm.count("output-format") || vm.count("overwrite") || vm.count("suppress-common")) {
             throw argument_error("Do not use --quiet/-q with any of the output options.");
         }
         m_output_action = "none";
@@ -218,8 +212,8 @@ class OutputActionOSM : public OutputAction {
 
 public:
 
-    OutputActionOSM(const osmium::io::File& file) :
-        m_writer(file) {
+    OutputActionOSM(const osmium::io::File& file, osmium::io::overwrite ow) :
+        m_writer(file, ow) {
     }
 
     void left(osmium::OSMObject& object) override {
@@ -254,11 +248,11 @@ bool CommandDiff::run() {
     std::unique_ptr<OutputAction> action;
 
     if (m_output_action == "compact") {
-        int fd = osmium::io::detail::open_for_writing(m_output_filename, m_output_overwrite);
+        const int fd = osmium::io::detail::open_for_writing(m_output_filename, m_output_overwrite);
         action.reset(new OutputActionCompact{fd});
     } else if (m_output_action == "osm") {
         m_output_file.set("diff");
-        action.reset(new OutputActionOSM{m_output_file});
+        action.reset(new OutputActionOSM{m_output_file, m_output_overwrite});
     }
 
     uint64_t count_left = 0;

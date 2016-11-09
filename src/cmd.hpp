@@ -66,7 +66,6 @@ class Command {
 
 protected:
 
-    bool m_debug {false};
     osmium::util::VerboseOutput m_vout {false};
 
 public:
@@ -179,10 +178,11 @@ public:
 
 class with_osm_output {
 
-protected:
-
     std::string m_generator;
     std::vector<std::string> m_output_headers;
+
+protected:
+
     std::string m_output_filename = "-"; // default: stdout
     std::string m_output_format;
     osmium::io::File m_output_file;
