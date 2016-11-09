@@ -8,9 +8,27 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Add hint to error message about `--overwrite` option when trying to open
+  an existing file.
+- Check the required libosmium version in CMake build.
+
 ### Changed
 
+- Add --ignore-missing-nodes to `add-locations-to-ways` subcommand. If this
+  is not set, the command will now fail if there are missing nodes needed
+  for ways.
+- The `check-refs` and `getid` subcommands now use the IdSet class from the
+  newest libosmium making them more efficient (especially on very large input
+  files).
+- Improved error messages for low-level errors.
+
 ### Fixed
+
+- Consistently handle `--output-header` option in all commands that create
+  standard OSM files.
+- Handling of some output options was not correct in `diff` command. They
+  do now what is documented and it is documented what they do.
+- Progress bar and output from verbose mode will now be kept separate.
 
 
 ## [1.4.0] - 2016-09-15
@@ -27,7 +45,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   shown in verbose mode.
 - Added `iwyu` target to CMake config.
 - Progress bars will be shown on some commands. (This is configurable at
-  run time with the --progress and --no-progress options.)
+  run time with the `--progress` and `--no-progress` options.)
 
 ### Changed
 
