@@ -32,7 +32,8 @@ OSMOSIS := /usr/bin/osmosis
 
 OSMIUM  := @CMAKE_BINARY_DIR@/src/osmium
 
-OSMIUM_CMD := $(OSMIUM) cat --overwrite
+OSMIUM_CMD := $(OSMIUM) cat --overwrite --no-progress
+OSMIUM_FILEINFO := $(OSMIUM) fileinfo --no-progress -e -g data.crc32
 
 ifeq ($(suffix $(INPUT)),.pbf)
     OSMOSIS_READ := $(OSMOSIS) --read-pbf
@@ -157,7 +158,7 @@ $(DIR)/report_default: \
 	echo "Default:" >$@; \
 	for i in $^; do \
 	    filename=`basename $$i`; \
-	    crc=`$(OSMIUM) fileinfo -e -g data.crc32 $$i`; \
+	    crc=`$(OSMIUM_FILEINFO) $$i`; \
 	    echo $$crc $$filename >>$@; \
 	done; \
 	echo >>$@
@@ -167,7 +168,7 @@ $(DIR)/report_granularity: \
 	echo "Non-standard granularity:" >$@; \
 	for i in $^; do \
 	    filename=`basename $$i`; \
-	    crc=`$(OSMIUM) fileinfo -e -g data.crc32 $$i`; \
+	    crc=`$(OSMIUM_FILEINFO) $$i`; \
 	    echo $$crc $$filename >>$@; \
 	done; \
 	echo >>$@
@@ -180,7 +181,7 @@ $(DIR)/report_without_metadata: \
 	echo "Without metadata:" >$@; \
 	for i in $^; do \
 	    filename=`basename $$i`; \
-	    crc=`$(OSMIUM) fileinfo -e -g data.crc32 $$i`; \
+	    crc=`$(OSMIUM_FILEINFO) $$i`; \
 	    echo $$crc $$filename >>$@; \
 	done; \
 	echo >>$@
