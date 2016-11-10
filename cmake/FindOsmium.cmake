@@ -56,7 +56,7 @@
 
 # This is the list of directories where we look for osmium and protozero
 # includes.
-list(APPEND _osmium_include_path
+set(_osmium_include_path
         ../libosmium
         ~/Library/Frameworks
         /Library/Frameworks
