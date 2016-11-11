@@ -117,6 +117,7 @@ if(Osmium_USE_PBF)
     find_path(PROTOZERO_INCLUDE_DIR protozero/version.hpp
         PATH_SUFFIXES include
         PATHS ${_osmium_include_path}
+              ${OSMIUM_INCLUDE_DIR}
     )
     if(PROTOZERO_INCLUDE_DIR)
         message(STATUS "Looking for protozero - found")
