@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.4.1] - 2016-11-20
+
+### Added
+
 - Add hint to error message about `--overwrite` option when trying to open
   an existing file.
 - Check the required libosmium version in CMake build.
@@ -181,7 +190,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/osmcode/osmium-tool/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/osmcode/osmium-tool/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/osmcode/osmium-tool/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/osmcode/osmium-tool/compare/v1.2.1...v1.3.0
