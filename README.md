@@ -18,7 +18,7 @@ You also need the following libraries:
         http://osmcode.org/libosmium
         Debian/Ubuntu: libosmium2-dev
 
-    Protozero (>= 1.4.4)
+    Protozero (>= 1.4.5)
         This is included in the libosmium repository and might or might not
         have been installed with it. See the libosmium README.
         https://github.com/mapbox/protozero

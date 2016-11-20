@@ -21,6 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   newest libosmium making them more efficient (especially on very large input
   files).
 - Improved error messages for low-level errors.
+- Now requires at least libosmium 2.10.2 and protozero 1.4.5.
 
 ### Fixed
 
