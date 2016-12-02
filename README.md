@@ -35,6 +35,12 @@ You also need the following libraries:
         openSUSE: utfcpp
         Fedora: utf8cpp-devel
 
+    RapidJSON
+        This is included in the osmium-tool repository, so you usually do
+        not need to install this.
+        http://rapidjson.org/
+        Debian/Ubuntu: rapidjson-dev
+
     boost-program-options (>= 1.55)
         http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
