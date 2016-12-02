@@ -126,5 +126,5 @@ main memory.
 # SEE ALSO
 
 * **osmium**(1), **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 

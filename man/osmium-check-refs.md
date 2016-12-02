@@ -72,6 +72,6 @@ that's roughly 500 MB these days (Summer 2015). With the **-r**,
 # SEE ALSO
 
 * **osmium**(1), **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 
 

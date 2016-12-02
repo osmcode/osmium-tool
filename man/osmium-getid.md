@@ -130,5 +130,5 @@ Output nodes 17 and 1234, way 42, and relation 111 to *stdout* in OPL format:
 # SEE ALSO
 
 * **osmium**(1), **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 

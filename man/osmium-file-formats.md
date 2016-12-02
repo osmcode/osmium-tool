@@ -77,5 +77,5 @@ osm.gz,xml_change_format=true
 # SEE ALSO
 
 * **osmium**(1)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 

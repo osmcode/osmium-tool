@@ -63,5 +63,5 @@ Extract planet data how it appeared on January 1 2008 from history planet:
 # SEE ALSO
 
 * **osmium**(1), **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 

@@ -67,5 +67,5 @@ Copy nodes and ways from source to destination file:
 # SEE ALSO
 
 * **osmium**(1), **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 

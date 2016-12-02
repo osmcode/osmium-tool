@@ -121,5 +121,5 @@ If an osmium command exits with an "Out of memory" error, try running it with
   **osmium-sort**(1),
   **osmium-time-filter**(1),
   **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 

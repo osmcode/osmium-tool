@@ -51,5 +51,5 @@ Sort *in.osm.bz2* and write out to *sorted.osm.pbf*:
 # SEE ALSO
 
 * **osmium**(1), **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium)
+* [Osmium website](http://osmcode.org/osmium-tool/)
 
