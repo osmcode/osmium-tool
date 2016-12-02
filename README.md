@@ -4,6 +4,8 @@
 A multipurpose command line tool for working with OpenStreetMap data based on
 the Osmium library.
 
+Official web site: http://osmcode.org/osmium-tool/
+
 [![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.svg)](http://travis-ci.org/osmcode/osmium-tool)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/osmcode/osmium-tool?svg=true)](https://ci.appveyor.com/project/Mapbox/osmium-tool)
 
