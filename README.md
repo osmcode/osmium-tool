@@ -103,7 +103,8 @@ default is RelWithDebInfo.
 
 ## Documentation
 
-See the [manual](doc/manual.md).
+See the [Osmium Tool website](http://osmcode.org/osmium-tool/)
+and [Osmium Tool Manual](http://osmcode.org/osmium-tool/manual.html).
 
 There are man pages in the 'man' directory. To build them you need 'pandoc'.
 If the `pandoc` command was found during the CMake config step, the manpages
