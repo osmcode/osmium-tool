@@ -11,7 +11,7 @@ Osmium library. These are:
 * The classical XML format in the variants *.osm* (for data files),
   *.osh* (for data files with history) and *.osc* (for change files).
 * The PBF binary format (usually with suffix *.osm.pbf*).
-* The OPL format (usually with suffix *.osm.opl*) (writing only).
+* The OPL format (usually with suffix *.osm.opl*).
 * The O5M/O5C format (usually with suffix *.o5m* or *.o5c*) (reading only).
 * The "debug" format (usually with suffix *.osm.debug*) (writing only).
 
@@ -36,20 +36,20 @@ set additional options.
 
 The following options can be added when writing OSM files:
 
-xml_change_format=true/false
+`xml_change_format`=`true`/`false`
 :   Enable/disable XML change format. Same as *.osc*.
 
-force_visible_flag=true/false (*default: false*)
+`force_visible_flag`=`true`/`false` (*default: false*)
 :   Force writing of visible flag, even for normal OSM XML files.
 
-pbf_dense_nodes=true/false (*default: true*)
+`pbf_dense_nodes`=`true`/`false` (*default: true*)
 :   Enable/disable DenseNodes format for PBF files.
 
-pbf_compression=true/false (*default: true*)
+`pbf_compression`=`true`/`false` (*default: true*)
 :   Enable/disable compression in PBF files. Disabling this will make writing
     files a bit faster, but the resulting files are 2 to 3 times bigger.
 
-add_metadata=true/false (*default: true*)
+`add_metadata`=`true`/`false` (*default: true*)
 :   Enable/disable writing of object metadata such as changeset id, username,
     etc. Disabling this will make files a bit smaller.
 
@@ -58,19 +58,19 @@ add_metadata=true/false (*default: true*)
 
 Here are some examples:
 
-pbf
+`pbf`
 :   PBF format.
 
-pbf,add_metadata=false
+`pbf,add_metadata=false`
 :   PBF format, dont' write metadata
 
-osm.bz2
+`osm.bz2`
 :   XML format, compressed with bzip2.
 
-osc.gz
+`osc.gz`
 :   OSM change file, compressed with gzip.
 
-osm.gz,xml_change_format=true
+`osm.gz,xml_change_format=true`
 :   OSM change file, compressed with gzip.
 
 
@@ -78,4 +78,5 @@ osm.gz,xml_change_format=true
 
 * **osmium**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
+* [OSM File Formats Manual](http://osmcode.org/file-formats-manual/)
 
