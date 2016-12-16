@@ -37,7 +37,7 @@ IDs.
     in several OSM files. Without this option, the indexes are not read from
     or written to disk. The directory must exist. Use '.' for the current
     directory. The files written will be named `nodes.idx`, `ways.idx`, and
-    `relations.idx`. See also the section INDEX FILES below.
+    `relations.idx`. See also the **INDEX FILES** section below.
 
 -t, --object-type=TYPE
 :   Renumber only objects of given type (*node*, *way*, or *relation*). By

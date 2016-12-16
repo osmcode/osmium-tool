@@ -18,7 +18,7 @@ displayed. Headers are ignored.
 
 Objects in both input files must be sorted in the same order.
 
-Several output formats are supported, see the **OUTPUT FORMAT** section.
+Several output formats are supported, see the **OUTPUT FORMATS** section.
 
 This command is intended for displaying the differences between files to
 humans. It can not be used to create an OSM change file (`.osc`), use
@@ -58,7 +58,7 @@ None of the output formats print the headers of the input files.
 :   Do not output objects that are the same in both files.
 
 -f, --output-format=FORMAT
-:   See section OUTPUT FORMATS.
+:   See the **OUTPUT FORMATS** section.
 
 -o, --output=FILE
 :   Name of the output file. Default is '-' (*stdout*).
