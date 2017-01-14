@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <osmium/handler/check_order.hpp>
 #include <osmium/util/string.hpp>
 
 #include "strategy_smart.hpp"
@@ -98,6 +99,7 @@ namespace strategy_smart {
 
     class Pass1 : public Pass<Strategy, Pass1> {
 
+        osmium::handler::CheckOrder m_check_order;
         osmium::index::RelationsMapStash m_relations_map_stash;
 
     public:
@@ -106,10 +108,18 @@ namespace strategy_smart {
             Pass(strategy) {
         }
 
+        void node(const osmium::Node& node) {
+            m_check_order.node(node);
+        }
+
         void enode(extract_data& e, const osmium::Node& node) {
             if (e.contains(node.location())) {
                 e.node_ids.set(node.positive_id());
             }
+        }
+
+        void way(const osmium::Way& way) {
+            m_check_order.way(way);
         }
 
         void eway(extract_data& e, const osmium::Way& way) {
@@ -122,6 +132,7 @@ namespace strategy_smart {
         }
 
         void relation(const osmium::Relation& relation) {
+            m_check_order.relation(relation);
             m_relations_map_stash.add_members(relation);
         }
 
