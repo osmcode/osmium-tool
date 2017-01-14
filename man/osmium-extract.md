@@ -58,6 +58,8 @@ the input file.
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
 
+# OUTPUT OPTIONS
+
 --fsync
 :   Call fsync after writing the output file to force flushing buffers to disk.
 
