@@ -51,6 +51,7 @@ std::size_t OSMFileParser::operator()() {
         reader.close();
     }
 
+    bool has_ring = false;
     {
         index_type index;
         location_handler_type location_handler{index};
@@ -63,6 +64,7 @@ std::size_t OSMFileParser::operator()() {
                     if (item.type() == osmium::item_type::outer_ring ||
                         item.type() == osmium::item_type::inner_ring) {
                         builder.add_item(item);
+                        has_ring = true;
                     }
                 }
             }
@@ -70,6 +72,11 @@ std::size_t OSMFileParser::operator()() {
         reader.close();
     }
 
-    return m_buffer.commit();
+    if (has_ring) {
+        return m_buffer.commit();
+    }
+
+    m_buffer.rollback();
+    throw std::runtime_error{"No areas found in the OSM file"};
 }
 
