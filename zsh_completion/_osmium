@@ -17,7 +17,7 @@ osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes fileinfo getid help merge merge-changes renumber show sort time-filter)
+    osmium_commands=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes extract fileinfo getid help merge merge-changes renumber show sort time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -172,6 +172,25 @@ _osmium-diff() {
         '(-s)--summary[Show summary on STDERR]' \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_object_type' \
         '*--object-type[read only objects of given output types]:OSM entity type:_osmium_object_type'
+}
+
+_osmium-extract() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
+        '(--config)-c[specify config file]:config_file:_files' \
+        '(-c)--config[specify config file]:config_file:_files' \
+        '(--directory)-d[output directory]:directory:_path_files -/' \
+        '(-d)--directory[output directory]:directory:_path_files -/' \
+        '--generator[generator setting for output file header]:generator:' \
+        '(--overwrite)-O[allow overwriting of existing output file]' \
+        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '(--strategy)-s[use strategy for computing extract]:extract strategy:_osmium_extract_strategy' \
+        '(-s)--strategy[use strategy for computing extract]:extract strategy:_osmium_extract_strategy' \
+        '*-S[set strategy option]:option:' \
+        '*--option[set strategy option]:option:' \
+        '--with-history[input and output files are OSM history files]'
 }
 
 _osmium-fileinfo() {
@@ -336,6 +355,13 @@ _osmium_entity_type() {
         'changeset'
 }
 
+_osmium_extract_strategy() {
+    _values 'extract stretegy' \
+        'simple' \
+        'complete_ways' \
+        'smart'
+}
+
 _osmium_fileinfo_variables() {
     _values 'variable' $(osmium fileinfo --show-variables)
 }
@@ -346,9 +372,9 @@ _osmium_index_types() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes fileinfo getid help merge merge-changes renumber show sort time-filter file-formats)
+    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes extract fileinfo getid help merge merge-changes renumber show sort time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 
-#_osmium "$@"
+_osmium "$@"
 

@@ -178,11 +178,10 @@ public:
 
 class with_osm_output {
 
-    std::string m_generator;
-    std::vector<std::string> m_output_headers;
-
 protected:
 
+    std::string m_generator;
+    std::vector<std::string> m_output_headers;
     std::string m_output_filename = "-"; // default: stdout
     std::string m_output_format;
     osmium::io::File m_output_file;

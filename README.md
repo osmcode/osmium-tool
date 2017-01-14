@@ -35,7 +35,7 @@ You also need the following libraries:
         openSUSE: utfcpp
         Fedora: utf8cpp-devel
 
-    RapidJSON
+    RapidJSON (>= 1.1)
         This is included in the osmium-tool repository, so you usually do
         not need to install this.
         http://rapidjson.org/

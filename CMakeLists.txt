@@ -76,7 +76,7 @@ endif()
 #  http://include-what-you-use.org/
 #
 #-----------------------------------------------------------------------------
-find_program(IWYU_TOOL iwyu_tool.py)
+find_program(IWYU_TOOL NAMES iwyu_tool iwyu_tool.py)
 
 if(IWYU_TOOL)
     message(STATUS "Looking for iwyu_tool.py - found")
@@ -142,6 +142,7 @@ if(PANDOC)
     add_man_page(1 osmium-check-refs)
     add_man_page(1 osmium-derive-changes)
     add_man_page(1 osmium-diff)
+    add_man_page(1 osmium-extract)
     add_man_page(1 osmium-fileinfo)
     add_man_page(1 osmium-getid)
     add_man_page(1 osmium-merge)

@@ -48,6 +48,9 @@ derive-changes
 diff
 :   display differences between OSM files
 
+extract
+:   create geographical extracts from an OSM file
+
 fileinfo
 :   show information about an OSM file
 
