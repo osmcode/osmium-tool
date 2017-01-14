@@ -60,7 +60,7 @@ TEST_CASE("Parse poly files") {
         }, poly_error);
     }
 
-    SECTION("File with one outer polygon") {
+    SECTION("File with one polygon with one outer ring") {
         PolyFileParser parser{buffer, "filename",
             "foo\n"
             "1\n"
@@ -74,10 +74,18 @@ TEST_CASE("Parse poly files") {
         };
         REQUIRE(parser() == 0);
         const osmium::Area& area = buffer.get<osmium::Area>(0);
-        REQUIRE(area.num_rings() == std::make_pair(1ul, 0ul));
+        const auto nr = area.num_rings();
+        REQUIRE(nr.first == 1);
+        REQUIRE(nr.second == 0);
+
+        auto it = area.outer_rings().begin();
+        REQUIRE(it != area.outer_rings().end());
+        REQUIRE(it->front().location() == osmium::Location(10.0, 10.0));
+        ++it;
+        REQUIRE(it == area.outer_rings().end());
     }
 
-    SECTION("File with two outer polygons") {
+    SECTION("File with two polygons each with one outer ring") {
         PolyFileParser parser{buffer, "filename",
             "foo\n"
             "1\n"
@@ -98,10 +106,21 @@ TEST_CASE("Parse poly files") {
         };
         REQUIRE(parser() == 0);
         const osmium::Area& area = buffer.get<osmium::Area>(0);
-        REQUIRE(area.num_rings() == std::make_pair(2ul, 0ul));
+        const auto nr = area.num_rings();
+        REQUIRE(nr.first == 2);
+        REQUIRE(nr.second == 0);
+
+        auto it = area.outer_rings().begin();
+        REQUIRE(it != area.outer_rings().end());
+        REQUIRE(it->front().location() == osmium::Location(10.0, 10.0));
+        ++it;
+        REQUIRE(it != area.outer_rings().end());
+        REQUIRE(it->front().location() == osmium::Location(20.0, 20.0));
+        ++it;
+        REQUIRE(it == area.outer_rings().end());
     }
 
-    SECTION("File with outer and inner polygons") {
+    SECTION("File with one polygon with outer and inner rings") {
         PolyFileParser parser{buffer, "filename",
             "foo\n"
             "1\n"
@@ -122,7 +141,17 @@ TEST_CASE("Parse poly files") {
         };
         REQUIRE(parser() == 0);
         const osmium::Area& area = buffer.get<osmium::Area>(0);
-        REQUIRE(area.num_rings() == std::make_pair(1ul, 1ul));
+        const auto nr = area.num_rings();
+        REQUIRE(nr.first == 1);
+        REQUIRE(nr.second == 1);
+
+        auto it = area.outer_rings().begin();
+        REQUIRE(it != area.outer_rings().end());
+        REQUIRE(it->front().location() == osmium::Location(10.0, 10.0));
+        const auto& inner_ring = *area.inner_rings(*it).begin();
+        REQUIRE(inner_ring.front().location() == osmium::Location(11.0, 11.0));
+        ++it;
+        REQUIRE(it == area.outer_rings().end());
     }
 
     SECTION("Two concatenated files") {
@@ -155,7 +184,20 @@ TEST_CASE("Parse poly files") {
         };
         REQUIRE(parser() == 0);
         const osmium::Area& area = buffer.get<osmium::Area>(0);
-        REQUIRE(area.num_rings() == std::make_pair(2ul, 1ul));
+        const auto nr = area.num_rings();
+        REQUIRE(nr.first == 2);
+        REQUIRE(nr.second == 1);
+
+        auto it = area.outer_rings().begin();
+        REQUIRE(it != area.outer_rings().end());
+        REQUIRE(it->front().location() == osmium::Location(10.0, 10.0));
+        const auto& inner_ring = *area.inner_rings(*it).begin();
+        REQUIRE(inner_ring.front().location() == osmium::Location(11.0, 11.0));
+        ++it;
+        REQUIRE(it != area.outer_rings().end());
+        REQUIRE(it->front().location() == osmium::Location(20.0, 20.0));
+        ++it;
+        REQUIRE(it == area.outer_rings().end());
     }
 
     SECTION("Two concatenated files with empty line in between") {
@@ -189,7 +231,9 @@ TEST_CASE("Parse poly files") {
         };
         REQUIRE(parser() == 0);
         const osmium::Area& area = buffer.get<osmium::Area>(0);
-        REQUIRE(area.num_rings() == std::make_pair(2ul, 1ul));
+        const auto nr = area.num_rings();
+        REQUIRE(nr.first == 2);
+        REQUIRE(nr.second == 1);
     }
 
 }
