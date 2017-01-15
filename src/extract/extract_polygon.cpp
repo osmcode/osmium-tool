@@ -48,19 +48,47 @@ const osmium::Area& ExtractPolygon::area() const noexcept {
 ExtractPolygon::ExtractPolygon(const std::string& output, const std::string& output_format, const std::string& description, const osmium::memory::Buffer& buffer, std::size_t offset) :
     Extract(output, output_format, description, buffer.get<osmium::Area>(offset).envelope()),
     m_buffer(buffer),
-    m_offset(offset) {
+    m_offset(offset),
+    m_bands(),
+    m_dy(0) {
 
-    // prepare area
+    // get segments from all rings
+    std::vector<osmium::Segment> segments;
     for (const auto& outer_ring : area().outer_rings()) {
-        add_ring(m_segments, outer_ring);
+        add_ring(segments, outer_ring);
 
         for (const auto& inner_ring : area().inner_rings(outer_ring)) {
-            add_ring(m_segments, inner_ring);
+            add_ring(segments, inner_ring);
+        }
+    }
+
+    // split y range into equal-sized bands
+    constexpr const int segments_per_band = 10;
+    std::size_t num_bands = segments.size() / segments_per_band;
+    if (num_bands < 1) {
+        num_bands = 1;
+    } else if (num_bands > 100) {
+        num_bands = 100;
+    }
+
+    m_bands.resize(num_bands);
+
+    m_dy = (y_max() - y_min()) / num_bands;
+
+    // put segments into the bands they overlap
+    for (const auto& segment : segments) {
+        const std::pair<int32_t, int32_t> mm = std::minmax(segment.first().y(), segment.second().y());
+        const uint32_t band_min = (mm.first  - y_min()) / m_dy;
+        const uint32_t band_max = std::min(static_cast<int32_t>(num_bands), ((mm.second - y_min()) / m_dy) + 1);
+
+        for (auto band = band_min; band < band_max; ++band) {
+            m_bands[band].push_back(segment);
         }
     }
 }
 
-/**
+/*
+
   Simple point-in-polygon algorithm adapted from
 
   https://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -76,6 +104,10 @@ ExtractPolygon::ExtractPolygon(const std::string& output, const std::string& out
         return c;
     }
 
+  In our implementation we split the y-range into equal-sized subranges and
+  only have to test all segments in the subrange that contains the y coordinate
+  of the node.
+
 */
 
 bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
@@ -83,9 +115,14 @@ bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
         return false;
     }
 
+    size_t band = (location.y() - y_min()) / m_dy;
+    if (band >= m_bands.size()) {
+        band = m_bands.size() - 1;
+    }
+
     bool inside = false;
 
-    for (const auto& segment : m_segments) {
+    for (const auto& segment : m_bands[band]) {
         if ((segment.second().y() > location.y()) != (segment.first().y() > location.y())) {
             const int64_t ax = int64_t(segment.first().x()) - int64_t(segment.second().x());
             const int64_t ay = int64_t(segment.first().y()) - int64_t(segment.second().y());

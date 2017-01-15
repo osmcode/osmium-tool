@@ -125,9 +125,18 @@ class ExtractPolygon : public Extract {
     const osmium::memory::Buffer& m_buffer;
     std::size_t m_offset;
 
-    std::vector<osmium::Segment> m_segments;
+    std::vector<std::vector<osmium::Segment>> m_bands;
+    int32_t m_dy;
 
     const osmium::Area& area() const noexcept;
+
+    int32_t y_max() const noexcept {
+        return envelope().top_right().y();
+    }
+
+    int32_t y_min() const noexcept {
+        return envelope().bottom_left().y();
+    }
 
 public:
 
