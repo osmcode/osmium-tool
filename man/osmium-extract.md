@@ -27,6 +27,10 @@ history extract will contain every version of all objects with at least one
 version in the region. Generating a history extract is somewhat slower than
 a normal data extract.
 
+Osmium can not guarantee that objects directly on the border of a specified
+region will end up. If you want to be sure that the boundary is complete, use
+a small buffer around your region.
+
 No **bounds** will be set in the header of the output file. Which bounds would
 be correct is unclear and setting it correctly might need an extra pass through
 the input file.
