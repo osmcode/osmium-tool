@@ -382,7 +382,7 @@ void CommandExtract::parse_config_file() {
     }
 
     std::string directory{get_value_as_string(doc, "directory")};
-    if (!directory.empty()) {
+    if (!directory.empty() && m_output_directory.empty()) {
         set_directory(directory);
     }
 
