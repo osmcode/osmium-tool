@@ -3,6 +3,7 @@
     "extracts": [
         {
             "output": "dresden.osm.pbf",
+            "output_format": "pbf",
             "description": "City of Dresden specified using a bounding box (object format)",
             "bbox": {
                 "left": 13.57,

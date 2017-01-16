@@ -106,11 +106,14 @@ The extracts array specifies the extracts that should be created. Each item in
 the array is an object with at least a name "output" naming the output file and
 a region defined in a "bbox", "polygon" or "multipolygon" name. An optional
 "description" can be added, it will not be used by the program but can help
-with documenting the file contents.
+with documenting the file contents. You can add an optional "output_format"
+if the format can not be detected from the "output" file name. Run "osmium
+help file-formats" to get a description of allowed formats.
 
     "extracts": [
         {
             "output": "hamburg.osm.pbf",
+            "output_format": "pbf",
             "description": "optional description",
             "box": ...
         },
@@ -333,6 +336,6 @@ try it:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-getid**(1), **osmium-merge**(1)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-getid**(1), **osmium-merge**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
 
