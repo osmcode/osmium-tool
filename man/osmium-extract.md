@@ -35,6 +35,12 @@ No **bounds** will be set in the header of the output file. Which bounds would
 be correct is unclear and setting it correctly might need an extra pass through
 the input file.
 
+Note that **osmium extract** will never clip any OSM objects, ie. it will not
+remove node references outside the region from ways or unused relation members
+from relations. This means you might get objects that are not
+reference-complete. It has the advantage that you can use **osmium merge**
+to merge several extracts without problems.
+
 
 # OPTIONS
 
@@ -234,9 +240,11 @@ osm
     must be used, so the file format is detected correctly. Files for this can
     easily be obtained by searching for the area on OSM and then downloading
     the full relation using a URL like
-    http://www.openstreetmap.org/api/0.6/relation/RELATION-ID/full . Note
-    that this can get you very detailed boundaries which can take quite a
-    while to cut out. Consider simplifying the boundary before use.
+    http://www.openstreetmap.org/api/0.6/relation/RELATION-ID/full . Or
+    you can use **osmium getid -r** to get a specific relation from an OSM
+    file. Note that both these approaches can get you very detailed boundaries
+    which can take quite a while to cut out. Consider simplifying the boundary
+    before use.
 
 If there are several (multi)polygons in a poly file or OSM file, they will
 be merged. The (multi)polygons must not overlap, otherwise the result is
@@ -325,6 +333,6 @@ try it:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-merge**(1)
+* **osmium**(1), **osmium-getid**(1), **osmium-merge**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
 
