@@ -28,6 +28,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "poly_file_parser.hpp"
 
+void PolyFileParser::error(const std::string& message) {
+    throw poly_error{message + " in file '" + m_file_name + "' on line " + std::to_string(m_line + 1)};
+}
+
 PolyFileParser::PolyFileParser(osmium::memory::Buffer& buffer, const std::string& file_name, const std::string& data) :
     m_buffer(buffer),
     m_builder(nullptr),

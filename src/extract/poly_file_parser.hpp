@@ -65,9 +65,7 @@ class PolyFileParser {
         return m_data[m_line];
     }
 
-    void error(const std::string& message) {
-        throw poly_error{message + " in file '" + m_file_name + "' on line " + std::to_string(m_line + 1)};
-    }
+    void error(const std::string& message);
 
 public:
 
