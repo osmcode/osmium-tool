@@ -1,5 +1,5 @@
-#ifndef OSM_POLY_FILE_PARSER_HPP
-#define OSM_POLY_FILE_PARSER_HPP
+#ifndef EXTRACT_OSM_FILE_PARSER_HPP
+#define EXTRACT_OSM_FILE_PARSER_HPP
 
 /*
 
@@ -45,4 +45,4 @@ public:
 
 }; // class OSMFileParser
 
-#endif // OSM_POLY_FILE_PARSER_HPP
+#endif // EXTRACT_OSM_FILE_PARSER_HPP
