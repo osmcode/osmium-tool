@@ -37,6 +37,7 @@ const char* ExtractBBox::geometry_type() const noexcept {
 std::string ExtractBBox::geometry_as_text() const {
     std::string s{"BOX("};
     envelope().bottom_left().as_string(std::back_inserter(s), ' ');
+    s += ',';
     envelope().top_right().as_string(std::back_inserter(s), ' ');
     s += ')';
     return s;
