@@ -64,11 +64,12 @@ ExtractPolygon::ExtractPolygon(const std::string& output, const std::string& out
 
     // split y range into equal-sized bands
     constexpr const int segments_per_band = 10;
+    constexpr const size_t max_bands = 10000;
     std::size_t num_bands = segments.size() / segments_per_band;
     if (num_bands < 1) {
         num_bands = 1;
-    } else if (num_bands > 100) {
-        num_bands = 100;
+    } else if (num_bands > max_bands) {
+        num_bands = max_bands;
     }
 
     m_bands.resize(num_bands);
