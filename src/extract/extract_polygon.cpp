@@ -45,8 +45,8 @@ const osmium::Area& ExtractPolygon::area() const noexcept {
     return m_buffer.get<osmium::Area>(m_offset);
 }
 
-ExtractPolygon::ExtractPolygon(const std::string& output, const std::string& output_format, const std::string& description, const osmium::memory::Buffer& buffer, std::size_t offset) :
-    Extract(output, output_format, description, buffer.get<osmium::Area>(offset).envelope()),
+ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::string& description, const osmium::memory::Buffer& buffer, std::size_t offset) :
+    Extract(output_file, description, buffer.get<osmium::Area>(offset).envelope()),
     m_buffer(buffer),
     m_offset(offset),
     m_bands(),

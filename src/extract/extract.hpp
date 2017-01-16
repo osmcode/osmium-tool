@@ -49,17 +49,15 @@ namespace osmium {
 
 class Extract {
 
-    std::string m_output;
-    std::string m_output_format;
+    osmium::io::File m_output_file;
     std::string m_description;
     osmium::Box m_envelope;
     std::unique_ptr<osmium::io::Writer> m_writer;
 
 public:
 
-    Extract(const std::string& output, const std::string& output_format, const std::string& description, const osmium::Box& envelope) :
-        m_output(output),
-        m_output_format(output_format),
+    Extract(const osmium::io::File& output_file, const std::string& description, const osmium::Box& envelope) :
+        m_output_file(output_file),
         m_description(description),
         m_envelope(envelope),
         m_writer(nullptr) {
@@ -68,11 +66,11 @@ public:
     virtual ~Extract() = default;
 
     const std::string& output() const noexcept {
-        return m_output;
+        return m_output_file.filename();
     }
 
-    const std::string& output_format() const noexcept {
-        return m_output_format;
+    const char* output_format() const noexcept {
+        return osmium::io::as_string(m_output_file.format());
     }
 
     const std::string& description() const noexcept {
@@ -101,15 +99,15 @@ public:
 
     virtual std::string geometry_as_text() const = 0;
 
-}; // class ExtractGeometry
+}; // class Extract
 
 
 class ExtractBBox : public Extract {
 
 public:
 
-    ExtractBBox(const std::string& output, const std::string& output_format, const std::string& description, const osmium::Box& box) :
-        Extract(output, output_format, description, box) {
+    ExtractBBox(const osmium::io::File& output_file, const std::string& description, const osmium::Box& box) :
+        Extract(output_file, description, box) {
     }
 
     bool contains(const osmium::Location& location) const noexcept override final;
@@ -140,7 +138,7 @@ class ExtractPolygon : public Extract {
 
 public:
 
-    ExtractPolygon(const std::string& output, const std::string& output_format, const std::string& description, const osmium::memory::Buffer& buffer, std::size_t offset);
+    ExtractPolygon(const osmium::io::File& output_file, const std::string& description, const osmium::memory::Buffer& buffer, std::size_t offset);
 
     bool contains(const osmium::Location& location) const noexcept override final;
 

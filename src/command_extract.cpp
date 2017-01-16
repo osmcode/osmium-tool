@@ -194,13 +194,15 @@ void CommandExtract::parse_config_file() {
         const auto json_polygon      = e.FindMember("polygon");
         const auto json_multipolygon = e.FindMember("multipolygon");
 
+        const osmium::io::File output_file{m_output_directory + output, output_format};
+
         try {
             if (json_bbox != e.MemberEnd()) {
-                m_extracts.emplace_back(new ExtractBBox{m_output_directory + output, output_format, description, parse_bbox(json_bbox->value)});
+                m_extracts.emplace_back(new ExtractBBox{output_file, description, parse_bbox(json_bbox->value)});
             } else if (json_polygon != e.MemberEnd()) {
-                m_extracts.emplace_back(new ExtractPolygon{m_output_directory + output, output_format, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, m_buffer)});
+                m_extracts.emplace_back(new ExtractPolygon{output_file, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, m_buffer)});
             } else if (json_multipolygon != e.MemberEnd()) {
-                m_extracts.emplace_back(new ExtractPolygon{m_output_directory + output, output_format, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, m_buffer)});
+                m_extracts.emplace_back(new ExtractPolygon{output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, m_buffer)});
             } else {
                 throw config_error{"Missing geometry for extract"};
             }
