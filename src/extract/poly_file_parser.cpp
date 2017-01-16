@@ -20,23 +20,34 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <fstream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #include <osmium/geom/coordinates.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/util/string.hpp>
 
+#include "error.hpp"
 #include "poly_file_parser.hpp"
 
 void PolyFileParser::error(const std::string& message) {
     throw poly_error{message + " in file '" + m_file_name + "' on line " + std::to_string(m_line + 1)};
 }
 
-PolyFileParser::PolyFileParser(osmium::memory::Buffer& buffer, const std::string& file_name, const std::string& data) :
+PolyFileParser::PolyFileParser(osmium::memory::Buffer& buffer, const std::string& file_name) :
     m_buffer(buffer),
     m_builder(nullptr),
     m_file_name(file_name),
-    m_data(osmium::split_string(data, '\n', true)) {
+    m_data() {
+    std::ifstream file{file_name};
+    if (!file.is_open()) {
+        throw config_error{std::string{"Could not open file '"} + file_name + "'"};
+    }
+    std::stringstream sstr;
+    sstr << file.rdbuf();
+    m_data = osmium::split_string(sstr.str(), '\n', true);
 }
 
 void PolyFileParser::parse_ring() {

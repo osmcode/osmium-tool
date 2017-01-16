@@ -69,7 +69,7 @@ class PolyFileParser {
 
 public:
 
-    PolyFileParser(osmium::memory::Buffer& buffer, const std::string& file_name, const std::string& data);
+    PolyFileParser(osmium::memory::Buffer& buffer, const std::string& file_name);
 
     std::size_t operator()();
 

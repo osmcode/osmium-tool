@@ -103,13 +103,7 @@ namespace {
             GeoJSONFileParser parser{buffer, file_name};
             return parser();
         } else if (file_type == "poly") {
-            std::ifstream file{file_name};
-            if (!file.is_open()) {
-                throw config_error{std::string{"Could not open file '"} + file_name + "'"};
-            }
-            std::stringstream sstr;
-            sstr << file.rdbuf();
-            PolyFileParser parser{buffer, file_name, sstr.str()};
+            PolyFileParser parser{buffer, file_name};
             return parser();
         } else if (file_type == "") {
             throw config_error{"missing file_type"};
