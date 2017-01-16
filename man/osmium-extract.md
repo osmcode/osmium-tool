@@ -223,7 +223,8 @@ using the "file_name" and "file_type" properties on the "polygon" or
     }
 
 If file names don't start with a slash (/), they are interpreted relative to
-the directory where the config file is.
+the directory where the config file is. If the "file_type" is missing, Osmium
+will try to autodetect it from the suffix of the "file_name".
 
 The following file types are supported:
 

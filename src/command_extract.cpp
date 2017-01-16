@@ -57,9 +57,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace {
 
+    std::string get_suffix(const std::string& file_name) {
+        const auto pos = file_name.find_first_of('.');
+        if (pos == std::string::npos) {
+            return "";
+        }
+        return file_name.substr(pos + 1);
+    }
+
     std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
         std::string file_name{get_value_as_string(value, "file_name")};
-        const std::string file_type{get_value_as_string(value, "file_type")};
+        std::string file_type{get_value_as_string(value, "file_type")};
 
         if (file_name.empty()) {
             throw config_error{"missing file_name"};
@@ -68,6 +76,22 @@ namespace {
         if (file_name[0] != '/') {
             // relative file name
             file_name = directory + file_name;
+        }
+
+        // If the file type is not set, try to deduce it from the file name
+        // suffix.
+        if (file_type.empty()) {
+            std::string suffix{get_suffix(file_name)};
+            if (suffix == "poly") {
+                file_type = "poly";
+            } else if (suffix == "json" || suffix == "geojson") {
+                file_type = "geojson";
+            } else {
+                osmium::io::File osmfile{"", suffix};
+                if (osmfile.format() != osmium::io::file_format::unknown) {
+                    file_type = "osm";
+                }
+            }
         }
 
         if (file_type == "osm") {

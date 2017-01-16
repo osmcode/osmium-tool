@@ -29,8 +29,7 @@
             "output": "brandenburg.osm.pbf",
             "description": "Brandenburg area without Berlin specified using a poly file with hole",
             "multipolygon": {
-                "file_name": "brandenburg.poly",
-                "file_type": "poly"
+                "file_name": "brandenburg.poly"
             }
         },
         {
