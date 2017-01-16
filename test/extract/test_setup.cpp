@@ -3,11 +3,20 @@
 
 #include <osmium/memory/buffer.hpp>
 
+#include "error.hpp"
 #include "poly_file_parser.hpp"
 #include "osm_file_parser.hpp"
+#include "geojson_file_parser.hpp"
 
 TEST_CASE("Parse poly files") {
     osmium::memory::Buffer buffer{1024};
+
+    SECTION("Missing file") {
+        REQUIRE_THROWS({
+            PolyFileParser parser(buffer, "test/extract/missing.poly");
+            parser();
+        });
+    }
 
     SECTION("Empty file") {
         PolyFileParser parser{buffer, "test/extract/empty.poly"};
@@ -215,6 +224,53 @@ TEST_CASE("Parse OSM files") {
         REQUIRE(it->front().location() == osmium::Location(10.0, 10.0));
         ++it;
         REQUIRE(it == area.outer_rings().end());
+    }
+
+}
+
+TEST_CASE("Parse GeoJSON files") {
+    osmium::memory::Buffer buffer{1024};
+
+    SECTION("Missing GeoJSON file") {
+        GeoJSONFileParser parser{buffer, "test/extract/missing.geojson"};
+        REQUIRE_THROWS({
+            parser();
+        });
+    }
+
+    SECTION("Empty GeoJSON file") {
+        GeoJSONFileParser parser{buffer, "test/extract/empty.geojson"};
+        REQUIRE_THROWS({
+            parser();
+        });
+    }
+
+    SECTION("Invalid GeoJSON file") {
+        GeoJSONFileParser parser{buffer, "test/extract/invalid.geojson"};
+        REQUIRE_THROWS_AS({
+            parser();
+        }, geojson_error);
+    }
+
+    SECTION("Invalid GeoJSON file: Root not an object") {
+        GeoJSONFileParser parser{buffer, "test/extract/invalid-root.geojson"};
+        REQUIRE_THROWS_AS({
+            parser();
+        }, geojson_error);
+    }
+
+    SECTION("Invalid GeoJSON file: Empty root object") {
+        GeoJSONFileParser parser{buffer, "test/extract/empty-root.geojson"};
+        REQUIRE_THROWS_AS({
+            parser();
+        }, geojson_error);
+    }
+
+    SECTION("Invalid GeoJSON file: Wrong geometry type") {
+        GeoJSONFileParser parser{buffer, "test/extract/wrong-geometry-type.geojson"};
+        REQUIRE_THROWS_AS({
+            parser();
+        }, geojson_error);
     }
 
 }

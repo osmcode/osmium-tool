@@ -150,7 +150,7 @@ std::size_t GeoJSONFileParser::operator()() {
         error("Top-level value must be an object");
     }
 
-    std::string type{get_value_as_string(doc, "type")};
+    const std::string type{get_value_as_string(doc, "type")};
     if (type != "Feature") {
         error("Expect 'type' value to be 'Feature'");
     }
@@ -161,25 +161,24 @@ std::size_t GeoJSONFileParser::operator()() {
     }
 
     if (!json_geometry->value.IsObject()) {
-        error("Expect 'geometry' value to be an object");
-
+        error("Expected 'geometry' value to be an object");
     }
 
-    type = get_value_as_string(json_geometry->value, "type");
-    if (type != "Polygon" && type != "Multipolygon") {
-        error("Expect 'type' value to be 'Polygon' or 'Multipolygon'");
+    std::string geometry_type{get_value_as_string(json_geometry->value, "type")};
+    if (geometry_type != "Polygon" && geometry_type != "Multipolygon") {
+        error("Expected 'geometry.type' value to be 'Polygon' or 'Multipolygon'");
     }
 
     const auto json_coordinates = json_geometry->value.FindMember("coordinates");
     if (json_coordinates == json_geometry->value.MemberEnd()) {
-        error("Missing 'coordinates' member");
+        error("Missing 'coordinates' name in 'geometry' object");
     }
 
     if (!json_coordinates->value.IsArray()) {
-        error("Expect 'coordinates' value to be an array");
+        error("Expected 'geometry.coordinates' value to be an array");
     }
 
-    if (type == "Polygon") {
+    if (geometry_type == "Polygon") {
         return parse_polygon_array(json_coordinates->value, m_buffer);
     } else {
         return parse_multipolygon_array(json_coordinates->value, m_buffer);
