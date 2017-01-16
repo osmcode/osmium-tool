@@ -25,7 +25,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <string>
-#include <vector>
 
 #include <osmium/osm/box.hpp>
 #include <osmium/io/file.hpp>
@@ -33,10 +32,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 
 namespace osmium {
-    class Area;
     class Box;
     class Location;
-    class Segment;
 
     namespace io {
         class Header;
@@ -100,53 +97,5 @@ public:
     virtual std::string geometry_as_text() const = 0;
 
 }; // class Extract
-
-
-class ExtractBBox : public Extract {
-
-public:
-
-    ExtractBBox(const osmium::io::File& output_file, const std::string& description, const osmium::Box& box) :
-        Extract(output_file, description, box) {
-    }
-
-    bool contains(const osmium::Location& location) const noexcept override final;
-
-    const char* geometry_type() const noexcept override final;
-
-    std::string geometry_as_text() const override final;
-
-}; // class ExtractBBox
-
-class ExtractPolygon : public Extract {
-
-    const osmium::memory::Buffer& m_buffer;
-    std::size_t m_offset;
-
-    std::vector<std::vector<osmium::Segment>> m_bands;
-    int32_t m_dy;
-
-    const osmium::Area& area() const noexcept;
-
-    int32_t y_max() const noexcept {
-        return envelope().top_right().y();
-    }
-
-    int32_t y_min() const noexcept {
-        return envelope().bottom_left().y();
-    }
-
-public:
-
-    ExtractPolygon(const osmium::io::File& output_file, const std::string& description, const osmium::memory::Buffer& buffer, std::size_t offset);
-
-    bool contains(const osmium::Location& location) const noexcept override final;
-
-    const char* geometry_type() const noexcept override final;
-
-    std::string geometry_as_text() const override final;
-
-}; // class ExtractPolygon
-
 
 #endif // EXTRACT_EXTRACT_HPP

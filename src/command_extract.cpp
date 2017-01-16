@@ -47,12 +47,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 
 #include "extract/error.hpp"
+#include "extract/extract_bbox.hpp"
+#include "extract/extract_polygon.hpp"
 #include "extract/geojson_file_parser.hpp"
 #include "extract/osm_file_parser.hpp"
 #include "extract/poly_file_parser.hpp"
-#include "extract/strategy_simple.hpp"
 #include "extract/strategy_complete_ways.hpp"
 #include "extract/strategy_complete_ways_with_history.hpp"
+#include "extract/strategy_simple.hpp"
 #include "extract/strategy_smart.hpp"
 
 namespace {

@@ -1,3 +1,6 @@
+#ifndef EXTRACT_EXTRACT_BBOX_HPP
+#define EXTRACT_EXTRACT_BBOX_HPP
+
 /*
 
 Osmium -- OpenStreetMap data manipulation command line tool
@@ -20,26 +23,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
+#include "extract.hpp"
 
-#include <osmium/osm/location.hpp>
+class ExtractBBox : public Extract {
 
-#include "extract_bbox.hpp"
+public:
 
-bool ExtractBBox::contains(const osmium::Location& location) const noexcept {
-    return location.valid() && envelope().contains(location);
-}
+    ExtractBBox(const osmium::io::File& output_file, const std::string& description, const osmium::Box& box) :
+        Extract(output_file, description, box) {
+    }
 
-const char* ExtractBBox::geometry_type() const noexcept {
-    return "bbox";
-}
+    bool contains(const osmium::Location& location) const noexcept override final;
 
-std::string ExtractBBox::geometry_as_text() const {
-    std::string s{"BOX("};
-    envelope().bottom_left().as_string(std::back_inserter(s), ' ');
-    s += ',';
-    envelope().top_right().as_string(std::back_inserter(s), ' ');
-    s += ')';
-    return s;
-}
+    const char* geometry_type() const noexcept override final;
 
+    std::string geometry_as_text() const override final;
+
+}; // class ExtractBBox
+#endif // EXTRACT_EXTRACT_BBOX_HPP

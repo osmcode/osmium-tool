@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/location.hpp>
 #include <osmium/osm/segment.hpp>
 
-#include "extract.hpp"
+#include "extract_polygon.hpp"
 
 static void add_ring(std::vector<osmium::Segment>& segments, const osmium::NodeRefList& ring) {
     auto it = ring.begin();
