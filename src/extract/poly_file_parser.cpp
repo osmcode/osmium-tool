@@ -48,6 +48,13 @@ PolyFileParser::PolyFileParser(osmium::memory::Buffer& buffer, const std::string
     std::stringstream sstr;
     sstr << file.rdbuf();
     m_data = osmium::split_string(sstr.str(), '\n', true);
+
+    // remove CR at end of lines
+    for (auto& line : m_data) {
+        if (line.back() == '\r') {
+            line.resize(line.size() - 1);
+        }
+    }
 }
 
 void PolyFileParser::parse_ring() {

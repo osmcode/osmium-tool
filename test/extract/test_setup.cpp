@@ -202,5 +202,20 @@ TEST_CASE("Parse OSM files") {
         REQUIRE(it == area.outer_rings().end());
     }
 
+    SECTION("File with CRLF") {
+        PolyFileParser parser{buffer, "test/extract/polygon-crlf.poly"};
+        REQUIRE(parser() == 0);
+        const osmium::Area& area = buffer.get<osmium::Area>(0);
+        const auto nr = area.num_rings();
+        REQUIRE(nr.first == 1);
+        REQUIRE(nr.second == 0);
+
+        auto it = area.outer_rings().begin();
+        REQUIRE(it != area.outer_rings().end());
+        REQUIRE(it->front().location() == osmium::Location(10.0, 10.0));
+        ++it;
+        REQUIRE(it == area.outer_rings().end());
+    }
+
 }
 
