@@ -30,7 +30,6 @@ namespace osmium { namespace memory {
 }}
 
 extern std::string get_value_as_string(const rapidjson::Value& object, const char* key);
-extern osmium::Box parse_bbox(const rapidjson::Value& value);
 extern std::size_t parse_polygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer);
 extern std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer);
 

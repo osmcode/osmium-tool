@@ -31,50 +31,6 @@ std::string get_value_as_string(const rapidjson::Value& object, const char* key)
     }
 }
 
-osmium::Box parse_bbox(const rapidjson::Value& value) {
-    if (value.IsArray()) {
-        if (value.Size() == 4) {
-            if (value[0].IsNumber() && value[1].IsNumber() && value[2].IsNumber() && value[3].IsNumber()) {
-                const osmium::Location bottom_left{value[0].GetDouble(), value[1].GetDouble()};
-                const osmium::Location top_right{value[2].GetDouble(), value[3].GetDouble()};
-
-                if (bottom_left < top_right) {
-                    return osmium::Box{bottom_left, top_right};
-                }
-                throw config_error{"'bbox' array elements must be in order: left, bottom, right, top"};
-            }
-            throw config_error{"'bbox' array elements must be numbers"};
-        } else {
-            throw config_error{"'bbox' member is not an array of length 4"};
-        }
-    } else if (value.IsObject()) {
-        const auto left   = value.FindMember("left");
-        const auto right  = value.FindMember("right");
-        const auto top    = value.FindMember("top");
-        const auto bottom = value.FindMember("bottom");
-
-        if (left != value.MemberEnd() && right  != value.MemberEnd() &&
-            top  != value.MemberEnd() && bottom != value.MemberEnd()) {
-            if (left->value.IsNumber() && right->value.IsNumber() &&
-                top->value.IsNumber()  && bottom->value.IsNumber()) {
-
-                const osmium::Location bottom_left{left->value.GetDouble(), bottom->value.GetDouble()};
-                const osmium::Location top_right{right->value.GetDouble(), top->value.GetDouble()};
-
-                if (bottom_left < top_right) {
-                    return osmium::Box{bottom_left, top_right};
-                }
-
-                throw config_error{"Need 'left' < 'right' and 'bottom' < 'top'"};
-            }
-        }
-
-        throw config_error{"Need 'left', 'right', 'top', and 'bottom' members"};
-    }
-
-    throw config_error{"'bbox' member is not an array or object"};
-}
-
 // parse coordinate pair from JSON array
 osmium::geom::Coordinates parse_coordinate(const rapidjson::Value& value) {
     if (!value.IsArray()) {
