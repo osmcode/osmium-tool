@@ -81,68 +81,72 @@ void CommandMerge::show_arguments() {
     show_output_arguments(m_vout);
 }
 
-class DataSource {
+namespace {
 
-    using it_type = osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject>;
+    class DataSource {
 
-    std::unique_ptr<osmium::io::Reader> reader;
-    it_type iterator;
+        using it_type = osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject>;
 
-public:
+        std::unique_ptr<osmium::io::Reader> reader;
+        it_type iterator;
 
-    explicit DataSource(const osmium::io::File& file) :
-        reader(new osmium::io::Reader{file}),
-        iterator(*reader) {
+    public:
+
+        explicit DataSource(const osmium::io::File& file) :
+            reader(new osmium::io::Reader{file}),
+            iterator(*reader) {
+        }
+
+        bool empty() const noexcept {
+            return iterator == it_type{};
+        }
+
+        bool next() noexcept {
+            ++iterator;
+            return iterator != it_type{};
+        }
+
+        const osmium::OSMObject* get() noexcept {
+            return &*iterator;
+        }
+
+    }; // DataSource
+
+    class QueueElement {
+
+        const osmium::OSMObject* m_object;
+        int m_data_source_index;
+
+    public:
+
+        QueueElement(const osmium::OSMObject* object, int data_source_index) noexcept :
+            m_object(object),
+            m_data_source_index(data_source_index) {
+        }
+
+        const osmium::OSMObject& object() const noexcept {
+            return *m_object;
+        }
+
+        int data_source_index() const noexcept {
+            return m_data_source_index;
+        }
+
+    }; // QueueElement
+
+    bool operator<(const QueueElement& lhs, const QueueElement& rhs) noexcept {
+        return lhs.object() > rhs.object();
     }
 
-    bool empty() const noexcept {
-        return iterator == it_type{};
+    bool operator==(const QueueElement& lhs, const QueueElement& rhs) noexcept {
+        return lhs.object() == rhs.object();
     }
 
-    bool next() noexcept {
-        ++iterator;
-        return iterator != it_type{};
+    bool operator!=(const QueueElement& lhs, const QueueElement& rhs) noexcept {
+        return ! (lhs == rhs);
     }
 
-    const osmium::OSMObject* get() noexcept {
-        return &*iterator;
-    }
-
-}; // DataSource
-
-class QueueElement {
-
-    const osmium::OSMObject* m_object;
-    int m_data_source_index;
-
-public:
-
-    QueueElement(const osmium::OSMObject* object, int data_source_index) noexcept :
-        m_object(object),
-        m_data_source_index(data_source_index) {
-    }
-
-    const osmium::OSMObject& object() const noexcept {
-        return *m_object;
-    }
-
-    int data_source_index() const noexcept {
-        return m_data_source_index;
-    }
-
-}; // QueueElement
-
-bool operator<(const QueueElement& lhs, const QueueElement& rhs) noexcept {
-    return lhs.object() > rhs.object();
-}
-
-bool operator==(const QueueElement& lhs, const QueueElement& rhs) noexcept {
-    return lhs.object() == rhs.object();
-}
-
-bool operator!=(const QueueElement& lhs, const QueueElement& rhs) noexcept {
-    return ! (lhs == rhs);
-}
+} // anonymous namespace
 
 bool CommandMerge::run() {
     m_vout << "Opening output file...\n";

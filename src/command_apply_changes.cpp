@@ -122,34 +122,38 @@ void CommandApplyChanges::show_arguments() {
     m_vout << "  reading and writing history file: " << yes_no(m_with_history);
 }
 
-/**
- *  Copy the first OSM object with a given Id to the output. Keep
- *  track of the Id of each object to do this.
- *
- *  We are using this functor class instead of a simple lambda, because the
- *  lambda doesn't build on MSVC.
- */
-class copy_first_with_id {
+namespace {
 
-    osmium::io::Writer* writer;
-    osmium::object_id_type id = 0;
+    /**
+     *  Copy the first OSM object with a given Id to the output. Keep
+     *  track of the Id of each object to do this.
+     *
+     *  We are using this functor class instead of a simple lambda, because the
+     *  lambda doesn't build on MSVC.
+     */
+    class copy_first_with_id {
 
-public:
+        osmium::io::Writer* writer;
+        osmium::object_id_type id = 0;
 
-    explicit copy_first_with_id(osmium::io::Writer& w) :
-        writer(&w) {
-    }
+    public:
 
-    void operator()(const osmium::OSMObject& obj) {
-        if (obj.id() != id) {
-            if (obj.visible()) {
-                (*writer)(obj);
-            }
-            id = obj.id();
+        explicit copy_first_with_id(osmium::io::Writer& w) :
+            writer(&w) {
         }
-    }
 
-}; // class copy_first_with_id
+        void operator()(const osmium::OSMObject& obj) {
+            if (obj.id() != id) {
+                if (obj.visible()) {
+                    (*writer)(obj);
+                }
+                id = obj.id();
+            }
+        }
+
+    }; // class copy_first_with_id
+
+} // anonymous namespace
 
 bool CommandApplyChanges::run() {
     std::vector<osmium::memory::Buffer> changes;

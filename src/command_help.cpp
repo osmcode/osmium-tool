@@ -36,7 +36,7 @@ bool CommandHelp::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
-void show_help(const std::string& topic, const std::string& info) {
+static void show_help(const std::string& topic, const std::string& info) {
 #ifndef _MSC_VER
     // show man page on non-Windows systems
     std::string manpage{"osmium-"};
