@@ -92,7 +92,8 @@ namespace {
                     const osmium::Location bottom_left{left->value.GetDouble(), bottom->value.GetDouble()};
                     const osmium::Location top_right{right->value.GetDouble(), top->value.GetDouble()};
 
-                    if (bottom_left < top_right) {
+                    if (bottom_left.x() < top_right.x() &&
+                        bottom_left.y() < top_right.y()) {
                         return osmium::Box{bottom_left, top_right};
                     }
 
@@ -110,17 +111,18 @@ namespace {
         const auto coordinates = osmium::split_string(str, ',');
 
         if (coordinates.size() != 4) {
-            throw config_error{"Need four coordinates in --bbox/-b option"};
+            throw argument_error{"Need exactly four coordinates in --bbox/-b option."};
         }
 
         const osmium::Location bottom_left{std::atof(coordinates[0].c_str()), std::atof(coordinates[1].c_str())};
         const osmium::Location top_right{std::atof(coordinates[2].c_str()), std::atof(coordinates[3].c_str())};
 
-        if (bottom_left < top_right) {
+        if (bottom_left.x() < top_right.x() &&
+            bottom_left.y() < top_right.y()) {
             return osmium::Box{bottom_left, top_right};
         }
 
-        throw config_error{"Need 'left' < 'right' and 'bottom' < 'top'"};
+        throw argument_error{"Need LEFT < RIGHT and BOTTOM < TOP in --bbox/-b option."};
     }
 
     std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer& buffer) {
@@ -276,7 +278,7 @@ void CommandExtract::parse_config_file() {
 std::unique_ptr<ExtractStrategy> CommandExtract::make_strategy(const std::string& name) {
     if (name == "simple") {
         if (m_with_history) {
-            throw argument_error{"The 'simple' strategy is not supported for history files"};
+            throw argument_error{"The 'simple' strategy is not supported for history files."};
         } else {
             return std::unique_ptr<ExtractStrategy>(new strategy_simple::Strategy{m_extracts, m_options});
         }
@@ -288,13 +290,13 @@ std::unique_ptr<ExtractStrategy> CommandExtract::make_strategy(const std::string
         }
     } else if (name == "smart") {
         if (m_with_history) {
-            throw argument_error{"The 'smart' strategy is not supported for history files"};
+            throw argument_error{"The 'smart' strategy is not supported for history files."};
         } else {
             return std::unique_ptr<ExtractStrategy>(new strategy_smart::Strategy{m_extracts, m_options});
         }
     }
 
-    throw argument_error{std::string{"Unknown extract strategy: '"} + name + "'"};
+    throw argument_error{std::string{"Unknown extract strategy: '"} + name + "'."};
 }
 
 bool CommandExtract::setup(const std::vector<std::string>& arguments) {
@@ -337,7 +339,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     init_output_file(vm);
 
     if (vm.count("config") + vm.count("bbox") + vm.count("polygon") > 1) {
-        throw argument_error{"Can only use one of --config/-c, --bbox/-b, or --polygon/-p"};
+        throw argument_error{"Can only use one of --config/-c, --bbox/-b, or --polygon/-p."};
     }
 
     if (vm.count("config")) {
