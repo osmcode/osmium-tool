@@ -1,7 +1,7 @@
 /*
 
 Osmium -- OpenStreetMap data manipulation command line tool
-http://osmcode.org/osmium
+http://osmcode.org/osmium-tool/
 
 Copyright (C) 2013-2017  Jochen Topf <jochen@topf.org>
 
