@@ -44,6 +44,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_add_locations_to_ways.hpp"
 #include "exception.hpp"
+#include "util.hpp"
 
 bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments) {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();

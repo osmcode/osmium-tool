@@ -43,6 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_getid.hpp"
 #include "exception.hpp"
+#include "util.hpp"
 
 void CommandGetId::parse_and_add_id(const std::string& s) {
     auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr, m_default_item_type);

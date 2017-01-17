@@ -43,10 +43,6 @@ const char* get_osmium_version() noexcept;
 const char* get_osmium_long_version() noexcept;
 const char* get_libosmium_version() noexcept;
 
-const char* yes_no(bool choice) noexcept;
-void warning(const char* text);
-std::size_t file_size_sum(std::vector<osmium::io::File> files);
-
 namespace osmium { namespace io {
     class Header;
 }}

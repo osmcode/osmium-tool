@@ -20,6 +20,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include <osmium/io/file.hpp>
+#include <osmium/util/file.hpp>
+
 #include "util.hpp"
 
 /**
@@ -40,5 +47,23 @@ std::string get_filename_suffix(const std::string& file_name) {
         return "";
     }
     return file_name.substr(dot + 1);
+}
+
+const char* yes_no(bool choice) noexcept {
+    return choice ? "yes\n" : "no\n";
+}
+
+void warning(const char* text) {
+    std::cerr << "WARNING: " << text;
+}
+
+std::size_t file_size_sum(const std::vector<osmium::io::File>& files) {
+    std::size_t sum = 0;
+
+    for (const auto& file : files) {
+        sum += osmium::util::file_size(file.filename());
+    }
+
+    return sum;
 }
 

@@ -39,6 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/visitor.hpp>
 
 #include "command_check_refs.hpp"
+#include "util.hpp"
 
 bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

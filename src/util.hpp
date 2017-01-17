@@ -24,8 +24,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <string>
+#include <vector>
 
-extern std::string get_filename_suffix(const std::string& file_name);
+namespace osmium { namespace io {
+    class File;
+}}
 
+std::string get_filename_suffix(const std::string& file_name);
+const char* yes_no(bool choice) noexcept;
+void warning(const char* text);
+std::size_t file_size_sum(const std::vector<osmium::io::File>& files);
 
 #endif // UTIL_HPP

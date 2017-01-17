@@ -40,6 +40,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_time_filter.hpp"
 #include "exception.hpp"
+#include "util.hpp"
 
 bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_common{add_common_options()};

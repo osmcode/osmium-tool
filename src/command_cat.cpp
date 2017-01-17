@@ -35,6 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_cat.hpp"
+#include "util.hpp"
 
 bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

@@ -36,6 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp"
 #include "exception.hpp"
+#include "util.hpp"
 
 void with_single_osm_input::setup_input_file(const boost::program_options::variables_map& vm) {
     if (vm.count("input-filename")) {
@@ -186,15 +187,5 @@ void with_osm_output::setup_header(osmium::io::Header& header) const {
     for (const auto& h : m_output_headers) {
         header.set(h);
     }
-}
-
-std::size_t file_size_sum(std::vector<osmium::io::File> files) {
-    std::size_t sum = 0;
-
-    for (const auto& file : files) {
-        sum += osmium::util::file_size(file.filename());
-    }
-
-    return sum;
 }
 
