@@ -14,6 +14,7 @@
 #
 
 osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(bz2|gz)'"
+polygon_file_glob="'*.json *.geojson *.poly *.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(bz2|gz)'"
 
 _osmium() {
     local -a osmium_commands
@@ -180,16 +181,16 @@ _osmium-extract() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
-        '(--config)-c[specify config file]:config_file:_files -g "*.json"' \
-        '(-c)--config[specify config file]:config_file:_files -g "*.json"' \
-        '(--directory)-d[output directory]:directory:_path_files -/' \
-        '(-d)--directory[output directory]:directory:_path_files -/' \
-        '--fsync[call fsync after writing output file(s)]' \
-        '--generator[generator setting for output file header]:' \
-        "*--output-header[add option to output header]:" \
-        '(--overwrite)-O[allow overwriting of existing output file]' \
-        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '(--config -c --directory -d --polygon -p --bbox)-b[bounding box]:bounding box (format\: LEFT,BOTTOM,RIGHT,TOP):' \
+        '(--config -c --directory -d --polygon -p -b)--bbox[bounding box]:bounding box (format\: LEFT,BOTTOM,RIGHT,TOP):' \
+        '(--bbox -b --polygon -p --output -o --output-format -f --config)-c[specify config file]:config file:_files -g "*.json"' \
+        '(--bbox -b --polygon -p --output -o --output-format -f -c)--config[specify config file]:config file:_files -g "*.json"' \
+        '(--output -o --output-format -f --bbox -b --polygon -p --directory)-d[output directory]:directory:_path_files -/' \
+        '(--output -o --output-format -f --bbox -b --polygon -p -d)--directory[output directory]:directory:_path_files -/' \
+        "(--config -c --directory -d --bbox -b --polygon)-p[polygon file]:polygon file:_files -g ${polygon_file_glob}" \
+        "(--config -c --directory -d --bbox -b -p)--polygon[polygon file]:polygon file:_files -g ${polygon_file_glob}" \
         '(--strategy)-s[use strategy for computing extract]:extract strategy:_osmium_extract_strategy' \
         '(-s)--strategy[use strategy for computing extract]:extract strategy:_osmium_extract_strategy' \
         '*-S[set strategy option]:' \
