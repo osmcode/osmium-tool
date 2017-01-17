@@ -124,6 +124,9 @@ bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
     bool inside = false;
 
     for (const auto& segment : m_bands[band]) {
+        if (segment.first() == location || segment.second() == location) {
+            return true;
+        }
         if ((segment.second().y() > location.y()) != (segment.first().y() > location.y())) {
             const int64_t ax = int64_t(segment.first().x()) - int64_t(segment.second().x());
             const int64_t ay = int64_t(segment.first().y()) - int64_t(segment.second().y());

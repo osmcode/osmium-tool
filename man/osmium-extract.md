@@ -36,9 +36,11 @@ history extract will contain every version of all objects with at least one
 version in the region. Generating a history extract is somewhat slower than
 a normal data extract.
 
-Osmium can not guarantee that objects directly on the border of a specified
-region will end up in the output. If you want to be sure that the boundary is
-complete, use a small buffer around your region.
+Osmium will make sure that all nodes on the vertices of the boundary of the
+region will be in the extract, but nodes that happen to be directly on the
+boundary, but between those vertices, might end up in the extract or not. In
+almost all cases this will be good enough, but if you want to make really sure
+you got everything, use a small buffer around your region.
 
 No **bounds** will be set in the header of the output file. Which bounds would
 be correct is unclear and setting it correctly might need an extra pass through
