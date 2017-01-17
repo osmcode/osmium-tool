@@ -56,16 +56,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "extract/strategy_complete_ways_with_history.hpp"
 #include "extract/strategy_simple.hpp"
 #include "extract/strategy_smart.hpp"
+#include "util.hpp"
 
 namespace {
-
-    std::string get_suffix(const std::string& file_name) {
-        const auto pos = file_name.find_first_of('.');
-        if (pos == std::string::npos) {
-            return "";
-        }
-        return file_name.substr(pos + 1);
-    }
 
     osmium::Box parse_bbox(const rapidjson::Value& value) {
         if (value.IsArray()) {
@@ -127,7 +120,7 @@ namespace {
         // If the file type is not set, try to deduce it from the file name
         // suffix.
         if (file_type.empty()) {
-            std::string suffix{get_suffix(file_name)};
+            std::string suffix{get_filename_suffix(file_name)};
             if (suffix == "poly") {
                 file_type = "poly";
             } else if (suffix == "json" || suffix == "geojson") {
