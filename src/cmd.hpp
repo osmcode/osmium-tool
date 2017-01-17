@@ -191,6 +191,8 @@ public:
         m_generator.append(get_osmium_version());
     }
 
+    void init_output_file(const po::variables_map& vm);
+    void check_output_file();
     void setup_output_file(const po::variables_map& vm);
 
     po::options_description add_output_options();

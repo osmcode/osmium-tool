@@ -6,16 +6,25 @@ osmium-extract - create geographical extracts from an OSM file
 
 # SYNOPSIS
 
-**osmium extract** -c *CONFIG-FILE* \[*OPTIONS*\] *OSM-FILE*
+**osmium extract** --config *CONFIG-FILE* \[*OPTIONS*\] *OSM-FILE*\
+**osmium extract** --bbox *LEFT*,*BOTTOM*,*RIGHT*,*TOP* \[*OPTIONS*\] *OSM-FILE*\
+**osmium extract** --polygon *POLYGON-FILE* \[*OPTIONS*\] *OSM-FILE*
 
 
 # DESCRIPTION
 
 Create geographical extracts from an OSM data file or an OSM history file.
 The region (geographical extent) can be given as a bounding box or as a
-(multi)polygon. The command can create several extracts at the same time. You
-have to supply a config file which contains (at least) the output file names
-and regions. See the **CONFIG FILE** section for details.
+(multi)polygon.
+
+There are three ways of calling this command:
+
+* Specify a config file with the --config/-c option. It can define any number
+  of regions you want to cut out. See the **CONFIG FILE** section for details.
+
+* Specify a bounding box to cut out with the --bbox/-b option.
+
+* Specify a (multi)polygon to cut out with the --polygon/-p option.
 
 The input file is assumed to be ordered in the usual order: nodes first, then
 ways, then relations.
@@ -28,8 +37,8 @@ version in the region. Generating a history extract is somewhat slower than
 a normal data extract.
 
 Osmium can not guarantee that objects directly on the border of a specified
-region will end up. If you want to be sure that the boundary is complete, use
-a small buffer around your region.
+region will end up in the output. If you want to be sure that the boundary is
+complete, use a small buffer around your region.
 
 No **bounds** will be set in the header of the output file. Which bounds would
 be correct is unclear and setting it correctly might need an extra pass through
@@ -44,47 +53,45 @@ to merge several extracts without problems.
 
 # OPTIONS
 
+-b, --bbox=LEFT,BOTTOM,RIGHT,TOP
+:   Set the bounding box to cut out. Can not be used with --polygon/-p,
+    --config/-c, or --directory/-d.
+
 -c, --config=FILE
-:   Set the name of the config file.
+:   Set the name of the config file. Can not be used with the --bbox/-b or
+    --polygon/-p option. If this is set, the --output/-o and --output-format/-f
+    options are ignored, because they are set in the config file.
 
 -d, --directory=DIRECTORY
 :   Output directory. Output file names in the config file are relative to
     this directory. Overwrites the setting of the same name in the config
-    file.
+    file. This option is ignored when the --bbox/-b or --polygon/-p options
+    are used, set the output directory and name with the --output/-o option
+    in that case.
+
+-p, --polygon=POLYGON_FILE
+:   Set the polygon to cut out based on the contents of the file. The file
+    has to be a GeoJSON, poly, or OSM file as described in the
+    **(MULTI)POLYGON FILE FORMATS** section. It has to have the right suffix
+    to be detected correctly. Can not be used with --bbox/-b, --config/-c,
+    or --directory/-d.
 
 -s, --strategy=STRATEGY
-:   Use the given strategy to extract region. For possible values and details
-    see under STRATEGIES. Default is "complete_ways".
+:   Use the given strategy to extract the region. For possible values and
+    details see the **STRATEGIES** section. Default is "complete_ways".
 
 -S, --option=OPTION=VALUE
 :   Set a named option for the strategy. If needed you can specify this
     option multiple times to set several options.
 
 --with-history
-:   Specify that the input file is a history file. The output files will also
-    be history files.
+:   Specify that the input file is a history file. The output file(s) will also
+    be history file(s).
 
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
-
-# OUTPUT OPTIONS
-
---fsync
-:   Call fsync after writing the output file to force flushing buffers to disk.
-
---generator=NAME
-:   The name and version of the program generating the output file. It will be
-    added to the header of the output file. Default is "*osmium/*" and the
-    version of osmium.
-
--O, --overwrite
-:   Allow an existing output file to be overwritten. Normally **osmium** will
-    refuse to write over an existing file.
-
---output-header=OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed header options.
+@MAN_OUTPUT_OPTIONS@
 
 
 # CONFIG FILE
@@ -315,7 +322,7 @@ can be huge, so if you include them, be aware your result might be huge.
 
 2
   ~ if there was a problem with the command line arguments, config file or
-    geometry files.
+    polygon files.
 
 
 # MEMORY USAGE
@@ -333,6 +340,16 @@ try it:
 
     osmium extract -v -c extract-example-config/extracts.json \
         germany-latest.osm.pbf
+
+Extract the city of Karlsruhe using a boundary polygon:
+
+    osmium -p karlsruhe-boundary.osm.bz2 germany-latest.osm.pbf \
+        -o karlsruhe.osm.pbf
+
+Extract the city of Munich using a bounding box:
+
+    osmium -b 11.35,48.05,11.73,48.25 germany-latest.osm.pbf \
+        -o munich.osm.pbf
 
 
 # SEE ALSO

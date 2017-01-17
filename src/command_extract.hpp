@@ -68,7 +68,9 @@ public:
     }
 
     const char* synopsis() const noexcept override final {
-        return "osmium extract [OPTIONS] OSM-FILE";
+        return "osmium extract --config CONFIG-FILE [OPTIONS] OSM-FILE\n"
+               "       osmium extract --bbox LEFT,BOTTOM,RIGHT,TOP [OPTIONS] OSM-FILE\n"
+               "       osmium extract --polygon POLYGON-FILE [OPTIONS] OSM-FILE";
     }
 
 }; // class CommandExtract

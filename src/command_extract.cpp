@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <cassert>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -41,6 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/util/progress_bar.hpp>
+#include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_extract.hpp"
@@ -104,10 +106,24 @@ namespace {
         throw config_error{"'bbox' member is not an array or object"};
     }
 
-    std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
-        std::string file_name{get_value_as_string(value, "file_name")};
-        std::string file_type{get_value_as_string(value, "file_type")};
+    osmium::Box parse_bbox(const std::string& str) {
+        const auto coordinates = osmium::split_string(str, ',');
 
+        if (coordinates.size() != 4) {
+            throw config_error{"Need four coordinates in --bbox/-b option"};
+        }
+
+        const osmium::Location bottom_left{std::atof(coordinates[0].c_str()), std::atof(coordinates[1].c_str())};
+        const osmium::Location top_right{std::atof(coordinates[2].c_str()), std::atof(coordinates[3].c_str())};
+
+        if (bottom_left < top_right) {
+            return osmium::Box{bottom_left, top_right};
+        }
+
+        throw config_error{"Need 'left' < 'right' and 'bottom' < 'top'"};
+    }
+
+    std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer& buffer) {
         if (file_name.empty()) {
             throw config_error{"missing file_name"};
         }
@@ -147,6 +163,12 @@ namespace {
         }
 
         throw config_error{std::string{"unknown file type: '"} + file_type + "'"};
+    }
+
+    std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+        std::string file_name{get_value_as_string(value, "file_name")};
+        std::string file_type{get_value_as_string(value, "file_type")};
+        return parse_multipolygon_object(directory, file_name, file_type, buffer);
     }
 
     std::size_t parse_polygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
@@ -278,19 +300,18 @@ std::unique_ptr<ExtractStrategy> CommandExtract::make_strategy(const std::string
 bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
+    ("bbox,b", po::value<std::string>(), "Bounding box")
     ("config,c", po::value<std::string>(), "Config file")
     ("directory,d", po::value<std::string>(), "Output directory (default: from config)")
-    ("fsync", "Call fsync after writing file")
-    ("generator", po::value<std::string>(), "Generator setting for file header")
     ("option,S", po::value<std::vector<std::string>>(), "Set strategy option")
-    ("output-header", po::value<std::vector<std::string>>(), "Add output header")
-    ("overwrite,O", "Allow existing output files to be overwritten")
+    ("polygon,p", po::value<std::string>(), "Polygon file")
     ("strategy,s", po::value<std::string>()->default_value("complete_ways"), "Use named extract strategy")
     ("with-history", "Input file and output files are history files")
     ;
 
     po::options_description opts_common{add_common_options()};
     po::options_description opts_input{add_single_input_options()};
+    po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -298,7 +319,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     ;
 
     po::options_description desc;
-    desc.add(opts_cmd).add(opts_common).add(opts_input);
+    desc.add(opts_cmd).add(opts_common).add(opts_input).add(opts_output);
 
     po::options_description parsed_options;
     parsed_options.add(desc).add(hidden);
@@ -313,28 +334,22 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     setup_common(vm, desc);
     setup_progress(vm);
     setup_input_file(vm);
+    init_output_file(vm);
 
-    if (vm.count("generator")) {
-        m_generator = vm["generator"].as<std::string>();
-    }
-
-    if (vm.count("output-header")) {
-        m_output_headers = vm["output-header"].as<std::vector<std::string>>();
-    }
-
-    if (vm.count("overwrite")) {
-        m_output_overwrite = osmium::io::overwrite::allow;
-    }
-
-    if (vm.count("fsync")) {
-        m_fsync = osmium::io::fsync::yes;
-    }
-
-    if (vm.count("directory")) {
-        set_directory(vm["directory"].as<std::string>());
+    if (vm.count("config") + vm.count("bbox") + vm.count("polygon") > 1) {
+        throw argument_error{"Can only use one of --config/-c, --bbox/-b, or --polygon/-p"};
     }
 
     if (vm.count("config")) {
+        if (vm.count("directory")) {
+            set_directory(vm["directory"].as<std::string>());
+        }
+        if (vm.count("output")) {
+            warning("Ignoring --output/-o option\n");
+        }
+        if (vm.count("output-format")) {
+            warning("Ignoring --output-format/-f option\n");
+        }
         m_config_file_name = vm["config"].as<std::string>();
         auto slash = m_config_file_name.find_last_of('/');
         if (slash != std::string::npos) {
@@ -343,6 +358,22 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
         }
 
         parse_config_file();
+    }
+
+    if (vm.count("bbox")) {
+        if (vm.count("directory")) {
+            warning("Ignoring --directory/-d option\n");
+        }
+        check_output_file();
+        m_extracts.emplace_back(new ExtractBBox{m_output_file, "", parse_bbox(vm["bbox"].as<std::string>())});
+    }
+
+    if (vm.count("polygon")) {
+        if (vm.count("directory")) {
+            warning("Ignoring --directory/-d option\n");
+        }
+        check_output_file();
+        m_extracts.emplace_back(new ExtractPolygon{m_output_file, "", m_buffer, parse_multipolygon_object("./", vm["polygon"].as<std::string>(), "", m_buffer)});
     }
 
     if (vm.count("option")) {
@@ -364,17 +395,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
 
 void CommandExtract::show_arguments() {
     show_single_input_arguments(m_vout);
-
-    m_vout << "  output options:\n";
-    m_vout << "    generator: " << m_generator << "\n";
-    m_vout << "    overwrite: " << yes_no(m_output_overwrite == osmium::io::overwrite::allow);
-    m_vout << "    fsync: " << yes_no(m_fsync == osmium::io::fsync::yes);
-    if (!m_output_headers.empty()) {
-        m_vout << "    output header:\n";
-        for (const auto& h : m_output_headers) {
-            m_vout << "      " << h << "\n";
-        }
-    }
+    show_output_arguments(m_vout);
 
     m_vout << "  strategy options:\n";
     m_vout << "    strategy: " << m_strategy->name() << '\n';

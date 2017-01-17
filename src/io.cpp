@@ -119,7 +119,7 @@ void with_multiple_osm_inputs::show_multiple_inputs_arguments(osmium::util::Verb
     vout << "    file format: " << m_input_format << "\n";
 }
 
-void with_osm_output::setup_output_file(const po::variables_map& vm) {
+void with_osm_output::init_output_file(const po::variables_map& vm) {
     if (vm.count("generator")) {
         m_generator = vm["generator"].as<std::string>();
     }
@@ -143,13 +143,21 @@ void with_osm_output::setup_output_file(const po::variables_map& vm) {
     if (vm.count("fsync")) {
         m_fsync = osmium::io::fsync::yes;
     }
+}
 
+void with_osm_output::check_output_file() {
     if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        throw argument_error{"When writing to STDOUT you need to use the --output-format/-f option to declare the file format."};
+        throw argument_error{"When writing to STDOUT you need to use the --output-format/-f option\n"
+                             "to declare the file format. Or did you miss the --output/-O option?"};
     }
 
     m_output_file = osmium::io::File(m_output_filename, m_output_format);
     m_output_file.check();
+}
+
+void with_osm_output::setup_output_file(const po::variables_map& vm) {
+    init_output_file(vm);
+    check_output_file();
 }
 
 po::options_description with_osm_output::add_output_options() {
