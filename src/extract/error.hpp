@@ -29,22 +29,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 /**
  *  Thrown when there is a problem with parsing the JSON config file.
  */
-struct config_error : std::runtime_error {
+struct config_error : public std::runtime_error {
 
     explicit config_error(const char* message) :
-        std::runtime_error(std::string{"Config file error: "} + message) {
+        std::runtime_error(message) {
     }
 
     explicit config_error(const std::string& message) :
-        std::runtime_error(std::string{"Config file error: "} + message) {
-    }
-
-    explicit config_error(int n, const char* message) :
-        std::runtime_error(std::string{"Config file error in extract "} + std::to_string(n) + ": " + message) {
-    }
-
-    explicit config_error(int n, const std::string& message) :
-        std::runtime_error(std::string{"Config file error in extract "} + std::to_string(n) + ": " + message) {
+        std::runtime_error(message) {
     }
 
 }; // struct config_error
@@ -52,15 +44,7 @@ struct config_error : std::runtime_error {
 /**
  *  Thrown when there is a problem with parsing a GeoJSON file.
  */
-struct geojson_error : std::runtime_error {
-
-    explicit geojson_error(const std::string& file_name, const char* message) :
-        std::runtime_error(std::string{"Error in GeoJSON file '"} + file_name + "': " + message) {
-    }
-
-    explicit geojson_error(const std::string& file_name, const std::string& message) :
-        std::runtime_error(std::string{"Error in GeoJSON file '"} + file_name + "': " + message) {
-    }
+struct geojson_error : public std::runtime_error {
 
     explicit geojson_error(const std::string& message) :
         std::runtime_error(message) {

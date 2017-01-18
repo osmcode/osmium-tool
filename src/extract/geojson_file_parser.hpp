@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <fstream>
 #include <string>
 
 #include <rapidjson/document.h>
@@ -42,6 +43,7 @@ class GeoJSONFileParser {
 
     osmium::memory::Buffer& m_buffer;
     std::string m_file_name;
+    std::ifstream m_file;
 
     void error(const std::string& message);
 

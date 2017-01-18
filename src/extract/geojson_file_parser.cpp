@@ -27,36 +27,36 @@ std::string get_value_as_string(const rapidjson::Value& object, const char* key)
     if (it->value.IsString()) {
         return it->value.GetString();
     } else {
-        throw config_error{std::string{"Value for name '"} + key + "' is not a string"};
+        throw config_error{std::string{"Value for name '"} + key + "' must be a string."};
     }
 }
 
 // parse coordinate pair from JSON array
 osmium::geom::Coordinates parse_coordinate(const rapidjson::Value& value) {
     if (!value.IsArray()) {
-        throw config_error{"coordinates must be an array"};
+        throw config_error{"Coordinates must be an array."};
     }
 
     const auto array = value.GetArray();
     if (array.Size() != 2) {
-        throw config_error{"coordinates array must have size 2"};
+        throw config_error{"Coordinates array must have exactly two elements."};
     }
 
     if (array[0].IsNumber() && array[1].IsNumber()) {
         return osmium::geom::Coordinates{array[0].GetDouble(), array[1].GetDouble()};
     }
 
-    throw config_error{"coordinates array must contain numbers"};
+    throw config_error{"Coordinates array must contain numbers."};
 }
 
 std::vector<osmium::geom::Coordinates> parse_ring(const rapidjson::Value& value) {
     if (!value.IsArray()) {
-        throw config_error{"ring must be an array"};
+        throw config_error{"Ring must be an array."};
     }
 
     const auto array = value.GetArray();
     if (array.Size() < 3) {
-        throw config_error{"ring must contain at least three coordinates"};
+        throw config_error{"Ring must contain at least three coordinate pairs."};
     }
 
     std::vector<osmium::geom::Coordinates> coordinates;
@@ -72,7 +72,7 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
     assert(value.IsArray());
     const auto array = value.GetArray();
     if (array.Size() < 1) {
-        throw config_error{"polygon must contain at least one ring"};
+        throw config_error{"Polygon must contain at least one ring."};
     }
 
     {
@@ -105,12 +105,12 @@ std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memo
     assert(value.IsArray());
     const auto array = value.GetArray();
     if (array.Size() < 1) {
-        throw config_error{"multipolygon must contain at least one polygon"};
+        throw config_error{"Multipolygon must contain at least one polygon array."};
     }
 
     for (const auto& polygon : array) {
         if (!polygon.IsArray()) {
-            throw config_error{"polygon must be an array"};
+            throw config_error{"Polygon must be an array."};
         }
         osmium::builder::AreaBuilder builder{buffer};
         parse_rings(polygon, builder);
@@ -120,62 +120,66 @@ std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memo
 }
 
 void GeoJSONFileParser::error(const std::string& message) {
-    throw geojson_error{message + " in file '" + m_file_name + "'"};
+    throw geojson_error{std::string{"In file '"} + m_file_name + "':\n" + message};
 }
 
 GeoJSONFileParser::GeoJSONFileParser(osmium::memory::Buffer& buffer, const std::string& file_name) :
     m_buffer(buffer),
-    m_file_name(file_name) {
+    m_file_name(file_name),
+    m_file(m_file_name) {
+    if (!m_file.is_open()) {
+        throw config_error{std::string{"Could not open file '"} + m_file_name + "'."};
+    }
 }
 
 std::size_t GeoJSONFileParser::operator()() {
-    std::ifstream file{m_file_name};
-
-    if (!file.is_open()) {
-        throw config_error{std::string{"Could not open file '"} + m_file_name + "'"};
-    }
-
-    rapidjson::IStreamWrapper stream_wrapper{file};
+    rapidjson::IStreamWrapper stream_wrapper{m_file};
 
     rapidjson::Document doc;
     if (doc.ParseStream<rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag>(stream_wrapper).HasParseError()) {
-        throw geojson_error{m_file_name, std::string{"JSON error at offset "} +
-                            std::to_string(doc.GetErrorOffset()) +
-                            " : " +
-                            rapidjson::GetParseError_En(doc.GetParseError())
-                            };
+        error(std::string{"JSON error at offset "} +
+              std::to_string(doc.GetErrorOffset()) +
+              " : " +
+              rapidjson::GetParseError_En(doc.GetParseError()));
     }
 
     if (!doc.IsObject()) {
-        error("Top-level value must be an object");
+        error("Top-level value must be an object.");
     }
 
     const std::string type{get_value_as_string(doc, "type")};
+    if (type.empty()) {
+        error("Expected 'type' name with the value 'Feature'.");
+    }
+
     if (type != "Feature") {
-        error("Expect 'type' value to be 'Feature'");
+        error("Expected 'type' value to be 'Feature'.");
     }
 
     const auto json_geometry = doc.FindMember("geometry");
     if (json_geometry == doc.MemberEnd()) {
-        error("Missing 'geometry' member");
+        error("Missing 'geometry' name.");
     }
 
     if (!json_geometry->value.IsObject()) {
-        error("Expected 'geometry' value to be an object");
+        error("Expected 'geometry' value to be an object.");
     }
 
     std::string geometry_type{get_value_as_string(json_geometry->value, "type")};
+    if (geometry_type.empty()) {
+        error("Missing 'geometry.type'.");
+    }
     if (geometry_type != "Polygon" && geometry_type != "Multipolygon") {
-        error("Expected 'geometry.type' value to be 'Polygon' or 'Multipolygon'");
+        error("Expected 'geometry.type' value to be 'Polygon' or 'Multipolygon'.");
     }
 
     const auto json_coordinates = json_geometry->value.FindMember("coordinates");
     if (json_coordinates == json_geometry->value.MemberEnd()) {
-        error("Missing 'coordinates' name in 'geometry' object");
+        error("Missing 'coordinates' name in 'geometry' object.");
     }
 
     if (!json_coordinates->value.IsArray()) {
-        error("Expected 'geometry.coordinates' value to be an array");
+        error("Expected 'geometry.coordinates' value to be an array.");
     }
 
     if (geometry_type == "Polygon") {

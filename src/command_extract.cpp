@@ -72,11 +72,11 @@ namespace {
                     if (bottom_left < top_right) {
                         return osmium::Box{bottom_left, top_right};
                     }
-                    throw config_error{"'bbox' array elements must be in order: left, bottom, right, top"};
+                    throw config_error{"'bbox' array elements must be in order: left, bottom, right, top."};
                 }
-                throw config_error{"'bbox' array elements must be numbers"};
+                throw config_error{"'bbox' array elements must be numbers."};
             } else {
-                throw config_error{"'bbox' member is not an array of length 4"};
+                throw config_error{"'bbox' must be an array with exactly four elements."};
             }
         } else if (value.IsObject()) {
             const auto left   = value.FindMember("left");
@@ -97,14 +97,15 @@ namespace {
                         return osmium::Box{bottom_left, top_right};
                     }
 
-                    throw config_error{"Need 'left' < 'right' and 'bottom' < 'top'"};
+                    throw config_error{"Need 'left' < 'right' and 'bottom' < 'top' in 'bbox' object."};
                 }
+                throw config_error{"Members in 'bbox' object must be numbers."};
             }
 
-            throw config_error{"Need 'left', 'right', 'top', and 'bottom' members"};
+            throw config_error{"Need 'left', 'right', 'top', and 'bottom' members in 'bbox' object."};
         }
 
-        throw config_error{"'bbox' member is not an array or object"};
+        throw config_error{"'bbox' member is not an array or object."};
     }
 
     osmium::Box parse_bbox(const std::string& str) {
@@ -127,7 +128,7 @@ namespace {
 
     std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer& buffer) {
         if (file_name.empty()) {
-            throw config_error{"missing file_name"};
+            throw config_error{"Missing 'file_name' in '(multi)polygon' object."};
         }
 
         if (file_name[0] != '/') {
@@ -152,19 +153,27 @@ namespace {
         }
 
         if (file_type == "osm") {
-            OSMFileParser parser{buffer, file_name};
-            return parser();
+            try {
+                OSMFileParser parser{buffer, file_name};
+                return parser();
+            } catch (const osmium::io_error& e) {
+                throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
+            }
         } else if (file_type == "geojson") {
             GeoJSONFileParser parser{buffer, file_name};
-            return parser();
+            try {
+                return parser();
+            } catch (const config_error& e) {
+                throw geojson_error{e.what()};
+            }
         } else if (file_type == "poly") {
             PolyFileParser parser{buffer, file_name};
             return parser();
         } else if (file_type == "") {
-            throw config_error{"missing file_type"};
+            throw config_error{"Could not autodetect file type in '(multi)polygon' object. Add a 'file_type'."};
         }
 
-        throw config_error{std::string{"unknown file type: '"} + file_type + "'"};
+        throw config_error{std::string{"Unknown file type: '"} + file_type + "' in '(multi)polygon.file_type'"};
     }
 
     std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
@@ -180,7 +189,7 @@ namespace {
             return parse_multipolygon_object(directory, value, buffer);
         }
 
-        throw config_error{"polygon must be an object or array"};
+        throw config_error{"Polygon must be an object or array."};
     }
 
     std::size_t parse_multipolygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
@@ -190,7 +199,7 @@ namespace {
             return parse_multipolygon_object(directory, value, buffer);
         }
 
-        throw config_error{"multipolygon must be an object or array"};
+        throw config_error{"Multipolygon must be an object or array."};
     }
 
 } // anonymous namespace
@@ -216,7 +225,7 @@ void CommandExtract::parse_config_file() {
     }
 
     if (!doc.IsObject()) {
-        throw config_error{"Top-level value must be an object"};
+        throw config_error{"Top-level value must be an object."};
     }
 
     std::string directory{get_value_as_string(doc, "directory")};
@@ -226,34 +235,35 @@ void CommandExtract::parse_config_file() {
 
     const auto json_extracts = doc.FindMember("extracts");
     if (json_extracts == doc.MemberEnd()) {
-        throw config_error{"Missing 'extracts' member in top-level object"};
+        throw config_error{"Missing 'extracts' member in top-level object."};
     }
 
     if (!json_extracts->value.IsArray()) {
-        throw config_error{"'extracts' member in top-level object must be array"};
+        throw config_error{"'extracts' member in top-level object must be array."};
     }
 
     int extract_num = 1;
     for (const auto& e : json_extracts->value.GetArray()) {
-        if (!e.IsObject()) {
-            throw config_error{extract_num, "Members in extracts array must be objects"};
-        }
-
-        std::string output{get_value_as_string(e, "output")};
-        if (output.empty()) {
-            throw config_error{extract_num, "Missing 'output' field for extract"};
-        }
-
-        std::string output_format{get_value_as_string(e, "output_format")};
-        std::string description{get_value_as_string(e, "description")};
-
-        const auto json_bbox         = e.FindMember("bbox");
-        const auto json_polygon      = e.FindMember("polygon");
-        const auto json_multipolygon = e.FindMember("multipolygon");
-
-        const osmium::io::File output_file{m_output_directory + output, output_format};
-
+        std::string output;
         try {
+            if (!e.IsObject()) {
+                throw config_error{"Members in 'extracts' array must be objects."};
+            }
+
+            output = get_value_as_string(e, "output");
+            if (output.empty()) {
+                throw config_error{"Missing 'output' field for extract."};
+            }
+
+            std::string output_format{get_value_as_string(e, "output_format")};
+            std::string description{get_value_as_string(e, "description")};
+
+            const auto json_bbox         = e.FindMember("bbox");
+            const auto json_polygon      = e.FindMember("polygon");
+            const auto json_multipolygon = e.FindMember("multipolygon");
+
+            const osmium::io::File output_file{m_output_directory + output, output_format};
+
             if (json_bbox != e.MemberEnd()) {
                 m_extracts.emplace_back(new ExtractBBox{output_file, description, parse_bbox(json_bbox->value)});
             } else if (json_polygon != e.MemberEnd()) {
@@ -261,14 +271,26 @@ void CommandExtract::parse_config_file() {
             } else if (json_multipolygon != e.MemberEnd()) {
                 m_extracts.emplace_back(new ExtractPolygon{output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, m_buffer)});
             } else {
-                throw config_error{"Missing geometry for extract"};
+                throw config_error{"Missing geometry for extract. Need 'bbox', 'polygon', or 'multipolygon'."};
             }
         } catch (const config_error& e) {
-            throw config_error{std::string{e.what()} + " (in extract " + std::to_string(extract_num) + ")"};
+            std::string message{"In extract "};
+            message += std::to_string(extract_num);
+            message += ": ";
+            message += e.what();
+            throw config_error{message};
         } catch (const poly_error& e) {
-            throw poly_error{std::string{e.what()} + " (in extract " + std::to_string(extract_num) + ")"};
+            std::cerr << "Error while reading poly file for extract " << extract_num << " (" << output << "):\n";
+            throw;
         } catch (const geojson_error& e) {
-            throw geojson_error{std::string{e.what()} + " (in extract " + std::to_string(extract_num) + ")"};
+            std::cerr << "Error while reading GeoJSON file for extract " << extract_num << " (" << output << "):\n";
+            throw;
+        } catch (const std::system_error& e) {
+            std::cerr << "Error while reading OSM file for extract " << extract_num << " (" << output << "):\n";
+            throw;
+        } catch (const osmium::io_error& e) {
+            std::cerr << "Error while reading OSM file for extract " << extract_num << " (" << output << "):\n";
+            throw;
         }
 
         ++extract_num;
@@ -359,7 +381,12 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
             m_config_directory.resize(slash + 1);
         }
 
-        parse_config_file();
+        try {
+            parse_config_file();
+        } catch (const config_error& e) {
+            std::cerr << "Error while reading config file '" << m_config_file_name << "':\n";
+            throw;
+        }
     }
 
     if (vm.count("bbox")) {

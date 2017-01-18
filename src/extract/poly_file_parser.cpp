@@ -33,7 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "poly_file_parser.hpp"
 
 void PolyFileParser::error(const std::string& message) {
-    throw poly_error{message + " in file '" + m_file_name + "' on line " + std::to_string(m_line + 1)};
+    throw poly_error{std::string{"In file '"} + m_file_name + "' on line " + std::to_string(m_line + 1) + ":\n" + message};
 }
 
 PolyFileParser::PolyFileParser(osmium::memory::Buffer& buffer, const std::string& file_name) :
@@ -65,7 +65,7 @@ void PolyFileParser::parse_ring() {
     while (m_line < m_data.size()) {
         if (line() == "END") {
             if (coordinates.size() < 3) {
-                error("Expected at least three lines with coordinates");
+                error("Expected at least three lines with coordinates.");
             }
 
             if (coordinates.front() != coordinates.back()) {
@@ -91,14 +91,12 @@ void PolyFileParser::parse_ring() {
         std::istringstream sstr{line()};
         double lon, lat;
         if (!(sstr >> lon >> lat)) {
-            error("Expected 'END' or coordinates");
+            error("Expected coordinates or 'END' to end the ring.");
         }
         coordinates.emplace_back(lon, lat);
 
         ++m_line;
     }
-
-    error("Expected coordinates or 'END' for end of ring");
 }
 
 void PolyFileParser::parse_multipolygon() {
@@ -107,17 +105,21 @@ void PolyFileParser::parse_multipolygon() {
     while (m_line < m_data.size()) {
         if (line() == "END") {
             ++m_line;
+            if (m_line == 2) {
+                error("Need at least one ring in (multi)polygon.");
+            }
             return;
         }
         parse_ring();
     }
 
-    error("Expected 'END' for end of (multi)polygon");
+    --m_line;
+    error("Expected 'END' for end of (multi)polygon.");
 }
 
 std::size_t PolyFileParser::operator()() {
     if (m_data.empty()) {
-        throw poly_error{std::string{"File '"} + m_file_name + "' is empty"};
+        throw poly_error{std::string{"File '"} + m_file_name + "' is empty."};
     }
 
     m_builder.reset(new osmium::builder::AreaBuilder{m_buffer});

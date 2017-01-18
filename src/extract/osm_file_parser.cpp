@@ -77,6 +77,6 @@ std::size_t OSMFileParser::operator()() {
     }
 
     m_buffer.rollback();
-    throw std::runtime_error{"No areas found in the OSM file"};
+    throw osmium::io_error{"No areas found in the OSM file."};
 }
 

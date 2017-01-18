@@ -36,7 +36,7 @@ namespace osmium { namespace memory {
 /**
  *  Thrown when there is a problem with parsing a poly file.
  */
-struct poly_error : std::runtime_error {
+struct poly_error : public std::runtime_error {
 
     explicit poly_error(const std::string& message) :
         std::runtime_error(message) {
