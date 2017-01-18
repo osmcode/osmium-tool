@@ -331,7 +331,7 @@ can be huge, so if you include them, be aware your result might be huge.
 
 Memory usage of **osmium extract** depends on the number of extracts and on the
 strategy used. For the *simple* strategy it will at least be the number of
-extracts times the highest node ID used devided by 8. For the *complete_ways*
+extracts times the highest node ID used divided by 8. For the *complete_ways*
 twice that and for the *smart* strategy a bit more.
 
 
