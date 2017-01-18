@@ -63,9 +63,9 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
     }
 
     // split y range into equal-sized bands
-    constexpr const int segments_per_band = 10;
-    constexpr const size_t max_bands = 10000;
-    std::size_t num_bands = segments.size() / segments_per_band;
+    constexpr const int32_t segments_per_band = 10;
+    constexpr const int32_t max_bands = 10000;
+    int32_t num_bands = static_cast<int32_t>(segments.size()) / segments_per_band;
     if (num_bands < 1) {
         num_bands = 1;
     } else if (num_bands > max_bands) {
@@ -80,7 +80,7 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
     for (const auto& segment : segments) {
         const std::pair<int32_t, int32_t> mm = std::minmax(segment.first().y(), segment.second().y());
         const uint32_t band_min = (mm.first  - y_min()) / m_dy;
-        const uint32_t band_max = std::min(static_cast<int32_t>(num_bands), ((mm.second - y_min()) / m_dy) + 1);
+        const uint32_t band_max = std::min(num_bands, ((mm.second - y_min()) / m_dy) + 1);
 
         for (auto band = band_min; band < band_max; ++band) {
             m_bands[band].push_back(segment);

@@ -219,7 +219,7 @@ void CommandExtract::parse_config_file() {
     if (doc.ParseStream<(rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag)>(stream_wrapper).HasParseError()) {
         throw config_error{std::string{"JSON error at offset "} +
                            std::to_string(doc.GetErrorOffset()) +
-                           " : " +
+                           ": " +
                            rapidjson::GetParseError_En(doc.GetParseError())
                           };
     }
@@ -279,16 +279,16 @@ void CommandExtract::parse_config_file() {
             message += ": ";
             message += e.what();
             throw config_error{message};
-        } catch (const poly_error& e) {
+        } catch (const poly_error&) {
             std::cerr << "Error while reading poly file for extract " << extract_num << " (" << output << "):\n";
             throw;
-        } catch (const geojson_error& e) {
+        } catch (const geojson_error&) {
             std::cerr << "Error while reading GeoJSON file for extract " << extract_num << " (" << output << "):\n";
             throw;
-        } catch (const std::system_error& e) {
+        } catch (const std::system_error&) {
             std::cerr << "Error while reading OSM file for extract " << extract_num << " (" << output << "):\n";
             throw;
-        } catch (const osmium::io_error& e) {
+        } catch (const osmium::io_error&) {
             std::cerr << "Error while reading OSM file for extract " << extract_num << " (" << output << "):\n";
             throw;
         }
@@ -383,7 +383,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
 
         try {
             parse_config_file();
-        } catch (const config_error& e) {
+        } catch (const config_error&) {
             std::cerr << "Error while reading config file '" << m_config_file_name << "':\n";
             throw;
         }

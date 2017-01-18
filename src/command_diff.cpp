@@ -185,7 +185,7 @@ class OutputActionCompact : public OutputAction {
 
 public:
 
-    OutputActionCompact(int fd) noexcept :
+    explicit OutputActionCompact(int fd) noexcept :
         m_fd(fd) {
     }
 
