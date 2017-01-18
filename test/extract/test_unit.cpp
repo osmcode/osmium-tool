@@ -138,8 +138,8 @@ TEST_CASE("Parse OSM files") {
     osmium::memory::Buffer buffer{1024};
 
     SECTION("Missing OSM file") {
-        OSMFileParser parser{buffer, "test/extract/missing.osm.opl"};
         REQUIRE_THROWS({
+            OSMFileParser parser(buffer, "test/extract/missing.osm.opl");
             parser();
         });
     }
@@ -232,8 +232,8 @@ TEST_CASE("Parse GeoJSON files") {
     osmium::memory::Buffer buffer{1024};
 
     SECTION("Missing GeoJSON file") {
-        GeoJSONFileParser parser{buffer, "test/extract/missing.geojson"};
         REQUIRE_THROWS({
+            GeoJSONFileParser parser(buffer, "test/extract/missing.geojson");
             parser();
         });
     }
