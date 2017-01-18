@@ -20,13 +20,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cstddef>
+#include <string>
+
 #include <osmium/area/assembler.hpp>
 #include <osmium/area/multipolygon_collector.hpp>
 #include <osmium/builder/osm_object_builder.hpp>
-#include <osmium/geom/coordinates.hpp>
 #include <osmium/handler/node_locations_for_ways.hpp>
 #include <osmium/index/map/sparse_mem_array.hpp>
 #include <osmium/io/any_input.hpp>
+#include <osmium/io/file.hpp>
 #include <osmium/memory/buffer.hpp>
 
 #include "osm_file_parser.hpp"

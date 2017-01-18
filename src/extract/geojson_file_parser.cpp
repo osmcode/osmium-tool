@@ -10,7 +10,7 @@
 
 #include <osmium/builder/osm_object_builder.hpp>
 #include <osmium/geom/coordinates.hpp>
-#include <osmium/osm/box.hpp>
+#include <osmium/memory/buffer.hpp>
 #include <osmium/osm/location.hpp>
 
 #include "error.hpp"

@@ -22,9 +22,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-#include <osmium/osm/location.hpp>
-
 #include "extract_bbox.hpp"
+
+namespace osmium {
+    class Location;
+}
 
 bool ExtractBBox::contains(const osmium::Location& location) const noexcept {
     return location.valid() && envelope().contains(location);

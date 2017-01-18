@@ -20,7 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
+#include <memory>
+#include <vector>
 
 #include "strategy_complete_ways_with_history.hpp"
 

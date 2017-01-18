@@ -21,7 +21,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include <osmium/geom/wkt.hpp>
 #include <osmium/osm/location.hpp>

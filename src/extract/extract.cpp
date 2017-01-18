@@ -21,10 +21,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <sstream>
+#include <string>
 
-#include <osmium/io/file.hpp>
+#include <osmium/io/writer_options.hpp>
 
 #include "extract.hpp"
+
+namespace osmium {
+    namespace io {
+        class Header;
+    }
+    namespace memory {
+        class Item;
+    }
+}
 
 void Extract::open_file(const osmium::io::Header& header, osmium::io::overwrite output_overwrite, osmium::io::fsync sync) {
     m_writer.reset(new osmium::io::Writer{m_output_file, header, output_overwrite, sync});
