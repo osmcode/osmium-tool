@@ -148,7 +148,7 @@ bool CommandDeriveChanges::run() {
     osmium::io::Header header;
     setup_header(header);
 
-    osmium::io::Writer writer{m_output_file, header};
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     m_vout << "Deriving changes...\n";
     while (it1 != end1 || it2 != end2) {
