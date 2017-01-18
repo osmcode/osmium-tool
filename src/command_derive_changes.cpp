@@ -152,12 +152,12 @@ bool CommandDeriveChanges::run() {
 
     m_vout << "Deriving changes...\n";
     while (it1 != end1 || it2 != end2) {
-        if (it1 == end1 || *it2 < *it1) {
-            writer(*it2);
-            ++it2;
-        } else if (it2 == end2) {
+        if (it2 == end2) {
             write_deleted(writer, *it1);
             ++it1;
+        } else if (it1 == end1 || *it2 < *it1) {
+            writer(*it2);
+            ++it2;
         } else if (*it1 < *it2) {
             if (it2->id() != it1->id()) {
                 write_deleted(writer, *it1);
