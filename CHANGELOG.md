@@ -8,12 +8,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- New `extract` command to cut out geographical regions from an OSM file
-  using a bounding box or (multi)polygon.
-
 ### Changed
 
 ### Fixed
+
+
+## [1.5.0] - 2017-01-18
+
+### Added
+
+- New `extract` command to cut out geographical regions from an OSM file
+  using a bounding box or (multi)polygon.
 
 
 ## [1.4.1] - 2016-11-20
@@ -193,7 +198,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.4.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/osmcode/osmium-tool/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/osmcode/osmium-tool/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/osmcode/osmium-tool/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/osmcode/osmium-tool/compare/v1.3.0...v1.3.1
