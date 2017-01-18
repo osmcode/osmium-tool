@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- New `extract` command to cut out geographical regions from an OSM file
+  using a bounding box or (multi)polygon.
+
 ### Changed
 
 ### Fixed
