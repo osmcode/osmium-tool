@@ -12,6 +12,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Make `--overwrite` and `--fsync` work in `derive_changes` command.
+- A dereference of end iterator in `derive_changes`.
+
 
 ## [1.5.0] - 2017-01-18
 
