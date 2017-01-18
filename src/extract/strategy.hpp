@@ -90,8 +90,7 @@ class Pass {
 
     TStrategy& m_strategy;
 
-    void run_impl(bool display_progress, osmium::io::Reader& reader) {
-        osmium::ProgressBar progress_bar{reader.file_size(), display_progress};
+    void run_impl(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader) {
         while (osmium::memory::Buffer buffer = reader.read()) {
             progress_bar.update(reader.offset());
             for (const auto& object : buffer) {
@@ -119,7 +118,6 @@ class Pass {
                 }
             }
         }
-        progress_bar.done();
     }
 
 protected:
@@ -163,9 +161,9 @@ public:
     }
 
     template <typename... Args>
-    void run(bool display_progress, Args ...args) {
+    void run(osmium::ProgressBar& progress_bar, Args ...args) {
         osmium::io::Reader reader{std::forward<Args>(args)...};
-        run_impl(display_progress, reader);
+        run_impl(progress_bar, reader);
         reader.close();
     }
 

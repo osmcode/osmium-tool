@@ -100,8 +100,13 @@ namespace strategy_simple {
 
     void Strategy::run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
         vout << "Running 'simple' strategy in one pass...\n";
+        const size_t file_size = osmium::util::file_size(input_file.filename());
+        osmium::ProgressBar progress_bar{file_size, display_progress};
+
         Pass1 pass1{*this};
-        pass1.run(display_progress, input_file);
+        pass1.run(progress_bar, input_file);
+
+        progress_bar.done();
     }
 
 } // namespace strategy_simple

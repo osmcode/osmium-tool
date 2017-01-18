@@ -159,9 +159,13 @@ namespace strategy_complete_ways_with_history {
 
     void Strategy::run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
         vout << "Running 'complete_ways' strategy in two passes...\n";
+        const size_t file_size = osmium::util::file_size(input_file.filename());
+        osmium::ProgressBar progress_bar{file_size * 2, display_progress};
+
         vout << "First pass...\n";
         Pass1 pass1{*this};
-        pass1.run(display_progress, input_file, osmium::io::read_meta::no);
+        pass1.run(progress_bar, input_file, osmium::io::read_meta::no);
+        progress_bar.file_done(file_size);
         pass1.add_extra_nodes();
 
         // recursively get parents of all relations that are in an extract
@@ -172,9 +176,11 @@ namespace strategy_complete_ways_with_history {
             }
         }
 
+        progress_bar.remove();
         vout << "Second pass...\n";
         Pass2 pass2{*this};
-        pass2.run(display_progress, input_file);
+        pass2.run(progress_bar, input_file);
+        progress_bar.done();
     }
 
 } // namespace strategy_complete_ways_with_history
