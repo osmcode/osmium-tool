@@ -216,7 +216,7 @@ void CommandExtract::parse_config_file() {
     rapidjson::IStreamWrapper stream_wrapper{config_file};
 
     rapidjson::Document doc;
-    if (doc.ParseStream<rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag>(stream_wrapper).HasParseError()) {
+    if (doc.ParseStream<(rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag)>(stream_wrapper).HasParseError()) {
         throw config_error{std::string{"JSON error at offset "} +
                            std::to_string(doc.GetErrorOffset()) +
                            " : " +
