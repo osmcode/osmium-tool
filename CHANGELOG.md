@@ -10,6 +10,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+### Fixed
+
+
+## [1.5.1] - 2017-01-19
+
+### Changed
+
 - Build with warnings in all build types, not only "Dev".
 - Better error messages for command line errors.
 
@@ -206,7 +213,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.5.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/osmcode/osmium-tool/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/osmcode/osmium-tool/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/osmcode/osmium-tool/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/osmcode/osmium-tool/compare/v1.3.1...v1.4.0
