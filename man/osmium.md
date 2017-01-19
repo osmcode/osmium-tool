@@ -109,12 +109,14 @@ If an osmium command exits with an "Out of memory" error, try running it with
 
 # SEE ALSO
 
-* **osmium-apply-changes**(1),
+* **osmium-add-locations-to-ways**(1),
+  **osmium-apply-changes**(1),
   **osmium-cat**(1),
   **osmium-changeset-filter**(1),
   **osmium-check-refs**(1),
   **osmium-derive-changes**(1),
   **osmium-diff**(1),
+  **osmium-extract**(1),
   **osmium-fileinfo**(1),
   **osmium-getid**(1),
   **osmium-merge**(1),
