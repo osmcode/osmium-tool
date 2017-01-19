@@ -215,16 +215,3 @@ bool CommandMerge::run() {
     return true;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("merge", "Merge several sorted OSM files into one", []() {
-        return new CommandMerge();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

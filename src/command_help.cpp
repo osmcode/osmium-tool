@@ -88,16 +88,3 @@ bool CommandHelp::run() {
     return false;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("help", "Show osmium help", []() {
-        return new CommandHelp();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

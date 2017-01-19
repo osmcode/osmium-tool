@@ -246,16 +246,3 @@ bool CommandChangesetFilter::run() {
     return true;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("changeset-filter", "Filter OSM changesets by different criteria", []() {
-        return new CommandChangesetFilter();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

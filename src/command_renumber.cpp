@@ -330,16 +330,3 @@ bool CommandRenumber::run() {
     return true;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("renumber", "Renumber IDs in OSM file", []() {
-        return new CommandRenumber();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

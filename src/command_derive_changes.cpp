@@ -179,16 +179,3 @@ bool CommandDeriveChanges::run() {
     return true;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("derive-changes", "Create OSM change files from two OSM data files", []() {
-        return new CommandDeriveChanges();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

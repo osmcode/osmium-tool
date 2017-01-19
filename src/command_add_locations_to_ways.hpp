@@ -32,11 +32,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/index/map/sparse_mmap_array.hpp> // IWYU pragma: keep
 #include <osmium/handler/node_locations_for_ways.hpp>
 
-namespace osmium { namespace io {
-    class Header;
-    class Reader;
-    class Writer;
-}}
+namespace osmium {
+    namespace io {
+        class Header;
+        class Reader;
+        class Writer;
+    }
+    class ProgressBar;
+}
 
 #include "cmd.hpp" // IWYU pragma: export
 

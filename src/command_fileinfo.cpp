@@ -635,16 +635,3 @@ bool CommandFileinfo::run() {
     return true;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("fileinfo", "Show information about OSM file", []() {
-        return new CommandFileinfo();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

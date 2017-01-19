@@ -126,16 +126,3 @@ bool CommandCat::run() {
     return true;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("cat", "Concatenate OSM files and convert to different formats", []() {
-        return new CommandCat();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

@@ -122,16 +122,3 @@ bool CommandSort::run() {
     return true;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("sort", "Sort OSM data files", []() {
-        return new CommandSort();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

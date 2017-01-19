@@ -331,16 +331,3 @@ bool CommandDiff::run() {
     return count_left == 0 && count_right == 0 && count_different == 0;
 }
 
-namespace {
-
-    const bool register_command = CommandFactory::add("diff", "Display differences between OSM files", []() {
-        return new CommandDiff();
-    });
-
-    // dummy function to silence the unused variable warning from above
-    inline bool get_registered() noexcept {
-        return register_command;
-    }
-
-}
-

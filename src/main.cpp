@@ -50,6 +50,8 @@ int main(int argc, char *argv[]) {
     _setmode(1, _O_BINARY);
 #endif
 
+    register_commands();
+
     std::string command = argv[0];
 
     // remove path from command

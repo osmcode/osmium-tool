@@ -256,4 +256,6 @@ public:
 
 }; // class CommandFactory
 
+void register_commands();
+
 #endif // CMD_HPP
