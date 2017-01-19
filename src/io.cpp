@@ -47,11 +47,19 @@ void with_single_osm_input::setup_input_file(const boost::program_options::varia
         m_input_format = vm["input-format"].as<std::string>();
     }
 
-    if ((m_input_filename == "-" || m_input_filename == "") && m_input_format.empty()) {
-        throw argument_error{"When reading from STDIN you need to use the --input-format/-F option to declare the file format."};
+    if (m_input_format.empty()) {
+        if (m_input_filename == "-") {
+            throw argument_error{"When reading from STDIN you need to use the --input-format/-F option\n"
+                                 "to specify the file format."};
+        }
+
+        if (m_input_filename == "") {
+            throw argument_error{"Missing input file. Use '-' to read from STDIN and add the --input-format/-F\n"
+                                 "option to specify the file format or specify the input file name."};
+        }
     }
 
-    m_input_file = osmium::io::File(m_input_filename, m_input_format);
+    m_input_file = osmium::io::File{m_input_filename, m_input_format};
 }
 
 po::options_description with_single_osm_input::add_single_input_options() {
@@ -70,31 +78,34 @@ void with_single_osm_input::show_single_input_arguments(osmium::util::VerboseOut
     vout << "    file format: " << m_input_format << "\n";
 }
 
-void with_multiple_osm_inputs::setup_input_files(const boost::program_options::variables_map& vm, bool optional) {
+void with_multiple_osm_inputs::setup_input_files(const boost::program_options::variables_map& vm) {
     if (vm.count("input-filenames")) {
         m_input_filenames = vm["input-filenames"].as<std::vector<std::string>>();
-    } else if (!optional) {
+    } else {
         m_input_filenames.push_back("-"); // default is stdin
+    }
+
+    bool uses_stdin = false;
+    for (auto& filename : m_input_filenames) {
+        if (filename == "-") {
+            if (uses_stdin) {
+                throw argument_error{"Can read at most one file from STDIN."};
+            }
+            uses_stdin = true;
+        }
     }
 
     if (vm.count("input-format")) {
         m_input_format = vm["input-format"].as<std::string>();
     }
 
-    if (m_input_format.empty()) {
-        bool uses_stdin = false;
-        for (auto& filename : m_input_filenames) {
-            if (filename.empty() || filename == "-") {
-                uses_stdin = true;
-            }
-        }
-        if (uses_stdin) {
-            throw argument_error{"When reading from STDIN you need to use the --input-format/-F option to declare the file format."};
-        }
+    if (uses_stdin && m_input_format.empty()) {
+        throw argument_error{"When reading from STDIN you need to use the --input-format/-F option\n"
+                             "to specify the file format. Or are you missing a file name argument?"};
     }
 
     for (const std::string& input_filename : m_input_filenames) {
-        osmium::io::File input_file(input_filename, m_input_format);
+        osmium::io::File input_file{input_filename, m_input_format};
         m_input_files.push_back(input_file);
     }
 }
@@ -146,12 +157,18 @@ void with_osm_output::init_output_file(const po::variables_map& vm) {
 }
 
 void with_osm_output::check_output_file() {
-    if ((m_output_filename == "-" || m_output_filename == "") && m_output_format.empty()) {
-        throw argument_error{"When writing to STDOUT you need to use the --output-format/-f option\n"
-                             "to declare the file format. Or did you miss the --output/-O option?"};
+    if (m_output_format.empty()) {
+        if (m_output_filename == "-") {
+            throw argument_error{"When writing to STDOUT you need to use the --output-format/-f\n"
+                                 "option to specify the file format."};
+        }
+        if (m_output_filename == "") {
+            throw argument_error{"Missing output file. Set the output file with --output/-o and/or\n"
+                                 "add the --input-format/-F option to specify the file format."};
+        }
     }
 
-    m_output_file = osmium::io::File(m_output_filename, m_output_format);
+    m_output_file = osmium::io::File{m_output_filename, m_output_format};
     m_output_file.check();
 }
 

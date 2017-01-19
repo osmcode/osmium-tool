@@ -132,7 +132,7 @@ class with_single_osm_input {
 
 protected:
 
-    std::string m_input_filename = "-"; // default: stdin
+    std::string m_input_filename;
     std::string m_input_format;
     osmium::io::File m_input_file;
 
@@ -160,7 +160,7 @@ protected:
 
 public:
 
-    void setup_input_files(const boost::program_options::variables_map& vm, bool optional = false);
+    void setup_input_files(const boost::program_options::variables_map& vm);
 
     po::options_description add_multiple_inputs_options();
 
@@ -178,7 +178,7 @@ protected:
 
     std::string m_generator;
     std::vector<std::string> m_output_headers;
-    std::string m_output_filename = "-"; // default: stdout
+    std::string m_output_filename;
     std::string m_output_format;
     osmium::io::File m_output_file;
     osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;

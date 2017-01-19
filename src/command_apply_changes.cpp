@@ -85,6 +85,8 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("change-filenames")) {
         m_change_filenames = vm["change-filenames"].as<std::vector<std::string>>();
+    } else {
+        throw argument_error{"Need data file and at least one change file on the command line."};
     }
 
     if (vm.count("with-history")) {

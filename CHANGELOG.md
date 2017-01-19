@@ -11,11 +11,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Build with warnings in all build types, not only "Dev".
+- Better error messages for command line errors.
 
 ### Fixed
 
 - Make `--overwrite` and `--fsync` work in `derive_changes` command.
 - A dereference of end iterator in `derive_changes`.
+- You can not specify the special file name "-" (to read from STDIN) several
+  times for commands reading multiple files.
 
 
 ## [1.5.0] - 2017-01-18
