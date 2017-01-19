@@ -272,7 +272,7 @@ configure_file(
     ${PROJECT_BINARY_DIR}/osmium
 )
 
-include_directories(include)
+include_directories(SYSTEM include)
 include_directories(${PROJECT_BINARY_DIR}/src)
 
 #-----------------------------------------------------------------------------
