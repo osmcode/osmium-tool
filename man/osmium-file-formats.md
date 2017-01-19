@@ -22,8 +22,8 @@ In addition files in all formats except PBF can be compressed using *gzip* or
 
 Which format a file has is usually autodetected from the file name suffix.
 
-If this doesn't work, either because you are reading from stdin or writing to
-stdout, or because you have an unusual file name, you have to set the format
+If this doesn't work, either because you are reading from STDIN or writing to
+STDOUT, or because you have an unusual file name, you have to set the format
 manually. You can also set the format manually if you want to specify special
 format options.
 

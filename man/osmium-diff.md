@@ -61,7 +61,7 @@ None of the output formats print the headers of the input files.
 :   See the **OUTPUT FORMATS** section.
 
 -o, --output=FILE
-:   Name of the output file. Default is '-' (*stdout*).
+:   Name of the output file. Default is '-' (STDOUT).
 
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will

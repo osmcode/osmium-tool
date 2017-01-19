@@ -15,7 +15,7 @@
     version of osmium.
 
 -o, --output=FILE
-:   Name of the output file. Default is '-' (*stdout*).
+:   Name of the output file. Default is '-' (STDOUT).
 
 -O, --overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will

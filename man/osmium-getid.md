@@ -74,7 +74,7 @@ This command will not work with negative IDs.
 
 -i, --id-file[=FILE]
 :   Read IDs from text file instead of from the command line. Use the special
-    name "-" to read from *stdin*. Each line of the file must start with an
+    name "-" to read from *STDIN*. Each line of the file must start with an
     ID in the format described above. Lines can optionally contain a space
     character or a hash sign ('#') after the ID. This character and all
     following characters are ignored. (This allows files in OPL format to be
@@ -122,7 +122,7 @@ IDs it needs in main memory.
 
 # EXAMPLES
 
-Output nodes 17 and 1234, way 42, and relation 111 to *stdout* in OPL format:
+Output nodes 17 and 1234, way 42, and relation 111 to STDOUT in OPL format:
 
     osmium getid -f opl planet.osm.pbf n1234 w42 n17 r111
 

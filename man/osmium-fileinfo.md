@@ -74,7 +74,7 @@ The following variables are available:
     file.name - STRING
     file.format - STRING: XML|PBF
     file.compression - STRING: none|bzip2|gzip
-    file.size - INTEGER (0 for stdout)
+    file.size - INTEGER (always 0 when reading from STDIN)
     header.with_history - BOOL (yes|no)
     header.option.generator - STRING
     header.option.version - STRING

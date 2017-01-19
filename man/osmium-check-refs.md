@@ -33,7 +33,7 @@ change files.
 # OPTIONS
 
 -i, --show-ids
-:   Print all missing IDs to *stdout*. If you don't give this option, only a
+:   Print all missing IDs to STDOUT. If you don't give this option, only a
     summary is shown.
 
 -r, --check-relations
