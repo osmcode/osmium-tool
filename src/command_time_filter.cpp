@@ -169,9 +169,14 @@ bool CommandTimeFilter::run() {
 
 namespace {
 
-    const bool register_time_filter_command = CommandFactory::add("time-filter", "Filter OSM data from a point in time or a time span out of a history file", []() {
+    const bool register_command = CommandFactory::add("time-filter", "Filter OSM data from a point in time or a time span out of a history file", []() {
         return new CommandTimeFilter();
     });
+
+    // dummy function to silence the unused variable warning from above
+    inline bool get_registered() noexcept {
+        return register_command;
+    }
 
 }
 

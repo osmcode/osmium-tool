@@ -225,9 +225,14 @@ bool CommandApplyChanges::run() {
 
 namespace {
 
-    const bool register_apply_changes_command = CommandFactory::add("apply-changes", "Apply OSM change files to OSM data file", []() {
+    const bool register_command = CommandFactory::add("apply-changes", "Apply OSM change files to OSM data file", []() {
         return new CommandApplyChanges();
     });
+
+    // dummy function to silence the unused variable warning from above
+    inline bool get_registered() noexcept {
+        return register_command;
+    }
 
 }
 

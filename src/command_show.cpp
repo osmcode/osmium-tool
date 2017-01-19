@@ -219,9 +219,14 @@ bool CommandShow::run() {
 
 namespace {
 
-    const bool register_show_command = CommandFactory::add("show", "Show OSM file contents", []() {
+    const bool register_command = CommandFactory::add("show", "Show OSM file contents", []() {
         return new CommandShow();
     });
+
+    // dummy function to silence the unused variable warning from above
+    inline bool get_registered() noexcept {
+        return register_command;
+    }
 
 }
 

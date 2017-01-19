@@ -425,9 +425,14 @@ bool CommandGetId::run() {
 
 namespace {
 
-    const bool register_get_id_command = CommandFactory::add("getid", "Get objects with given ID from OSM file", []() {
+    const bool register_command = CommandFactory::add("getid", "Get objects with given ID from OSM file", []() {
         return new CommandGetId();
     });
+
+    // dummy function to silence the unused variable warning from above
+    inline bool get_registered() noexcept {
+        return register_command;
+    }
 
 }
 

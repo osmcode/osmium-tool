@@ -333,9 +333,14 @@ bool CommandDiff::run() {
 
 namespace {
 
-    const bool register_diff_command = CommandFactory::add("diff", "Display differences between OSM files", []() {
+    const bool register_command = CommandFactory::add("diff", "Display differences between OSM files", []() {
         return new CommandDiff();
     });
+
+    // dummy function to silence the unused variable warning from above
+    inline bool get_registered() noexcept {
+        return register_command;
+    }
 
 }
 

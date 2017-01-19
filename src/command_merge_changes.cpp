@@ -142,9 +142,14 @@ bool CommandMergeChanges::run() {
 
 namespace {
 
-    const bool register_merge_changes_command = CommandFactory::add("merge-changes", "Merge several OSM change files into one", []() {
+    const bool register_command = CommandFactory::add("merge-changes", "Merge several OSM change files into one", []() {
         return new CommandMergeChanges();
     });
+
+    // dummy function to silence the unused variable warning from above
+    inline bool get_registered() noexcept {
+        return register_command;
+    }
 
 }
 

@@ -297,9 +297,14 @@ bool CommandCheckRefs::run() {
 
 namespace {
 
-    const bool register_check_refs_command = CommandFactory::add("check-refs", "Check referential integrity of an OSM file", []() {
+    const bool register_command = CommandFactory::add("check-refs", "Check referential integrity of an OSM file", []() {
         return new CommandCheckRefs();
     });
+
+    // dummy function to silence the unused variable warning from above
+    inline bool get_registered() noexcept {
+        return register_command;
+    }
 
 }
 
