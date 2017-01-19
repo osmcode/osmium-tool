@@ -32,9 +32,9 @@ namespace osmium { namespace memory {
     class Buffer;
 }}
 
-extern std::string get_value_as_string(const rapidjson::Value& object, const char* key);
-extern std::size_t parse_polygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer);
-extern std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer);
+std::string get_value_as_string(const rapidjson::Value& object, const char* key);
+std::size_t parse_polygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer);
+std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer);
 
 /**
  * Gets areas from OSM files.

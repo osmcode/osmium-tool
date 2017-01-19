@@ -40,4 +40,5 @@ public:
     std::string geometry_as_text() const override final;
 
 }; // class ExtractBBox
+
 #endif // EXTRACT_EXTRACT_BBOX_HPP
