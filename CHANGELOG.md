@@ -10,6 +10,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- Build with warnings in all build types, not only "Dev".
+
 ### Fixed
 
 - Make `--overwrite` and `--fsync` work in `derive_changes` command.
