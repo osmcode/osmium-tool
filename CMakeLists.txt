@@ -218,12 +218,13 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${USUAL_COMPILE_OPTIONS}"
 #
 #-----------------------------------------------------------------------------
 
+add_definitions(${OSMIUM_WARNING_OPTIONS})
+
 # In 'Dev' mode: compile with very strict warnings and turn them into errors.
 if(CMAKE_BUILD_TYPE STREQUAL "Dev")
     if(NOT MSVC)
-        add_definitions(-Werror -Wno-unused-variable)
+        add_definitions(-Werror)
     endif()
-    add_definitions(${OSMIUM_WARNING_OPTIONS})
 endif()
 
 # Force RelWithDebInfo build type if none was given
@@ -237,6 +238,8 @@ set(CMAKE_BUILD_TYPE ${build_type}
     CACHE STRING
     "Choose the type of build, options are: ${CMAKE_CONFIGURATION_TYPES}."
     FORCE)
+
+message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
 
 #-----------------------------------------------------------------------------
