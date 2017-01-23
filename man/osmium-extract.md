@@ -219,6 +219,10 @@ boxes, but more expensive for (multi)polygons. And it becomes more expensive
 the more vertices the (multi)polyon has. Use bounding boxes or simplified
 polygons where possible.
 
+Note that bounding boxes or (multi)polygons are not allowed to span the
+-180/180 degree line. If you need this, cut out the regions on each side and
+use **osmium merge** to join the resulting files.
+
 
 # (MULTI)POLYGON FILE FORMATS
 
