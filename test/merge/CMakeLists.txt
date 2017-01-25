@@ -2,7 +2,7 @@
 #
 #  CMake Config
 #
-#  Osmium Tool Tests - getid
+#  Osmium Tool Tests - merge
 #
 #-----------------------------------------------------------------------------
 
