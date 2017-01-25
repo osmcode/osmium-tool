@@ -369,10 +369,10 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
             set_directory(vm["directory"].as<std::string>());
         }
         if (vm.count("output")) {
-            warning("Ignoring --output/-o option\n");
+            warning("Ignoring --output/-o option.\n");
         }
         if (vm.count("output-format")) {
-            warning("Ignoring --output-format/-f option\n");
+            warning("Ignoring --output-format/-f option.\n");
         }
         m_config_file_name = vm["config"].as<std::string>();
         auto slash = m_config_file_name.find_last_of('/');
@@ -391,7 +391,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("bbox")) {
         if (vm.count("directory")) {
-            warning("Ignoring --directory/-d option\n");
+            warning("Ignoring --directory/-d option.\n");
         }
         check_output_file();
         m_extracts.emplace_back(new ExtractBBox{m_output_file, "", parse_bbox(vm["bbox"].as<std::string>())});
@@ -399,7 +399,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("polygon")) {
         if (vm.count("directory")) {
-            warning("Ignoring --directory/-d option\n");
+            warning("Ignoring --directory/-d option.\n");
         }
         check_output_file();
         m_extracts.emplace_back(new ExtractPolygon{m_output_file, "", m_buffer, parse_multipolygon_object("./", vm["polygon"].as<std::string>(), "", m_buffer)});

@@ -33,6 +33,7 @@ namespace osmium { namespace io {
 std::string get_filename_suffix(const std::string& file_name);
 const char* yes_no(bool choice) noexcept;
 void warning(const char* text);
+void warning(const std::string& text);
 std::size_t file_size_sum(const std::vector<osmium::io::File>& files);
 
 #endif // UTIL_HPP

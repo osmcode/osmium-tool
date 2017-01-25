@@ -23,14 +23,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/handler/check_order.hpp>
 
 #include "strategy_simple.hpp"
+#include "../util.hpp"
 
 namespace strategy_simple {
 
-    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& /*options*/) :
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& options) :
         ExtractStrategy() {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);
+        }
+
+        for (const auto& option : options) {
+            warning(std::string{"Ignoring unknown option '"} + option.first + "' for 'simple' strategy.\n");
         }
     }
 

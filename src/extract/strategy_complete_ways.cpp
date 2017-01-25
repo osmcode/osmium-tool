@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/file.hpp>
 
 #include "strategy_complete_ways.hpp"
+#include "../util.hpp"
 
 namespace strategy_complete_ways {
 
@@ -36,11 +37,15 @@ namespace strategy_complete_ways {
         });
     }
 
-    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& /*options*/) :
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& options) :
         ExtractStrategy() {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);
+        }
+
+        for (const auto& option : options) {
+            warning(std::string{"Ignoring unknown option '"} + option.first + "' for 'complete_ways' strategy.\n");
         }
     }
 

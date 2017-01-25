@@ -57,6 +57,10 @@ void warning(const char* text) {
     std::cerr << "WARNING: " << text;
 }
 
+void warning(const std::string& text) {
+    std::cerr << "WARNING: " << text;
+}
+
 std::size_t file_size_sum(const std::vector<osmium::io::File>& files) {
     std::size_t sum = 0;
 

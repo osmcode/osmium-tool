@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/string.hpp>
 
 #include "strategy_smart.hpp"
+#include "../util.hpp"
 
 namespace strategy_smart {
 
@@ -59,6 +60,12 @@ namespace strategy_smart {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);
+        }
+
+        for (const auto& option : options) {
+            if (std::string{"types"} != option.first) {
+                warning(std::string{"Ignoring unknown option '"} + option.first + "' for 'smart' strategy.\n");
+            }
         }
 
         const auto types = options.get("types");
