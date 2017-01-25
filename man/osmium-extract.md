@@ -311,9 +311,10 @@ Strategy **smart**
 
 For the **smart** strategy you can change the types of relations that should be
 reference-complete. Instead of just relations tagged "type=multipolygon", you
-can either get all relations (use "-S all") or give a list of types to the
--S option: "-S multipolygon,route". Note that especially boundary relations
-can be huge, so if you include them, be aware your result might be huge.
+can either get all relations (use "-S types=any") or give a list of types to
+the -S option: "-S types=multipolygon,route". Note that especially boundary
+relations can be huge, so if you include them, be aware your result might be
+huge.
 
 
 # DIAGNOSTICS
