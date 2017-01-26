@@ -75,6 +75,9 @@ show
 sort
 :   sort OSM files
 
+tags-filter
+:   filter OSM data based on tags
+
 time-filter
 :   filter OSM data by time from a history file
 
@@ -124,6 +127,7 @@ If an osmium command exits with an "Out of memory" error, try running it with
   **osmium-renumber**(1),
   **osmium-show**(1),
   **osmium-sort**(1),
+  **osmium-tags-filter**(1),
   **osmium-time-filter**(1),
   **osmium-file-formats**(5)
 * [Osmium website](http://osmcode.org/osmium-tool/)
