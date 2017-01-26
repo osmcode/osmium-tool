@@ -15,6 +15,7 @@
 #include "command_renumber.hpp"
 #include "command_show.hpp"
 #include "command_sort.hpp"
+#include "command_tags_filter.hpp"
 #include "command_time_filter.hpp"
 
 void register_commands() {
@@ -79,6 +80,10 @@ void register_commands() {
 
     CommandFactory::add("sort", "Sort OSM data files", []() {
         return new CommandSort();
+    });
+
+    CommandFactory::add("tags-filter", "Filter OSM data based on tags", []() {
+        return new CommandTagsFilter();
     });
 
     CommandFactory::add("time-filter", "Filter OSM data from a point in time or a time span out of a history file", []() {
