@@ -48,7 +48,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 void CommandGetId::parse_and_add_id(const std::string& s) {
     auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr, m_default_item_type);
     if (p.second < 0) {
-        throw std::runtime_error("osmium-getid does not work with negative IDs");
+        throw std::runtime_error{"osmium-getid does not work with negative IDs"};
     }
     m_ids(p.first).set(p.second);
 }
@@ -56,7 +56,7 @@ void CommandGetId::parse_and_add_id(const std::string& s) {
 void CommandGetId::read_id_file(std::istream& stream) {
     m_vout << "Reading ID file...\n";
     for (std::string line; std::getline(stream, line); ) {
-        auto pos = line.find_first_of(" #");
+        const auto pos = line.find_first_of(" #");
         if (pos != std::string::npos) {
             line.erase(pos);
         }
@@ -382,7 +382,7 @@ bool CommandGetId::run() {
 
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
-    m_vout << "Copying from source to output file...\n";
+    m_vout << "Copying matching objects to output file...\n";
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
