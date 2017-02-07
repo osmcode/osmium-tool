@@ -46,6 +46,7 @@ class CommandExtract : public Command, public with_single_osm_input, public with
     std::vector<std::unique_ptr<Extract>> m_extracts;
     osmium::memory::Buffer m_buffer{initial_buffer_size, osmium::memory::Buffer::auto_grow::yes};
     bool m_with_history = false;
+    bool m_set_bounds = false;
 
     void parse_config_file();
 

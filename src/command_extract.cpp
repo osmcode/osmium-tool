@@ -331,6 +331,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     ("polygon,p", po::value<std::string>(), "Polygon file")
     ("strategy,s", po::value<std::string>()->default_value("complete_ways"), "Use named extract strategy")
     ("with-history", "Input file and output files are history files")
+    ("set-bounds", "Sets bounds (bounding box) in header")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -415,6 +416,10 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
         m_with_history = true;
     }
 
+    if (vm.count("set-bounds")) {
+        m_set_bounds = true;
+    }
+
     if (vm.count("strategy")) {
         m_strategy = make_strategy(vm["strategy"].as<std::string>());
     }
@@ -460,7 +465,11 @@ bool CommandExtract::run() {
     setup_header(header);
 
     for (const auto& extract : m_extracts) {
-        extract->open_file(header, m_output_overwrite, m_fsync);
+        osmium::io::Header file_header{header};
+        if (m_set_bounds) {
+            file_header.add_box(extract->envelope());
+        }
+        extract->open_file(file_header, m_output_overwrite, m_fsync);
     }
 
     m_strategy->run(m_vout, display_progress(), m_input_file);

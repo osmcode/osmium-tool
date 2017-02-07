@@ -42,9 +42,8 @@ boundary, but between those vertices, might end up in the extract or not. In
 almost all cases this will be good enough, but if you want to make really sure
 you got everything, use a small buffer around your region.
 
-No **bounds** will be set in the header of the output file. Which bounds would
-be correct is unclear and setting it correctly might need an extra pass through
-the input file.
+By default no **bounds** will be set in the header of the output file. Use
+the --set-bounds option if you need this.
 
 Note that **osmium extract** will never clip any OSM objects, ie. it will not
 remove node references outside the region from ways or unused relation members
@@ -85,6 +84,12 @@ to merge several extracts without problems.
 -S, --option=OPTION=VALUE
 :   Set a named option for the strategy. If needed you can specify this
     option multiple times to set several options.
+
+--set-bounds
+:   Set the bounds field in the header. The bounds are set to the bbox or
+    envelope of the polygon specified for the extract. Note that strategies
+    other than "simple" can put nodes outside those bounds into the output
+    file.
 
 --with-history
 :   Specify that the input file is a history file. The output file(s) will also
