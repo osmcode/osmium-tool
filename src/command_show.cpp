@@ -21,6 +21,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <cstdlib>
+#include <string>
+#include <system_error>
+#include <vector>
+#include <utility>
 
 #ifndef _MSC_VER
 # include <signal.h>

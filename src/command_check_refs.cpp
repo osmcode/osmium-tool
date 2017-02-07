@@ -20,8 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstdint>
 #include <algorithm>
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <utility>
