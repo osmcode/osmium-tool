@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/fwd.hpp>
 #include <osmium/index/id_set.hpp>
+#include <osmium/index/nwr_array.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
@@ -44,7 +45,7 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
     bool m_work_with_history = false;
     bool m_verbose_ids = false;
 
-    osmium::index::NWRIdSet<osmium::index::IdSetDense> m_ids;
+    osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
 
     void parse_and_add_id(const std::string& s);
 
