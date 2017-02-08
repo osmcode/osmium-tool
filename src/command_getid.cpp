@@ -359,12 +359,19 @@ void CommandGetId::find_nodes_in_ways() {
 
 void CommandGetId::find_referenced_objects() {
     m_vout << "Following references...\n";
+
+    // If there are any relations we are looking for, we need to run
+    // find_relations_in_relations() to get the member IDs of all types.
     bool todo = !m_ids(osmium::item_type::relation).empty();
     if (todo) {
         todo = find_relations_in_relations();
     }
 
     if (todo) {
+        // If find_relations_in_relations() returned true, it means it found
+        // relation members that were not in the original relations ID list.
+        // This means we need to run find_nodes_and_ways_in_relations() to
+        // make sure we have all node and way members of those relations, too.
         find_nodes_and_ways_in_relations();
     }
 
