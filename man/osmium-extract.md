@@ -70,6 +70,10 @@ to merge several extracts without problems.
     are used, set the output directory and name with the --output/-o option
     in that case.
 
+-H, --with-history
+:   Specify that the input file is a history file. The output file(s) will also
+    be history file(s).
+
 -p, --polygon=POLYGON_FILE
 :   Set the polygon to cut out based on the contents of the file. The file
     has to be a GeoJSON, poly, or OSM file as described in the
@@ -90,10 +94,6 @@ to merge several extracts without problems.
     envelope of the polygon specified for the extract. Note that strategies
     other than "simple" can put nodes outside those bounds into the output
     file.
-
---with-history
-:   Specify that the input file is a history file. The output file(s) will also
-    be history file(s).
 
 
 @MAN_COMMON_OPTIONS@

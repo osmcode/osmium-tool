@@ -330,7 +330,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     ("option,S", po::value<std::vector<std::string>>(), "Set strategy option")
     ("polygon,p", po::value<std::string>(), "Polygon file")
     ("strategy,s", po::value<std::string>()->default_value("complete_ways"), "Use named extract strategy")
-    ("with-history", "Input file and output files are history files")
+    ("with-history,H", "Input file and output files are history files")
     ("set-bounds", "Sets bounds (bounding box) in header")
     ;
 

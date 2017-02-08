@@ -95,7 +95,8 @@ _osmium-apply-changes() {
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
-        '--with-history[update OSM history file]'
+        '(--with-history)-H[update OSM history file]' \
+        '(-H)--with-history[update OSM history file]'
 }
 
 _osmium-cat() {
@@ -195,7 +196,8 @@ _osmium-extract() {
         '(-s)--strategy[use strategy for computing extract]:extract strategy:_osmium_extract_strategy' \
         '*-S[set strategy option]:' \
         '*--option[set strategy option]:' \
-        '--with-history[input and output files are OSM history files]'
+        '(--with-history)-H[input and output files are OSM history files]' \
+        '(-H)--with-history[input and output files are OSM history files]'
 }
 
 _osmium-fileinfo() {

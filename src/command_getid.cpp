@@ -84,7 +84,8 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     ("default-type", po::value<std::string>()->default_value("node"), "Default item type")
     ("id-file,i", po::value<std::vector<std::string>>(), "Read OSM IDs from text file")
     ("id-osm-file,I", po::value<std::vector<std::string>>(), "Read OSM IDs from OSM file")
-    ("history,H", "Make it work with history files")
+    ("history", "Deprecated, use --with-history instead")
+    ("with-history,H", "Make it work with history files")
     ("add-referenced,r", "Recursively add referenced objects")
     ("verbose-ids", "Print all requested and missing IDs")
     ;
@@ -125,7 +126,12 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         m_add_referenced_objects = true;
     }
 
+    if (vm.count("with-history")) {
+        m_work_with_history = true;
+    }
+
     if (vm.count("history")) {
+        warning("The --history option is deprecated. Use --with-history instead.\n");
         m_work_with_history = true;
     }
 

@@ -51,12 +51,12 @@ Note that all objects will be taken from the *OSM-FILE*, the *ID-OSM-FILE* is
 only used to detect which objects to get. This might matter if there are
 different object versions in the different files.
 
-The *OSM-FILE* can not be a history file unless the **-H**, **--history**
+The *OSM-FILE* can not be a history file unless the **-H**, **--with-history**
 option is used. Then all versions of the objects will be copied to the output.
 
 If referenced objects are missing from the input file, the type and IDs
 of those objects is written out to *stderr* at the end of the program unless
-the **-H**, **--history** option was given.
+the **-H**, **--with-history** option was given.
 
 This command will not work with negative IDs.
 
@@ -68,7 +68,10 @@ This command will not work with negative IDs.
     (default: 'node'). It is also allowed to just use the first character
     of the type here.
 
--H, --history
+--history
+:   Deprecated. Use --with-history instead.
+
+-H, --with-history
 :   Make this program work on history files. This is only needed when using
     the **-r** option.
 
@@ -108,7 +111,8 @@ This command will not work with negative IDs.
 
 1
   ~ if there was an error processing the data or not all IDs were found,
-    (this is only detected if the **-h**, **--history** option was not used),
+    (this is only detected if the **-H**, **--with-history** option was not
+    used),
 
 2
   ~ if there was a problem with the command line arguments.

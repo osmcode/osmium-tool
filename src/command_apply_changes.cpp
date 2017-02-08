@@ -52,7 +52,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     opts_cmd.add_options()
     ("simplify,s",       "Simplify change (deprecated)")
     ("remove-deleted,r", "Remove deleted objects from output (deprecated)")
-    ("with-history",     "Apply changes to history file")
+    ("with-history,H",   "Apply changes to history file")
     ;
 
     po::options_description opts_common{add_common_options()};

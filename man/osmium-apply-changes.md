@@ -26,6 +26,13 @@ the **--with-history** option if that doesn't work.
 
 # OPTIONS
 
+-H, --with-history
+:   Update an OSM history file (instead of a normal OSM data file). Both
+    input and output must be history files. This option is usually not
+    necessary, because history files will be detected from their file name
+    suffixes, but if this detection doesn't work, you can force this mode
+    with this option.
+
 -r, --remove-deleted
 :   Deprecated. Remove deleted objects from the output. This is now the
     default if your input file is a normal OSM data file ('.osm').
@@ -34,13 +41,6 @@ the **--with-history** option if that doesn't work.
 :   Deprecated. Only write the last version of any object to the output.
     This is now the default if your input file is a normal OSM data file
     ('.osm').
-
---with-history
-:   Update an OSM history file (instead of a normal OSM data file). Both
-    input and output must be history files. This option is usually not
-    necessary, because history files will be detected from their file name
-    suffixes, but if this detection doesn't work, you can force this mode
-    with this option.
 
 
 @MAN_COMMON_OPTIONS@
