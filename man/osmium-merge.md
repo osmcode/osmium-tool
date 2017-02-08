@@ -25,6 +25,10 @@ files as input creating a new history file. Do not use this command to merge
 non-history files with data from different points in time. It will not work
 correctly.
 
+While merging only object type, id, and version are compared. If you have
+objects with the same type, id, and version but different other data, the
+result of this command is undefined.
+
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
