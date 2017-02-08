@@ -223,7 +223,7 @@ _osmium-getid() {
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '--default-type[default item type]' \
-        'i[read OSM IDs from text file]' \
+        '-i[read OSM IDs from text file]' \
         '--id-file[read OSM IDs from text file]' \
         '-I[read OSM IDs from OSM file]' \
         '--id-osm-file[read OSM IDs from OSM file]' \
@@ -232,7 +232,7 @@ _osmium-getid() {
         '(--with-history)-H[make it work with history files]' \
         '(-H)--with-history[make it work with history files]' \
         '(--progress)--no-progress[disable progress bar]' \
-        '(--no-progress)--progress[enable progress bar]'
+        '(--no-progress)--progress[enable progress bar]' \
         "*:IDs (format\: [nwr]ID):"
 }
 
@@ -263,7 +263,7 @@ _osmium-renumber() {
         '(--index-directory)-i[read/write index files in this directory]:directory:_path_files -/' \
         '(-i)--index-directory[read/write index files in this directory]:directory:_path_files -/' \
         '(--progress)--no-progress[disable progress bar]' \
-        '(--no-progress)--progress[enable progress bar]'
+        '(--no-progress)--progress[enable progress bar]' \
         '*-t[renumber only objects of given output types]:OSM entity type:_osmium_object_type' \
         '*--object-type[renumber only objects of given output types]:OSM entity type:_osmium_object_type'
 }
