@@ -23,7 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -36,6 +35,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/types.hpp>
 
 #include "cmd.hpp" // IWYU pragma: export
+
+namespace osmium { namespace index {
+    class RelationsMapIndex;
+}}
 
 class CommandGetId : public Command, public with_single_osm_input, public with_osm_output {
 
@@ -61,7 +64,7 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
     void add_nodes(const osmium::Way& way);
     void add_members(const osmium::Relation& relation);
 
-    void mark_rel_ids(const std::multimap<osmium::object_id_type, osmium::object_id_type>& rel_in_rel, osmium::object_id_type id);
+    void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id);
     bool find_relations_in_relations();
     void find_nodes_and_ways_in_relations();
     void find_nodes_in_ways();

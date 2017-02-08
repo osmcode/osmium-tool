@@ -23,14 +23,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstddef>
 #include <fstream>
 #include <iostream>
-#include <map>
-#include <set>
 #include <string>
 #include <utility>
 #include <vector>
 
 #include <boost/program_options.hpp>
 
+#include <osmium/index/relations_map.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
@@ -281,25 +280,24 @@ void CommandGetId::read_id_osm_file(const std::string& file_name) {
     reader.close();
 }
 
-void CommandGetId::mark_rel_ids(const std::multimap<osmium::object_id_type, osmium::object_id_type>& rel_in_rel, osmium::object_id_type id) {
-    auto range = rel_in_rel.equal_range(id);
-    for (auto it = range.first; it != range.second; ++it) {
-        if (m_ids(osmium::item_type::relation).check_and_set(it->second)) {
-            mark_rel_ids(rel_in_rel, it->second);
+void CommandGetId::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id) {
+    rel_in_rel.for_each(parent_id, [&](osmium::unsigned_object_id_type member_id) {
+        if (m_ids(osmium::item_type::relation).check_and_set(member_id)) {
+            mark_rel_ids(rel_in_rel, member_id);
         }
-    }
+    });
 }
 
 bool CommandGetId::find_relations_in_relations() {
     m_vout << "  Reading input file to find relations in relations...\n";
-    std::multimap<osmium::object_id_type, osmium::object_id_type> rel_in_rel;
+    osmium::index::RelationsMapStash stash;
 
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             for (const auto& member : relation.members()) {
                 if (member.type() == osmium::item_type::relation) {
-                    rel_in_rel.emplace(relation.id(), member.ref());
+                    stash.add(member.ref(), relation.id());
                 } else if (m_ids(osmium::item_type::relation).get(relation.positive_id())) {
                     if (member.type() == osmium::item_type::node) {
                         m_ids(osmium::item_type::node).set(member.positive_ref());
@@ -312,10 +310,11 @@ bool CommandGetId::find_relations_in_relations() {
     }
     reader.close();
 
-    if (rel_in_rel.empty()) {
+    if (stash.empty()) {
         return false;
     }
 
+    const auto rel_in_rel = stash.build_parent_to_member_index();
     for (const osmium::unsigned_object_id_type id : m_ids(osmium::item_type::relation)) {
         mark_rel_ids(rel_in_rel, id);
     }

@@ -162,7 +162,7 @@ namespace strategy_complete_ways {
         progress_bar.file_done(file_size);
 
         // recursively get parents of all relations that are in an extract
-        auto relations_map = pass1.relations_map_stash().build_index();
+        const auto relations_map = pass1.relations_map_stash().build_member_to_parent_index();
         for (auto& e : m_extracts) {
             for (osmium::unsigned_object_id_type id : e.relation_ids) {
                 e.add_relation_parents(id, relations_map);
