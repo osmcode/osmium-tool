@@ -194,13 +194,9 @@ bool CommandTagsFilter::find_relations_in_relations() {
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
+            stash.add_members(relation);
             if (osmium::tags::match_any_of(relation.tags(), filter)) {
                 m_ids(osmium::item_type::relation).set(relation.positive_id());
-            }
-            for (const auto& member : relation.members()) {
-                if (member.type() == osmium::item_type::relation) {
-                    stash.add(member.ref(), relation.id());
-                }
             }
         }
     }
