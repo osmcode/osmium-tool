@@ -46,22 +46,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "util.hpp"
 
 void CommandTagsFilter::parse_and_add_key(const std::string& line) {
-    if (line.size() < 3 || line[1] != ' ') {
-        throw std::runtime_error{"Can't understand line."};
-    }
+    const auto p = get_filter_expression(line);
 
-    switch (line[0]) {
-        case 'n':
-            m_filters(osmium::item_type::node).add(true, line.c_str() + 2);
-            break;
-        case 'w':
-            m_filters(osmium::item_type::way).add(true, line.c_str() + 2);
-            break;
-        case 'r':
-            m_filters(osmium::item_type::relation).add(true, line.c_str() + 2);
-            break;
-        default:
-            throw std::runtime_error{"Can't understand line."};
+    if (p.first & osmium::osm_entity_bits::node) {
+        m_filters(osmium::item_type::node).add(true, p.second);
+    }
+    if (p.first & osmium::osm_entity_bits::way) {
+        m_filters(osmium::item_type::way).add(true, p.second);
+    }
+    if (p.first & osmium::osm_entity_bits::relation) {
+        m_filters(osmium::item_type::relation).add(true, p.second);
     }
 }
 
