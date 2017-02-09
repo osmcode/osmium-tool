@@ -24,7 +24,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <string>
+#include <utility>
 #include <vector>
+
+#include <osmium/osm/entity_bits.hpp>
 
 namespace osmium { namespace io {
     class File;
@@ -35,5 +38,7 @@ const char* yes_no(bool choice) noexcept;
 void warning(const char* text);
 void warning(const std::string& text);
 std::size_t file_size_sum(const std::vector<osmium::io::File>& files);
+osmium::osm_entity_bits::type get_types(const std::string& s);
+std::pair<osmium::osm_entity_bits::type, std::string> get_filter_expression(const std::string& s);
 
 #endif // UTIL_HPP
