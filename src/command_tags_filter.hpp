@@ -60,8 +60,8 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
     void find_nodes_and_ways_in_relations();
     void find_nodes_in_ways();
 
-    void parse_and_add_key(const std::string& line);
-    void read_filter_file(const std::string& file_name);
+    void parse_and_add_expression(const std::string& expression);
+    void read_expressions_file(const std::string& file_name);
 
 public:
 
@@ -78,7 +78,8 @@ public:
     }
 
     const char* synopsis() const noexcept override final {
-        return "osmium tags-filter [OPTIONS] OSM-FILE";
+        return "osmium tags-filter [OPTIONS] OSM-FILE FILTER-EXPRESSION...\n"
+               "       osmium tags-filter [OPTIONS] --expressions=FILE OSM-FILE";
     }
 
 }; // class CommandTagsFilter

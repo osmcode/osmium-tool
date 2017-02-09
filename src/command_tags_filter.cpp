@@ -45,8 +45,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 #include "util.hpp"
 
-void CommandTagsFilter::parse_and_add_key(const std::string& line) {
-    const auto p = get_filter_expression(line);
+void CommandTagsFilter::parse_and_add_expression(const std::string& expression) {
+    const auto p = get_filter_expression(expression);
 
     if (p.first & osmium::osm_entity_bits::node) {
         m_filters(osmium::item_type::node).add(true, p.second);
@@ -59,8 +59,8 @@ void CommandTagsFilter::parse_and_add_key(const std::string& line) {
     }
 }
 
-void CommandTagsFilter::read_filter_file(const std::string& file_name) {
-    m_vout << "Reading keys file...\n";
+void CommandTagsFilter::read_expressions_file(const std::string& file_name) {
+    m_vout << "Reading expressions file...\n";
 
     std::ifstream file{file_name};
     if (!file.is_open()) {
@@ -73,7 +73,10 @@ void CommandTagsFilter::read_filter_file(const std::string& file_name) {
             line.erase(pos);
         }
         if (!line.empty()) {
-            parse_and_add_key(line);
+            if (line.back() == '\r') {
+                line.resize(line.size() - 1);
+            }
+            parse_and_add_expression(line);
         }
     }
 }
@@ -81,7 +84,7 @@ void CommandTagsFilter::read_filter_file(const std::string& file_name) {
 bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
-    ("keys-file,k", po::value<std::string>(), "Read keys from text file")
+    ("expressions,e", po::value<std::string>(), "Read filter expressions from file")
     ("add-referenced,r", "Recursively add referenced objects")
     ;
 
@@ -92,6 +95,7 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description hidden;
     hidden.add_options()
     ("input-filename", po::value<std::string>(), "OSM input file")
+    ("expression-list", po::value<std::vector<std::string>>(), "Filter expressions")
     ;
 
     po::options_description desc;
@@ -102,6 +106,7 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
 
     po::positional_options_description positional;
     positional.add("input-filename", 1);
+    positional.add("expression-list", -1);
 
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
@@ -119,8 +124,14 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
         m_add_referenced_objects = true;
     }
 
-    if (vm.count("keys-file")) {
-        read_filter_file(vm["keys-file"].as<std::string>());
+    if (vm.count("expression-list")) {
+        for (const auto& e : vm["expression-list"].as<std::vector<std::string>>()) {
+            parse_and_add_expression(e);
+        }
+    }
+
+    if (vm.count("expressions")) {
+        read_expressions_file(vm["expressions"].as<std::string>());
     }
 
     return true;
