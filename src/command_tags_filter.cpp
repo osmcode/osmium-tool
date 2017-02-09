@@ -309,6 +309,6 @@ bool CommandTagsFilter::run() {
 
     m_vout << "Done.\n";
 
-    return 0;
+    return true;
 }
 
