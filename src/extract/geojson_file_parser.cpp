@@ -190,8 +190,8 @@ std::size_t GeoJSONFileParser::operator()() {
     if (geometry_type.empty()) {
         error("Missing 'geometry.type'.");
     }
-    if (geometry_type != "Polygon" && geometry_type != "Multipolygon") {
-        error("Expected 'geometry.type' value to be 'Polygon' or 'Multipolygon'.");
+    if (geometry_type != "Polygon" && geometry_type != "MultiPolygon") {
+        error("Expected 'geometry.type' value to be 'Polygon' or 'MultiPolygon'.");
     }
 
     const auto json_coordinates = json_geometry->value.FindMember("coordinates");
