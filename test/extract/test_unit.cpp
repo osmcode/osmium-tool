@@ -12,45 +12,32 @@ TEST_CASE("Parse poly files") {
     osmium::memory::Buffer buffer{1024};
 
     SECTION("Missing file") {
-        REQUIRE_THROWS({
-            PolyFileParser parser(buffer, "test/extract/missing.poly");
-            parser();
-        });
+        REQUIRE_THROWS(PolyFileParser(buffer, "test/extract/missing.poly")());
     }
 
     SECTION("Empty file") {
         PolyFileParser parser{buffer, "test/extract/empty.poly"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, poly_error);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("One line file") {
         PolyFileParser parser{buffer, "test/extract/one-line.poly"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, poly_error);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("Two line file") {
         PolyFileParser parser{buffer, "test/extract/two-line.poly"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, poly_error);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("Missing END ring") {
         PolyFileParser parser{buffer, "test/extract/missing-end-ring.poly"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, poly_error);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("Missing END polygon") {
         PolyFileParser parser{buffer, "test/extract/missing-end-polygon.poly"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, poly_error);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("File with one polygon with one outer ring") {
@@ -138,24 +125,17 @@ TEST_CASE("Parse OSM files") {
     osmium::memory::Buffer buffer{1024};
 
     SECTION("Missing OSM file") {
-        REQUIRE_THROWS({
-            OSMFileParser parser(buffer, "test/extract/missing.osm.opl");
-            parser();
-        });
+        REQUIRE_THROWS(OSMFileParser(buffer, "test/extract/missing.osm.opl")());
     }
 
     SECTION("Empty OSM file") {
         OSMFileParser parser{buffer, "test/extract/empty.osm.opl"};
-        REQUIRE_THROWS({
-            parser();
-        });
+        REQUIRE_THROWS(parser());
     }
 
     SECTION("OSM file without polygon") {
         OSMFileParser parser{buffer, "test/extract/no-polygon.osm.opl"};
-        REQUIRE_THROWS({
-            parser();
-        });
+        REQUIRE_THROWS(parser());
     }
 
     SECTION("OSM file with simple polygon") {
@@ -232,45 +212,32 @@ TEST_CASE("Parse GeoJSON files") {
     osmium::memory::Buffer buffer{1024};
 
     SECTION("Missing GeoJSON file") {
-        REQUIRE_THROWS({
-            GeoJSONFileParser parser(buffer, "test/extract/missing.geojson");
-            parser();
-        });
+        REQUIRE_THROWS(GeoJSONFileParser(buffer, "test/extract/missing.geojson")());
     }
 
     SECTION("Empty GeoJSON file") {
         GeoJSONFileParser parser{buffer, "test/extract/empty.geojson"};
-        REQUIRE_THROWS({
-            parser();
-        });
+        REQUIRE_THROWS(parser());
     }
 
     SECTION("Invalid GeoJSON file") {
         GeoJSONFileParser parser{buffer, "test/extract/invalid.geojson"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, geojson_error);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
     SECTION("Invalid GeoJSON file: Root not an object") {
         GeoJSONFileParser parser{buffer, "test/extract/invalid-root.geojson"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, geojson_error);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
     SECTION("Invalid GeoJSON file: Empty root object") {
         GeoJSONFileParser parser{buffer, "test/extract/empty-root.geojson"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, geojson_error);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
     SECTION("Invalid GeoJSON file: Wrong geometry type") {
         GeoJSONFileParser parser{buffer, "test/extract/wrong-geometry-type.geojson"};
-        REQUIRE_THROWS_AS({
-            parser();
-        }, geojson_error);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
 }
