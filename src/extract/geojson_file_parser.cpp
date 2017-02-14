@@ -129,12 +129,14 @@ std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memo
         throw config_error{"Multipolygon must contain at least one polygon array."};
     }
 
-    for (const auto& polygon : array) {
-        if (!polygon.IsArray()) {
-            throw config_error{"Polygon must be an array."};
-        }
+    {
         osmium::builder::AreaBuilder builder{buffer};
-        parse_rings(polygon, builder);
+        for (const auto& polygon : array) {
+            if (!polygon.IsArray()) {
+                throw config_error{"Polygon must be an array."};
+            }
+            parse_rings(polygon, builder);
+        }
     }
 
     return buffer.commit();
