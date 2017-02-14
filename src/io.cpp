@@ -164,7 +164,7 @@ void with_osm_output::check_output_file() {
         }
         if (m_output_filename == "") {
             throw argument_error{"Missing output file. Set the output file with --output/-o and/or\n"
-                                 "add the --input-format/-F option to specify the file format."};
+                                 "add the --output-format/-f option to specify the file format."};
         }
     }
 
