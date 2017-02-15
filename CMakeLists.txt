@@ -191,8 +191,7 @@ else()
 endif()
 
 if(WIN32)
-    add_definitions(-DWIN32 -D_WIN32 -DMSWIN32 -DBGDWIN32
-                    -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0600)
+    add_definitions(-DWIN32 -D_WIN32 -DMSWIN32 -DBGDWIN32)
 endif()
 
 set(CMAKE_CXX_FLAGS_DEV "${USUAL_COMPILE_OPTIONS}"
