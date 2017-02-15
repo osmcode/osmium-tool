@@ -298,6 +298,20 @@ unset(OSMIUM_EXTRA_FIND_VARS)
 
 #----------------------------------------------------------------------
 #
+#  A function for setting the -pthread option in compilers/linkers
+#
+#----------------------------------------------------------------------
+function(set_pthread_on_target _target)
+    if(NOT MSVC)
+        set_target_properties(${_target} PROPERTIES COMPILE_FLAGS "-pthread")
+        if(NOT APPLE)
+            set_target_properties(${_target} PROPERTIES LINK_FLAGS "-pthread")
+        endif()
+    endif()
+endfunction()
+
+#----------------------------------------------------------------------
+#
 #  Add compiler flags
 #
 #----------------------------------------------------------------------
