@@ -43,6 +43,7 @@ namespace osmium { namespace index {
 class CommandTagsFilter : public Command, public with_single_osm_input, public with_osm_output {
 
     bool m_add_referenced_objects = false;
+    bool m_invert_match = false;
 
     osmium::nwr_array<osmium::TagsFilter> m_filters;
 

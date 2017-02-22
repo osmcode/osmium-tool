@@ -162,6 +162,7 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description hidden;
     hidden.add_options()
     ("input-filename", po::value<std::string>(), "OSM input file")
+    ("invert-match,i", "Invert the sense of matching, exclude objects with matching tags")
     ("expression-list", po::value<std::vector<std::string>>(), "Filter expressions")
     ;
 
@@ -189,6 +190,10 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
             throw argument_error{"Can not read OSM input from STDIN when --add-referenced/-r option is used."};
         }
         m_add_referenced_objects = true;
+    }
+
+    if (vm.count("invert-match")) {
+        m_invert_match = true;
     }
 
     if (vm.count("expression-list")) {
@@ -262,7 +267,7 @@ bool CommandTagsFilter::find_relations_in_relations() {
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             stash.add_members(relation);
-            if (osmium::tags::match_any_of(relation.tags(), filter)) {
+            if (osmium::tags::match_any_of(relation.tags(), filter) != m_invert_match) {
                 m_ids(osmium::item_type::relation).set(relation.positive_id());
             }
         }
@@ -309,7 +314,7 @@ void CommandTagsFilter::find_nodes_in_ways() {
         for (const auto& way : buffer.select<osmium::Way>()) {
             if (m_ids(osmium::item_type::way).get(way.positive_id())) {
                 add_nodes(way);
-            } else if (osmium::tags::match_any_of(way.tags(), m_filters(osmium::item_type::way))) {
+            } else if (osmium::tags::match_any_of(way.tags(), m_filters(osmium::item_type::way)) != m_invert_match) {
                 m_ids(osmium::item_type::way).set(way.positive_id());
                 add_nodes(way);
             }
@@ -358,7 +363,7 @@ bool CommandTagsFilter::run() {
                 writer(object);
             } else if (!m_add_referenced_objects || object.type() == osmium::item_type::node) {
                 const auto& filter = m_filters(object.type());
-                if (osmium::tags::match_any_of(object.tags(), filter)) {
+                if (osmium::tags::match_any_of(object.tags(), filter) != m_invert_match) {
                     writer(object);
                 }
             }
