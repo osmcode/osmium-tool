@@ -72,6 +72,37 @@ nw/highway
 note
 :   Matches objects of any type with the key "note".
 
+w/highway=primary
+:   Matches all ways with the key "highway" and value "primary".
+
+w/highway!=primary
+:   Matches all ways with the key "highway" and a value other than "primary".
+
+r/type=multipolygon,boundary
+:   Matches all relations with key "type" and value "multipolygon" or "boundary".
+
+w/name,name:de=Kastanienallee,Kastanienstrasse
+:   Matches any way with a "name" or "name:de" tag with the value
+    "Kastanienallee" or "Kastanienstrasse".
+
+n/addr:\*
+:   Matches all nodes with any key starting with "addr:"
+
+n/name=\*Paris\*
+:   Matches all nodes with a name that contains the word "Paris".
+
+If there is no equal sign ("=") in the expression only keys are matched and
+values can by anything. If there is an equal sign ("=") in the expression, the
+key is to the left and the value to the right. An exclamation sign ("!") before
+the equal sign means: A tag with that key, but not the value(s) to the right of
+the equal sign. A leading or trailing asterisk ("\*") can be used for substring
+or prefix matching, respectively. Commas (",") can be used to separate several
+keys or values.
+
+All filter expressions are case-sensitive. There is no way to escape the
+special characters such as "=", "\*" and ",". You can not mix
+comma-expressions and "\*"-expressions.
+
 The filter expressions specified in a file and/or on the command line are
 matched in the order they are given. To achieve best performance, put
 expressions expected to match more often first.

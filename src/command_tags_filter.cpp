@@ -45,18 +45,85 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 #include "util.hpp"
 
+void CommandTagsFilter::add_filter(osmium::osm_entity_bits::type entities, const osmium::TagMatcher& matcher) {
+    if (entities & osmium::osm_entity_bits::node) {
+        m_filters(osmium::item_type::node).add_rule(true, matcher);
+    }
+    if (entities & osmium::osm_entity_bits::way) {
+        m_filters(osmium::item_type::way).add_rule(true, matcher);
+    }
+    if (entities & osmium::osm_entity_bits::relation) {
+        m_filters(osmium::item_type::relation).add_rule(true, matcher);
+    }
+}
+
+void strip_whitespace(std::string& string) {
+    while (!string.empty() && string.back() == ' ') {
+        string.pop_back();
+    }
+
+    const auto pos = string.find_first_not_of(' ');
+    if (pos != std::string::npos) {
+        string.erase(0, pos);
+    }
+}
+
+osmium::StringMatcher get_matcher(std::string string) {
+    strip_whitespace(string);
+
+    if (string.size() == 1 && string.front() == '*') {
+        return osmium::StringMatcher::always_true{};
+    }
+
+    if (string.empty() || (string.back() != '*' && string.front() != '*')) {
+        if (string.find(',') == std::string::npos) {
+            return osmium::StringMatcher::equal{string};
+        }
+        auto sstrings = osmium::split_string(string, ',');
+        for (auto& s : sstrings) {
+            strip_whitespace(s);
+        }
+        return osmium::StringMatcher::list{sstrings};
+    }
+
+    auto s = string;
+
+    if (s.back() == '*' && s.front() != '*') {
+        s.pop_back();
+        return osmium::StringMatcher::prefix{s};
+    }
+
+    if (s.front() == '*') {
+        s.erase(0, 1);
+    }
+
+    if (!s.empty() && s.back() == '*') {
+        s.pop_back();
+    }
+
+    return osmium::StringMatcher::substring{s};
+}
+
 void CommandTagsFilter::parse_and_add_expression(const std::string& expression) {
     const auto p = get_filter_expression(expression);
+    std::string key = p.second;
 
-    if (p.first & osmium::osm_entity_bits::node) {
-        m_filters(osmium::item_type::node).add(true, p.second);
+    const auto op_pos = key.find('=');
+    if (op_pos == std::string::npos) {
+        add_filter(p.first, osmium::TagMatcher{get_matcher(key)});
+        return;
     }
-    if (p.first & osmium::osm_entity_bits::way) {
-        m_filters(osmium::item_type::way).add(true, p.second);
+
+    const auto value = key.substr(op_pos + 1);
+    key.erase(op_pos);
+
+    bool invert = false;
+    if (!key.empty() && key.back() == '!') {
+        key.pop_back();
+        invert = true;
     }
-    if (p.first & osmium::osm_entity_bits::relation) {
-        m_filters(osmium::item_type::relation).add(true, p.second);
-    }
+
+    add_filter(p.first, osmium::TagMatcher{get_matcher(key), get_matcher(value), invert});
 }
 
 void CommandTagsFilter::read_expressions_file(const std::string& file_name) {
@@ -144,8 +211,8 @@ void CommandTagsFilter::show_arguments() {
     m_vout << "  other options:\n";
     m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
     m_vout << "  looking for tags...\n";
-    m_vout << "    on nodes: " << yes_no(!m_filters(osmium::item_type::node).empty());
-    m_vout << "    on ways: " << yes_no(!m_filters(osmium::item_type::way).empty());
+    m_vout << "    on nodes: "     << yes_no(!m_filters(osmium::item_type::node).empty());
+    m_vout << "    on ways: "      << yes_no(!m_filters(osmium::item_type::way).empty());
     m_vout << "    on relations: " << yes_no(!m_filters(osmium::item_type::relation).empty());
 }
 

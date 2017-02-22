@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
-#include <osmium/tags/filter.hpp>
+#include <osmium/tags/tags_filter.hpp>
 
 #include "cmd.hpp" // IWYU pragma: export
 
@@ -44,7 +44,7 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
 
     bool m_add_referenced_objects = false;
 
-    osmium::nwr_array<osmium::tags::KeyFilter> m_filters;
+    osmium::nwr_array<osmium::TagsFilter> m_filters;
 
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
 
@@ -60,6 +60,7 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
     void find_nodes_and_ways_in_relations();
     void find_nodes_in_ways();
 
+    void add_filter(osmium::osm_entity_bits::type entities, const osmium::TagMatcher& matcher);
     void parse_and_add_expression(const std::string& expression);
     void read_expressions_file(const std::string& file_name);
 
