@@ -38,6 +38,9 @@ The *OSM-FILE* will work correctly on history files unless the
     ignored. Everything after the comment character (#) is also ignored. The
     the **FILTER EXPRESSIONS** section for further details.
 
+-i, --invert-match
+:   Invert the sense of matching. Exclude all objects with matching tags.
+
 -r, --add-referenced
 :   Recursively find all objects referenced by the matching objects and include
     them in the output. This only works correctly on non-history files.
