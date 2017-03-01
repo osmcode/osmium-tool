@@ -32,6 +32,8 @@ class CommandApplyChanges : public Command, public with_single_osm_input, public
 
     std::vector<std::string> m_change_filenames;
 
+    std::string m_change_file_format;
+
     bool m_with_history = false;
 
 public:

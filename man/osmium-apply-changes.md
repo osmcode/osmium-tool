@@ -44,7 +44,21 @@ the **--with-history** option if that doesn't work.
 
 
 @MAN_COMMON_OPTIONS@
-@MAN_INPUT_OPTIONS@
+# INPUT OPTIONS
+
+-F, --input-format=FORMAT
+:   The format of the OSM-DATA-FILE or OSM-HISTORY-FILE. Can be used to set
+    the input format if it can't be autodetected from the file name.
+    See **osmium-file-formats**(5) or the libosmium manual for details.
+
+--change-file-format=FORMAT
+:   The format of the OSM-CHANGE-FILE(s). Can be used to set the input format
+    if it can't be autodetected from the file name(s). This will set the format
+    for all change files, there is no way to set the format for some change
+    files only. See **osmium-file-formats**(5) or the libosmium manual for
+    details.
+
+
 @MAN_OUTPUT_OPTIONS@
 
 # DIAGNOSTICS

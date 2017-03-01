@@ -50,6 +50,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
+    ("change-file-format", po::value<std::string>(), "Format of the change files")
     ("simplify,s",       "Simplify change (deprecated)")
     ("remove-deleted,r", "Remove deleted objects from output (deprecated)")
     ("with-history,H",   "Apply changes to history file")
@@ -89,6 +90,10 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         throw argument_error{"Need data file and at least one change file on the command line."};
     }
 
+    if (vm.count("change-file-format")) {
+        m_change_file_format = vm["change-file-format"].as<std::string>();
+    }
+
     if (vm.count("with-history")) {
         m_with_history = true;
         m_output_file.set_has_multiple_object_versions(true);
@@ -119,7 +124,8 @@ void CommandApplyChanges::show_arguments() {
     for (const auto& fn : m_change_filenames) {
         m_vout << "    " << fn << "\n";
     }
-    m_vout << "  input format: " << m_input_format << "\n";
+    m_vout << "  data file format: " << m_input_format << "\n";
+    m_vout << "  change file format: " << m_change_file_format << "\n";
     show_output_arguments(m_vout);
     m_vout << "  reading and writing history file: " << yes_no(m_with_history);
 }
@@ -164,7 +170,12 @@ bool CommandApplyChanges::run() {
     m_vout << "Reading change file contents...\n";
 
     for (const std::string& change_file_name : m_change_filenames) {
-        osmium::io::Reader reader{change_file_name, osmium::osm_entity_bits::object};
+        if (change_file_name == "-" && m_change_file_format.empty()) {
+            throw argument_error{"When reading the change file from STDIN you have to use\n"
+                                 "the --change-file-format option to specify the file format."};
+        }
+        osmium::io::File file{change_file_name, m_change_file_format};
+        osmium::io::Reader reader{file, osmium::osm_entity_bits::object};
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));
