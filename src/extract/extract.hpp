@@ -25,6 +25,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include <osmium/osm/box.hpp>
 #include <osmium/io/file.hpp>
@@ -48,6 +50,7 @@ class Extract {
 
     osmium::io::File m_output_file;
     std::string m_description;
+    std::vector<std::pair<std::string, std::string>> m_header_options;
     osmium::Box m_envelope;
     std::unique_ptr<osmium::io::Writer> m_writer;
 
@@ -76,6 +79,14 @@ public:
 
     const osmium::Box& envelope() const noexcept {
         return m_envelope;
+    }
+
+    void add_header_option(const std::string& name, const std::string& value) {
+        m_header_options.emplace_back(name, value);
+    }
+
+    const std::vector<std::pair<std::string, std::string>>& header_options() const noexcept {
+        return m_header_options;
     }
 
     osmium::io::Writer& writer() {

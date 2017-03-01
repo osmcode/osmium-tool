@@ -273,6 +273,22 @@ void CommandExtract::parse_config_file() {
             } else {
                 throw config_error{"Missing geometry for extract. Need 'bbox', 'polygon', or 'multipolygon'."};
             }
+
+            Extract& extract = *m_extracts.back();
+            const auto json_output_header = e.FindMember("output_header");
+            if (json_output_header != e.MemberEnd()) {
+                const auto& value = json_output_header->value;
+                if (!value.IsObject()) {
+                    throw config_error{"Optional 'output_header' field must be an object."};
+                }
+                for (auto it = value.MemberBegin(); it != value.MemberEnd(); ++it) {
+                    const auto& member_value = it->value;
+                    if (!member_value.IsString()) {
+                        throw config_error{"Values in 'output_header' object must be strings."};
+                    }
+                    extract.add_header_option(it->name.GetString(), member_value.GetString());
+                }
+            }
         } catch (const config_error& e) {
             std::string message{"In extract "};
             message += std::to_string(extract_num);
@@ -451,6 +467,18 @@ void CommandExtract::show_arguments() {
         std::cerr.fill(old_fill);
         m_vout << "     Format:      " << e->output_format()    << '\n';
         m_vout << "     Description: " << e->description()      << '\n';
+        if (!e->header_options().empty()) {
+        m_vout << "     Header opts: ";
+            bool first = true;
+            for (const auto& opt : e->header_options()) {
+                if (first) {
+                    first = false;
+                } else {
+                    m_vout << "                  ";
+                }
+                m_vout << opt.first << ": " << opt.second << '\n';
+            }
+        }
         m_vout << "     Envelope:    " << e->envelope_as_text() << '\n';
         m_vout << "     Type:        " << e->geometry_type()    << '\n';
         m_vout << "     Geometry:    " << e->geometry_as_text() << '\n';
@@ -468,6 +496,9 @@ bool CommandExtract::run() {
         osmium::io::Header file_header{header};
         if (m_set_bounds) {
             file_header.add_box(extract->envelope());
+        }
+        for (const auto& p : extract->header_options()) {
+            file_header.set(p.first, p.second);
         }
         extract->open_file(file_header, m_output_overwrite, m_fsync);
     }
