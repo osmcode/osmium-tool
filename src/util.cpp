@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/util/file.hpp>
 
+#include "exception.hpp"
 #include "util.hpp"
 
 /**
@@ -69,5 +70,43 @@ std::size_t file_size_sum(const std::vector<osmium::io::File>& files) {
     }
 
     return sum;
+}
+
+osmium::osm_entity_bits::type get_types(const std::string& str) {
+    osmium::osm_entity_bits::type entities{osmium::osm_entity_bits::nothing};
+
+    for (const auto c : str) {
+        switch (c) {
+            case 'n':
+                entities |= osmium::osm_entity_bits::node;
+                break;
+            case 'w':
+                entities |= osmium::osm_entity_bits::way;
+                break;
+            case 'r':
+                entities |= osmium::osm_entity_bits::relation;
+                break;
+            default:
+                throw argument_error{std::string{"Unknown object type '"} + c + "' (allowed are 'n', 'w', and 'r')."};
+        }
+    }
+
+    return entities;
+}
+
+std::pair<osmium::osm_entity_bits::type, std::string> get_filter_expression(const std::string& str) {
+    auto pos = str.find('/');
+
+    osmium::osm_entity_bits::type entities{osmium::osm_entity_bits::nwr};
+    if (pos == std::string::npos) {
+        pos = 0;
+    } else if (pos == 0) {
+        pos = 1;
+    } else {
+        entities = get_types(str.substr(0, pos));
+        ++pos;
+    }
+
+    return std::make_pair(entities, &str[pos]);
 }
 
