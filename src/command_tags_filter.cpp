@@ -152,7 +152,7 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("expressions,e", po::value<std::string>(), "Read filter expressions from file")
-    ("add-referenced,r", "Recursively add referenced objects")
+    ("omit-referenced,R", "Omit referenced objects")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -185,11 +185,10 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     setup_input_file(vm);
     setup_output_file(vm);
 
-    if (vm.count("add-referenced")) {
-        if (m_input_filename == "-") {
-            throw argument_error{"Can not read OSM input from STDIN when --add-referenced/-r option is used."};
-        }
-        m_add_referenced_objects = true;
+    if (vm.count("omit-referenced")) {
+        m_add_referenced_objects = false;
+    } else if (m_input_filename == "-") {
+        throw argument_error{"Can not read OSM input from STDIN (unless --omit-referenced/-R option is used)."};
     }
 
     if (vm.count("invert-match")) {

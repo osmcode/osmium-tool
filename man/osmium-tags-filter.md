@@ -1,7 +1,7 @@
 
 # NAME
 
-osmium-tags-filter - get objects with keys/tags from OSM file
+osmium-tags-filter - filter objects matching specified keys/tags
 
 
 # SYNOPSIS
@@ -14,21 +14,21 @@ osmium-tags-filter - get objects with keys/tags from OSM file
 
 Get objects matching the specified expressions from the input and write them to
 the output. Expressions can either be specified on the command line or in an
-expressions file, one per line. See the **FILTER EXPRESSIONS** section for a
-description of the filter expression format.
+expressions file. See the **FILTER EXPRESSIONS** section for a description of
+the filter expression format.
 
 All objects matching the expressions will be read from *OSM-FILE* and written
-to the output. If the option **-r**, **--add-referenced** is used all objects
-referenced from those objects will also be added to the output.
+to the output. All objects referenced from those objects will also be added
+to the output unless the option **-R**, **--omit-referenced** is used. This
+applies to nodes referenced in ways and members referenced in relations.
 
-If the option **-r**, **--add-referenced** is *not* used, the input file is
-read only once, if it is used, the input file will possibly be read up to
-three times.
+If the option **-R**, **--omit-referenced** is used, the input file is read
+only once, otherwise the input file will possibly be read up to three times.
 
 Objects will be written out in the order they are found in the *OSM-FILE*.
 
-The *OSM-FILE* will work correctly on history files unless the
-**-r**/**--add-referenced** option is used.
+The command will only work correctly on history files if the
+**-R**/**--omit-referenced** option is used.
 
 
 # OPTIONS
@@ -41,9 +41,9 @@ The *OSM-FILE* will work correctly on history files unless the
 -i, --invert-match
 :   Invert the sense of matching. Exclude all objects with matching tags.
 
--r, --add-referenced
-:   Recursively find all objects referenced by the matching objects and include
-    them in the output. This only works correctly on non-history files.
+-R, --omit-referenced
+:   Omit the nodes referenced from matching ways and members referenced from
+    matching relations.
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
@@ -128,8 +128,8 @@ expressions expected to match more often first.
 # MEMORY USAGE
 
 **osmium tags-filter** does all its work on the fly and only keeps tables of
-object IDs it needs in main memory if the **-r**/**--add-references** option
-is used.
+object IDs it needs in main memory. If the **-R**/**--omit-referenced** option
+is used, no IDs are kept in memory.
 
 
 # EXAMPLES
@@ -140,12 +140,12 @@ Get all amenity nodes from the Berlin PBF file:
 
 Get all objects (nodes, ways, or relations) with a `note` tag:
 
-    osmium tags-filter -o notes.osm.pbf berlin.osm.pbf note
+    osmium tags-filter -R -o notes.osm.pbf berlin.osm.pbf note
 
 Get all nodes and ways with a `highway` tag and all relations tagged with
 `type=restriction` plus all referenced objects:
 
-    osmium tags-filter -r -o filtered.osm.pbf planet.osm.pbf \
+    osmium tags-filter -o filtered.osm.pbf planet.osm.pbf \
         nw/highway r/type=restriction
 
 
