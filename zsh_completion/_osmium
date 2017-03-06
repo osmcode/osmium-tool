@@ -95,6 +95,7 @@ _osmium-apply-changes() {
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
+        '--change-file-format[Format of the change file(s)]' \
         '--locations-on-ways[update OSM file with locations on ways]' \
         '(--with-history)-H[update OSM history file]' \
         '(-H)--with-history[update OSM history file]'

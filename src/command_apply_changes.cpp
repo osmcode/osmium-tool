@@ -55,7 +55,7 @@ using location_index_type = osmium::index::map::SparseMemArray<osmium::unsigned_
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
-    ("change-file-format", po::value<std::string>(), "Format of the change files")
+    ("change-file-format", po::value<std::string>(), "Format of the change file(s)")
     ("simplify,s",        "Simplify change (deprecated)")
     ("remove-deleted,r",  "Remove deleted objects from output (deprecated)")
     ("with-history,H",    "Apply changes to history file")
