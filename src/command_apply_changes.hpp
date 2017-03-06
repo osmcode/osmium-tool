@@ -35,6 +35,7 @@ class CommandApplyChanges : public Command, public with_single_osm_input, public
     std::string m_change_file_format;
 
     bool m_with_history = false;
+    bool m_locations_on_ways = false;
 
 public:
 

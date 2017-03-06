@@ -23,5 +23,6 @@ check_apply_changes(history-osh-osh-wh "--with-history" input-history.osh input-
 check_apply_changes(history-osm-osh-wh "--with-history" input-history.osm input-change.osc "osh" output-history.osh)
 check_apply_changes(history-osh-osm-wh "--with-history" input-history.osh input-change.osc "osm" output-history.osh)
 
+check_apply_changes(data-low "--locations-on-ways" input-data-low.osm input-change.osc "osm" output-data-low.osm)
 
 #-----------------------------------------------------------------------------

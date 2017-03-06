@@ -28,6 +28,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <boost/function_output_iterator.hpp>
 #include <boost/program_options.hpp>
 
+#include <osmium/index/id_set.hpp>
+#include <osmium/index/map/sparse_mem_array.hpp>
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/input_iterator.hpp>
@@ -40,6 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/object.hpp>
 #include <osmium/osm/object_comparisons.hpp>
 #include <osmium/osm/types.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -47,13 +50,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 #include "util.hpp"
 
+using location_index_type = osmium::index::map::SparseMemArray<osmium::unsigned_object_id_type, osmium::Location>;
+
 bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("change-file-format", po::value<std::string>(), "Format of the change files")
-    ("simplify,s",       "Simplify change (deprecated)")
-    ("remove-deleted,r", "Remove deleted objects from output (deprecated)")
-    ("with-history,H",   "Apply changes to history file")
+    ("simplify,s",        "Simplify change (deprecated)")
+    ("remove-deleted,r",  "Remove deleted objects from output (deprecated)")
+    ("with-history,H",    "Apply changes to history file")
+    ("locations-on-ways", "Expect and update locations on ways")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -94,7 +100,14 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         m_change_file_format = vm["change-file-format"].as<std::string>();
     }
 
+    if (vm.count("locations-on-ways")) {
+        m_locations_on_ways = true;
+    }
+
     if (vm.count("with-history")) {
+        if (m_locations_on_ways) {
+            throw argument_error{"Can not use --with-history/-H and --locations-on-ways together."};
+        }
         m_with_history = true;
         m_output_file.set_has_multiple_object_versions(true);
     } else {
@@ -128,6 +141,7 @@ void CommandApplyChanges::show_arguments() {
     m_vout << "  change file format: " << m_change_file_format << "\n";
     show_output_arguments(m_vout);
     m_vout << "  reading and writing history file: " << yes_no(m_with_history);
+    m_vout << "  locations on ways: " << yes_no(m_locations_on_ways);
 }
 
 namespace {
@@ -163,6 +177,19 @@ namespace {
 
 } // anonymous namespace
 
+static void update_nodes_if_way(osmium::OSMObject& object, const location_index_type& location_index) {
+    if (object.type() != osmium::item_type::way) {
+        return;
+    }
+
+    for (auto& node_ref : static_cast<osmium::Way&>(object).nodes()) {
+        auto location = location_index.get_noexcept(node_ref.positive_ref());
+        if (location) {
+            node_ref.set_location(location);
+        }
+    }
+}
+
 bool CommandApplyChanges::run() {
     std::vector<osmium::memory::Buffer> changes;
     osmium::ObjectPointerCollection objects;
@@ -189,10 +216,12 @@ bool CommandApplyChanges::run() {
     osmium::io::Header header{reader.header()};
     setup_header(header);
 
+    if (m_locations_on_ways) {
+        m_output_file.set("locations_on_ways");
+    }
+
     m_vout << "Opening output file...\n";
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
-
-    auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
 
     if (m_with_history) {
         // For history files this is a straightforward sort of the change
@@ -200,6 +229,7 @@ bool CommandApplyChanges::run() {
         m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_version());
 
+        auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
         auto out = osmium::io::make_output_iterator(writer);
         m_vout << "Applying changes and writing them to output...\n";
         std::set_union(objects.begin(),
@@ -212,19 +242,98 @@ bool CommandApplyChanges::run() {
         // object first and then only copy this last version of any object
         // to the output.
         m_vout << "Sorting change data...\n";
-        objects.sort(osmium::object_order_type_id_reverse_version());
+        objects.sort(osmium::object_order_type_id_reverse_version{});
 
-        auto output_it = boost::make_function_output_iterator(
-                            copy_first_with_id(writer)
-        );
+        if (m_locations_on_ways) {
+            objects.unique(osmium::object_equal_type_id{});
+            m_vout << "There are " << objects.size() << " unique objects in the change files\n";
 
-        m_vout << "Applying changes and writing them to output...\n";
-        std::set_union(objects.begin(),
-                       objects.end(),
-                       input.begin(),
-                       input.end(),
-                       output_it,
-                       osmium::object_order_type_id_reverse_version());
+            osmium::index::IdSetSmall<osmium::unsigned_object_id_type> node_ids;
+            m_vout << "Creating node index...\n";
+            for (const auto& buffer : changes) {
+                for (const auto& way : buffer.select<osmium::Way>()) {
+                    for (const auto& nr : way.nodes()) {
+                        node_ids.set(nr.positive_ref());
+                    }
+                }
+            }
+            node_ids.sort_unique();
+            m_vout << "Node index has " << node_ids.size() << " entries\n";
+
+            m_vout << "Creating location index...\n";
+            location_index_type location_index;
+            for (const auto& buffer : changes) {
+                for (const auto& node : buffer.select<osmium::Node>()) {
+                    location_index.set(node.positive_id(), node.location());
+                }
+            }
+            m_vout << "Location index has " << location_index.size() << " entries\n";
+
+            m_vout << "Applying changes and writing them to output...\n";
+            auto it = objects.begin();
+            auto last_type = osmium::item_type::undefined;
+            osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+            while (osmium::memory::Buffer buffer = reader.read()) {
+                progress_bar.update(reader.offset());
+                for (auto& object : buffer.select<osmium::OSMObject>()) {
+                    if (object.type() < last_type) {
+                        throw std::runtime_error{"Input data out of order. Need nodes, ways, relations in ID order."};
+                    }
+                    if (object.type() == osmium::item_type::node) {
+                        const auto& node = static_cast<osmium::Node&>(object);
+                        if (node_ids.get_binary_search(node.positive_id())) {
+                            const auto location = location_index.get_noexcept(node.positive_id());
+                            if (!location) {
+                                location_index.set(node.positive_id(), node.location());
+                            }
+                        }
+                    } else if (object.type() == osmium::item_type::way) {
+                        if (last_type == osmium::item_type::node) {
+                            location_index.sort();
+                            node_ids.clear();
+                        }
+                    }
+
+                    last_type = object.type();
+
+                    auto last_it = it;
+                    while (it != objects.end() && osmium::object_order_type_id_reverse_version{}(*it, object)) {
+                        if (it->visible()) {
+                            update_nodes_if_way(*it, location_index);
+                            writer(*it);
+                        }
+                        last_it = it;
+                        ++it;
+                    }
+
+                    if (last_it == objects.end() || last_it->type() != object.type() || last_it->id() != object.id()) {
+                        update_nodes_if_way(object, location_index);
+                        writer(object);
+                    }
+                }
+            }
+            while (it != objects.end()) {
+                if (it->visible()) {
+                    update_nodes_if_way(*it, location_index);
+                    writer(*it);
+                }
+                ++it;
+            }
+            progress_bar.done();
+        } else {
+            auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
+            auto output_it = boost::make_function_output_iterator(
+                                copy_first_with_id(writer)
+            );
+
+            m_vout << "Applying changes and writing them to output...\n";
+            std::set_union(objects.begin(),
+                           objects.end(),
+                           input.begin(),
+                           input.end(),
+                           output_it,
+                           osmium::object_order_type_id_reverse_version());
+        }
     }
 
     writer.close();

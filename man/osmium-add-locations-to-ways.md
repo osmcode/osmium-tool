@@ -35,6 +35,10 @@ the right index type for small to medium sized extracts. For large
 (continent-sized) extracts or the full planet use `dense_mmap_array` on Linux
 or `dense_mem_array` on OSX/Windows.
 
+If the **--keep-untagged-nodes**, **-n** option is used, files created by this
+command can be updated with the **apply-changes** command using the
+**--locations-on-ways** option.
+
 This program will not work on full history files.
 
 

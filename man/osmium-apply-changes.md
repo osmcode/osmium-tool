@@ -15,7 +15,7 @@ osmium-apply-changes - apply OSM change file(s) to OSM data file
 Merges the content of all OSM change files and applies those changes to the OSM
 data or history file.
 
-Objects in the data or historyy file must be sorted by type, ID, and version.
+Objects in the data or history file must be sorted by type, ID, and version.
 Objects in change files need not be sorted, so it doesn't matter in what order
 the change files are given or in what order they contain the data.
 
@@ -31,7 +31,14 @@ the **--with-history** option if that doesn't work.
     input and output must be history files. This option is usually not
     necessary, because history files will be detected from their file name
     suffixes, but if this detection doesn't work, you can force this mode
-    with this option.
+    with this option. Can not be used together with the **--locations-on-ways**
+    option.
+
+--locations-on-ways
+:   Input has and output should have node locations on ways. Can be used
+    to update files created by the **osmium-add-locations-to-ways**. See
+    there for details on the format. Can not be used together with the
+    **--with-history**,**-H** option.
 
 -r, --remove-deleted
 :   Deprecated. Remove deleted objects from the output. This is now the
