@@ -152,6 +152,7 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("expressions,e", po::value<std::string>(), "Read filter expressions from file")
+    ("invert-match,i", "Invert the sense of matching, exclude objects with matching tags")
     ("omit-referenced,R", "Omit referenced objects")
     ;
 
@@ -162,7 +163,6 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description hidden;
     hidden.add_options()
     ("input-filename", po::value<std::string>(), "OSM input file")
-    ("invert-match,i", "Invert the sense of matching, exclude objects with matching tags")
     ("expression-list", po::value<std::vector<std::string>>(), "Filter expressions")
     ;
 
