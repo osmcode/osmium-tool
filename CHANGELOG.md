@@ -8,9 +8,38 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- New `tags-filter` command for filtering OSM files based on tag keys and
+  values.
+- Add option `--locations-on-ways` to `apply-changes` for updating files
+  created with `add-locations-to-ways`.
+- Add optional `output_header` on extracts in config file. (#47)
+- Add `--change-file-format` to `apply-changes` format for setting format
+  of change files.
+- Add `--set-bounds` option to `extract` command.
+
 ### Changed
 
+- Now requires libosmium 2.12.
+- Deprecated `--history` option on `getid` command in favour of
+  `--with-history` for consistency with other commands.
+- Use new `RelationsMapIndex` from libosmium for `getid` instead of
+  `std::multimap`.
+- Update included version of Catch unit test framework to 1.8.1 which required
+  some changes in the tests.
+- Use `osmium::util::file_size` instead of our own `filesize()` function.
+- Miscellaneous code cleanups and improved warning messages and man pages.
+
 ### Fixed
+
+- Add `-pthread` compiler and linker options on Linux/OSX. This should fix
+  a problem where some linker versions will not link binaries correctly when
+  the `--as-needed` option is used.
+- Typo in GeoJSON parser which broke MultiPolygon support.
+- Wrong description of -S option in extract man page.
+- Windows build problem related to forced build for old Windows versions.
+- All but the first polygon in a GeoJSON multipolygon were ignored by the
+  `extract` command.
+- Zsh command line completion for some commands.
 
 
 ## [1.5.1] - 2017-01-19
