@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.6.0] - 2017-03-07
+
+### Added
+
 - New `tags-filter` command for filtering OSM files based on tag keys and
   values.
 - Add option `--locations-on-ways` to `apply-changes` for updating files
@@ -242,7 +251,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.5.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/osmcode/osmium-tool/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/osmcode/osmium-tool/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/osmcode/osmium-tool/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/osmcode/osmium-tool/compare/v1.4.0...v1.4.1
