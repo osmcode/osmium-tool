@@ -213,8 +213,11 @@ bool CommandApplyChanges::run() {
     m_vout << "Opening input file...\n";
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::object};
 
-    osmium::io::Header header{reader.header()};
+    osmium::io::Header header;
     setup_header(header);
+    if (m_with_history) {
+        header.set_has_multiple_object_versions(true);
+    }
 
     if (m_locations_on_ways) {
         m_output_file.set("locations_on_ways");
