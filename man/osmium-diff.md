@@ -11,7 +11,10 @@ osmium-diff - display differences between OSM files
 
 # DESCRIPTION
 
-Finds differences between two OSM files and displays them.
+Finds all differences between two OSM files and displays them. This command
+compares all attributes of all objects, so it will even find, say, differences
+in the user name or even the order of tags, differences that should not happen
+in normal OSM data unless there is also a different object version.
 
 Only differences between objects (node, ways, and relations) are found and
 displayed. Headers are ignored.

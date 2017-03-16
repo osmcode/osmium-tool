@@ -18,6 +18,11 @@ applied on *OSM-FILE1* to re-create *OSM-FILE2*.
 Objects in both input files must be sorted by type, ID, and version. The first
 input file must be from a point in time before the second input file.
 
+Only object type, id, and version are compared, so this program will not detect
+differences in, say, the tags, unless the object has a new version, which is
+the normal way things work in OSM. If you need to compare all data in OSM
+files, have a look at the **osmium diff** program.
+
 For this command to create a proper change file you have to set the
 **--output** option or **--output-format** option in a way that it will
 generate an .osc file, typically by using something like '-o out.osc.gz'.
