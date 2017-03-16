@@ -40,6 +40,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_show.hpp"
 #include "exception.hpp"
+#include "util.hpp"
 
 #ifndef _MSC_VER
 void CommandShow::setup_pager_from_env() noexcept {
@@ -128,17 +129,28 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
         }
     }
 
+    m_color_output = m_output_format.find("color=true") != std::string::npos;
+
     return true;
 }
 
+void CommandShow::show_arguments() {
+    show_single_input_arguments(m_vout);
+    m_vout << "  other options:\n";
+    m_vout << "    file format: " << m_output_format << "\n";
+    m_vout << "    use color: " << yes_no(m_color_output);
+    m_vout << "    use pager: " << (m_pager == "" ? "(no pager)" : m_pager) << "\n";
+    show_object_types(m_vout);
+}
+
 #ifndef _MSC_VER
-static int execute_pager(const std::string& pager) {
+static int execute_pager(const std::string& pager, bool with_color) {
     int pipefd[2];
     if (::pipe(pipefd) < 0) {
         throw std::system_error{errno, std::system_category(), "Could not run pager: pipe() call failed"};
     }
 
-    pid_t pid = fork();
+    const pid_t pid = fork();
     if (pid < 0) {
         throw std::system_error{errno, std::system_category(), "Could not run pager: fork() call failed"};
     }
@@ -151,8 +163,12 @@ static int execute_pager(const std::string& pager) {
             std::exit(1);
         }
 
-        // execute pager without arguments
-        ::execlp(pager.c_str(), pager.c_str(), nullptr);
+        if (with_color && pager.substr(pager.size() - 4, 4) == "less") {
+            ::execlp(pager.c_str(), pager.c_str(), "-R", nullptr);
+        } else {
+            // execute pager without arguments
+            ::execlp(pager.c_str(), pager.c_str(), nullptr);
+        }
 
         // Exec will either succeed and never return here, or it fails and
         // we'll exit.
@@ -175,15 +191,15 @@ bool CommandShow::run() {
     osmium::io::Header header{reader.header()};
 
     if (m_pager.empty()) {
-        osmium::io::File file("-", m_output_format);
-        osmium::io::Writer writer(file, header);
+        osmium::io::File file{"-", m_output_format};
+        osmium::io::Writer writer{file, header};
         while (osmium::memory::Buffer buffer = reader.read()) {
             writer(std::move(buffer));
         }
         writer.close();
     } else {
 #ifndef _MSC_VER
-        int fd = execute_pager(m_pager);
+        const int fd = execute_pager(m_pager, m_color_output);
 
         ::close(1); // close stdout
         if (::dup2(fd, 1) < 0) { // put end of pipe as stdout

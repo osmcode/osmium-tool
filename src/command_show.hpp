@@ -34,6 +34,7 @@ class CommandShow : public Command, public with_single_osm_input {
 
     std::string m_output_format{"debug,color=true"};
     std::string m_pager;
+    bool m_color_output;
 
     void setup_pager_from_env() noexcept;
 
@@ -42,6 +43,8 @@ public:
     CommandShow() = default;
 
     bool setup(const std::vector<std::string>& arguments) override final;
+
+    void show_arguments() override final;
 
     bool run() override final;
 
