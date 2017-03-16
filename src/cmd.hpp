@@ -101,7 +101,7 @@ public:
     // The command line usage synopsis of the command.
     virtual const char* synopsis() const noexcept = 0;
 
-    po::options_description add_common_options();
+    po::options_description add_common_options(bool with_progress = true);
     void setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
     void setup_progress(const boost::program_options::variables_map& vm);
     void setup_object_type_nrwc(const boost::program_options::variables_map& vm);

@@ -30,15 +30,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cmd.hpp"
 #include "exception.hpp"
 
-po::options_description Command::add_common_options() {
+po::options_description Command::add_common_options(bool with_progress) {
     po::options_description options("COMMON OPTIONS");
 
-    options.add_options()
+    auto opts = options.add_options()
     ("help,h", "Show usage help")
-    ("progress", "Display progress bar")
-    ("no-progress", "Suppress display of progress bar")
     ("verbose,v", "Set verbose mode")
     ;
+
+    if (with_progress) {
+        opts("progress", "Display progress bar")
+            ("no-progress", "Suppress display of progress bar");
+    }
 
     return options;
 }

@@ -74,7 +74,7 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
     ("output-format,f", po::value<std::string>(), "Format of output file")
     ;
 
-    po::options_description opts_common{add_common_options()};
+    po::options_description opts_common{add_common_options(false)};
     po::options_description opts_input{add_single_input_options()};
 
     po::options_description hidden;
