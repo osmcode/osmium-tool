@@ -81,7 +81,7 @@ Show an OSM file using the default pager and default format:
 
 Use `more` as a pager and only show relations:
 
-    OSMIUM_PAGER=more osmium show -r norway.osm.pbf
+    OSMIUM_PAGER=more osmium show -t r norway.osm.pbf
 
 Show using XML format:
 
