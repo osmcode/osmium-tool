@@ -74,7 +74,7 @@ void Command::setup_progress(const boost::program_options::variables_map& vm) {
     }
 }
 
-void Command::setup_object_type_nrwc(const boost::program_options::variables_map& vm) {
+void Command::setup_object_type_nwrc(const boost::program_options::variables_map& vm) {
     if (vm.count("object-type")) {
         m_osm_entity_bits = osmium::osm_entity_bits::nothing;
         for (const auto& t : vm["object-type"].as<std::vector<std::string>>()) {
@@ -95,7 +95,7 @@ void Command::setup_object_type_nrwc(const boost::program_options::variables_map
     }
 }
 
-void Command::setup_object_type_nrw(const boost::program_options::variables_map& vm) {
+void Command::setup_object_type_nwr(const boost::program_options::variables_map& vm) {
     if (vm.count("object-type")) {
         m_osm_entity_bits = osmium::osm_entity_bits::nothing;
         for (const auto& t : vm["object-type"].as<std::vector<std::string>>()) {

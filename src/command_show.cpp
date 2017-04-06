@@ -96,7 +96,7 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
-    setup_object_type_nrwc(vm);
+    setup_object_type_nwrc(vm);
     setup_input_file(vm);
 
 #ifndef _MSC_VER

@@ -81,7 +81,7 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
-    setup_object_type_nrw(vm);
+    setup_object_type_nwr(vm);
     setup_input_files(vm);
 
     if (m_input_files.size() != 2) {

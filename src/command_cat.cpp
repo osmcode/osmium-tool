@@ -67,7 +67,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
 
     setup_common(vm, desc);
     setup_progress(vm);
-    setup_object_type_nrwc(vm);
+    setup_object_type_nwrc(vm);
     setup_input_files(vm);
     setup_output_file(vm);
 

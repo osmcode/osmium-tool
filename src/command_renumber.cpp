@@ -139,7 +139,7 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
 
     setup_common(vm, desc);
     setup_progress(vm);
-    setup_object_type_nrw(vm);
+    setup_object_type_nwr(vm);
     setup_input_file(vm);
     setup_output_file(vm);
 

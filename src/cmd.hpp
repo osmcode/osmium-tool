@@ -104,8 +104,8 @@ public:
     po::options_description add_common_options(bool with_progress = true);
     void setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
     void setup_progress(const boost::program_options::variables_map& vm);
-    void setup_object_type_nrwc(const boost::program_options::variables_map& vm);
-    void setup_object_type_nrw(const boost::program_options::variables_map& vm);
+    void setup_object_type_nwrc(const boost::program_options::variables_map& vm);
+    void setup_object_type_nwr(const boost::program_options::variables_map& vm);
     void show_object_types(osmium::util::VerboseOutput& vout);
     void print_arguments(const std::string& command);
     void show_memory_used();
