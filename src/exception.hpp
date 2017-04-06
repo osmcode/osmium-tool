@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <stdexcept>
+#include <string>
 
 /**
  *  Thrown when there is a problem with the command line arguments.
@@ -40,5 +41,34 @@ struct argument_error : std::runtime_error {
 
 };
 
+/**
+ *  Thrown when there is a problem with parsing a JSON config file.
+ */
+struct config_error : public std::runtime_error {
+
+    explicit config_error(const char* message) :
+        std::runtime_error(message) {
+    }
+
+    explicit config_error(const std::string& message) :
+        std::runtime_error(message) {
+    }
+
+}; // struct config_error
+
+/**
+ *  Thrown when there is a problem with parsing a GeoJSON file.
+ */
+struct geojson_error : public std::runtime_error {
+
+    explicit geojson_error(const char* message) :
+        std::runtime_error(message) {
+    }
+
+    explicit geojson_error(const std::string& message) :
+        std::runtime_error(message) {
+    }
+
+}; // struct geojson_error
 
 #endif // EXCEPTION_HPP

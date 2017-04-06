@@ -29,7 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/memory/buffer.hpp>
 #include <osmium/util/string.hpp>
 
-#include "error.hpp"
+#include "../exception.hpp"
 #include "poly_file_parser.hpp"
 
 void PolyFileParser::error(const std::string& message) {

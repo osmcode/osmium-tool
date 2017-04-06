@@ -34,7 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/location.hpp>
 
-#include "error.hpp"
+#include "../exception.hpp"
 #include "geojson_file_parser.hpp"
 
 std::string get_value_as_string(const rapidjson::Value& object, const char* key) {

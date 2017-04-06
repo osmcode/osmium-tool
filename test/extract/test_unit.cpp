@@ -3,7 +3,7 @@
 
 #include <osmium/memory/buffer.hpp>
 
-#include "error.hpp"
+#include "exception.hpp"
 #include "poly_file_parser.hpp"
 #include "osm_file_parser.hpp"
 #include "geojson_file_parser.hpp"
