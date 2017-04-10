@@ -16,7 +16,7 @@ later are known to work. It also works on modern Visual Studio C++ compilers.
 
 You also need the following libraries:
 
-    Libosmium (>= 2.12.0)
+    Libosmium (>= 2.12.1)
         http://osmcode.org/libosmium
         Debian/Ubuntu: libosmium2-dev
 

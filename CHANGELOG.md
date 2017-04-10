@@ -13,6 +13,21 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [1.6.1] - 2017-04-10
+
+### Changed
+
+- Clarify differences between `diff` and `derive-changes` commands in man
+  pages.
+- Needs current libosmium 2.12.1 now.
+
+### Fixed
+
+- Use empty header for apply-changes instead of the one from input file.
+- Call 'less' with -R when using ANSI colors with 'show' command.
+- Do not show progress options on show command.
+
+
 ## [1.6.0] - 2017-03-07
 
 ### Added
@@ -251,7 +266,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.6.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/osmcode/osmium-tool/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/osmcode/osmium-tool/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/osmcode/osmium-tool/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/osmcode/osmium-tool/compare/v1.4.1...v1.5.0
