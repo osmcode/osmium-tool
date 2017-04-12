@@ -57,53 +57,6 @@ void CommandTagsFilter::add_filter(osmium::osm_entity_bits::type entities, const
     }
 }
 
-void strip_whitespace(std::string& string) {
-    while (!string.empty() && string.back() == ' ') {
-        string.pop_back();
-    }
-
-    const auto pos = string.find_first_not_of(' ');
-    if (pos != std::string::npos) {
-        string.erase(0, pos);
-    }
-}
-
-osmium::StringMatcher get_matcher(std::string string) {
-    strip_whitespace(string);
-
-    if (string.size() == 1 && string.front() == '*') {
-        return osmium::StringMatcher::always_true{};
-    }
-
-    if (string.empty() || (string.back() != '*' && string.front() != '*')) {
-        if (string.find(',') == std::string::npos) {
-            return osmium::StringMatcher::equal{string};
-        }
-        auto sstrings = osmium::split_string(string, ',');
-        for (auto& s : sstrings) {
-            strip_whitespace(s);
-        }
-        return osmium::StringMatcher::list{sstrings};
-    }
-
-    auto s = string;
-
-    if (s.back() == '*' && s.front() != '*') {
-        s.pop_back();
-        return osmium::StringMatcher::prefix{s};
-    }
-
-    if (s.front() == '*') {
-        s.erase(0, 1);
-    }
-
-    if (!s.empty() && s.back() == '*') {
-        s.pop_back();
-    }
-
-    return osmium::StringMatcher::substring{s};
-}
-
 void CommandTagsFilter::parse_and_add_expression(const std::string& expression) {
     const auto p = get_filter_expression(expression);
     std::string key = p.second;

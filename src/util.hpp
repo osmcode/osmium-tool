@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <osmium/osm/entity_bits.hpp>
+#include <osmium/util/string_matcher.hpp>
 
 namespace osmium { namespace io {
     class File;
@@ -40,5 +41,7 @@ void warning(const std::string& text);
 std::size_t file_size_sum(const std::vector<osmium::io::File>& files);
 osmium::osm_entity_bits::type get_types(const std::string& s);
 std::pair<osmium::osm_entity_bits::type, std::string> get_filter_expression(const std::string& s);
+void strip_whitespace(std::string& string);
+osmium::StringMatcher get_matcher(std::string string);
 
 #endif // UTIL_HPP
