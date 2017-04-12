@@ -6,7 +6,7 @@
 #
 #-----------------------------------------------------------------------------
 
-file(GLOB OSMIUM_SOURCE_FILES *.cpp extract/*.cpp ${PROJECT_BINARY_DIR}/src/version.cpp)
+file(GLOB OSMIUM_SOURCE_FILES *.cpp */*.cpp ${PROJECT_BINARY_DIR}/src/version.cpp)
 
 add_executable(osmium ${OSMIUM_SOURCE_FILES})
 

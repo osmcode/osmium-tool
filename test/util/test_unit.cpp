@@ -66,33 +66,56 @@ TEST_CASE("strip whitespace") {
     test_strip_whitespace("f o o", "f o o");
 }
 
-void test_matcher(const char* string, const char* print_out) {
+void test_string_matcher(const char* string, const char* print_out) {
     std::stringstream ss;
-    ss << get_matcher(string);
+    ss << get_string_matcher(string);
     REQUIRE(ss.str() == print_out);
 }
 
-TEST_CASE("get_matcher") {
-    test_matcher("foo", "equal[foo]");
-    test_matcher("", "equal[]");
-    test_matcher("foo*", "prefix[foo]");
-    test_matcher(" foo* ", "prefix[foo]");
-    test_matcher("*foo", "substring[foo]");
-    test_matcher("*foo*", "substring[foo]");
-    test_matcher(" *foo* ", "substring[foo]");
-    test_matcher("*", "always_true");
-    test_matcher(" * ", "always_true");
-    test_matcher("f*oo", "equal[f*oo]");
-    test_matcher("foo,bar", "list[[foo][bar]]");
-    test_matcher("foo,bar*,baz", "list[[foo][bar*][baz]]");
-    test_matcher("*foo,bar", "substring[foo,bar]");
-    test_matcher("foo ", "equal[foo]");
-    test_matcher(" foo", "equal[foo]");
-    test_matcher(" foo ", "equal[foo]");
-    test_matcher("foo    ", "equal[foo]");
-    test_matcher("    foo", "equal[foo]");
-    test_matcher("  foo ", "equal[foo]");
-    test_matcher("foo, bar, baz", "list[[foo][bar][baz]]");
-    test_matcher("  foo, bar   ,baz   ", "list[[foo][bar][baz]]");
+TEST_CASE("get_string_matcher") {
+    test_string_matcher("foo", "equal[foo]");
+    test_string_matcher("", "equal[]");
+    test_string_matcher("foo*", "prefix[foo]");
+    test_string_matcher(" foo* ", "prefix[foo]");
+    test_string_matcher("*foo", "substring[foo]");
+    test_string_matcher("*foo*", "substring[foo]");
+    test_string_matcher(" *foo* ", "substring[foo]");
+    test_string_matcher("*", "always_true");
+    test_string_matcher(" * ", "always_true");
+    test_string_matcher("f*oo", "equal[f*oo]");
+    test_string_matcher("foo,bar", "list[[foo][bar]]");
+    test_string_matcher("foo,bar*,baz", "list[[foo][bar*][baz]]");
+    test_string_matcher("*foo,bar", "substring[foo,bar]");
+    test_string_matcher("foo ", "equal[foo]");
+    test_string_matcher(" foo", "equal[foo]");
+    test_string_matcher(" foo ", "equal[foo]");
+    test_string_matcher("foo    ", "equal[foo]");
+    test_string_matcher("    foo", "equal[foo]");
+    test_string_matcher("  foo ", "equal[foo]");
+    test_string_matcher("foo, bar, baz", "list[[foo][bar][baz]]");
+    test_string_matcher("  foo, bar   ,baz   ", "list[[foo][bar][baz]]");
+}
+
+bool test_tag_matcher(const char* expression, const char* key, const char* value) {
+    const auto matcher = get_tag_matcher(expression);
+    return matcher(key, value);
+}
+
+TEST_CASE("get_tag_matcher") {
+    REQUIRE(test_tag_matcher("foo", "foo", "bar"));
+    REQUIRE(test_tag_matcher("foo=bar", "foo", "bar"));
+    REQUIRE(test_tag_matcher("foo!=bar", "foo", "baz"));
+    REQUIRE_FALSE(test_tag_matcher("foo!=bar", "foo", "bar"));
+
+    REQUIRE(test_tag_matcher("highway=primary,secondary", "highway", "primary"));
+    REQUIRE(test_tag_matcher("highway=primary,secondary", "highway", "secondary"));
+    REQUIRE_FALSE(test_tag_matcher("highway=primary,secondary", "highway", "residential"));
+
+    REQUIRE(test_tag_matcher("landuse,natural", "landuse", "forest"));
+    REQUIRE(test_tag_matcher("landuse,natural", "natural", "wood"));
+    REQUIRE_FALSE(test_tag_matcher("landuse,natural", "highway", "motorway"));
+
+    REQUIRE(test_tag_matcher("addr:*", "addr:city", "Berlin"));
+    REQUIRE_FALSE(test_tag_matcher("addr:*", "addr", "Berlin"));
 }
 

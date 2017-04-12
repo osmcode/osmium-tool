@@ -55,24 +55,7 @@ void CommandTagsFilter::add_filter(osmium::osm_entity_bits::type entities, const
 
 void CommandTagsFilter::parse_and_add_expression(const std::string& expression) {
     const auto p = get_filter_expression(expression);
-    std::string key = p.second;
-
-    const auto op_pos = key.find('=');
-    if (op_pos == std::string::npos) {
-        add_filter(p.first, osmium::TagMatcher{get_matcher(key)});
-        return;
-    }
-
-    const auto value = key.substr(op_pos + 1);
-    key.erase(op_pos);
-
-    bool invert = false;
-    if (!key.empty() && key.back() == '!') {
-        key.pop_back();
-        invert = true;
-    }
-
-    add_filter(p.first, osmium::TagMatcher{get_matcher(key), get_matcher(value), invert});
+    add_filter(p.first, get_tag_matcher(p.second));
 }
 
 void CommandTagsFilter::read_expressions_file(const std::string& file_name) {

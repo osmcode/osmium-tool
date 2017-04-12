@@ -6,6 +6,7 @@
 #include "command_check_refs.hpp"
 #include "command_derive_changes.hpp"
 #include "command_diff.hpp"
+#include "command_export.hpp"
 #include "command_extract.hpp"
 #include "command_fileinfo.hpp"
 #include "command_getid.hpp"
@@ -45,6 +46,10 @@ void register_commands() {
 
     CommandFactory::add("diff", "Display differences between OSM files", []() {
         return new CommandDiff();
+    });
+
+    CommandFactory::add("export", "Export OSM data", []() {
+        return new CommandExport();
     });
 
     CommandFactory::add("extract", "Create geographic extract", []() {

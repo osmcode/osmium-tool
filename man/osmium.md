@@ -48,6 +48,9 @@ derive-changes
 diff
 :   display differences between OSM files
 
+export
+:   export OSM data
+
 extract
 :   create geographical extracts from an OSM file
 
@@ -119,6 +122,7 @@ If an osmium command exits with an "Out of memory" error, try running it with
   **osmium-check-refs**(1),
   **osmium-derive-changes**(1),
   **osmium-diff**(1),
+  **osmium-export**(1),
   **osmium-extract**(1),
   **osmium-fileinfo**(1),
   **osmium-getid**(1),

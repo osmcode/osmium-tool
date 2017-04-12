@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/string.hpp>
+#include <osmium/tags/tags_filter.hpp>
 
 #include "exception.hpp"
 #include "util.hpp"
@@ -122,7 +123,7 @@ void strip_whitespace(std::string& string) {
     }
 }
 
-osmium::StringMatcher get_matcher(std::string string) {
+osmium::StringMatcher get_string_matcher(std::string string) {
     strip_whitespace(string);
 
     if (string.size() == 1 && string.front() == '*') {
@@ -156,5 +157,31 @@ osmium::StringMatcher get_matcher(std::string string) {
     }
 
     return osmium::StringMatcher::substring{s};
+}
+
+osmium::TagMatcher get_tag_matcher(const std::string& expression) {
+    const auto op_pos = expression.find('=');
+    if (op_pos == std::string::npos) {
+        return osmium::TagMatcher{get_string_matcher(expression)};
+    }
+
+    auto key = expression.substr(0, op_pos);
+    const auto value = expression.substr(op_pos + 1);
+
+    bool invert = false;
+    if (!key.empty() && key.back() == '!') {
+        key.pop_back();
+        invert = true;
+    }
+
+    return osmium::TagMatcher{get_string_matcher(key), get_string_matcher(value), invert};
+}
+
+void initialize_tags_filter(osmium::TagsFilter& tags_filter, bool default_result, const std::vector<std::string>& strings) {
+    tags_filter.set_default_result(default_result);
+    for (const auto& str : strings) {
+        assert(!str.empty());
+        tags_filter.add_rule(!default_result, get_tag_matcher(str));
+    }
 }
 

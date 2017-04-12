@@ -12,7 +12,7 @@ include_directories(../src/extract)
 include_directories(../include)
 
 file(GLOB ALL_UNIT_TESTS */test_setup.cpp */test_unit.cpp)
-file(GLOB ALL_COMMANDS ../src/command_*.cpp ../src/io.cpp ../src/cmd.cpp ../src/cmd_factory.cpp ../src/util.cpp ../src/extract/*.cpp)
+file(GLOB ALL_COMMANDS ../src/command_*.cpp ../src/io.cpp ../src/cmd.cpp ../src/cmd_factory.cpp ../src/util.cpp ../src/*/*.cpp)
 add_executable(unit_tests unit_tests.cpp ${ALL_COMMANDS} ${ALL_UNIT_TESTS} ${PROJECT_BINARY_DIR}/src/version.cpp)
 target_link_libraries(unit_tests ${Boost_LIBRARIES} ${OSMIUM_LIBRARIES})
 set_pthread_on_target(unit_tests)

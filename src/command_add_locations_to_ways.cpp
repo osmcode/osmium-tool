@@ -48,7 +48,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments) {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
-    std::string default_index_type{ map_factory.has_map_type("sparse_mmap_array") ? "sparse_mmap_array" : "sparse_mem_array" };
+    std::string default_index_type{map_factory.has_map_type("sparse_mmap_array") ? "sparse_mmap_array" : "sparse_mem_array"};
 
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
@@ -82,7 +82,7 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
 
     if (vm.count("show-index-types")) {
         for (const auto& map_type : map_factory.map_types()) {
-            std::cout << map_type << "\n";
+            std::cout << map_type << '\n';
         }
         return false;
     }
@@ -115,9 +115,9 @@ void CommandAddLocationsToWays::show_arguments() {
     show_output_arguments(m_vout);
 
     m_vout << "  other options:\n";
-    m_vout << "    index type: " << m_index_type_name << "\n";
+    m_vout << "    index type: " << m_index_type_name << '\n';
     m_vout << "    keep untagged nodes: " << yes_no(m_keep_untagged_nodes);
-    m_vout << "\n";
+    m_vout << '\n';
 }
 
 void CommandAddLocationsToWays::copy_data(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler) {
