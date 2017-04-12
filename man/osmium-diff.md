@@ -75,7 +75,7 @@ None of the output formats print the headers of the input files.
 
 -s, --summary
 :   Print count of objects that are only in the left or right files, or the
-    same in both or different in both to *stderr*.
+    same in both or different in both to STDERR.
 
 -t, --object-type=TYPE
 :   Read only objects of given type (*node*, *way*, *relation*).

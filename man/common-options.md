@@ -6,4 +6,4 @@
 
 -v, --verbose
 :   Set verbose mode. The program will output information about what it is
-    doing to *stderr*.
+    doing to STDERR.

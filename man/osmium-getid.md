@@ -55,7 +55,7 @@ The *OSM-FILE* can not be a history file unless the **-H**, **--with-history**
 option is used. Then all versions of the objects will be copied to the output.
 
 If referenced objects are missing from the input file, the type and IDs
-of those objects is written out to *stderr* at the end of the program unless
+of those objects is written out to STDERR at the end of the program unless
 the **-H**, **--with-history** option was given.
 
 This command will not work with negative IDs.
