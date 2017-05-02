@@ -148,8 +148,8 @@ void CommandExport::canonicalize_output_format() {
         return;
     }
 
-    if (m_output_format == "ldjson") {
-        m_output_format = "ldgeojson";
+    if (m_output_format == "jsonseq") {
+        m_output_format = "geojsonseq";
         return;
     }
 
@@ -175,6 +175,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     ("overwrite,O", "Allow existing output file to be overwritten")
     ("show-errors,e", "Output any geometry errors on STDOUT")
     ("show-index-types,I", "Show available index types")
+    ("omit-rs,r", "Do not print RS (record separator) character when using JSON Text Sequences")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -263,12 +264,19 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
 
     canonicalize_output_format();
 
-    if (m_output_format != "geojson" && m_output_format != "ldgeojson" && m_output_format != "text") {
-        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'ldgeojson', or 'text'."};
+    if (m_output_format != "geojson" && m_output_format != "geojsonseq" && m_output_format != "text") {
+        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', or 'text'."};
     }
 
     if (vm.count("overwrite")) {
         m_output_overwrite = osmium::io::overwrite::allow;
+    }
+
+    if (vm.count("omit-rs")) {
+        m_options.print_record_separator = false;
+        if (m_output_format != "geojsonseq") {
+            warning("The --omit-rs/-r option only works for GeoJSON Text Sequence (geojsonseq) format. Ignored.\n");
+        }
     }
 
     if (vm.count("show-errors")) {
@@ -316,7 +324,12 @@ void CommandExport::show_arguments() {
 
     m_vout << "  output options:\n";
     m_vout << "    file name: " << m_output_filename << '\n';
-    m_vout << "    file format: " << m_output_format << '\n';
+
+    if (m_output_format == "geojsonseq") {
+        m_vout << "    file format: geojsonseq (with" << (m_options.print_record_separator ? " RS)\n" : "out RS)\n");
+    } else {
+        m_vout << "    file format: " << m_output_format << '\n';
+    }
     m_vout << "    overwrite: " << yes_no(m_output_overwrite == osmium::io::overwrite::allow);
     m_vout << "    fsync: " << yes_no(m_fsync == osmium::io::fsync::yes);
     m_vout << "  attributes:\n";
@@ -353,7 +366,7 @@ static std::unique_ptr<ExportFormat> create_handler(const std::string& output_fo
                                                     osmium::io::overwrite overwrite,
                                                     osmium::io::fsync fsync,
                                                     const options_type& options) {
-    if (output_format == "geojson" || output_format == "ldgeojson") {
+    if (output_format == "geojson" || output_format == "geojsonseq") {
         return std::unique_ptr<ExportFormat>{new ExportFormatJSON{output_format, output_filename, overwrite, fsync, options}};
     }
 

@@ -40,7 +40,7 @@ This program will not work on full history files.
 # OPTIONS
 
 -c, --config=FILE
-    Read configuration from specified file.
+:   Read configuration from specified file.
 
 -e, --show-errors
 :   Output any geometry errors on STDOUT. This includes ways with a single
@@ -62,6 +62,10 @@ This program will not work on full history files.
     By default these features will be omitted from the output. Tags are the
     OSM tags, not attributes (like id, version, uid, ...) without the tags
     removed by the **exclude_tags** or **include_tags** settings.
+
+-r, --omit-rs
+:   Do not print the RS (0x1e, record separator) character when using the
+    GeoJSON Text Sequence Format. Ignored for other formats.
 
 -u, --add-unique-id=TYPE
 :   Add a unique Id to each feature. TYPE can be either *counter* in which
@@ -218,11 +222,11 @@ areas. Some closed ways will also form areas. Here are the more detailed rules:
 
 The following output formats are supported:
 
-* `geojson` (alias: `json`): GeoJSON. The output file will contain a single
-  `FeatureCollection` object. This is the default format.
-* `ldgeojson` (alias: `ldjson`): Line delimited GeoJSON. Each line (ending
-  in a linefeed character) contains one GeoJSON object. Used for streaming
-  GeoJSON.
+* `geojson` (alias: `json`): GeoJSON (RFC7946). The output file will contain a
+  single `FeatureCollection` object. This is the default format.
+* `geojsonseq` (alias: `jsonseq`): GeoJSON Text Sequence (RFC8142). Each line
+  (beginning with a RS (0x1e, record separator) and ending in a linefeed
+  character) contains one GeoJSON object. Used for streaming GeoJSON.
 * `text` (alias: `txt`): A simple text format with the geometry in WKT formats
   followed by the comma-delimited tags. This is mainly intended for debugging
   at the moment. THE FORMAT MIGHT CHANGE WITHOUT NOTICE!
@@ -256,9 +260,9 @@ Export into GeoJSON format:
 
     osmium export data.osm.pbf -o data.geojson
 
-Use a config file:
+Use a config file and export into GeoJSON Text Sequence format:
 
-    osmium export data.osm.pbf -o data.geojson -c export-config.json
+    osmium export data.osm.pbf -o data.geojsonseq -c export-config.json
 
 
 # SEE ALSO
@@ -266,5 +270,7 @@ Use a config file:
 * **osmium**(1), **osmium-file-formats**(5), **osmium-add-node-locations-to-ways**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
 * [GeoJSON](http://geojson.org/)
+* [RFC7946](https://tools.ietf.org/html/rfc7946)
+* [RFC8142](https://tools.ietf.org/html/rfc8142)
 * [Line delimited JSON](https://en.wikipedia.org/wiki/JSON_Streaming#Line_delimited_JSON)
 

@@ -46,7 +46,8 @@ class ExportFormatJSON : public ExportFormat {
 
     int m_fd;
     osmium::io::fsync m_fsync;
-    bool m_line_delimited;
+    bool m_text_sequence_format;
+    bool m_with_record_separator;
     rapidjson::StringBuffer m_stream;
     std::size_t m_committed_size;
     writer_type m_writer;

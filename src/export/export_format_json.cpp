@@ -41,13 +41,14 @@ ExportFormatJSON::ExportFormatJSON(const std::string& output_format,
     ExportFormat(options),
     m_fd(osmium::io::detail::open_for_writing(output_filename, overwrite)),
     m_fsync(fsync),
-    m_line_delimited(output_format == "ldgeojson"),
+    m_text_sequence_format(output_format == "geojsonseq"),
+    m_with_record_separator(m_text_sequence_format && options.print_record_separator),
     m_stream(),
     m_committed_size(0),
     m_writer(m_stream),
     m_factory(m_writer) {
     m_stream.Reserve(initial_buffer_size);
-    if (!m_line_delimited) {
+    if (!m_text_sequence_format) {
         add_to_stream(m_stream, "{\"type\":\"FeatureCollection\",\"features\":[\n");
     }
     m_committed_size = m_stream.GetSize();
@@ -65,12 +66,16 @@ void ExportFormatJSON::start_feature(const std::string& prefix, osmium::object_i
         m_stream.Pop(uncommitted_size);
     }
     if (m_count > 0) {
-        if (!m_line_delimited) {
+        if (!m_text_sequence_format) {
             m_stream.Put(',');
         }
         m_stream.Put('\n');
     }
     m_writer.Reset(m_stream);
+
+    if (m_with_record_separator) {
+        m_stream.Put(0x1e);
+    }
     m_writer.StartObject(); // start feature
     m_writer.Key("type");
     m_writer.String("Feature");
@@ -191,7 +196,7 @@ void ExportFormatJSON::area(const osmium::Area& area) {
 
 void ExportFormatJSON::close() {
     if (m_fd > 0) {
-        if (!m_line_delimited) {
+        if (!m_text_sequence_format) {
             add_to_stream(m_stream, "\n]}\n");
         }
 

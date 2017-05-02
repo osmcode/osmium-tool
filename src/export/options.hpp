@@ -47,6 +47,7 @@ struct options_type {
     unique_id_type unique_id = unique_id_type::none;
 
     bool keep_untagged = false;
+    bool print_record_separator = true;
 };
 
 #endif // EXPORT_OPTIONS_HPP
