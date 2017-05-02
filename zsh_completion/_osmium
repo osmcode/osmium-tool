@@ -18,7 +18,7 @@ polygon_file_glob="'*.json *.geojson *.poly *.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) 
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter)
+    osmium_commands=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -178,6 +178,33 @@ _osmium-diff() {
         '(-s)--summary[Show summary on STDERR]' \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_object_type' \
         '*--object-type[read only objects of given output types]:OSM entity type:_osmium_object_type'
+}
+
+_osmium-export() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-single-input-options)"} \
+        '--fsync[call fsync after writing output file(s)]' \
+        '(--output)-o[output file name]:output OSM file:_files -g "*.json *.geojson *.jsonseq *.geojsonseq"' \
+        '(-o)--output[output file name]:output OSM file:_files -g "*.json *.geojson *.jsonseq *.geojsonseq"' \
+        '(--overwrite)-O[allow overwriting of existing output file]' \
+        '(-O)--overwrite[allow overwriting of existing output file]' \
+        '(--output-format)-f[format of output file]:file format:_export_file_formats' \
+        '(-f)--output-format[format of output file]:file format:_export_file_formats' \
+        '(--config)-c[config file]:config file:_files -f "*.json"' \
+        '(-c)--config[config file]:config file:_files -f "*.json"' \
+        '(--show-errors)-e[output errors to stdout]' \
+        '(-e)--show-errors[output errors to stdout]' \
+        '(--index-type -I --show-index-types)-i[set index type]:index types:_osmium_export_index_types' \
+        '(-i -I --show-index-types)--index-type[set index type]:index types:_osmium_export_index_types' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --show-index-types)-I[show a list of available index types]' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u -I)--show-index-types[show a list of available index types]' \
+        '(--keep-untagged)-n[keep untagged features]' \
+        '(-n)--keep-untagged[keep untagged features]' \
+        '(--omit-rs)-r[omit record separator when using geojsonseq format]' \
+        '(-r)--omit-rs[omit record separator when using geojsonseq format]' \
+        '(--add-unique-id)-u[add unique id]:unique id format:_export_id_type' \
+        '(-u)--add-unique-id[add unique id]:unique id format:_export_id_type'
 }
 
 _osmium-extract() {
@@ -379,6 +406,20 @@ _osmium_entity_type() {
         'changeset'
 }
 
+_export_file_formats() {
+    _values 'export file formats' \
+        'json[GeoJSON format]' \
+        'geojson[GeoJSON format]' \
+        'jsonseq[GeoJSON Text Sequence format]' \
+        'geojsonseq[GeoJSON Text Sequence format]'
+}
+
+_export_id_type() {
+    _values 'export unique id type' \
+        'counter' \
+        'type_id'
+}
+
 _osmium_extract_strategy() {
     _values 'extract strategy' \
         'simple' \
@@ -394,9 +435,13 @@ _osmium_index_types() {
     _values 'index types' $(osmium add-locations-to-ways --show-index-types)
 }
 
+_osmium_export_index_types() {
+    _values 'index types' $(osmium export --show-index-types)
+}
+
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter file-formats)
+    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter file-formats)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 
