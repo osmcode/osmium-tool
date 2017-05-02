@@ -196,8 +196,9 @@ void ExportFormatJSON::area(const osmium::Area& area) {
 
 void ExportFormatJSON::close() {
     if (m_fd > 0) {
+        add_to_stream(m_stream, "\n");
         if (!m_text_sequence_format) {
-            add_to_stream(m_stream, "\n]}\n");
+            add_to_stream(m_stream, "]}\n");
         }
 
         flush_to_output();

@@ -1,0 +1,4 @@
+{"type":"Feature","geometry":{"type":"Point","coordinates":[2.0,1.5]},"properties":{"amenity":"post_box"}}
+{"type":"Feature","geometry":{"type":"LineString","coordinates":[[1.0,1.0],[1.0,2.0],[1.0,3.0]]},"properties":{"highway":"track"}}
+{"type":"Feature","geometry":{"type":"LineString","coordinates":[[1.0,1.0],[1.0,2.0],[2.0,1.5]]},"properties":{"barrier":"fence"}}
+{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[1.0,1.0],[2.0,1.5],[1.0,2.0],[1.0,1.0]]]]},"properties":{"landuse":"forest"}}
