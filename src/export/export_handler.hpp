@@ -41,26 +41,29 @@ class ExportHandler : public osmium::handler::Handler {
     std::unique_ptr<ExportFormat> m_handler;
     osmium::TagsFilter m_linear_filter;
     osmium::TagsFilter m_area_filter;
+    uint64_t m_error_count = 0;
     bool m_show_errors;
+    bool m_stop_on_error;
 
     bool is_linear(const osmium::Way& way) const noexcept;
 
     bool is_area(const osmium::Area& area) const noexcept;
 
-    void show_error(const std::runtime_error& e) const;
+    void show_error(const std::runtime_error& error);
 
 public:
 
     ExportHandler(std::unique_ptr<ExportFormat>&& handler,
                   const std::vector<std::string>& linear_tags,
                   const std::vector<std::string>& area_tags,
-                  bool show_errors);
+                  bool show_errors,
+                  bool stop_on_error);
 
-    void node(const osmium::Node& node) const;
+    void node(const osmium::Node& node);
 
-    void way(const osmium::Way& way) const;
+    void way(const osmium::Way& way);
 
-    void area(const osmium::Area& area) const;
+    void area(const osmium::Area& area);
 
     void close() const {
         m_handler->close();
@@ -68,6 +71,10 @@ public:
 
     std::uint64_t count() const noexcept {
         return m_handler->count();
+    }
+
+    std::uint64_t error_count() const noexcept {
+        return m_error_count;
     }
 
 }; // class ExportHandler

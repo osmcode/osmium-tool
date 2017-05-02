@@ -193,12 +193,14 @@ _osmium-export() {
         '(-f)--output-format[format of output file]:file format:_export_file_formats' \
         '(--config)-c[config file]:config file:_files -f "*.json"' \
         '(-c)--config[config file]:config file:_files -f "*.json"' \
-        '(--show-errors)-e[output errors to stdout]' \
-        '(-e)--show-errors[output errors to stdout]' \
+        '(--show-errors)-e[output errors to stderr]' \
+        '(-e)--show-errors[output errors to stderr]' \
+        '(--stop-on-error)-E[stop on first geometry error]' \
+        '(-E)--stop-on-error[stop on first geometry error]' \
         '(--index-type -I --show-index-types)-i[set index type]:index types:_osmium_export_index_types' \
         '(-i -I --show-index-types)--index-type[set index type]:index types:_osmium_export_index_types' \
-        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --show-index-types)-I[show a list of available index types]' \
-        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u -I)--show-index-types[show a list of available index types]' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --show-index-types)-I[show a list of available index types]' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u -I)--show-index-types[show a list of available index types]' \
         '(--keep-untagged)-n[keep untagged features]' \
         '(-n)--keep-untagged[keep untagged features]' \
         '(--omit-rs)-r[omit record separator when using geojsonseq format]' \

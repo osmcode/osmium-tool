@@ -61,10 +61,8 @@ void ExportFormatJSON::flush_to_output() {
 }
 
 void ExportFormatJSON::start_feature(const std::string& prefix, osmium::object_id_type id) {
-    const auto uncommitted_size = m_stream.GetSize() - m_committed_size;
-    if (uncommitted_size) {
-        m_stream.Pop(uncommitted_size);
-    }
+    rollback_uncomitted();
+
     if (m_count > 0) {
         if (!m_text_sequence_format) {
             m_stream.Put(',');
@@ -194,8 +192,17 @@ void ExportFormatJSON::area(const osmium::Area& area) {
     finish_feature(area);
 }
 
+void ExportFormatJSON::rollback_uncomitted() {
+    const auto uncommitted_size = m_stream.GetSize() - m_committed_size;
+    if (uncommitted_size != 0) {
+        m_stream.Pop(uncommitted_size);
+    }
+}
+
 void ExportFormatJSON::close() {
     if (m_fd > 0) {
+        rollback_uncomitted();
+
         add_to_stream(m_stream, "\n");
         if (!m_text_sequence_format) {
             add_to_stream(m_stream, "]}\n");

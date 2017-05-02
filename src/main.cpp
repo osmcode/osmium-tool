@@ -36,6 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <boost/program_options/errors.hpp>
 
 #include <osmium/handler/check_order.hpp>
+#include <osmium/geom/factory.hpp>
 
 #include "cmd.hpp"
 
@@ -133,6 +134,10 @@ int main(int argc, char *argv[]) {
             std::cerr << ". Try using --overwrite if you are sure you want to overwrite the file.";
         }
         std::cerr << '\n';
+    } catch (const osmium::geometry_error& e) {
+        std::cerr << "Geometry error: " << e.what() << '\n';
+    } catch (const osmium::invalid_location& e) {
+        std::cerr << "Geometry error: Invalid location. Usually this means a node was missing from the input data.\n";
     } catch (const std::exception& e) {
         std::cerr << e.what() << '\n';
     }

@@ -58,11 +58,13 @@ bool ExportHandler::is_area(const osmium::Area& area) const noexcept {
 ExportHandler::ExportHandler(std::unique_ptr<ExportFormat>&& handler,
                              const std::vector<std::string>& linear_tags,
                              const std::vector<std::string>& area_tags,
-                             bool show_errors) :
+                             bool show_errors,
+                             bool stop_on_error) :
     m_handler(std::move(handler)),
     m_linear_filter(true),
     m_area_filter(true),
-    m_show_errors(show_errors) {
+    m_show_errors(show_errors),
+    m_stop_on_error(stop_on_error) {
     if (!linear_tags.empty()) {
         initialize_tags_filter(m_linear_filter, false, linear_tags);
     }
@@ -71,13 +73,17 @@ ExportHandler::ExportHandler(std::unique_ptr<ExportFormat>&& handler,
     }
 }
 
-void ExportHandler::show_error(const std::runtime_error& e) const {
+void ExportHandler::show_error(const std::runtime_error& error) {
+    if (m_stop_on_error) {
+        throw;
+    }
+    ++m_error_count;
     if (m_show_errors) {
-        std::cout << "Geometry error: " << e.what() << "\n";
+        std::cerr << "Geometry error: " << error.what() << '\n';
     }
 }
 
-void ExportHandler::node(const osmium::Node& node) const {
+void ExportHandler::node(const osmium::Node& node) {
     if (node.tags().empty() && !m_handler->options().keep_untagged) {
         return;
     }
@@ -91,7 +97,7 @@ void ExportHandler::node(const osmium::Node& node) const {
     }
 }
 
-void ExportHandler::way(const osmium::Way& way) const {
+void ExportHandler::way(const osmium::Way& way) {
     if (way.nodes().size() <= 1) {
         return;
     }
@@ -107,7 +113,7 @@ void ExportHandler::way(const osmium::Way& way) const {
     }
 }
 
-void ExportHandler::area(const osmium::Area& area) const {
+void ExportHandler::area(const osmium::Area& area) {
     if (!area.from_way() || is_area(area)) {
         try {
             m_handler->area(area);

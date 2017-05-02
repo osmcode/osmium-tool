@@ -174,6 +174,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     ("output-format,f", po::value<std::string>(), "Output format (default depends on output file suffix)")
     ("overwrite,O", "Allow existing output file to be overwritten")
     ("show-errors,e", "Output any geometry errors on STDOUT")
+    ("stop-on-error,E", "Stop on the first error encountered")
     ("show-index-types,I", "Show available index types")
     ("omit-rs,r", "Do not print RS (record separator) character when using JSON Text Sequences")
     ;
@@ -283,6 +284,11 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         m_show_errors = true;
     }
 
+    if (vm.count("stop-on-error")) {
+        m_show_errors = true;
+        m_stop_on_error = true;
+    }
+
     if (!m_include_tags.empty() && !m_exclude_tags.empty()) {
         throw config_error{"Setting both 'include_tags' and 'exclude_tags' is not allowed."};
     }
@@ -291,10 +297,6 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         initialize_tags_filter(m_options.tags_filter, false, m_include_tags);
     } else if (!m_exclude_tags.empty()) {
         initialize_tags_filter(m_options.tags_filter, true, m_exclude_tags);
-    }
-
-    if (m_output_filename == "-" && m_show_errors) {
-        throw argument_error{"Can't use --show-errors/-e when writing to STDOUT."};
     }
 
     return true;
@@ -392,7 +394,7 @@ bool CommandExport::run() {
     m_vout << "Second pass through input file...\n";
 
     auto handler = create_handler(m_output_format, m_output_filename, m_output_overwrite, m_fsync, m_options);
-    ExportHandler export_handler{std::move(handler), m_linear_tags, m_area_tags, m_show_errors};
+    ExportHandler export_handler{std::move(handler), m_linear_tags, m_area_tags, m_show_errors, m_stop_on_error};
     osmium::handler::CheckOrder check_order_handler;
 
     if (m_index_type_name == "none") {
@@ -417,6 +419,7 @@ bool CommandExport::run() {
     export_handler.close();
 
     m_vout << "Wrote " << export_handler.count() << " features.\n";
+    m_vout << "Encountered " << export_handler.error_count() << " errors.\n";
 
     show_memory_used();
 

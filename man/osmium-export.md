@@ -43,11 +43,16 @@ This program will not work on full history files.
 :   Read configuration from specified file.
 
 -e, --show-errors
-:   Output any geometry errors on STDOUT. This includes ways with a single
+:   Output any geometry errors on STDERR. This includes ways with a single
     node or areas that can't be assembled from multipolygon relations. This
     output is not suitable for automated use, there are other tools that can
     create very detailed errors reports that are better for that (see
     http://osmcode.org/osm-area-tools/).
+
+-E, --stop-on-error
+:   Usually geometry errors (due to missing node locations or broken polygons)
+    are ignored and the features are omitted from the output. If this option
+    is set, any error will immediately stop the program.
 
 -i, --index-type=TYPE
 :   Set the index type.
@@ -205,8 +210,9 @@ areas. Some closed ways will also form areas. Here are the more detailed rules:
 * Non-closed ways (last node not the same as the first node) are always
   linestrings, not areas.
 * Relations tagged `type=multipolygon` or `type=boundary` are always assembled
-  into areas. If they are not valid, they are ignored (but an error message
-  will be produced if the --show-errors/-e option is specified).
+  into areas. If they are not valid, they are omitted from the output (unless
+  --stop-on-error/-E is specified). (An error message will be produced if the
+  --show-errors/-e option is specified).
 * For closed ways the tags are checked. If they have an `area` tag other than
   `area=no`, they are areas and a polygon is created. If they have an `area`
   tag other than `area=yes`, they are linestrings. So closed ways can be both,

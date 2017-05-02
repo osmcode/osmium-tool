@@ -66,6 +66,7 @@ class CommandExport : public Command, public with_single_osm_input {
     osmium::io::fsync m_fsync = osmium::io::fsync::no;
 
     bool m_show_errors = false;
+    bool m_stop_on_error = false;
 
     void canonicalize_output_format();
     void parse_options(const rapidjson::Value& attributes);
