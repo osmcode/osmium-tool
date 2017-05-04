@@ -261,7 +261,12 @@ void CommandExtract::parse_config_file() {
             const auto json_polygon      = e.FindMember("polygon");
             const auto json_multipolygon = e.FindMember("multipolygon");
 
-            const osmium::io::File output_file{m_output_directory + output, output_format};
+            osmium::io::File output_file{m_output_directory + output, output_format};
+            if (m_with_history) {
+                output_file.set_has_multiple_object_versions(true);
+            } else if (output_file.has_multiple_object_versions()) {
+                throw config_error{"Looks like you are trying to write a history file, but option --with-history is not set."};
+            }
 
             if (json_bbox != e.MemberEnd()) {
                 m_extracts.emplace_back(new ExtractBBox{output_file, description, parse_bbox(json_bbox->value)});
@@ -380,6 +385,10 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
         throw argument_error{"Can only use one of --config/-c, --bbox/-b, or --polygon/-p."};
     }
 
+    if (vm.count("with-history")) {
+        m_with_history = true;
+    }
+
     if (vm.count("config")) {
         if (vm.count("directory")) {
             set_directory(vm["directory"].as<std::string>());
@@ -425,10 +434,6 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
         for (const auto& option : vm["option"].as<std::vector<std::string>>()) {
             m_options.set(option);
         }
-    }
-
-    if (vm.count("with-history")) {
-        m_with_history = true;
     }
 
     if (vm.count("set-bounds")) {
@@ -493,6 +498,9 @@ bool CommandExtract::run() {
 
     for (const auto& extract : m_extracts) {
         osmium::io::Header file_header{header};
+        if (m_with_history) {
+            file_header.set_has_multiple_object_versions(true);
+        }
         if (m_set_bounds) {
             file_header.add_box(extract->envelope());
         }
