@@ -1,0 +1,27 @@
+File:
+  Name: fileinfo/fi1.osm
+  Format: XML
+  Compression: none
+  Size: 438
+Header:
+  Bounding boxes:
+  With history: no
+  Options:
+    generator=testdata
+    version=0.6
+Data: 
+  Bounding box: (1,1,1,3)
+  Timestamps:
+    First: 2015-01-01T01:00:00Z
+    Last: 2015-01-01T04:00:00Z
+  Objects ordered (by type and id): yes
+  Multiple versions of same object: no
+  CRC32: 1e1e05ec
+  Number of changesets: 0
+  Number of nodes: 3
+  Number of ways: 0
+  Number of relations: 0
+  Largest changeset ID: 0
+  Largest node ID: 4
+  Largest way ID: 0
+  Largest relation ID: 0
