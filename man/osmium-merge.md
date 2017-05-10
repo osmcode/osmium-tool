@@ -25,9 +25,11 @@ files as input creating a new history file. Do not use this command to merge
 non-history files with data from different points in time. It will not work
 correctly.
 
-While merging only object type, id, and version are compared. If you have
-objects with the same type, id, and version but different other data, the
-result of this command is undefined.
+If you have objects with the same type, id, and version but different other
+data, the result of this command is undefined. This situation can never happen
+in correct OSM files, but sometimes buggy programs can generate data like this.
+Osmium doesn't make any promises on what the result of the command is if the
+input data is not correct.
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
