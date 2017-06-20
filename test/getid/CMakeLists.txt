@@ -15,7 +15,7 @@ function(check_getid_file _name _file _input _output)
 endfunction()
 
 check_getid(n input.osm output.osm)
-check_getid_file(file1 idfile input.osm output.osm)
+check_getid_file(file1 idfile input.osm output-file.osm)
 
 #-----------------------------------------------------------------------------
 

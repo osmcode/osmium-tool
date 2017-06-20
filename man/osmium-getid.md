@@ -43,9 +43,10 @@ single argument separated by spaces, tabs, commas (,), semicolons (;), forward
 slashes (/) or pipe characters (|).
 
 In an ID file (option **-i**/**--id-file**) each line must start with an ID in
-the format described above. Lines can optionally contain a space character or a
-hash sign ('#') after the ID. Any characters after that are ignored. (This also
-allows files in OPL format to be read.) Empty lines are ignored.
+the format described above. Leading space characters in the line are ignored.
+Lines can optionally contain a space character or a hash sign ('#') after the
+ID. Any characters after that are ignored. (This also allows files in OPL
+format to be read.) Empty lines are ignored.
 
 Note that all objects will be taken from the *OSM-FILE*, the *ID-OSM-FILE* is
 only used to detect which objects to get. This might matter if there are
