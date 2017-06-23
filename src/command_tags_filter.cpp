@@ -20,9 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstddef>
 #include <fstream>
-#include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -35,10 +33,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
-#include <osmium/osm/types_from_string.hpp>
 #include <osmium/tags/taglist.hpp>
 #include <osmium/util/progress_bar.hpp>
-#include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_tags_filter.hpp"

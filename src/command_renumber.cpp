@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <fcntl.h>
 #include <iostream>
 #include <iterator>
+#include <stdexcept>
 #include <string>
 #include <sys/types.h>
 #include <sys/stat.h>

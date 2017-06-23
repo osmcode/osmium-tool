@@ -20,7 +20,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstddef>
 #include <string>
 #include <vector>
 
@@ -31,7 +30,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
-#include <osmium/util/file.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "cmd.hpp"

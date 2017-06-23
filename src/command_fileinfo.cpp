@@ -21,14 +21,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <algorithm>
-#include <cerrno>
 #include <cstdint>
 #include <iostream>
 #include <iterator>
 #include <memory>
 #include <sstream>
 #include <string>
-#include <system_error>
 #include <utility>
 #include <vector>
 

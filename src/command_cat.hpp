@@ -28,10 +28,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp" // IWYU pragma: export
 
-namespace osmium { namespace io {
-    class Header;
-}}
-
 class CommandCat : public Command, public with_multiple_osm_inputs, public with_osm_output {
 
 public:

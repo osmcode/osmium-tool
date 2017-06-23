@@ -23,7 +23,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <set>
+#include <cstddef>
+#include <iosfwd>
 #include <string>
 #include <vector>
 

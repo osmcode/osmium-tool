@@ -34,7 +34,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace osmium {
     namespace io {
-        class Header;
         class Reader;
         class Writer;
     }

@@ -20,12 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cassert>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include <stdexcept>
 #include <string>
 #include <vector>
 

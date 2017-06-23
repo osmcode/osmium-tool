@@ -38,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/diff_object.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/object.hpp>
+#include <osmium/osm/timestamp.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include "command_time_filter.hpp"
