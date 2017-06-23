@@ -21,9 +21,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <cctype>
-#include <cstddef>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -34,15 +34,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <rapidjson/error/en.h>
 #include <rapidjson/istreamwrapper.h>
 
+#include <osmium/area/assembler.hpp>
+#include <osmium/area/multipolygon_collector.hpp>
 #include <osmium/handler/check_order.hpp>
-#include <osmium/io/header.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
+#include <osmium/io/any_input.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
-#include <osmium/osm/types_from_string.hpp>
-#include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
+#include <osmium/visitor.hpp>
 
 #include "command_export.hpp"
 #include "exception.hpp"

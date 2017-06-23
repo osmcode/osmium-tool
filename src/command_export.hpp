@@ -28,14 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <rapidjson/document.h>
 
-#include <osmium/area/assembler.hpp>
-#include <osmium/area/multipolygon_collector.hpp>
-#include <osmium/handler/check_order.hpp>
-#include <osmium/io/any_input.hpp>
-#include <osmium/memory/buffer.hpp>
-#include <osmium/osm.hpp>
-#include <osmium/osm/tag.hpp>
-#include <osmium/visitor.hpp>
+#include <osmium/io/writer_options.hpp>
 
 // these must be included in this order
 #include <osmium/index/map/all.hpp>
