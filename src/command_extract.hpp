@@ -37,7 +37,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandExtract : public Command, public with_single_osm_input, public with_osm_output {
 
-    static const size_t initial_buffer_size = 10 * 1024;
+    static const std::size_t initial_buffer_size = 10 * 1024;
 
     std::string m_config_file_name;
     std::string m_config_directory;

@@ -121,7 +121,7 @@ bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
         return false;
     }
 
-    size_t band = (location.y() - y_min()) / m_dy;
+    std::size_t band = (location.y() - y_min()) / m_dy;
     if (band >= m_bands.size()) {
         band = m_bands.size() - 1;
     }

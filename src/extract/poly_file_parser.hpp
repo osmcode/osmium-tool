@@ -56,7 +56,7 @@ class PolyFileParser {
     std::unique_ptr<osmium::builder::AreaBuilder> m_builder;
     std::string m_file_name;
     std::vector<std::string> m_data;
-    size_t m_line = 0;
+    std::size_t m_line = 0;
 
     void parse_ring();
     void parse_multipolygon();

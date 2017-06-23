@@ -159,7 +159,7 @@ namespace strategy_complete_ways_with_history {
 
     void Strategy::run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
         vout << "Running 'complete_ways' strategy in two passes...\n";
-        const size_t file_size = osmium::util::file_size(input_file.filename());
+        const std::size_t file_size = osmium::util::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size * 2, display_progress};
 
         vout << "First pass...\n";
