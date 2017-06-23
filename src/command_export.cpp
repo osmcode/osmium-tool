@@ -35,11 +35,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <rapidjson/istreamwrapper.h>
 
 #include <osmium/area/assembler.hpp>
-#include <osmium/area/multipolygon_collector.hpp>
+#include <osmium/area/multipolygon_manager.hpp>
 #include <osmium/handler/check_order.hpp>
 #include <osmium/io/any_input.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
+#include <osmium/relations/manager_util.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -380,14 +381,10 @@ static std::unique_ptr<ExportFormat> create_handler(const std::string& output_fo
 
 bool CommandExport::run() {
     osmium::area::Assembler::config_type assembler_config;
-    osmium::area::MultipolygonCollector<osmium::area::Assembler> collector{assembler_config};
+    osmium::area::MultipolygonManager<osmium::area::Assembler> mp_manager{assembler_config};
 
     m_vout << "First pass through input file (reading relations)...\n";
-    {
-        osmium::io::Reader reader{m_input_filename, osmium::osm_entity_bits::relation};
-        collector.read_relations(reader);
-        reader.close();
-    }
+    osmium::relations::read_relations(m_input_file, mp_manager);
     m_vout << "First pass done.\n";
 
     m_vout << "Second pass through input file...\n";
@@ -397,8 +394,8 @@ bool CommandExport::run() {
     osmium::handler::CheckOrder check_order_handler;
 
     if (m_index_type_name == "none") {
-        osmium::io::Reader reader{m_input_filename};
-        osmium::apply(reader, check_order_handler, export_handler, collector.handler([&export_handler](osmium::memory::Buffer&& buffer) {
+        osmium::io::Reader reader{m_input_file};
+        osmium::apply(reader, check_order_handler, export_handler, mp_manager.handler([&export_handler](osmium::memory::Buffer&& buffer) {
             osmium::apply(buffer, export_handler);
         }));
         reader.close();
@@ -409,7 +406,7 @@ bool CommandExport::run() {
         location_handler.ignore_errors();
 
         osmium::io::Reader reader{m_input_filename};
-        osmium::apply(reader, check_order_handler, location_handler, export_handler, collector.handler([&export_handler](osmium::memory::Buffer&& buffer) {
+        osmium::apply(reader, check_order_handler, location_handler, export_handler, mp_manager.handler([&export_handler](osmium::memory::Buffer&& buffer) {
             osmium::apply(buffer, export_handler);
         }));
         reader.close();
