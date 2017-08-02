@@ -27,6 +27,12 @@ Shapefiles, etc.) do not support arbitrary tags. Transformation into other GIS
 formats will need extra steps mapping tags to a limited list of attributes.
 This is outside the scope of this command.
 
+The **osmium export** command has to keep an index of the node locations in
+memory or in a temporary file on disk while doing its work. There are several
+different ways it can do that which have different advantages and
+disadvantages. The default is good enough for most cases, but see the
+**osmium-index-types**(5) man page for details.
+
 This program will not work on full history files.
 
 
@@ -48,11 +54,12 @@ This program will not work on full history files.
     is set, any error will immediately stop the program.
 
 -i, --index-type=TYPE
-:   Set the index type. For details see the INDEX TYPES section.
+:   Set the index type. For details see the **osmium-index-types**(5) man
+    page.
 
 -I, --show-index-types
-:   Shows a list of available index types. For details see the INDEX TYPES
-    section.
+:   Shows a list of available index types. For details see the
+    **osmium-index-types**(5) man page.
 
 -n, --keep-untagged
 :   If this is set features without any tags will be in the exported data.
@@ -193,34 +200,6 @@ Note that the `id` is not necessarily unique. Even the combination `type` and
 `id` is  not unique, because a way may end up as LineString and as Polygon
 on the file. See the `--add-unique-id` option for a unique Id.
 
-# INDEX TYPES
-
-The **osmium export** command has to keep an index of the node locations in
-memory or in a temporary file on disk while doing its work. There are several
-different ways it can do that which have different advantages and
-disadvantages.
-
-Use the **--show-index-types**, **-I** option to show all available index
-types. It depends on your operating system which index types are available.
-
-Use the **--index-type**, **-i** option to set the index type to be used.
-
-The default index type is `flex_mem` which will keep all data in memory and
-works for small extracts as well as the whole planet file. It is usually the
-right choice for almost all use cases if you have enough memory to keep the
-whole index in memory.
-
-The special type `none` is used when reading from files with the node locations
-on the ways. (See **osmium-add-node-locations-to-ways**(1) for how to get a
-file like this.)
-
-You can use one of the file-based indexes for the node location store to
-minimize memory use, but performance will suffer. In this case use
-`sparse_file_array` if you have a small or medium sized extract and
-`dense_file_array` if you are working with a planet or really large extract.
-
-See http://osmcode.org/osmium-concepts/#indexes for more about these indexes.
-
 
 # AREA HANDLING
 
@@ -276,7 +255,8 @@ The following output formats are supported:
 
 **osmium export** will usually keep all node locations and all objects needed
 for assembling the areas in memory. For larger data files, this can need
-several tens of GBytes of memory. See the INDEX TYPES section for details.
+several tens of GBytes of memory. See the **osmium-index-types**(5) man page
+for details.
 
 
 # EXAMPLES
@@ -292,11 +272,11 @@ Use a config file and export into GeoJSON Text Sequence format:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-add-node-locations-to-ways**(1)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-index-types**(5),
+  **osmium-add-node-locations-to-ways**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
 * [GeoJSON](http://geojson.org/)
 * [RFC7946](https://tools.ietf.org/html/rfc7946)
 * [RFC8142](https://tools.ietf.org/html/rfc8142)
 * [Line delimited JSON](https://en.wikipedia.org/wiki/JSON_Streaming#Line_delimited_JSON)
-* [Index types](http://osmcode.org/osmium-concepts/#indexes)
 

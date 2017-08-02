@@ -48,7 +48,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments) {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
-    std::string default_index_type{map_factory.has_map_type("sparse_mmap_array") ? "sparse_mmap_array" : "sparse_mem_array"};
+    std::string default_index_type{"flex_mem"};
 
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
@@ -140,7 +140,7 @@ void CommandAddLocationsToWays::copy_data(osmium::ProgressBar& progress_bar, osm
 bool CommandAddLocationsToWays::run() {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
     auto location_index = map_factory.create_map(m_index_type_name);
-    location_handler_type location_handler(*location_index);
+    location_handler_type location_handler{*location_index};
 
     if (m_ignore_missing_nodes) {
         location_handler.ignore_errors();
@@ -181,6 +181,7 @@ bool CommandAddLocationsToWays::run() {
         writer.close();
     }
 
+    m_vout << "About " << (location_index->used_memory() / (1024 * 1024)) << " MBytes used for node location index (in main memory or on disk).\n";
     show_memory_used();
     m_vout << "Done.\n";
 

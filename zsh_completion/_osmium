@@ -443,7 +443,7 @@ _osmium_export_index_types() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter file-formats)
+    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter file-formats index-types)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 

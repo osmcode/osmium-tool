@@ -155,6 +155,7 @@ if(PANDOC)
     add_man_page(1 osmium-tags-filter)
     add_man_page(1 osmium-time-filter)
     add_man_page(5 osmium-file-formats)
+    add_man_page(5 osmium-index-types)
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/man DESTINATION share)
 

@@ -68,8 +68,13 @@ bool CommandHelp::run() {
                       << "\n";
         }
 
+        std::cout << "\nTOPICS:\n"
+                     "  file-formats           File formats supported by Osmium\n"
+                     "  index-types            Index types for storing node locations\n";
+
         std::cout << "\nUse 'osmium COMMAND -h' for short usage information.\n"
-                     "Use 'osmium help COMMAND' for detailed information on a specific command.\n";
+                     "Use 'osmium help COMMAND' for detailed information on a specific command.\n"
+                     "Use 'osmium help TOPIC' for detailed information on a specific topic.\n";
         return true;
     }
 
@@ -81,6 +86,11 @@ bool CommandHelp::run() {
 
     if (m_topic == "file-formats") {
         show_help("file-formats", "osmium file-formats: Supported formats are 'xml', 'pbf', and 'opl'.");
+        return true;
+    }
+
+    if (m_topic == "index-types") {
+        show_help("index-types", "");
         return true;
     }
 

@@ -26,11 +26,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#include <osmium/index/map/dense_mem_array.hpp> // IWYU pragma: keep
-#include <osmium/index/map/dense_mmap_array.hpp> // IWYU pragma: keep
-#include <osmium/index/map/sparse_mem_array.hpp> // IWYU pragma: keep
-#include <osmium/index/map/sparse_mmap_array.hpp> // IWYU pragma: keep
 #include <osmium/handler/node_locations_for_ways.hpp>
+#include <osmium/index/map/all.hpp>
 
 namespace osmium {
     namespace io {
