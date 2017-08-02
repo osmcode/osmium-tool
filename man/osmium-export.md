@@ -72,13 +72,13 @@ This program will not work on full history files.
     GeoJSON Text Sequence Format. Ignored for other formats.
 
 -u, --add-unique-id=TYPE
-:   Add a unique Id to each feature. TYPE can be either *counter* in which
-    case the first feature will get Id 1, the next Id 2 and so on. The type
+:   Add a unique ID to each feature. TYPE can be either *counter* in which
+    case the first feature will get ID 1, the next ID 2 and so on. The type
     of object does not matter in this case. Or the TYPE is *type_id* in which
-    case the Id is a string, the first character is the type of object ('n'
+    case the ID is a string, the first character is the type of object ('n'
     for nodes, 'w' for linestrings created from ways, and 'a' for areas
-    created from ways and/or relations, after that there is a unique Id based
-    on the original OSM object Id(s).
+    created from ways and/or relations, after that there is a unique ID based
+    on the original OSM object ID(s).
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
@@ -175,13 +175,13 @@ their attributes from the ways and/or relations they were created from. The
 attributes known to `osmium export` are:
 
 * `type` ('node', 'way', or 'relation')
-* `id` (64 bit object Id)
+* `id` (64 bit object ID)
 * `version` (version number)
-* `changeset` (changeset Id)
+* `changeset` (changeset ID)
 * `timestamp` (time of object creation in seconds since Jan 1 1970)
-* `uid` (user Id)
+* `uid` (user ID)
 * `user` (user name)
-* `way_nodes` (ways only, array with node Ids)
+* `way_nodes` (ways only, array with node IDs)
 
 For areas, the type will be `way` or `relation` if the area was created
 from a closed way or a multipolygon or boundary relation, respectively. The
@@ -198,7 +198,7 @@ as the attribute name.
 
 Note that the `id` is not necessarily unique. Even the combination `type` and
 `id` is  not unique, because a way may end up as LineString and as Polygon
-on the file. See the `--add-unique-id` option for a unique Id.
+on the file. See the `--add-unique-id` option for a unique ID.
 
 
 # AREA HANDLING
@@ -232,7 +232,7 @@ The following output formats are supported:
 * `geojsonseq` (alias: `jsonseq`): GeoJSON Text Sequence (RFC8142). Each line
   (beginning with a RS (0x1e, record separator) and ending in a linefeed
   character) contains one GeoJSON object. Used for streaming GeoJSON.
-* `text` (alias: `txt`): A simple text format with the geometry in WKT formats
+* `text` (alias: `txt`): A simple text format with the geometry in WKT format
   followed by the comma-delimited tags. This is mainly intended for debugging
   at the moment. THE FORMAT MIGHT CHANGE WITHOUT NOTICE!
 
