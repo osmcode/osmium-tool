@@ -161,7 +161,7 @@ void CommandExport::canonicalize_output_format() {
 
 bool CommandExport::setup(const std::vector<std::string>& arguments) {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
-    std::string default_index_type{map_factory.has_map_type("sparse_mmap_array") ? "sparse_mmap_array" : "sparse_mem_array"};
+    std::string default_index_type{"flex_mem"};
 
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()

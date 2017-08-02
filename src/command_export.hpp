@@ -28,11 +28,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <rapidjson/document.h>
 
-#include <osmium/io/writer_options.hpp>
-
-// these must be included in this order
-#include <osmium/index/map/all.hpp>
 #include <osmium/handler/node_locations_for_ways.hpp>
+#include <osmium/index/map/all.hpp>
+#include <osmium/io/writer_options.hpp>
 
 #include "cmd.hpp" // IWYU pragma: export
 
