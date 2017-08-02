@@ -34,6 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <rapidjson/istreamwrapper.h>
 
 #include <osmium/geom/coordinates.hpp>
+#include <osmium/handler/check_order.hpp>
 #include <osmium/io/any_input.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
@@ -153,7 +154,11 @@ namespace {
             try {
                 OSMFileParser parser{buffer, file_name};
                 return parser();
+            } catch (const std::system_error& e) {
+                throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
             } catch (const osmium::io_error& e) {
+                throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
+            } catch (const osmium::out_of_order_error& e) {
                 throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
             }
         } else if (file_type == "geojson") {
@@ -227,6 +232,7 @@ void CommandExtract::parse_config_file() {
 
     std::string directory{get_value_as_string(doc, "directory")};
     if (!directory.empty() && m_output_directory.empty()) {
+        m_vout << "  Directory set to '" << directory << "'.\n";
         set_directory(directory);
     }
 
@@ -239,6 +245,7 @@ void CommandExtract::parse_config_file() {
         throw config_error{"'extracts' member in top-level object must be array."};
     }
 
+    m_vout << "  Reading extracts from config file...\n";
     int extract_num = 1;
     for (const auto& e : json_extracts->value.GetArray()) {
         std::string output;
@@ -251,6 +258,8 @@ void CommandExtract::parse_config_file() {
             if (output.empty()) {
                 throw config_error{"Missing 'output' field for extract."};
             }
+
+            m_vout << "    Looking at extract '" << output << "'...\n";
 
             std::string output_format{get_value_as_string(e, "output_format")};
             std::string description{get_value_as_string(e, "description")};
@@ -309,10 +318,14 @@ void CommandExtract::parse_config_file() {
         } catch (const osmium::io_error&) {
             std::cerr << "Error while reading OSM file for extract " << extract_num << " (" << output << "):\n";
             throw;
+        } catch (const osmium::out_of_order_error&) {
+            std::cerr << "Error while reading OSM file for extract " << extract_num << " (" << output << "):\n";
+            throw;
         }
 
         ++extract_num;
     }
+    m_vout << '\n';
 }
 
 std::unique_ptr<ExtractStrategy> CommandExtract::make_strategy(const std::string& name) {
@@ -403,13 +416,6 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
             m_config_directory = m_config_file_name;
             m_config_directory.resize(slash + 1);
         }
-
-        try {
-            parse_config_file();
-        } catch (const config_error&) {
-            std::cerr << "Error while reading config file '" << m_config_file_name << "':\n";
-            throw;
-        }
     }
 
     if (vm.count("bbox")) {
@@ -459,6 +465,9 @@ void CommandExtract::show_arguments() {
     m_vout << "    output directory: " << m_output_directory << '\n';
 
     m_vout << '\n';
+}
+
+void CommandExtract::show_extracts() {
     m_vout << "Extracts:\n";
 
     int n = 1;
@@ -491,6 +500,18 @@ void CommandExtract::show_arguments() {
 }
 
 bool CommandExtract::run() {
+    if (!m_config_file_name.empty()) {
+        m_vout << "Reading config file...\n";
+        try {
+            parse_config_file();
+        } catch (const config_error&) {
+            std::cerr << "Error while reading config file '" << m_config_file_name << "':\n";
+            throw;
+        }
+    }
+
+    show_extracts();
+
     osmium::io::Header header;
     setup_header(header);
 

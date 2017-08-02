@@ -50,6 +50,7 @@ class CommandExtract : public Command, public with_single_osm_input, public with
     bool m_set_bounds = false;
 
     void parse_config_file();
+    void show_extracts();
 
     void set_directory(const std::string& directory);
 
