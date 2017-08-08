@@ -20,9 +20,10 @@ from ways or relations are not guaranteed to be in the correct order.
 
 This command expects the input file to be ordered in the usual way: First
 nodes in order of ID, then ways in order of ID, then relations in order of ID.
-The input file will be read twice, so it will not work with STDIN.
+Negative IDs are allowed, they must be ordered before the positive IDs. See
+the **osmium-sort**(1) man page for details of the ordering.
 
-Currently this command can not renumber negative IDs.
+The input file will be read twice, so it will not work with STDIN.
 
 To renumber the IDs in several files, call **osmium renumber** for each file
 and specify the `-i` or `--index-directory` option each time. See the
@@ -112,6 +113,6 @@ then rewrite a change file, too:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-sort**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
 

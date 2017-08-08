@@ -57,18 +57,18 @@ namespace osmium { namespace io {
 
 osmium::object_id_type id_map::operator()(osmium::object_id_type id) {
     // Search for id in m_extra_ids and return if found.
-    auto it = m_extra_ids.find(id);
+    const auto it = m_extra_ids.find(id);
     if (it != m_extra_ids.end()) {
         return it->second;
     }
 
     // New ID is larger than all existing IDs. Add it to end and return.
-    if (m_ids.empty() || id > m_ids.back()) {
+    if (m_ids.empty() || osmium::id_order{}(m_ids.back(), id)) {
         m_ids.push_back(id);
         return m_ids.size();
     }
 
-    const auto element = std::lower_bound(m_ids.cbegin(), m_ids.cend(), id);
+    const auto element = std::lower_bound(m_ids.cbegin(), m_ids.cend(), id, osmium::id_order{});
     // Old ID not found in m_ids, add to m_extra_ids.
     if (element == m_ids.cend() || *element != id) {
         m_ids.push_back(m_ids.back());
@@ -93,13 +93,13 @@ void id_map::write(int fd) {
 }
 
 void id_map::read(int fd, std::size_t file_size) {
-    auto num_elements = file_size / sizeof(osmium::object_id_type);
+    const auto num_elements = file_size / sizeof(osmium::object_id_type);
     m_ids.reserve(num_elements);
     osmium::util::TypedMemoryMapping<osmium::object_id_type> mapping{num_elements, osmium::util::MemoryMapping::mapping_mode::readonly, fd};
 
     osmium::object_id_type last_id = 0;
     for (osmium::object_id_type id : mapping) {
-        if (id > last_id) {
+        if (osmium::id_order{}(last_id, id)) {
             m_ids.push_back(id);
             last_id = id;
         } else {
@@ -176,28 +176,28 @@ void CommandRenumber::renumber(osmium::memory::Buffer& buffer) {
             case osmium::item_type::node:
                 if (osm_entity_bits() & osmium::osm_entity_bits::node) {
                     m_check_order.node(static_cast<const osmium::Node&>(object));
-                    object.set_id(map(osmium::item_type::node)(object.id()));
+                    object.set_id(m_id_map(osmium::item_type::node)(object.id()));
                 }
                 break;
             case osmium::item_type::way:
                 if (osm_entity_bits() & osmium::osm_entity_bits::way) {
                     m_check_order.way(static_cast<const osmium::Way&>(object));
-                    object.set_id(map(osmium::item_type::way)(object.id()));
+                    object.set_id(m_id_map(osmium::item_type::way)(object.id()));
                 }
                 if (osm_entity_bits() & osmium::osm_entity_bits::node) {
                     for (auto& ref : static_cast<osmium::Way&>(object).nodes()) {
-                        ref.set_ref(map(osmium::item_type::node)(ref.ref()));
+                        ref.set_ref(m_id_map(osmium::item_type::node)(ref.ref()));
                     }
                 }
                 break;
             case osmium::item_type::relation:
                 if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
                     m_check_order.relation(static_cast<const osmium::Relation&>(object));
-                    object.set_id(map(osmium::item_type::relation)(object.id()));
+                    object.set_id(m_id_map(osmium::item_type::relation)(object.id()));
                 }
                 for (auto& member : static_cast<osmium::Relation&>(object).members()) {
                     if (osm_entity_bits() & osmium::osm_entity_bits::from_item_type(member.type())) {
-                        member.set_ref(map(member.type())(member.ref()));
+                        member.set_ref(m_id_map(member.type())(member.ref()));
                     }
                 }
                 break;
@@ -231,7 +231,7 @@ void CommandRenumber::read_index(osmium::item_type type) {
         throw std::runtime_error{std::string{"Index file '"} + f + "' has wrong file size"};
     }
 
-    map(type).read(fd, file_size);
+    m_id_map(type).read(fd, file_size);
 
     close(fd);
 }
@@ -250,7 +250,7 @@ void CommandRenumber::write_index(osmium::item_type type) {
     _setmode(fd, _O_BINARY);
 #endif
 
-    map(type).write(fd);
+    m_id_map(type).write(fd);
 
     close(fd);
 }
@@ -273,14 +273,14 @@ bool CommandRenumber::run() {
         read_index(osmium::item_type::way);
         read_index(osmium::item_type::relation);
 
-        m_vout << "  Nodes     index contains " << map(osmium::item_type::node).size() << " items\n";
-        m_vout << "  Ways      index contains " << map(osmium::item_type::way).size() << " items\n";
-        m_vout << "  Relations index contains " << map(osmium::item_type::relation).size() << " items\n";
+        m_vout << "  Nodes     index contains " << m_id_map(osmium::item_type::node).size() << " items\n";
+        m_vout << "  Ways      index contains " << m_id_map(osmium::item_type::way).size() << " items\n";
+        m_vout << "  Relations index contains " << m_id_map(osmium::item_type::relation).size() << " items\n";
     }
 
     if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
         m_vout << "First pass through input file (reading relations)...\n";
-        read_relations(m_input_file, map(osmium::item_type::relation));
+        read_relations(m_input_file, m_id_map(osmium::item_type::relation));
     } else {
         m_vout << "No first pass through input file, because relation IDs are not mapped.\n";
     }
@@ -314,15 +314,15 @@ bool CommandRenumber::run() {
     }
 
     if (osm_entity_bits() & osmium::osm_entity_bits::node) {
-        m_vout << "Largest (referenced) node id: "     << map(osmium::item_type::node).size()     << "\n";
+        m_vout << "Largest (referenced) node id: "     << m_id_map(osmium::item_type::node).size()     << "\n";
     }
 
     if (osm_entity_bits() & osmium::osm_entity_bits::way) {
-        m_vout << "Largest (referenced) way id: "      << map(osmium::item_type::way).size()      << "\n";
+        m_vout << "Largest (referenced) way id: "      << m_id_map(osmium::item_type::way).size()      << "\n";
     }
 
     if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
-        m_vout << "Largest (referenced) relation id: " << map(osmium::item_type::relation).size() << "\n";
+        m_vout << "Largest (referenced) relation id: " << m_id_map(osmium::item_type::relation).size() << "\n";
     }
 
     show_memory_used();

@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <osmium/handler/check_order.hpp>
+#include <osmium/index/nwr_array.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/types.hpp>
 
@@ -91,11 +92,7 @@ class CommandRenumber : public Command, public with_single_osm_input, public wit
     osmium::handler::CheckOrder m_check_order;
 
     // id mappings for nodes, ways, and relations
-    id_map m_id_map[3];
-
-    id_map& map(osmium::item_type type) noexcept {
-        return m_id_map[osmium::item_type_to_nwr_index(type)];
-    }
+    osmium::nwr_array<id_map> m_id_map;
 
     void renumber(osmium::memory::Buffer& buffer);
 
