@@ -12,7 +12,18 @@ osmium-sort - sort OSM files
 # DESCRIPTION
 
 Merges the content of all input files given on the command line and sort the
-result. Objects are sorted by type, ID, and version.
+result.
+
+Objects are sorted by type, ID, and version. IDs are sorted negative IDs first,
+the positive IDs, both ordered by their absolute values. So the sort order for
+types and IDs is:
+
+node -1, node -2, ..., node 1, node 2, ...,
+way -1, way -2, ..., way 1, way 2, ...,
+relation -1, relation -2, ..., relation 1, relation 2, ...
+
+If there are several objects of the same type and with the same ID they are
+ordered by ascending version.
 
 This works with normal OSM data files, history files, and change files.
 
