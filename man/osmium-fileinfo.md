@@ -45,7 +45,8 @@ Data
     ways, and relations found in the file, whether the objects in the
     file were ordered by type (nodes, then ways, then relations) and
     id, and whether there were multiple versions of the same object in
-    the file (history files and change files can have that).
+    the file (history files and change files can have that). See the
+    **osmium-sort**(1) man page for details of the expected ordering.
 
 
 # OPTIONS
@@ -125,6 +126,6 @@ main memory.
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-sort**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
 

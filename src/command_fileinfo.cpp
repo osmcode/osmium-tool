@@ -50,6 +50,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/crc.hpp>
+#include <osmium/osm/object_comparisons.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/minmax.hpp>
 #include <osmium/util/progress_bar.hpp>
@@ -111,7 +112,7 @@ struct InfoHandler : public osmium::handler::Handler {
             if (last_id == object.id()) {
                 multiple_versions = true;
             }
-            if (last_id > object.id()) {
+            if (osmium::id_order{}(object.id(), last_id)) {
                 ordered = false;
             }
         } else if (last_type != osmium::item_type::changeset && last_type > object.type()) {
