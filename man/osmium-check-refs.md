@@ -25,6 +25,8 @@ checked.
 
 This command expects the input file to be ordered in the usual way: First
 nodes in order of ID, then ways in order of ID, then relations in order of ID.
+Negative IDs are allowed, they must be ordered before the positive IDs. See
+the **osmium-sort**(1) man page for details of the ordering.
 
 This command will only work for OSM data files, not OSM history files or
 change files.
@@ -33,7 +35,7 @@ change files.
 # OPTIONS
 
 -i, --show-ids
-:   Print all missing IDs to STDOUT. If you don't give this option, only a
+:   Print all missing IDs to STDOUT. If you don't specify this option, only a
     summary is shown.
 
 -r, --check-relations
@@ -49,9 +51,9 @@ change files.
 **osmium check-refs** will do the check in one pass through the input data. It
 needs enough main memory to store all temporary data.
 
-Largest memory need will be about 1 bit for each node ID, for a full planet
-that's roughly 500 MB these days (Summer 2015). With the **-r**,
-**--check-relations** option memory use will be a bit bigger.
+Largest memory need will be about 1 bit for each node ID, that's roughly 540 MB
+these days (Summer 2017). With the **-r**, **--check-relations** option memory
+use will be a bit bigger.
 
 
 # DIAGNOSTICS
@@ -71,7 +73,7 @@ that's roughly 500 MB these days (Summer 2015). With the **-r**,
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-sort**(1)
 * [Osmium website](http://osmcode.org/osmium-tool/)
 
 

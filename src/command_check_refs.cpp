@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/handler.hpp>
 #include <osmium/handler/check_order.hpp>
 #include <osmium/index/id_set.hpp>
+#include <osmium/index/nwr_array.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/util/progress_bar.hpp>
@@ -93,11 +94,10 @@ void CommandCheckRefs::show_arguments() {
 
 class RefCheckHandler : public osmium::handler::Handler {
 
-    osmium::index::IdSetDense<osmium::unsigned_object_id_type> m_nodes;
-    osmium::index::IdSetDense<osmium::unsigned_object_id_type> m_ways;
-    osmium::index::IdSetDense<osmium::unsigned_object_id_type> m_relations;
+    osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_idset_pos;
+    osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_idset_neg;
 
-    std::vector<std::pair<uint32_t, uint32_t>> m_relation_refs;
+    std::vector<std::pair<osmium::object_id_type, osmium::object_id_type>> m_relation_refs;
 
     osmium::handler::CheckOrder m_check_order;
 
@@ -113,6 +113,14 @@ class RefCheckHandler : public osmium::handler::Handler {
     osmium::ProgressBar& m_progress_bar;
     bool m_show_ids;
     bool m_check_relations;
+
+    void set(osmium::item_type type, osmium::object_id_type id) {
+        (id > 0 ? m_idset_pos(type) : m_idset_neg(type)).set(std::abs(id));
+    }
+
+    bool get(osmium::item_type type, osmium::object_id_type id) const noexcept {
+        return (id > 0 ? m_idset_pos(type) : m_idset_neg(type)).get(std::abs(id));
+    }
 
 public:
 
@@ -155,8 +163,8 @@ public:
         std::sort(m_relation_refs.begin(), m_relation_refs.end());
 
         m_relation_refs.erase(
-            std::remove_if(m_relation_refs.begin(), m_relation_refs.end(), [this](std::pair<uint32_t, uint32_t> refs){
-                return m_relations.get(refs.first);
+            std::remove_if(m_relation_refs.begin(), m_relation_refs.end(), [this](std::pair<osmium::object_id_type, osmium::object_id_type> refs){
+                return get(osmium::item_type::relation, refs.first);
             }),
             m_relation_refs.end()
         );
@@ -178,7 +186,7 @@ public:
         }
         ++m_node_count;
 
-        m_nodes.set(node.positive_id());
+        set(osmium::item_type::node, node.id());
     }
 
     void way(const osmium::Way& way) {
@@ -191,11 +199,11 @@ public:
         ++m_way_count;
 
         if (m_check_relations) {
-            m_ways.set(way.positive_id());
+            set(osmium::item_type::way, way.id());
         }
 
         for (const auto& node_ref : way.nodes()) {
-            if (!m_nodes.get(node_ref.positive_ref())) {
+            if (!get(osmium::item_type::node, node_ref.ref())) {
                 ++m_missing_nodes_in_ways;
                 if (m_show_ids) {
                     std::cout << "n" << node_ref.ref() << " in w" << way.id() << "\n";
@@ -214,30 +222,30 @@ public:
         ++m_relation_count;
 
         if (m_check_relations) {
-            m_relations.set(relation.positive_id());
+            set(osmium::item_type::relation, relation.id());
             for (const auto& member : relation.members()) {
                 switch (member.type()) {
                     case osmium::item_type::node:
-                        if (!m_nodes.get(member.positive_ref())) {
+                        if (!get(osmium::item_type::node, member.ref())) {
                             ++m_missing_nodes_in_relations;
-                            m_nodes.set(member.positive_ref());
+                            set(osmium::item_type::node, member.ref());
                             if (m_show_ids) {
                                 std::cout << "n" << member.ref() << " in r" << relation.id() << "\n";
                             }
                         }
                         break;
                     case osmium::item_type::way:
-                        if (!m_ways.get(member.positive_ref())) {
+                        if (!get(osmium::item_type::way, member.ref())) {
                             ++m_missing_ways_in_relations;
-                            m_ways.set(member.positive_ref());
+                            set(osmium::item_type::way, member.ref());
                             if (m_show_ids) {
                                 std::cout << "w" << member.ref() << " in r" << relation.id() << "\n";
                             }
                         }
                         break;
                     case osmium::item_type::relation:
-                        if (member.ref() > relation.id() || !m_relations.get(member.positive_ref())) {
-                            m_relation_refs.emplace_back(uint32_t(member.ref()), uint32_t(relation.id()));
+                        if (member.ref() > relation.id() || !get(osmium::item_type::relation, member.ref())) {
+                            m_relation_refs.emplace_back(member.ref(), relation.id());
                         }
                         break;
                     default:
@@ -251,6 +259,16 @@ public:
         for (const auto& refs : m_relation_refs) {
             std::cout << "r" << refs.first << " in r" << refs.second << "\n";
         }
+    }
+
+    std::size_t used_memory() const noexcept {
+        return m_idset_pos(osmium::item_type::node).used_memory() +
+               m_idset_pos(osmium::item_type::way).used_memory() +
+               m_idset_pos(osmium::item_type::relation).used_memory() +
+               m_idset_neg(osmium::item_type::node).used_memory() +
+               m_idset_neg(osmium::item_type::way).used_memory() +
+               m_idset_neg(osmium::item_type::relation).used_memory() +
+               m_relation_refs.capacity() * sizeof(decltype(m_relation_refs)::value_type);
     }
 
 }; // class RefCheckHandler
@@ -288,6 +306,8 @@ bool CommandCheckRefs::run() {
     } else {
         std::cerr << "Nodes in ways missing: " << handler.missing_nodes_in_ways() << "\n";
     }
+
+    m_vout << "Memory used for indexes: " << (handler.used_memory() / (1024 * 1024)) << " MBytes\n";
 
     show_memory_used();
     m_vout << "Done.\n";
