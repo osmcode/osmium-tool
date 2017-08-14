@@ -43,6 +43,7 @@ class CommandChangesetFilter : public Command, public with_single_osm_input, pub
     std::string m_user;
     osmium::Timestamp m_after = osmium::start_of_time();
     osmium::Timestamp m_before = osmium::end_of_time();
+    osmium::Box m_box;
 
 public:
 

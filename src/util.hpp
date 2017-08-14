@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
+#include <osmium/osm/box.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/string_matcher.hpp>
 #include <osmium/tags/matcher.hpp>
@@ -52,5 +53,6 @@ void strip_whitespace(std::string& string);
 osmium::StringMatcher get_string_matcher(std::string string);
 osmium::TagMatcher get_tag_matcher(const std::string& expression);
 void initialize_tags_filter(osmium::TagsFilter& tags_filter, bool default_result, const std::vector<std::string>& strings);
+osmium::Box parse_bbox(const std::string& str, const std::string& option_name);
 
 #endif // UTIL_HPP

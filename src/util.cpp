@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -183,5 +184,23 @@ void initialize_tags_filter(osmium::TagsFilter& tags_filter, bool default_result
         assert(!str.empty());
         tags_filter.add_rule(!default_result, get_tag_matcher(str));
     }
+}
+
+osmium::Box parse_bbox(const std::string& str, const std::string& option_name) {
+    const auto coordinates = osmium::split_string(str, ',');
+
+    if (coordinates.size() != 4) {
+        throw argument_error{std::string{"Need exactly four coordinates in "} + option_name + " option."};
+    }
+
+    const osmium::Location bottom_left{std::atof(coordinates[0].c_str()), std::atof(coordinates[1].c_str())};
+    const osmium::Location top_right{std::atof(coordinates[2].c_str()), std::atof(coordinates[3].c_str())};
+
+    if (bottom_left.x() < top_right.x() &&
+        bottom_left.y() < top_right.y()) {
+        return osmium::Box{bottom_left, top_right};
+    }
+
+    throw argument_error{std::string{"Need LEFT < RIGHT and BOTTOM < TOP in "} + option_name + " option."};
 }
 

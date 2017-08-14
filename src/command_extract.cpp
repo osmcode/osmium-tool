@@ -106,24 +106,6 @@ namespace {
         throw config_error{"'bbox' member is not an array or object."};
     }
 
-    osmium::Box parse_bbox(const std::string& str) {
-        const auto coordinates = osmium::split_string(str, ',');
-
-        if (coordinates.size() != 4) {
-            throw argument_error{"Need exactly four coordinates in --bbox/-b option."};
-        }
-
-        const osmium::Location bottom_left{std::atof(coordinates[0].c_str()), std::atof(coordinates[1].c_str())};
-        const osmium::Location top_right{std::atof(coordinates[2].c_str()), std::atof(coordinates[3].c_str())};
-
-        if (bottom_left.x() < top_right.x() &&
-            bottom_left.y() < top_right.y()) {
-            return osmium::Box{bottom_left, top_right};
-        }
-
-        throw argument_error{"Need LEFT < RIGHT and BOTTOM < TOP in --bbox/-b option."};
-    }
-
     std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer& buffer) {
         if (file_name.empty()) {
             throw config_error{"Missing 'file_name' in '(multi)polygon' object."};
@@ -423,7 +405,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
             warning("Ignoring --directory/-d option.\n");
         }
         check_output_file();
-        m_extracts.emplace_back(new ExtractBBox{m_output_file, "", parse_bbox(vm["bbox"].as<std::string>())});
+        m_extracts.emplace_back(new ExtractBBox{m_output_file, "", parse_bbox(vm["bbox"].as<std::string>(), "--box/-b")});
     }
 
     if (vm.count("polygon")) {

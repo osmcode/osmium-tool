@@ -23,6 +23,9 @@ criteria are given through command line options.
 -b, --before=TIMESTAMP
 :   Only copy changesets created before the given time.
 
+-B, --bbox=LEFT,BOTTOM,RIGHT,TOP
+:   Only copy changesets with a bounding box overlapping the specified box.
+
 -c, --with-changes
 :   Only copy changesets with changes.
 

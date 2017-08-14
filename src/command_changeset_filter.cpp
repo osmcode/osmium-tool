@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
+#include <osmium/geom/relations.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
@@ -41,6 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_changeset_filter.hpp"
 #include "exception.hpp"
+#include "util.hpp"
 
 bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
@@ -55,6 +57,7 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     ("uid,U", po::value<osmium::user_id_type>(), "Changesets by given user ID")
     ("after,a", po::value<std::string>(), "Changesets opened after this time")
     ("before,b", po::value<std::string>(), "Changesets closed before this time")
+    ("bbox,B", po::value<std::string>(), "Changesets overlapping this bounding box")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -132,6 +135,10 @@ bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
         } catch (const std::invalid_argument&) {
             throw argument_error{"Wrong format for --before/-b timestamp (use YYYY-MM-DDThh:mm:ssZ)."};
         }
+    }
+
+    if (vm.count("bbox")) {
+        m_box = parse_bbox(vm["bbox"].as<std::string>(), "--bbox/-B");
     }
 
     if (m_with_discussion && m_without_discussion) {
@@ -231,7 +238,8 @@ bool CommandChangesetFilter::run() {
                    (m_uid == 0            || changeset.uid() == m_uid) &&
                    (m_user.empty()        || m_user == changeset.user()) &&
                    changeset_after(changeset, m_after) &&
-                   changeset_before(changeset, m_before);
+                   changeset_before(changeset, m_before) &&
+                   (!m_box.valid()        || (changeset.bounds().valid() && osmium::geom::contains(changeset.bounds(), m_box)));
 
     });
 
