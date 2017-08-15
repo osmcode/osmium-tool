@@ -13,6 +13,54 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## [1.7.0] - 2017-08-15
+
+### Added
+
+- New `export` command for exporting OSM data into GeoJSON format. The OSM
+  data model with its nodes, ways, and relations is very different from the
+  data model usually used for geodata with features having point, linestring,
+  or polygon geometries. The export command transforms OSM data into a more
+  usual GIS data model. Nodes will be translated into points and ways into
+  linestrings or polygons (if they are closed ways). Multipolygon and boundary
+  relations will be translated into multipolygons. This transformation is not
+  loss-less, especially information in non-multipolygon, non-boundary relations
+  is lost. All tags are preserved in this process.  Note that most GIS formats
+  (such as Shapefiles, etc.) do not support arbitrary tags. Transformation
+  into other GIS formats will need extra steps mapping tags to a limited list
+  of attributes. This is outside the scope of this command.
+- New `--bbox/-B` option to `changeset-filter` command. Only changesets with
+  bounding boxes overlapping this bounding box are copied to the output.
+- Support for the new `flex_mem` index type for node location indexes. It
+  is used by default in the `add_locations_to_ways` and `export` commands.
+  The new man page `osmium-index-types` documents this and other available
+  indexes.
+
+### Changed
+
+- The order of objects in an OSM file expected by some commands as well as
+  the order created by the `sort` command has changed when negative IDs are
+  involved. (Negative IDs are sometimes used for objects that have not yet
+  been uploaded to the OSM server.) The negative IDs are ordered now before
+  the positive ones, both in order of their absolute value. This is the same
+  ordering as JOSM uses.
+- The commands `check-refs`, `fileinfo`, and `renumber` now also work with
+  negative object IDs.
+- Allow leading spaces in ID files for `getid` command.
+- Various error messages and man pages have been clarified.
+- Updated minimum libosmium version required to 2.13.0.
+- Update version of Catch unit test framework to 1.9.7.
+
+### Fixed
+
+- Libosmium fix: Changesets with more than 2^16 characters in comments now
+  work.
+- Libosmium fix: Changeset bounding boxes are now always output to OSM files
+  (any format) if at least one of the corners is defined. This is needed to
+  handle broken data from the main OSM database which contains such cases.
+  This now also works when reading OPL files.
+
+
 ## [1.6.1] - 2017-04-10
 
 ### Changed
@@ -266,7 +314,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.6.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/osmcode/osmium-tool/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/osmcode/osmium-tool/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/osmcode/osmium-tool/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/osmcode/osmium-tool/compare/v1.5.0...v1.5.1
