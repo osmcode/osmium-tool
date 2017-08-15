@@ -16,11 +16,11 @@ later are known to work. It also works on modern Visual Studio C++ compilers.
 
 You also need the following libraries:
 
-    Libosmium (>= 2.12.1)
+    Libosmium (>= 2.13.0)
         http://osmcode.org/libosmium
         Debian/Ubuntu: libosmium2-dev
 
-    Protozero (>= 1.4.5)
+    Protozero (>= 1.5.1)
         This is included in the libosmium repository and might or might not
         have been installed with it. See the libosmium README.
         https://github.com/mapbox/protozero
