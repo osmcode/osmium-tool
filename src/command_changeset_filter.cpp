@@ -239,7 +239,7 @@ bool CommandChangesetFilter::run() {
                    (m_user.empty()        || m_user == changeset.user()) &&
                    changeset_after(changeset, m_after) &&
                    changeset_before(changeset, m_before) &&
-                   (!m_box.valid()        || (changeset.bounds().valid() && osmium::geom::contains(changeset.bounds(), m_box)));
+                   (!m_box.valid()        || (changeset.bounds().valid() && osmium::geom::overlaps(changeset.bounds(), m_box)));
 
     });
 
