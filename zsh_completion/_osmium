@@ -137,6 +137,8 @@ _osmium-changeset-filter() {
         '--after[changesets closed after]:timestamp:' \
         '-b[changesets opened before]:timestamp:' \
         '--before[changesets opened before]:timestamp:' \
+        '(--bbox)-B[bounding box]:changesets in bounding box (format\: LEFT,BOTTOM,RIGHT,TOP):' \
+        '(-B)--bbox[bounding box]:changesets in bounding box (format\: LEFT,BOTTOM,RIGHT,TOP):' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]'
 }
