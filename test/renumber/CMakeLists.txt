@@ -15,7 +15,7 @@ function(check_renumber_nodes _name _input _output)
 endfunction()
 
 function(check_renumber2 _name _in1 _in2 _out)
-    set(_idxdir "${PROJECT_BINARY_DIR}/test/renumber/index")
+    set(_idxdir "${PROJECT_BINARY_DIR}/test/renumber/index/${_name}")
     if(WIN32)
         set(_devnull "nul")
     else()
@@ -32,6 +32,8 @@ check_renumber(sorted input-sorted.osm output-sorted.osm)
 check_renumber_nodes(nodes-sorted input-sorted.osm output-sorted-n.osm)
 
 check_renumber2(change input-sorted.osm input-change.osc output-change.osc)
+
+check_renumber2(change-norel input-norel.osm input-change.osc output-norel-change.osc)
 
 #-----------------------------------------------------------------------------
 

@@ -213,7 +213,7 @@ std::string CommandRenumber::filename(const char* name) const {
 
 void CommandRenumber::read_index(osmium::item_type type) {
     const std::string f{filename(osmium::item_type_to_name(type))};
-    const int fd = ::open(f.c_str(), O_RDONLY);
+    const int fd = ::open(f.c_str(), O_RDWR);
     if (fd < 0) {
         // if the file is not there we don't have to read anything and can return
         if (errno == ENOENT) {
