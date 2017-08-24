@@ -94,14 +94,16 @@ namespace strategy_smart {
     }
 
     void Strategy::show_arguments(osmium::util::VerboseOutput& vout) {
+        vout << "Additional strategy options:\n";
         if (m_types.empty()) {
-            vout << "    types: any\n";
+            vout << "  types: any\n";
         } else {
-            vout << "    types:\n";
+            vout << "  types:\n";
             for (const auto& type : m_types) {
                 vout << "      " << type << '\n';
             }
         }
+        vout << '\n';
     }
 
     class Pass1 : public Pass<Strategy, Pass1> {

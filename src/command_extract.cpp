@@ -427,7 +427,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     }
 
     if (vm.count("strategy")) {
-        m_strategy = make_strategy(vm["strategy"].as<std::string>());
+        m_strategy_name = vm["strategy"].as<std::string>();
     }
 
     return true;
@@ -438,9 +438,8 @@ void CommandExtract::show_arguments() {
     show_output_arguments(m_vout);
 
     m_vout << "  strategy options:\n";
-    m_vout << "    strategy: " << m_strategy->name() << '\n';
+    m_vout << "    strategy: " << m_strategy_name << '\n';
     m_vout << "    with history: " << yes_no(m_with_history);
-    m_strategy->show_arguments(m_vout);
 
     m_vout << "  other options:\n";
     m_vout << "    config file: " << m_config_file_name << '\n';
@@ -493,6 +492,9 @@ bool CommandExtract::run() {
     }
 
     show_extracts();
+
+    m_strategy = make_strategy(m_strategy_name);
+    m_strategy->show_arguments(m_vout);
 
     osmium::io::Header header;
     setup_header(header);

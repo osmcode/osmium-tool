@@ -1,0 +1,10 @@
+{
+  "extracts": [
+    {
+      "output": "-",
+      "output_format": "osm",
+      "description": "Test",
+      "bbox": [0,0,1.5,10]
+    }
+  ]
+}
