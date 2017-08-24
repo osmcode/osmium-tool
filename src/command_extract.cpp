@@ -461,7 +461,7 @@ void CommandExtract::show_extracts() {
         m_vout << "     Format:      " << e->output_format()    << '\n';
         m_vout << "     Description: " << e->description()      << '\n';
         if (!e->header_options().empty()) {
-        m_vout << "     Header opts: ";
+            m_vout << "     Header opts: ";
             bool first = true;
             for (const auto& opt : e->header_options()) {
                 if (first) {
