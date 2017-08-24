@@ -23,7 +23,10 @@ nodes in order of ID, then ways in order of ID, then relations in order of ID.
 Negative IDs are allowed, they must be ordered before the positive IDs. See
 the **osmium-sort**(1) man page for details of the ordering.
 
-The input file will be read twice, so it will not work with STDIN.
+The input file will be read twice, so it will not work with STDIN. If you
+are not renumbering relations (ie. if the option **--object-type/-t** is used
+with nodes and/or ways but not relations) the input file will only be read
+once, so in that case it will work with STDIN.
 
 To renumber the IDs in several files, call **osmium renumber** for each file
 and specify the `-i` or `--index-directory` option each time. See the
