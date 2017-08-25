@@ -528,11 +528,12 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         "file.size",
         "header.with_history",
         "header.option.generator",
-        "header.option.version",
-        "header.option.pbf_dense_nodes",
-        "header.option.osmosis_replication_timestamp",
-        "header.option.osmosis_replication_sequence_number",
         "header.option.osmosis_replication_base_url",
+        "header.option.osmosis_replication_sequence_number",
+        "header.option.osmosis_replication_timestamp",
+        "header.option.pbf_dense_nodes",
+        "header.option.timestamp",
+        "header.option.version",
         "data.bbox",
         "data.timestamp.first",
         "data.timestamp.last",
@@ -558,9 +559,11 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("get")) {
         m_get_value = vm["get"].as<std::string>();
-        const auto& f = std::find(known_values.cbegin(), known_values.cend(), m_get_value);
-        if (f == known_values.cend()) {
-            throw argument_error{std::string{"Unknown value for --get/-g option '"} + m_get_value + "'. Use --show-variables/-G to see list of known values."};
+        if (m_get_value.substr(0, 14) != "header.option.") {
+            const auto& f = std::find(known_values.cbegin(), known_values.cend(), m_get_value);
+            if (f == known_values.cend()) {
+                throw argument_error{std::string{"Unknown value for --get/-g option '"} + m_get_value + "'. Use --show-variables/-G to see list of known values."};
+            }
         }
         if (m_get_value.substr(0, 5) == "data." && ! m_extended) {
             throw argument_error{"You need to set --extended/-e for any 'data.*' variables to be available."};
