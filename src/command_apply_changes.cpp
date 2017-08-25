@@ -233,7 +233,7 @@ bool CommandApplyChanges::run() {
         m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_version());
 
-        auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
+        const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
         auto out = osmium::io::make_output_iterator(writer);
         m_vout << "Applying changes and writing them to output...\n";
         std::set_union(objects.begin(),
@@ -325,7 +325,7 @@ bool CommandApplyChanges::run() {
             }
             progress_bar.done();
         } else {
-            auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
+            const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
             auto output_it = boost::make_function_output_iterator(
                                 copy_first_with_id(writer)
             );
