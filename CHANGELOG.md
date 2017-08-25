@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.7.1] - 2017-08-25
+
+### Added
+
 - Extended some man pages.
 
 ### Changed
@@ -326,7 +335,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.7.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...HEAD
+[1.7.1]: https://github.com/osmcode/osmium-tool/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/osmcode/osmium-tool/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/osmcode/osmium-tool/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/osmcode/osmium-tool/compare/v1.5.1...v1.6.0
