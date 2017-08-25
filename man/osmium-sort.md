@@ -25,7 +25,12 @@ relation -1, relation -2, ..., relation 1, relation 2, ...
 If there are several objects of the same type and with the same ID they are
 ordered by ascending version.
 
-This works with normal OSM data files, history files, and change files.
+This command works with normal OSM data files, history files, and change files.
+
+This commands reads its input file(s) only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@

@@ -48,6 +48,7 @@ Data
     the file (history files and change files can have that). See the
     **osmium-sort**(1) man page for details of the expected ordering.
 
+This commands reads its input file only once, ie. it can read from STDIN.
 
 # OPTIONS
 

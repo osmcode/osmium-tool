@@ -14,6 +14,10 @@ osmium-changeset-filter - filter changesets from OSM changeset file
 Copy the changesets matching all the given criteria to the output. Matching
 criteria are given through command line options.
 
+This commands reads its input file only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
 # FILTER OPTIONS
 
 -a, --after=TIMESTAMP

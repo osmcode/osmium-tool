@@ -16,6 +16,10 @@ change file. Objects are sorted by type, ID, version, and timestamp so it
 doesn't matter in what order the change files are given or in what order they
 contain the data.
 
+This commands reads its input file(s) only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
 
 # OPTIONS
 

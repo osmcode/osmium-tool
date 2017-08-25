@@ -23,6 +23,10 @@ Changes can be applied to normal OSM data files or OSM history files with this
 command. File formats will be autodetected from the file name suffixes, see
 the **--with-history** option if that doesn't work.
 
+This commands reads its input file(s) only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
 
 # OPTIONS
 

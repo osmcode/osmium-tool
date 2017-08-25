@@ -17,6 +17,10 @@ is not sorted in any way but strictly copied from input to output.
 Because this program supports several different input and output formats, it
 can be used to convert OSM files from one format into another.
 
+This commands reads its input file(s) only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
 
 # OPTIONS
 

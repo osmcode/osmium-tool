@@ -31,6 +31,7 @@ the **osmium-sort**(1) man page for details of the ordering.
 This command will only work for OSM data files, not OSM history files or
 change files.
 
+This commands reads its input file only once, ie. it can read from STDIN.
 
 # OPTIONS
 

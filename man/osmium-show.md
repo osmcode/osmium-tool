@@ -21,6 +21,8 @@ variable. If neither is set, the default `less` is used unless the option
 `--no-pager` is used. If the pager variables are set to an empty value or
 to `cat`, no pager is used. On Windows there is no pager support at all.
 
+This commands reads its input file only once, ie. it can read from STDIN.
+
 
 # OPTIONS
 

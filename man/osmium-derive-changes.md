@@ -42,6 +42,10 @@ other information will be removed. But you can change this using the
 options. Depending on which software you are using the change files with,
 different settings might be necessary.
 
+This commands reads its input files only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
 
 # OPTIONS
 

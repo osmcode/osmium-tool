@@ -31,6 +31,11 @@ in correct OSM files, but sometimes buggy programs can generate data like this.
 Osmium doesn't make any promises on what the result of the command is if the
 input data is not correct.
 
+This commands reads its input file(s) only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
+
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@

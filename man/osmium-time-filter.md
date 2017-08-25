@@ -16,14 +16,19 @@ Copy all objects that were valid at the given *TIME* or in the time period
 between *FROM-TIME* (inclusive) and *TO-TIME* (not inclusive) from the input
 file into the output file.  If no time is given, the current time is used.
 
-Usually the *INPUT-FILE* will be an OSM data file with history. If both *FROM-TIME*
-and *TO-TIME* are given, the result will also have history data, it will also
-include deleted versions of objects.
+Usually the *INPUT-FILE* will be an OSM data file with history. If both
+*FROM-TIME* and *TO-TIME* are given, the result will also have history data,
+it will also include deleted versions of objects.
 
 If only a single point in time was given, the result will be a normal OSM file
 without history containing no deleted objects.
 
 The format for the timestamps is "yyyy-mm-ddThh:mm::ssZ".
+
+This commands reads its input file only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
+
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@

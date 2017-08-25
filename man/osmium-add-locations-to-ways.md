@@ -38,7 +38,11 @@ If the **--keep-untagged-nodes**, **-n** option is used, files created by this
 command can be updated with the **apply-changes** command using the
 **--locations-on-ways** option.
 
-This program will not work on full history files.
+This command will not work on full history files.
+
+This commands reads its input file(s) only once and writes its output file
+in one go so it can be streamed, ie. it can read from STDIN and write to
+STDOUT.
 
 
 # OPTIONS
