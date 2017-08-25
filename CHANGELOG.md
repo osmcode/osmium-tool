@@ -8,9 +8,21 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Extended some man pages.
+
 ### Changed
 
+- Allow any OSM file header option with `fileinfo -g`. There is no final
+  list of possible options, so any option should be allowed.
+- Needs libosmium 2.13.1.
+
 ### Fixed
+
+- Specifying extracts in config files was broken. The `extract` command was
+  not reading config files correctly and all resulting OSM files were empty.
+  Specifying an extract on the command line using `--bbox` or `--polygon`
+  was still working.
+- Allow zero-length index files in renumber.
 
 
 ## [1.7.0] - 2017-08-15
