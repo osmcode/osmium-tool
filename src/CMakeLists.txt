@@ -48,11 +48,6 @@ set(OSMIUM_SOURCE_FILES
     extract/strategy_smart.cpp
 )
 
-# This is the list of all source files that are in the repository. It should be
-# the same as the configured list above, if not we'll find out about that below
-# and create a fatal error.
-file(GLOB _osmium_source_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp */*.cpp)
-
 add_executable(osmium ${OSMIUM_SOURCE_FILES})
 
 target_link_libraries(osmium ${Boost_LIBRARIES} ${OSMIUM_LIBRARIES})
@@ -60,12 +55,4 @@ target_link_libraries(osmium ${Boost_LIBRARIES} ${OSMIUM_LIBRARIES})
 set_pthread_on_target(osmium)
 
 install(TARGETS osmium DESTINATION bin)
-
-foreach(_file ${OSMIUM_SOURCE_FILES})
-    list(REMOVE_ITEM _osmium_source_files ${_file})
-endforeach()
-
-if(NOT ${_osmium_source_files} STREQUAL "${PROJECT_BINARY_DIR}/src/version.cpp")
-    message(FATAL_ERROR "Found source files that are not configured: ${_osmium_source_files}")
-endif()
 
