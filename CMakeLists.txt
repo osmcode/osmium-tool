@@ -200,6 +200,59 @@ include_directories(SYSTEM include)
 include_directories(${PROJECT_BINARY_DIR}/src)
 
 #-----------------------------------------------------------------------------
+
+SET(OSMIUM_COMMANDS
+    add-locations-to-ways
+    apply-changes
+    cat
+    changeset-filter
+    check-refs
+    derive-changes
+    diff
+    export
+    extract
+    fileinfo
+    getid
+    merge
+    merge-changes
+    renumber
+    show
+    sort
+    tags-filter
+    time-filter
+)
+
+set(OSMIUM_SOURCE_FILES
+    cmd.cpp
+    cmd_factory.cpp
+    io.cpp
+    util.cpp
+    command_help.cpp
+    export/export_format_json.cpp
+    export/export_format_text.cpp
+    export/export_handler.cpp
+    extract/extract_bbox.cpp
+    extract/extract.cpp
+    extract/extract_polygon.cpp
+    extract/geojson_file_parser.cpp
+    extract/osm_file_parser.cpp
+    extract/poly_file_parser.cpp
+    extract/strategy_complete_ways.cpp
+    extract/strategy_complete_ways_with_history.cpp
+    extract/strategy_simple.cpp
+    extract/strategy_smart.cpp
+)
+
+foreach(_command ${OSMIUM_COMMANDS})
+    string(REPLACE "-" "_" _ucmd ${_command})
+    list(APPEND OSMIUM_SOURCE_FILES "command_${_ucmd}.cpp")
+endforeach()
+
+add_subdirectory(man)
+add_subdirectory(src)
+
+
+#-----------------------------------------------------------------------------
 #
 #  Tests
 #
@@ -224,11 +277,5 @@ if(WITH_EXTRA_TESTS)
     add_test(NAME testinstall
              COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/test_install.cmake)
 endif()
-
-#-----------------------------------------------------------------------------
-
-add_subdirectory(man)
-add_subdirectory(src)
-
 
 #-----------------------------------------------------------------------------

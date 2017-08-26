@@ -11,8 +11,18 @@ include_directories(../src)
 include_directories(../src/extract)
 include_directories(../include)
 
-file(GLOB ALL_UNIT_TESTS */test_setup.cpp */test_unit.cpp)
-file(GLOB ALL_COMMANDS ../src/command_*.cpp ../src/io.cpp ../src/cmd.cpp ../src/cmd_factory.cpp ../src/util.cpp ../src/*/*.cpp)
+set(ALL_UNIT_TESTS
+    cat/test_setup.cpp
+    diff/test_setup.cpp
+    extract/test_unit.cpp
+    time-filter/test_setup.cpp
+    util/test_unit.cpp
+)
+
+foreach(_source_file ${OSMIUM_SOURCE_FILES})
+    list(APPEND ALL_COMMANDS "../src/${_source_file}")
+endforeach()
+
 add_executable(unit_tests unit_tests.cpp ${ALL_COMMANDS} ${ALL_UNIT_TESTS} ${PROJECT_BINARY_DIR}/src/version.cpp)
 target_link_libraries(unit_tests ${Boost_LIBRARIES} ${OSMIUM_LIBRARIES})
 set_pthread_on_target(unit_tests)
@@ -68,45 +78,23 @@ endfunction()
 
 #-----------------------------------------------------------------------------
 #
-#  Check "osmium SUBCOMMAND -h" for most subcommands.
-#
-#-----------------------------------------------------------------------------
-function(check_cmd_help _command)
-    do_test(help_cmd_${_command} "osmium ${_command} -h" "Usage: osmium ${_command}.*OPTIONS:")
-endfunction()
-
-check_cmd_help(add-locations-to-ways)
-check_cmd_help(apply-changes)
-check_cmd_help(cat)
-check_cmd_help(changeset-filter)
-check_cmd_help(check-refs)
-check_cmd_help(derive-changes)
-check_cmd_help(diff)
-check_cmd_help(export)
-check_cmd_help(extract)
-check_cmd_help(fileinfo)
-check_cmd_help(getid)
-check_cmd_help(merge)
-check_cmd_help(merge-changes)
-check_cmd_help(renumber)
-check_cmd_help(show)
-check_cmd_help(sort)
-check_cmd_help(tags-filter)
-check_cmd_help(time-filter)
-
-
-#-----------------------------------------------------------------------------
-#
-#  Configure tests in all subdirectories
+#  Configure tests for all commands
 #
 #-----------------------------------------------------------------------------
 
-file(GLOB _testcmakes "test" "*/CMakeLists.txt")
+foreach(_cmd IN LISTS OSMIUM_COMMANDS)
+    do_test(help_cmd_${_cmd} "osmium ${_cmd} -h" "Usage: osmium ${_cmd}.*OPTIONS:")
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_cmd}/CMakeLists.txt")
+        message(STATUS "Adding tests in ${_cmd}")
+        add_subdirectory(${_cmd})
+    else()
+        message(STATUS "No tests for ${_cmd} command found")
+    endif()
+endforeach()
 
-foreach(_tc IN LISTS _testcmakes)
-    string(REPLACE "/CMakeLists.txt" "" _dir ${_tc})
-    message(STATUS "Adding tests in ${_dir}")
-    add_subdirectory(${_dir})
+foreach(_extra_tests formats help misc)
+    message(STATUS "Adding tests in ${_extra_tests}")
+    add_subdirectory(${_extra_tests})
 endforeach()
 
 
