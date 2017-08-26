@@ -209,6 +209,17 @@ enable_testing()
 add_subdirectory(test)
 
 #-----------------------------------------------------------------------------
+#
+#  Test install
+#
+#  Does a local install and checks that the files we expect to be installed
+#  are and no extra files are installed. If this fails make sure the list of
+#  files in cmake/test_install.cmake is correct.
+#
+#-----------------------------------------------------------------------------
+add_test(NAME testinstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/test_install.cmake)
+
+#-----------------------------------------------------------------------------
 
 add_subdirectory(man)
 add_subdirectory(src)
