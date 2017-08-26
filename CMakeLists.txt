@@ -213,11 +213,17 @@ add_subdirectory(test)
 #  Test install
 #
 #  Does a local install and checks that the files we expect to be installed
-#  are and no extra files are installed. If this fails make sure the list of
-#  files in cmake/test_install.cmake is correct.
+#  are installed and no extra files are installed. If this fails make sure
+#  the list of files in cmake/test_install.cmake is correct. Only enables
+#  if the WITH_EXTRA_TESTS option is set, because this test fails on some
+#  platforms even if everything is correct.
 #
 #-----------------------------------------------------------------------------
-add_test(NAME testinstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/test_install.cmake)
+option(WITH_EXTRA_TESTS "Run extra tests (usually only for developers")
+if(WITH_EXTRA_TESTS)
+    add_test(NAME testinstall
+             COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/test_install.cmake)
+endif()
 
 #-----------------------------------------------------------------------------
 
