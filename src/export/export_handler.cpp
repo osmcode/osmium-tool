@@ -41,7 +41,7 @@ static bool check_filter(const osmium::TagList& tags, const char* area_tag_value
 
     if (area_tag) {
         // has "area" tag and check that it does NOT have the area_tag_value
-        return std::strcmp(area_tag, area_tag_value);
+        return std::strcmp(area_tag, area_tag_value) != 0;
     }
 
     return osmium::tags::match_any_of(tags, filter);
