@@ -21,78 +21,78 @@
 
 void register_commands() {
     CommandFactory::add("add-locations-to-ways", "Add node locations to ways", []() {
-        return new CommandAddLocationsToWays();
+        return new CommandAddLocationsToWays{};
     });
 
     CommandFactory::add("apply-changes", "Apply OSM change files to OSM data file", []() {
-        return new CommandApplyChanges();
+        return new CommandApplyChanges{};
     });
 
     CommandFactory::add("cat", "Concatenate OSM files and convert to different formats", []() {
-        return new CommandCat();
+        return new CommandCat{};
     });
 
     CommandFactory::add("changeset-filter", "Filter OSM changesets by different criteria", []() {
-        return new CommandChangesetFilter();
+        return new CommandChangesetFilter{};
     });
 
     CommandFactory::add("check-refs", "Check referential integrity of an OSM file", []() {
-        return new CommandCheckRefs();
+        return new CommandCheckRefs{};
     });
 
     CommandFactory::add("derive-changes", "Create OSM change files from two OSM data files", []() {
-        return new CommandDeriveChanges();
+        return new CommandDeriveChanges{};
     });
 
     CommandFactory::add("diff", "Display differences between OSM files", []() {
-        return new CommandDiff();
+        return new CommandDiff{};
     });
 
     CommandFactory::add("export", "Export OSM data", []() {
-        return new CommandExport();
+        return new CommandExport{};
     });
 
     CommandFactory::add("extract", "Create geographic extract", []() {
-        return new CommandExtract();
+        return new CommandExtract{};
     });
 
     CommandFactory::add("fileinfo", "Show information about OSM file", []() {
-        return new CommandFileinfo();
+        return new CommandFileinfo{};
     });
 
     CommandFactory::add("getid", "Get objects with given ID from OSM file", []() {
-        return new CommandGetId();
+        return new CommandGetId{};
     });
 
     CommandFactory::add("help", "Show osmium help", []() {
-        return new CommandHelp();
+        return new CommandHelp{};
     });
 
     CommandFactory::add("merge-changes", "Merge several OSM change files into one", []() {
-        return new CommandMergeChanges();
+        return new CommandMergeChanges{};
     });
     CommandFactory::add("merge", "Merge several sorted OSM files into one", []() {
-        return new CommandMerge();
+        return new CommandMerge{};
     });
 
     CommandFactory::add("renumber", "Renumber IDs in OSM file", []() {
-        return new CommandRenumber();
+        return new CommandRenumber{};
     });
 
     CommandFactory::add("show", "Show OSM file contents", []() {
-        return new CommandShow();
+        return new CommandShow{};
     });
 
     CommandFactory::add("sort", "Sort OSM data files", []() {
-        return new CommandSort();
+        return new CommandSort{};
     });
 
     CommandFactory::add("tags-filter", "Filter OSM data based on tags", []() {
-        return new CommandTagsFilter();
+        return new CommandTagsFilter{};
     });
 
     CommandFactory::add("time-filter", "Filter OSM data from a point in time or a time span out of a history file", []() {
-        return new CommandTimeFilter();
+        return new CommandTimeFilter{};
     });
 }
 

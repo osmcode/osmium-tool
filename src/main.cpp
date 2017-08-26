@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 
     register_commands();
 
-    std::string command = argv[0];
+    std::string command{argv[0]};
 
     // remove path from command
     // (backslash for windows, slash for everybody else)
