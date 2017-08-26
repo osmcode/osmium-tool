@@ -9,8 +9,9 @@ find_program(PANDOC pandoc)
 function(add_man_page _section _name)
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/man${_section})
     set(_output_file ${CMAKE_CURRENT_BINARY_DIR}/man${_section}/${_name}.${_section})
+    install(FILES ${_output_file} DESTINATION share/man/man${_section})
     set(_source_file ${CMAKE_CURRENT_SOURCE_DIR}/${_name}.md)
-    set(_dest_file ${CMAKE_BINARY_DIR}/man-source/${_name}.md)
+    set(_dest_file ${CMAKE_CURRENT_BINARY_DIR}/source/${_name}.md)
     file(READ ${CMAKE_CURRENT_SOURCE_DIR}/common-options.md MAN_COMMON_OPTIONS)
     file(READ ${CMAKE_CURRENT_SOURCE_DIR}/progress-options.md MAN_PROGRESS_OPTIONS)
     file(READ ${CMAKE_CURRENT_SOURCE_DIR}/input-options.md MAN_INPUT_OPTIONS)
@@ -44,7 +45,6 @@ if(PANDOC)
         --variable "version=${OSMIUM_VERSION}"
         --variable "author=${AUTHOR}"
     )
-    set(PANDOC_HTML_OPTIONS -s -t html)
 
     add_man_page(1 osmium)
     add_man_page(1 osmium-add-locations-to-ways)
@@ -67,8 +67,6 @@ if(PANDOC)
     add_man_page(1 osmium-time-filter)
     add_man_page(5 osmium-file-formats)
     add_man_page(5 osmium-index-types)
-
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/man1 ${CMAKE_CURRENT_BINARY_DIR}/man5 DESTINATION share/man)
 
     add_custom_target(man ALL DEPENDS ${ALL_MAN_PAGES})
 else()
