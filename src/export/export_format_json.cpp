@@ -128,7 +128,7 @@ void ExportFormatJSON::add_attributes(const osmium::OSMObject& object) {
 
     if (!options().timestamp.empty()) {
         m_writer.String(options().timestamp);
-        m_writer.Int(object.timestamp().seconds_since_epoch());
+        m_writer.Int64(object.timestamp().seconds_since_epoch());
     }
 
     if (!options().way_nodes.empty() && object.type() == osmium::item_type::way) {
