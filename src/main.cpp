@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
         std::cerr << '\n';
     } catch (const osmium::geometry_error& e) {
         std::cerr << "Geometry error: " << e.what() << '\n';
-    } catch (const osmium::invalid_location& e) {
+    } catch (const osmium::invalid_location&) {
         std::cerr << "Geometry error: Invalid location. Usually this means a node was missing from the input data.\n";
     } catch (const std::exception& e) {
         std::cerr << e.what() << '\n';
