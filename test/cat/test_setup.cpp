@@ -8,7 +8,7 @@ TEST_CASE("cat") {
     CommandCat cmd;
 
     SECTION("no parameters") {
-        REQUIRE_THROWS_AS(cmd.setup({}), argument_error);
+        REQUIRE_THROWS_AS(cmd.setup({}), const argument_error&);
     }
 
     SECTION("stdin osm to stdout pbf") {
@@ -29,11 +29,11 @@ TEST_CASE("cat") {
     }
 
     SECTION("unknown object-type 1") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "out.osm", "-t", "foo"}), argument_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "out.osm", "-t", "foo"}), const argument_error&);
     }
 
     SECTION("unknown object-type 2") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "out.osm", "--object-type", "foo"}), argument_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "out.osm", "--object-type", "foo"}), const argument_error&);
     }
 
     SECTION("reading to files") {
@@ -57,23 +57,23 @@ TEST_CASE("cat") {
     }
 
     SECTION("unknown input format suffix") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.foo"}), argument_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.foo"}), const argument_error&);
     }
 
     SECTION("unknown input format option") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-F", "foo"}), argument_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-F", "foo"}), const argument_error&);
     }
 
     SECTION("unknown output format suffix") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.bar"}), std::runtime_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.bar"}), const std::runtime_error&);
     }
 
     SECTION("unknown output suffix and unknown format option") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.foo", "-f", "bar"}), std::runtime_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.foo", "-f", "bar"}), const std::runtime_error&);
     }
 
     SECTION("unknown output format option") {
-        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.pbf", "-f", "bar"}), std::runtime_error);
+        REQUIRE_THROWS_AS(cmd.setup({"in.osm", "-o", "foo.pbf", "-f", "bar"}), const std::runtime_error&);
     }
 
 }

@@ -30,8 +30,8 @@ TEST_CASE("Get object types") {
     REQUIRE(get_types("r") == osmium::osm_entity_bits::relation);
     REQUIRE(get_types("nw") == (osmium::osm_entity_bits::node | osmium::osm_entity_bits::way));
     REQUIRE(get_types("rw") == (osmium::osm_entity_bits::way | osmium::osm_entity_bits::relation));
-    REQUIRE_THROWS_AS(get_types("x"), argument_error);
-    REQUIRE_THROWS_AS(get_types("nwx"), argument_error);
+    REQUIRE_THROWS_AS(get_types("x"), const argument_error&);
+    REQUIRE_THROWS_AS(get_types("nwx"), const argument_error&);
 }
 
 static void test_filter(const std::string& expression, osmium::osm_entity_bits::type entities, const char* filter) {
@@ -48,7 +48,7 @@ TEST_CASE("Get tags filter expression") {
     test_filter("r/highway", osmium::osm_entity_bits::relation, "highway");
     test_filter("nw/highway", osmium::osm_entity_bits::node | osmium::osm_entity_bits::way, "highway");
     test_filter("n/highway/foo", osmium::osm_entity_bits::node, "highway/foo");
-    REQUIRE_THROWS_AS(get_filter_expression("highway/foo"), argument_error);
+    REQUIRE_THROWS_AS(get_filter_expression("highway/foo"), const argument_error&);
 }
 
 void test_strip_whitespace(const char* in, const char* out) {
