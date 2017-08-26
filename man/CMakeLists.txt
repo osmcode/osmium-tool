@@ -68,7 +68,7 @@ if(PANDOC)
     add_man_page(5 osmium-file-formats)
     add_man_page(5 osmium-index-types)
 
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} DESTINATION share)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/man1 ${CMAKE_CURRENT_BINARY_DIR}/man5 DESTINATION share/man)
 
     add_custom_target(man ALL DEPENDS ${ALL_MAN_PAGES})
 else()
