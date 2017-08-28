@@ -100,6 +100,16 @@ To set the build type call cmake with `-DCMAKE_BUILD_TYPE=type`. Possible
 values are empty, Debug, Release, RelWithDebInfo, MinSizeRel, and Dev. The
 default is RelWithDebInfo.
 
+### Building with Docker
+
+Osmium can be build and used as a Docker container. It will also build `libosmium`
+from scratch as it is required for `osmium-tool`.
+
+    docker build -t osmcode/osmium-tool -f Dockerfile .
+
+If everything worked well, running `osmium-tool` is now as simple as:
+
+    docker run -it osmcode/osmium-tool:latest --help
 
 ## Documentation
 
