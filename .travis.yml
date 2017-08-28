@@ -8,18 +8,7 @@ language: generic
 
 sudo: false
 
-# http://docs.travis-ci.com/user/apt/
-addons:
-    apt:
-        sources:
-            - boost-latest
-            - ubuntu-toolchain-r-test
-        packages:
-            - g++-4.8
-            - gcc-4.8
-            - libboost1.55-dev
-            - libboost-program-options1.55-dev
-            - pandoc
+dist: trusty
 
 #-----------------------------------------------------------------------------
 
@@ -31,51 +20,85 @@ matrix:
       compiler: linux-clang35-release
       addons:
         apt:
-          sources: ['llvm-toolchain-precise-3.5', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.5', 'libboost1.55-all-dev', 'pandoc']
+          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-3.5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='clang++-3.5' BUILD_TYPE='Release'
 
     - os: linux
       compiler: linux-clang35-dev
       addons:
         apt:
-          sources: ['llvm-toolchain-precise-3.5', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.5', 'libboost1.55-all-dev', 'pandoc']
+          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-3.5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='clang++-3.5' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-clang37-release
-      addons:
-        apt:
-          sources: ['llvm-toolchain-precise-3.7', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.7', 'libboost1.55-all-dev', 'pandoc']
-      env: COMPILER='clang++-3.7' BUILD_TYPE='Release'
-
-    - os: linux
-      compiler: linux-clang37-dev
-      addons:
-        apt:
-          sources: ['llvm-toolchain-precise-3.7', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.7', 'libboost1.55-all-dev', 'pandoc']
-      env: COMPILER='clang++-3.7' BUILD_TYPE='Dev'
 
 
     - os: linux
       compiler: linux-clang38-release
       addons:
         apt:
-          sources: ['llvm-toolchain-precise-3.8', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.8', 'libboost1.55-all-dev', 'pandoc']
+          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-3.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='clang++-3.8' BUILD_TYPE='Release'
 
     - os: linux
       compiler: linux-clang38-dev
       addons:
         apt:
-          sources: ['llvm-toolchain-precise-3.8', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.8', 'libboost1.55-all-dev', 'pandoc']
+          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-3.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='clang++-3.8' BUILD_TYPE='Dev'
+
+
+    - os: linux
+      compiler: linux-clang39-release
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-3.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      env: COMPILER='clang++-3.9' BUILD_TYPE='Release'
+
+    - os: linux
+      compiler: linux-clang39-dev
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-3.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      env: COMPILER='clang++-3.9' BUILD_TYPE='Dev'
+
+
+    - os: linux
+      compiler: linux-clang40-release
+      addons:
+        apt:
+          sources: ['llvm-toolchain-trusty-4.0', 'ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-4.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      env: COMPILER='clang++-4.0' BUILD_TYPE='Release'
+
+    - os: linux
+      compiler: linux-clang40-dev
+      addons:
+        apt:
+          sources: ['llvm-toolchain-trusty-4.0', 'ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-4.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      env: COMPILER='clang++-4.0' BUILD_TYPE='Dev'
+
+
+    - os: linux
+      compiler: linux-clang50-release
+      addons:
+        apt:
+          sources: ['llvm-toolchain-trusty-5.0', 'ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-5.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      env: COMPILER='clang++-5.0' BUILD_TYPE='Release'
+
+    - os: linux
+      compiler: linux-clang50-dev
+      addons:
+        apt:
+          sources: ['llvm-toolchain-trusty-5.0', 'ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-5.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      env: COMPILER='clang++-5.0' BUILD_TYPE='Dev'
 
 
     # 2/ Linux GCC Builds
@@ -84,7 +107,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.8', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-4.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-4.8' COMPILER_FLAGS='-Wno-return-type' BUILD_TYPE='Release'
 
     - os: linux
@@ -92,7 +115,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.8', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-4.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-4.8' COMPILER_FLAGS='-Wno-return-type' BUILD_TYPE='Dev'
 
 
@@ -101,7 +124,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.9', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-4.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-4.9' BUILD_TYPE='Release'
 
     - os: linux
@@ -109,7 +132,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.9', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-4.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-4.9' BUILD_TYPE='Dev'
 
 
@@ -118,7 +141,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-5', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-5' BUILD_TYPE='Release'
 
     - os: linux
@@ -126,7 +149,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-5', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-5' BUILD_TYPE='Dev'
 
 
@@ -135,7 +158,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-6', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-6', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-6' BUILD_TYPE='Release'
 
     - os: linux
@@ -143,7 +166,7 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-6', 'libboost1.55-all-dev', 'pandoc']
+          packages: ['g++-6', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='g++-6' BUILD_TYPE='Dev'
 
 
@@ -171,12 +194,12 @@ matrix:
 
 
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode8.3
       compiler: xcode8-clang-release
       env: COMPILER='clang++' BUILD_TYPE='Release'
 
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode8.3
       compiler: xcode8-clang-dev
       env: COMPILER='clang++' BUILD_TYPE='Dev'
 
