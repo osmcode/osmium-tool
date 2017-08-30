@@ -1,5 +1,5 @@
-#ifndef EXPORT_JSON_HANDLER
-#define EXPORT_JSON_HANDLER
+#ifndef EXPORT_EXPORT_FORMAT_JSON_HPP
+#define EXPORT_EXPORT_FORMAT_JSON_HPP
 
 /*
 
@@ -84,4 +84,4 @@ public:
 
 }; // class ExportFormatJSON
 
-#endif // EXPORT_JSON_HANDLER
+#endif // EXPORT_EXPORT_FORMAT_JSON_HPP

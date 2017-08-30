@@ -1,5 +1,5 @@
-#ifndef EXPORT_TEXT_HANDLER
-#define EXPORT_TEXT_HANDLER
+#ifndef EXPORT_EXPORT_FORMAT_TEXT_HPP
+#define EXPORT_EXPORT_FORMAT_TEXT_HPP
 
 /*
 
@@ -68,4 +68,4 @@ public:
 
 }; // class ExportFormatText
 
-#endif // EXPORT_TEXT_HANDLER
+#endif // EXPORT_EXPORT_FORMAT_TEXT_HPP
