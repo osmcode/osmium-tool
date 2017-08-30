@@ -112,6 +112,11 @@ used including the program code itself, any needed libraries and the data.
 If an osmium command exits with an "Out of memory" error, try running it with
 **--verbose** on smaller datasets to get an idea how much memory it needs.
 
+On Linux a program that uses a lot of memory can be killed by the kernel
+without the program being notified. If you see osmium dieing without any
+apparent reason, this might be the case. Search on the Internet for "OOM
+killer" to find out more about this.
+
 
 # SEE ALSO
 
