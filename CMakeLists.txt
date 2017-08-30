@@ -272,7 +272,7 @@ add_subdirectory(test)
 #  platforms even if everything is correct.
 #
 #-----------------------------------------------------------------------------
-option(WITH_EXTRA_TESTS "Run extra tests (usually only for developers")
+option(WITH_EXTRA_TESTS "Run extra tests (usually only for developers)")
 if(WITH_EXTRA_TESTS)
     add_test(NAME testinstall
              COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/cmake/test_install.cmake)
