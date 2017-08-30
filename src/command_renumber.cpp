@@ -256,14 +256,14 @@ void CommandRenumber::write_index(osmium::item_type type) {
 }
 
 void read_relations(const osmium::io::File& input_file, id_map& map) {
-    osmium::io::Reader reader_pass1{input_file, osmium::osm_entity_bits::relation};
+    osmium::io::Reader reader{input_file, osmium::osm_entity_bits::relation};
 
-    auto input = osmium::io::make_input_iterator_range<osmium::Relation>(reader_pass1);
+    const auto input = osmium::io::make_input_iterator_range<osmium::Relation>(reader);
     for (const osmium::Relation& relation : input) {
         map(relation.id());
     }
 
-    reader_pass1.close();
+    reader.close();
 }
 
 bool CommandRenumber::run() {
@@ -279,30 +279,32 @@ bool CommandRenumber::run() {
     }
 
     if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
-        m_vout << "First pass through input file (reading relations)...\n";
+        m_vout << "First pass (of two) through input file (reading relations)...\n";
         read_relations(m_input_file, m_id_map(osmium::item_type::relation));
+        m_vout << "First pass done.\n";
+        m_vout << "Second pass (of two) through input file...\n";
     } else {
-        m_vout << "No first pass through input file, because relation IDs are not mapped.\n";
+        m_vout << "Single pass through input file (because relation IDs are not mapped)...\n";
     }
 
-    m_vout << "Second pass through input file...\n";
-    osmium::io::Reader reader_pass2{m_input_file};
+    osmium::io::Reader reader{m_input_file};
 
-    osmium::io::Header header = reader_pass2.header();
+    osmium::io::Header header = reader.header();
     setup_header(header);
     header.set("xml_josm_upload", "false");
 
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
-    osmium::ProgressBar progress_bar{reader_pass2.file_size(), display_progress()};
-    while (osmium::memory::Buffer buffer = reader_pass2.read()) {
-        progress_bar.update(reader_pass2.offset());
+    osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+    while (osmium::memory::Buffer buffer = reader.read()) {
+        progress_bar.update(reader.offset());
         renumber(buffer);
         writer(std::move(buffer));
     }
     progress_bar.done();
-    reader_pass2.close();
+    reader.close();
 
+    m_vout << "Pass done.\n";
     m_vout << "Closing output file...\n";
     writer.close();
 

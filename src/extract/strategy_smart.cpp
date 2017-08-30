@@ -233,7 +233,7 @@ namespace strategy_smart {
         const std::size_t file_size = osmium::util::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size * 3, display_progress};
 
-        vout << "First pass...\n";
+        vout << "First pass (of three)...\n";
         Pass1 pass1{*this};
         pass1.run(progress_bar, input_file, osmium::io::read_meta::no);
         progress_bar.file_done(file_size);
@@ -247,13 +247,13 @@ namespace strategy_smart {
         }
 
         progress_bar.remove();
-        vout << "Second pass...\n";
+        vout << "Second pass (of three)...\n";
         Pass2 pass2{*this};
         pass2.run(progress_bar, input_file, osmium::osm_entity_bits::way, osmium::io::read_meta::no);
         progress_bar.file_done(file_size);
 
         progress_bar.remove();
-        vout << "Third pass...\n";
+        vout << "Third pass (of three)...\n";
         Pass3 pass3{*this};
         pass3.run(progress_bar, input_file);
 

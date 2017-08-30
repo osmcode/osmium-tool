@@ -383,11 +383,11 @@ bool CommandExport::run() {
     osmium::area::Assembler::config_type assembler_config;
     osmium::area::MultipolygonManager<osmium::area::Assembler> mp_manager{assembler_config};
 
-    m_vout << "First pass through input file (reading relations)...\n";
+    m_vout << "First pass (of two) through input file (reading relations)...\n";
     osmium::relations::read_relations(m_input_file, mp_manager);
     m_vout << "First pass done.\n";
 
-    m_vout << "Second pass through input file...\n";
+    m_vout << "Second pass (of two) through input file...\n";
 
     auto handler = create_handler(m_output_format, m_output_filename, m_output_overwrite, m_fsync, m_options);
     ExportHandler export_handler{std::move(handler), m_linear_tags, m_area_tags, m_show_errors, m_stop_on_error};

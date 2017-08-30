@@ -156,7 +156,7 @@ namespace strategy_complete_ways {
         const std::size_t file_size = osmium::util::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size * 2, display_progress};
 
-        vout << "First pass...\n";
+        vout << "First pass (of two)...\n";
         Pass1 pass1{*this};
         pass1.run(progress_bar, input_file, osmium::io::read_meta::no);
         progress_bar.file_done(file_size);
@@ -170,7 +170,7 @@ namespace strategy_complete_ways {
         }
 
         progress_bar.remove();
-        vout << "Second pass...\n";
+        vout << "Second pass (of two)...\n";
         Pass2 pass2{*this};
         pass2.run(progress_bar, input_file);
 
