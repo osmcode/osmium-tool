@@ -69,7 +69,7 @@ namespace strategy_smart {
         }
 
         const auto types = options.get("types");
-        if (types == "") {
+        if (types.empty()) {
             m_types = {"multipolygon"};
         } else if (types != "any") {
             m_types = osmium::split_string(types, ',', true);

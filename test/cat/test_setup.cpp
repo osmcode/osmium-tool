@@ -18,11 +18,11 @@ TEST_CASE("cat") {
         REQUIRE(ifs.size() == 1);
         REQUIRE(ifs.front().format() == osmium::io::file_format::xml);
         REQUIRE(ifs.front().compression() == osmium::io::file_compression::none);
-        REQUIRE(ifs.front().filename() == "");
+        REQUIRE(ifs.front().filename().empty());
 
         auto of = cmd.output_file();
         REQUIRE(of.format() == osmium::io::file_format::pbf);
-        REQUIRE(of.filename() == "");
+        REQUIRE(of.filename().empty());
 
         REQUIRE(cmd.output_overwrite() == osmium::io::overwrite::no);
         REQUIRE(cmd.osm_entity_bits() == osmium::osm_entity_bits::all);

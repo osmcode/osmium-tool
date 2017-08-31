@@ -153,7 +153,7 @@ namespace {
         } else if (file_type == "poly") {
             PolyFileParser parser{buffer, file_name};
             return parser();
-        } else if (file_type == "") {
+        } else if (file_type.empty()) {
             throw config_error{"Could not autodetect file type in '(multi)polygon' object. Add a 'file_type'."};
         }
 

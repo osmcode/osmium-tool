@@ -117,7 +117,7 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     }
 
     if (m_output_action.empty()) {
-        if (m_output_format == "" && (m_output_filename == "" || m_output_filename == "-")) {
+        if (m_output_format.empty() && (m_output_filename.empty() || m_output_filename == "-")) {
             m_output_format = "compact";
             m_output_action = "compact";
         } else {

@@ -51,7 +51,7 @@ void with_single_osm_input::setup_input_file(const boost::program_options::varia
                                  "to specify the file format."};
         }
 
-        if (m_input_filename == "") {
+        if (m_input_filename.empty()) {
             throw argument_error{"Missing input file. Use '-' to read from STDIN and add the --input-format/-F\n"
                                  "option to specify the file format or specify the input file name."};
         }
@@ -160,7 +160,7 @@ void with_osm_output::check_output_file() {
             throw argument_error{"When writing to STDOUT you need to use the --output-format/-f\n"
                                  "option to specify the file format."};
         }
-        if (m_output_filename == "") {
+        if (m_output_filename.empty()) {
             throw argument_error{"Missing output file. Set the output file with --output/-o and/or\n"
                                  "add the --output-format/-f option to specify the file format."};
         }

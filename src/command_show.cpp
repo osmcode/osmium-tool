@@ -140,7 +140,7 @@ void CommandShow::show_arguments() {
     m_vout << "  other options:\n";
     m_vout << "    file format: " << m_output_format << "\n";
     m_vout << "    use color: " << yes_no(m_color_output);
-    m_vout << "    use pager: " << (m_pager == "" ? "(no pager)" : m_pager) << "\n";
+    m_vout << "    use pager: " << (m_pager.empty() ? "(no pager)" : m_pager) << "\n";
     show_object_types(m_vout);
 }
 
