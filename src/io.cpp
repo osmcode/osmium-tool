@@ -80,7 +80,7 @@ void with_multiple_osm_inputs::setup_input_files(const boost::program_options::v
     if (vm.count("input-filenames")) {
         m_input_filenames = vm["input-filenames"].as<std::vector<std::string>>();
     } else {
-        m_input_filenames.push_back("-"); // default is stdin
+        m_input_filenames.emplace_back("-"); // default is stdin
     }
 
     bool uses_stdin = false;

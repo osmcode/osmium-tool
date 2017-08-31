@@ -38,7 +38,7 @@ std::vector<std::pair<std::string, std::string>> CommandFactory::help() const {
     std::vector<std::pair<std::string, std::string>> commands;
 
     for (const auto& cmd : m_commands) {
-        commands.push_back(std::make_pair(cmd.first, cmd.second.description));
+        commands.emplace_back(cmd.first, cmd.second.description);
     }
 
     return commands;
