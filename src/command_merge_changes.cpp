@@ -40,9 +40,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_merge_changes.hpp"
 
-namespace osmium { namespace io {
-    class File;
-}}
+namespace osmium {
+
+    namespace io {
+        class File;
+    } // namespace io
+
+} // namespace osmium
 
 bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

@@ -51,9 +51,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_renumber.hpp"
 
-namespace osmium { namespace io {
-    class File;
-}}
+namespace osmium {
+
+    namespace io {
+        class File;
+    } // namespace io
+
+} // namespace osmium
 
 osmium::object_id_type id_map::operator()(osmium::object_id_type id) {
     // Search for id in m_extra_ids and return if found.
