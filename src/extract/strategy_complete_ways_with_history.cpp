@@ -56,7 +56,7 @@ namespace strategy_complete_ways_with_history {
 
     public:
 
-        Pass1(Strategy& strategy) :
+        explicit Pass1(Strategy& strategy) :
             Pass(strategy) {
         }
 
@@ -132,7 +132,7 @@ namespace strategy_complete_ways_with_history {
 
     public:
 
-        Pass2(Strategy& strategy) :
+        explicit Pass2(Strategy& strategy) :
             Pass(strategy) {
         }
 

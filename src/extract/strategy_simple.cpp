@@ -49,7 +49,7 @@ namespace strategy_simple {
 
     public:
 
-        Pass1(Strategy& strategy) :
+        explicit Pass1(Strategy& strategy) :
             Pass(strategy) {
         }
 

@@ -113,7 +113,7 @@ namespace strategy_smart {
 
     public:
 
-        Pass1(Strategy& strategy) :
+        explicit Pass1(Strategy& strategy) :
             Pass(strategy) {
         }
 
@@ -182,7 +182,7 @@ namespace strategy_smart {
 
     public:
 
-        Pass2(Strategy& strategy) :
+        explicit Pass2(Strategy& strategy) :
             Pass(strategy) {
         }
 
@@ -201,7 +201,7 @@ namespace strategy_smart {
 
     public:
 
-        Pass3(Strategy& strategy) :
+        explicit Pass3(Strategy& strategy) :
             Pass(strategy) {
         }
 
