@@ -553,9 +553,9 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     if (vm.count("show-variables")) {
         std::copy(known_values.cbegin(), known_values.cend(), std::ostream_iterator<std::string>(std::cout, "\n"));
         return false;
-    } else {
-        setup_input_file(vm);
     }
+
+    setup_input_file(vm);
 
     if (vm.count("get")) {
         m_get_value = vm["get"].as<std::string>();

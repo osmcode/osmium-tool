@@ -169,7 +169,9 @@ namespace {
     std::size_t parse_polygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
         if (value.IsArray()) {
             return parse_polygon_array(value, buffer);
-        } else if (value.IsObject()) {
+        }
+
+        if (value.IsObject()) {
             return parse_multipolygon_object(directory, value, buffer);
         }
 
@@ -179,7 +181,9 @@ namespace {
     std::size_t parse_multipolygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
         if (value.IsArray()) {
             return parse_multipolygon_array(value, buffer);
-        } else if (value.IsObject()) {
+        }
+
+        if (value.IsObject()) {
             return parse_multipolygon_object(directory, value, buffer);
         }
 
@@ -314,21 +318,22 @@ std::unique_ptr<ExtractStrategy> CommandExtract::make_strategy(const std::string
     if (name == "simple") {
         if (m_with_history) {
             throw argument_error{"The 'simple' strategy is not supported for history files."};
-        } else {
-            return std::unique_ptr<ExtractStrategy>(new strategy_simple::Strategy{m_extracts, m_options});
         }
-    } else if (name == "complete_ways") {
+        return std::unique_ptr<ExtractStrategy>(new strategy_simple::Strategy{m_extracts, m_options});
+    }
+
+    if (name == "complete_ways") {
         if (m_with_history) {
             return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways_with_history::Strategy{m_extracts, m_options});
-        } else {
-            return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways::Strategy{m_extracts, m_options});
         }
-    } else if (name == "smart") {
+        return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways::Strategy{m_extracts, m_options});
+    }
+
+    if (name == "smart") {
         if (m_with_history) {
             throw argument_error{"The 'smart' strategy is not supported for history files."};
-        } else {
-            return std::unique_ptr<ExtractStrategy>(new strategy_smart::Strategy{m_extracts, m_options});
         }
+        return std::unique_ptr<ExtractStrategy>(new strategy_smart::Strategy{m_extracts, m_options});
     }
 
     throw argument_error{std::string{"Unknown extract strategy: '"} + name + "'."};

@@ -47,9 +47,9 @@ std::string get_value_as_string(const rapidjson::Value& object, const char* key)
 
     if (it->value.IsString()) {
         return it->value.GetString();
-    } else {
-        throw config_error{std::string{"Value for name '"} + key + "' must be a string."};
     }
+
+    throw config_error{std::string{"Value for name '"} + key + "' must be a string."};
 }
 
 // parse coordinate pair from JSON array
@@ -207,8 +207,8 @@ std::size_t GeoJSONFileParser::operator()() {
 
     if (geometry_type == "Polygon") {
         return parse_polygon_array(json_coordinates->value, m_buffer);
-    } else {
-        return parse_multipolygon_array(json_coordinates->value, m_buffer);
     }
+
+    return parse_multipolygon_array(json_coordinates->value, m_buffer);
 }
 
