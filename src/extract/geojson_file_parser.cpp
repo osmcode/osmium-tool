@@ -92,7 +92,7 @@ std::vector<osmium::geom::Coordinates> parse_ring(const rapidjson::Value& value)
 void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& builder) {
     assert(value.IsArray());
     const auto array = value.GetArray();
-    if (array.Size() < 1) {
+    if (array.Empty()) {
         throw config_error{"Polygon must contain at least one ring."};
     }
 
@@ -125,7 +125,7 @@ std::size_t parse_polygon_array(const rapidjson::Value& value, osmium::memory::B
 std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
     assert(value.IsArray());
     const auto array = value.GetArray();
-    if (array.Size() < 1) {
+    if (array.Empty()) {
         throw config_error{"Multipolygon must contain at least one polygon array."};
     }
 
@@ -155,32 +155,9 @@ GeoJSONFileParser::GeoJSONFileParser(osmium::memory::Buffer& buffer, std::string
     }
 }
 
-std::size_t GeoJSONFileParser::operator()() {
-    rapidjson::IStreamWrapper stream_wrapper{m_file};
-
-    rapidjson::Document doc;
-    if (doc.ParseStream<rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag>(stream_wrapper).HasParseError()) {
-        error(std::string{"JSON error at offset "} +
-              std::to_string(doc.GetErrorOffset()) +
-              " : " +
-              rapidjson::GetParseError_En(doc.GetParseError()));
-    }
-
-    if (!doc.IsObject()) {
-        error("Top-level value must be an object.");
-    }
-
-    const std::string type{get_value_as_string(doc, "type")};
-    if (type.empty()) {
-        error("Expected 'type' name with the value 'Feature'.");
-    }
-
-    if (type != "Feature") {
-        error("Expected 'type' value to be 'Feature'.");
-    }
-
-    const auto json_geometry = doc.FindMember("geometry");
-    if (json_geometry == doc.MemberEnd()) {
+std::size_t GeoJSONFileParser::parse_top(const rapidjson::Value& top) {
+    const auto json_geometry = top.FindMember("geometry");
+    if (json_geometry == top.MemberEnd()) {
         error("Missing 'geometry' name.");
     }
 
@@ -210,5 +187,61 @@ std::size_t GeoJSONFileParser::operator()() {
     }
 
     return parse_multipolygon_array(json_coordinates->value, m_buffer);
+}
+
+std::size_t GeoJSONFileParser::operator()() {
+    rapidjson::IStreamWrapper stream_wrapper{m_file};
+
+    rapidjson::Document doc;
+    if (doc.ParseStream<rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag>(stream_wrapper).HasParseError()) {
+        error(std::string{"JSON error at offset "} +
+              std::to_string(doc.GetErrorOffset()) +
+              " : " +
+              rapidjson::GetParseError_En(doc.GetParseError()));
+    }
+
+    if (!doc.IsObject()) {
+        error("Top-level value must be an object.");
+    }
+
+    const std::string type{get_value_as_string(doc, "type")};
+    if (type.empty()) {
+        error("Expected 'type' name with the value 'Feature' or 'FeatureCollection'.");
+    }
+
+    if (type == "FeatureCollection") {
+        const auto json_features = doc.FindMember("features");
+        if (json_features == doc.MemberEnd()) {
+            error("Missing 'features' name.");
+        }
+
+        if (!json_features->value.IsArray()) {
+            error("Expected 'features' value to be an array.");
+        }
+
+        const auto json_features_array = json_features->value.GetArray();
+        if (json_features_array.Empty()) {
+            throw config_error{"Features array must contain at least one polygon."};
+        }
+
+        const auto& json_first_feature = json_features_array[0];
+        if (!json_first_feature.IsObject()) {
+            error("Expected values of 'features' array to be a objects.");
+        }
+
+        const std::string feature_type{get_value_as_string(json_first_feature, "type")};
+
+        if (feature_type != "Feature") {
+            error("Expected 'type' value to be 'Feature'.");
+        }
+
+        return parse_top(json_first_feature);
+    }
+
+    if (type != "Feature") {
+        error("Expected 'type' value to be 'Feature'.");
+    }
+
+    return parse_top(doc);
 }
 

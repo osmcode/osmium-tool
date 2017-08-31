@@ -252,8 +252,10 @@ will try to autodetect it from the suffix of the "file_name".
 The following file types are supported:
 
 geojson
-:   GeoJSON file containing exactly one polygon or multipolygon. Everything
-    except the actual geometry is ignored.
+:   GeoJSON file containing exactly one Feature of type Polygon or
+    MultiPolygon, or a FeatureCollection with the first Feature of type
+    Polygon or MultiPolygon. Everything except the actual geometry (of the
+    first Feature) is ignored.
 
 poly
 :   A poly file as described in

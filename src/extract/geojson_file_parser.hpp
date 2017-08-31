@@ -51,6 +51,8 @@ class GeoJSONFileParser {
 
     void error(const std::string& message);
 
+    std::size_t parse_top(const rapidjson::Value& top);
+
 public:
 
     GeoJSONFileParser(osmium::memory::Buffer& buffer, std::string file_name);
