@@ -76,7 +76,7 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     setup_input_file(vm);
     setup_output_file(vm);
 
-    m_from = osmium::Timestamp(std::time(0));
+    m_from = osmium::Timestamp{std::time(nullptr)};
     m_to = m_from;
 
     if (vm.count("time-from")) {
