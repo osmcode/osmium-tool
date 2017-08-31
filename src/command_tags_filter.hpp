@@ -56,7 +56,7 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
     void add_nodes(const osmium::Way& way);
     void add_members(const osmium::Relation& relation);
 
-    void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type id);
+    void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id);
     bool find_relations_in_relations();
     void find_nodes_and_ways_in_relations();
     void find_nodes_in_ways();
