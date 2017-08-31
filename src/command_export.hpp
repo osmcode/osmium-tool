@@ -41,7 +41,7 @@ class CommandExport : public Command, public with_single_osm_input {
     using index_type = osmium::index::map::Map<osmium::unsigned_object_id_type, osmium::Location>;
     using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;
 
-    options_type m_options;
+    options_type m_options{};
 
     std::vector<std::string> m_linear_tags;
     std::vector<std::string> m_area_tags;

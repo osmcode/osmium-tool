@@ -32,7 +32,7 @@ class CommandShow : public Command, public with_single_osm_input {
 
     std::string m_output_format{"debug,color=true"};
     std::string m_pager;
-    bool m_color_output;
+    bool m_color_output = false;
 
     void setup_pager_from_env() noexcept;
 
