@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (command == "osmium" || command == "osmium.exe") {
-        if (arguments.size() == 0) {
+        if (arguments.empty()) {
             command = "help";
         } else {
             if (arguments.front() == "--help" || arguments.front() == "-h") {
