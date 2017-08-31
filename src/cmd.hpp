@@ -240,7 +240,7 @@ class CommandFactory {
 
 public:
 
-    bool register_command(const std::string& name, const std::string& description, create_command_type create_function);
+    bool register_command(const std::string& name, const std::string& description, create_command_type&& create_function);
 
     // Return a vector with names and descriptions of all commands
     std::vector<std::pair<std::string, std::string>> help() const;
