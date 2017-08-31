@@ -37,9 +37,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp" // IWYU pragma: export
 
-namespace osmium { namespace index {
-    class RelationsMapIndex;
-}}
+namespace osmium {
+
+    namespace index {
+        class RelationsMapIndex;
+    } // namespace index
+
+} // namespace osmium
 
 class CommandGetId : public Command, public with_single_osm_input, public with_osm_output {
 

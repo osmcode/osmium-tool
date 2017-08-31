@@ -34,17 +34,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer.hpp>
 
 namespace osmium {
+
     class Box;
     class Location;
 
     namespace io {
         class Header;
-    }
+    } // namespace io
 
     namespace memory {
         class Item;
-    }
-}
+    } // namespace memory
+
+} // namespace osmium
 
 class Extract {
 

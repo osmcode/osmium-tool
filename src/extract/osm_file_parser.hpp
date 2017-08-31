@@ -25,9 +25,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-namespace osmium { namespace memory {
-    class Buffer;
-}}
+namespace osmium {
+
+    namespace memory {
+        class Buffer;
+    } // namespace memory
+
+} // namespace osmium
 
 /**
  * Gets areas from OSM files.

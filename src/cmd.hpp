@@ -43,9 +43,13 @@ const char* get_osmium_version() noexcept;
 const char* get_osmium_long_version() noexcept;
 const char* get_libosmium_version() noexcept;
 
-namespace osmium { namespace io {
-    class Header;
-}}
+namespace osmium {
+
+    namespace io {
+        class Header;
+    } // namespace io
+
+} // namespace osmium
 
 /**
  * Virtual base class for commands that can be called from the command line.

@@ -30,12 +30,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/index/map/all.hpp>
 
 namespace osmium {
+
     namespace io {
         class Reader;
         class Writer;
-    }
+    } // namespace io
+
     class ProgressBar;
-}
+
+} // namespace osmium
 
 #include "cmd.hpp" // IWYU pragma: export
 

@@ -28,9 +28,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <rapidjson/document.h>
 
-namespace osmium { namespace memory {
-    class Buffer;
-}}
+namespace osmium {
+
+    namespace memory {
+        class Buffer;
+    } // namespace memory
+
+} // namespace osmium
 
 std::string get_value_as_string(const rapidjson::Value& object, const char* key);
 std::size_t parse_polygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer);

@@ -28,9 +28,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "extract.hpp"
 
 namespace osmium {
+
     class Area;
     class Segment;
-}
+
+} // namespace osmium
 
 class ExtractPolygon : public Extract {
 

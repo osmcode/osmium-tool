@@ -29,9 +29,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/builder/osm_object_builder.hpp>
 
-namespace osmium { namespace memory {
-    class Buffer;
-}}
+namespace osmium {
+
+    namespace memory {
+        class Buffer;
+    } // namespace memory
+
+} // namespace osmium
 
 /**
  *  Thrown when there is a problem with parsing a poly file.

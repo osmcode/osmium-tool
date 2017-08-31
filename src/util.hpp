@@ -38,9 +38,9 @@ namespace osmium {
 
     namespace io {
         class File;
-    }
+    } // namespace io
 
-}
+} // namespace osmium
 
 std::string get_filename_suffix(const std::string& file_name);
 const char* yes_no(bool choice) noexcept;
