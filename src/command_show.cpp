@@ -21,14 +21,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <cerrno>
+#include <csignal>
 #include <cstdlib>
 #include <string>
 #include <system_error>
-#include <vector>
 #include <utility>
+#include <vector>
 
 #ifndef _MSC_VER
-# include <signal.h>
 # include <unistd.h>
 #endif
 
