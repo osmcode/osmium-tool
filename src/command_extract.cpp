@@ -161,8 +161,8 @@ namespace {
     }
 
     std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
-        std::string file_name{get_value_as_string(value, "file_name")};
-        std::string file_type{get_value_as_string(value, "file_type")};
+        const std::string file_name{get_value_as_string(value, "file_name")};
+        const std::string file_type{get_value_as_string(value, "file_type")};
         return parse_multipolygon_object(directory, file_name, file_type, buffer);
     }
 

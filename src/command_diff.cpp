@@ -154,8 +154,7 @@ class OutputAction {
 
 public:
 
-    virtual ~OutputAction() {
-    }
+    virtual ~OutputAction() noexcept = default;
 
     virtual void left(osmium::OSMObject& /* object */) {
     }
