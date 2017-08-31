@@ -151,7 +151,7 @@ class Output {
 
 public:
 
-    virtual ~Output() = default;
+    virtual ~Output() noexcept = default;
 
     virtual void file(const std::string& filename, const osmium::io::File& input_file) = 0;
     virtual void header(const osmium::io::Header& header) = 0;
