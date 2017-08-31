@@ -43,7 +43,7 @@ class OSMFileParser {
 
 public:
 
-    OSMFileParser(osmium::memory::Buffer& buffer, const std::string& file_name);
+    OSMFileParser(osmium::memory::Buffer& buffer, std::string file_name);
 
     std::size_t operator()();
 

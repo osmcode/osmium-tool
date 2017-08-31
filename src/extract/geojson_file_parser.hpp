@@ -53,7 +53,7 @@ class GeoJSONFileParser {
 
 public:
 
-    GeoJSONFileParser(osmium::memory::Buffer& buffer, const std::string& file_name);
+    GeoJSONFileParser(osmium::memory::Buffer& buffer, std::string file_name);
 
     std::size_t operator()();
 

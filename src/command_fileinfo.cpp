@@ -374,8 +374,8 @@ class SimpleOutput : public Output {
 
 public:
 
-    explicit SimpleOutput(const std::string& get_value) :
-        m_get_value(get_value) {
+    explicit SimpleOutput(std::string get_value) :
+        m_get_value(std::move(get_value)) {
     }
 
     void file(const std::string& input_filename, const osmium::io::File& input_file) final {

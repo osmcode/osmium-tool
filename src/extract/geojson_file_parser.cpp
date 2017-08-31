@@ -146,9 +146,9 @@ void GeoJSONFileParser::error(const std::string& message) {
     throw geojson_error{std::string{"In file '"} + m_file_name + "':\n" + message};
 }
 
-GeoJSONFileParser::GeoJSONFileParser(osmium::memory::Buffer& buffer, const std::string& file_name) :
+GeoJSONFileParser::GeoJSONFileParser(osmium::memory::Buffer& buffer, std::string file_name) :
     m_buffer(buffer),
-    m_file_name(file_name),
+    m_file_name(std::move(file_name)),
     m_file(m_file_name) {
     if (!m_file.is_open()) {
         throw config_error{std::string{"Could not open file '"} + m_file_name + "'."};

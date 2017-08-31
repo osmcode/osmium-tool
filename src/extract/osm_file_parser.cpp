@@ -37,9 +37,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using index_type = osmium::index::map::SparseMemArray<osmium::unsigned_object_id_type, osmium::Location>;
 using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;
 
-OSMFileParser::OSMFileParser(osmium::memory::Buffer& buffer, const std::string& file_name) :
+OSMFileParser::OSMFileParser(osmium::memory::Buffer& buffer, std::string file_name) :
     m_buffer(buffer),
-    m_file_name(file_name) {
+    m_file_name(std::move(file_name)) {
 }
 
 std::size_t OSMFileParser::operator()() {
