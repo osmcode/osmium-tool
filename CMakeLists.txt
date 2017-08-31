@@ -275,6 +275,8 @@ if(CLANG_TIDY)
     # For a list of check options, see:
     # http://clang.llvm.org/extra/clang-tidy/checks/list.html
 
+    list(APPEND CT_CHECKS "bugprone-*")
+
     list(APPEND CT_CHECKS "cert-*"
                          "-cert-err60-cpp") # even the std lib doesn't do this
 
@@ -285,7 +287,10 @@ if(CLANG_TIDY)
                          "-google-build-using-namespace"
                          "-google-explicit-constructor"
                          "-google-readability-casting"
-                         "-google-readability-function")
+                         "-google-readability-function"
+                         "-google-runtime-references")
+
+    list(APPEND CT_CHECKS "hicpp-*")
 
     list(APPEND CT_CHECKS "llvm-*"
                          "-llvm-include-order")
@@ -298,10 +303,13 @@ if(CLANG_TIDY)
     list(APPEND CT_CHECKS "modernize-*"
                           "-modernize-make-unique") # not available in C++11
 
+    list(APPEND CT_CHECKS "performance-*")
+
     list(APPEND CT_CHECKS "readability-*"
                          "-readability-identifier-naming"
                          "-readability-implicit-bool-cast"
-                         "-readability-named-parameter")
+                         "-readability-named-parameter"
+                         "-readability-redundant-member-init")
 
     string(REPLACE ";" "," ALL_CHECKS "${CT_CHECKS}")
 
