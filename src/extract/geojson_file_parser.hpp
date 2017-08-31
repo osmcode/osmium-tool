@@ -28,6 +28,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <rapidjson/document.h>
 
+#include <osmium/util/compatibility.hpp>
+
 namespace osmium {
 
     namespace memory {
@@ -49,7 +51,7 @@ class GeoJSONFileParser {
     std::string m_file_name;
     std::ifstream m_file;
 
-    void error(const std::string& message);
+    OSMIUM_NORETURN void error(const std::string& message);
 
     std::size_t parse_top(const rapidjson::Value& top);
 

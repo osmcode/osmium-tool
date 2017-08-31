@@ -142,7 +142,7 @@ std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memo
     return buffer.commit();
 }
 
-void GeoJSONFileParser::error(const std::string& message) {
+OSMIUM_NORETURN void GeoJSONFileParser::error(const std::string& message) {
     throw geojson_error{std::string{"In file '"} + m_file_name + "':\n" + message};
 }
 
@@ -209,6 +209,10 @@ std::size_t GeoJSONFileParser::operator()() {
         error("Expected 'type' name with the value 'Feature' or 'FeatureCollection'.");
     }
 
+    if (type == "Feature") {
+        return parse_top(doc);
+    }
+
     if (type == "FeatureCollection") {
         const auto json_features = doc.FindMember("features");
         if (json_features == doc.MemberEnd()) {
@@ -238,10 +242,6 @@ std::size_t GeoJSONFileParser::operator()() {
         return parse_top(json_first_feature);
     }
 
-    if (type != "Feature") {
-        error("Expected 'type' value to be 'Feature'.");
-    }
-
-    return parse_top(doc);
+    error("Expected 'type' value to be 'Feature'.");
 }
 

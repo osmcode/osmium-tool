@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 #include <osmium/builder/osm_object_builder.hpp>
+#include <osmium/util/compatibility.hpp>
 
 namespace osmium {
 
@@ -69,7 +70,7 @@ class PolyFileParser {
         return m_data[m_line];
     }
 
-    void error(const std::string& message);
+    OSMIUM_NORETURN void error(const std::string& message);
 
 public:
 
