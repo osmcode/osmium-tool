@@ -166,7 +166,7 @@ class HumanReadableOutput : public Output {
 
 public:
 
-    void file(const std::string& input_filename, const osmium::io::File& input_file) override final {
+    void file(const std::string& input_filename, const osmium::io::File& input_file) final {
         std::cout << "File:\n";
         std::cout << "  Name: " << input_filename << "\n";
         std::cout << "  Format: " << input_file.format() << "\n";
@@ -177,7 +177,7 @@ public:
         }
     }
 
-    void header(const osmium::io::Header& header) override final {
+    void header(const osmium::io::Header& header) final {
         std::cout << "Header:\n";
 
         std::cout << "  Bounding boxes:\n";
@@ -192,7 +192,7 @@ public:
         }
     }
 
-    void data(const osmium::io::Header& header, const InfoHandler& info_handler) override final {
+    void data(const osmium::io::Header& header, const InfoHandler& info_handler) final {
         std::cout << "Data:\n";
         std::cout << "  Bounding box: " << info_handler.bounds << "\n";
 
@@ -245,7 +245,7 @@ public:
         m_writer.StartObject();
     }
 
-    void file(const std::string& input_filename, const osmium::io::File& input_file) override final {
+    void file(const std::string& input_filename, const osmium::io::File& input_file) final {
         m_writer.String("file");
         m_writer.StartObject();
 
@@ -275,7 +275,7 @@ public:
         m_writer.EndArray();
     }
 
-    void header(const osmium::io::Header& header) override final {
+    void header(const osmium::io::Header& header) final {
         m_writer.String("header");
         m_writer.StartObject();
 
@@ -300,7 +300,7 @@ public:
         m_writer.EndObject();
     }
 
-    void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) override final {
+    void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) final {
         m_writer.String("data");
         m_writer.StartObject();
 
@@ -361,7 +361,7 @@ public:
         m_writer.EndObject();
     }
 
-    void output() override final {
+    void output() final {
         m_writer.EndObject();
         std::cout << m_stream.GetString() << "\n";
     }
@@ -378,7 +378,7 @@ public:
         m_get_value(get_value) {
     }
 
-    void file(const std::string& input_filename, const osmium::io::File& input_file) override final {
+    void file(const std::string& input_filename, const osmium::io::File& input_file) final {
         if (m_get_value == "file.name") {
             std::cout << input_filename << "\n";
         }
@@ -397,7 +397,7 @@ public:
         }
     }
 
-    void header(const osmium::io::Header& header) override final {
+    void header(const osmium::io::Header& header) final {
         if (m_get_value == "header.with_history") {
             std::cout << yes_no(header.has_multiple_object_versions());
         }
@@ -411,7 +411,7 @@ public:
         }
     }
 
-    void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) override final {
+    void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) final {
         if (m_get_value == "data.bbox") {
             std::cout << info_handler.bounds << "\n";
         }
