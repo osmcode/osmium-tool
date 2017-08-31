@@ -76,7 +76,9 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
 
 public:
 
-    CommandGetId() = default;
+    explicit CommandGetId(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

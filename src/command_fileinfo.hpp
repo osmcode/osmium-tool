@@ -36,7 +36,9 @@ class CommandFileinfo : public Command, public with_single_osm_input {
 
 public:
 
-    CommandFileinfo() = default;
+    explicit CommandFileinfo(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

@@ -35,7 +35,9 @@ class CommandCheckRefs : public Command, public with_single_osm_input {
 
 public:
 
-    CommandCheckRefs() = default;
+    explicit CommandCheckRefs(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

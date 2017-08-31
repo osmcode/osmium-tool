@@ -59,7 +59,9 @@ class CommandExtract : public Command, public with_single_osm_input, public with
 
 public:
 
-    CommandExtract() = default;
+    explicit CommandExtract(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

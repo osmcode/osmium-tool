@@ -19,80 +19,80 @@
 #include "command_tags_filter.hpp"
 #include "command_time_filter.hpp"
 
-void register_commands() {
-    CommandFactory::add("add-locations-to-ways", "Add node locations to ways", []() {
-        return new CommandAddLocationsToWays{};
+void register_commands(CommandFactory& cmd_factory) {
+    cmd_factory.register_command("add-locations-to-ways", "Add node locations to ways", [&]() {
+        return new CommandAddLocationsToWays{cmd_factory};
     });
 
-    CommandFactory::add("apply-changes", "Apply OSM change files to OSM data file", []() {
-        return new CommandApplyChanges{};
+    cmd_factory.register_command("apply-changes", "Apply OSM change files to OSM data file", [&]() {
+        return new CommandApplyChanges{cmd_factory};
     });
 
-    CommandFactory::add("cat", "Concatenate OSM files and convert to different formats", []() {
-        return new CommandCat{};
+    cmd_factory.register_command("cat", "Concatenate OSM files and convert to different formats", [&]() {
+        return new CommandCat{cmd_factory};
     });
 
-    CommandFactory::add("changeset-filter", "Filter OSM changesets by different criteria", []() {
-        return new CommandChangesetFilter{};
+    cmd_factory.register_command("changeset-filter", "Filter OSM changesets by different criteria", [&]() {
+        return new CommandChangesetFilter{cmd_factory};
     });
 
-    CommandFactory::add("check-refs", "Check referential integrity of an OSM file", []() {
-        return new CommandCheckRefs{};
+    cmd_factory.register_command("check-refs", "Check referential integrity of an OSM file", [&]() {
+        return new CommandCheckRefs{cmd_factory};
     });
 
-    CommandFactory::add("derive-changes", "Create OSM change files from two OSM data files", []() {
-        return new CommandDeriveChanges{};
+    cmd_factory.register_command("derive-changes", "Create OSM change files from two OSM data files", [&]() {
+        return new CommandDeriveChanges{cmd_factory};
     });
 
-    CommandFactory::add("diff", "Display differences between OSM files", []() {
-        return new CommandDiff{};
+    cmd_factory.register_command("diff", "Display differences between OSM files", [&]() {
+        return new CommandDiff{cmd_factory};
     });
 
-    CommandFactory::add("export", "Export OSM data", []() {
-        return new CommandExport{};
+    cmd_factory.register_command("export", "Export OSM data", [&]() {
+        return new CommandExport{cmd_factory};
     });
 
-    CommandFactory::add("extract", "Create geographic extract", []() {
-        return new CommandExtract{};
+    cmd_factory.register_command("extract", "Create geographic extract", [&]() {
+        return new CommandExtract{cmd_factory};
     });
 
-    CommandFactory::add("fileinfo", "Show information about OSM file", []() {
-        return new CommandFileinfo{};
+    cmd_factory.register_command("fileinfo", "Show information about OSM file", [&]() {
+        return new CommandFileinfo{cmd_factory};
     });
 
-    CommandFactory::add("getid", "Get objects with given ID from OSM file", []() {
-        return new CommandGetId{};
+    cmd_factory.register_command("getid", "Get objects with given ID from OSM file", [&]() {
+        return new CommandGetId{cmd_factory};
     });
 
-    CommandFactory::add("help", "Show osmium help", []() {
-        return new CommandHelp{};
+    cmd_factory.register_command("help", "Show osmium help", [&]() {
+        return new CommandHelp{cmd_factory};
     });
 
-    CommandFactory::add("merge-changes", "Merge several OSM change files into one", []() {
-        return new CommandMergeChanges{};
+    cmd_factory.register_command("merge-changes", "Merge several OSM change files into one", [&]() {
+        return new CommandMergeChanges{cmd_factory};
     });
-    CommandFactory::add("merge", "Merge several sorted OSM files into one", []() {
-        return new CommandMerge{};
-    });
-
-    CommandFactory::add("renumber", "Renumber IDs in OSM file", []() {
-        return new CommandRenumber{};
+    cmd_factory.register_command("merge", "Merge several sorted OSM files into one", [&]() {
+        return new CommandMerge{cmd_factory};
     });
 
-    CommandFactory::add("show", "Show OSM file contents", []() {
-        return new CommandShow{};
+    cmd_factory.register_command("renumber", "Renumber IDs in OSM file", [&]() {
+        return new CommandRenumber{cmd_factory};
     });
 
-    CommandFactory::add("sort", "Sort OSM data files", []() {
-        return new CommandSort{};
+    cmd_factory.register_command("show", "Show OSM file contents", [&]() {
+        return new CommandShow{cmd_factory};
     });
 
-    CommandFactory::add("tags-filter", "Filter OSM data based on tags", []() {
-        return new CommandTagsFilter{};
+    cmd_factory.register_command("sort", "Sort OSM data files", [&]() {
+        return new CommandSort{cmd_factory};
     });
 
-    CommandFactory::add("time-filter", "Filter OSM data from a point in time or a time span out of a history file", []() {
-        return new CommandTimeFilter{};
+    cmd_factory.register_command("tags-filter", "Filter OSM data based on tags", [&]() {
+        return new CommandTagsFilter{cmd_factory};
+    });
+
+    cmd_factory.register_command("time-filter", "Filter OSM data from a point in time or a time span out of a history file", [&]() {
+        return new CommandTimeFilter{cmd_factory};
     });
 }
 

@@ -4,8 +4,8 @@
 #include "command_diff.hpp"
 
 TEST_CASE("diff") {
-
-    CommandDiff cmd;
+    CommandFactory factory;
+    CommandDiff cmd{factory};
 
     SECTION("no arguments - need exactly two arguments") {
         REQUIRE_THROWS_AS(cmd.setup({}), const argument_error&);

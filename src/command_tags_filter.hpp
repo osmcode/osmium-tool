@@ -71,7 +71,9 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
 
 public:
 
-    CommandTagsFilter() = default;
+    explicit CommandTagsFilter(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

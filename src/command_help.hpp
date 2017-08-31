@@ -34,6 +34,10 @@ class CommandHelp : public Command {
 
 public:
 
+    explicit CommandHelp(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
+
     bool setup(const std::vector<std::string>& arguments) override final;
 
     bool run() override final;

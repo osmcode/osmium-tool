@@ -55,7 +55,9 @@ class CommandAddLocationsToWays : public Command, public with_multiple_osm_input
 
 public:
 
-    CommandAddLocationsToWays() = default;
+    explicit CommandAddLocationsToWays(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

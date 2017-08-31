@@ -50,7 +50,7 @@ static void show_help(const std::string& topic, const std::string& info) {
 }
 
 bool CommandHelp::run() {
-    auto commands = CommandFactory::help();
+    auto commands = m_command_factory.help();
 
     if (m_topic == "help") {
         std::cout << "Usage: " << synopsis()
@@ -59,7 +59,7 @@ bool CommandHelp::run() {
         // print command names and descriptions in a nice table
         for (const auto& cmd : commands) {
             std::cout << "  "
-                      << std::setw(CommandFactory::max_command_name_length())
+                      << std::setw(m_command_factory.max_command_name_length())
                       << std::left
                       << cmd.first
                       << std::setw(0)
@@ -78,7 +78,7 @@ bool CommandHelp::run() {
         return true;
     }
 
-    std::string description = CommandFactory::get_description(m_topic);
+    std::string description = m_command_factory.get_description(m_topic);
     if (!description.empty()) {
         show_help(m_topic, std::string{"osmium "} + m_topic + ": " + description);
         return true;

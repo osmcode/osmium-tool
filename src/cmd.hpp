@@ -51,6 +51,8 @@ namespace osmium {
 
 } // namespace osmium
 
+class CommandFactory;
+
 /**
  * Virtual base class for commands that can be called from the command line.
  */
@@ -66,11 +68,14 @@ class Command {
 
 protected:
 
-    osmium::util::VerboseOutput m_vout {false};
+    const CommandFactory& m_command_factory;
+    osmium::util::VerboseOutput m_vout{false};
 
 public:
 
-    Command() = default;
+    explicit Command(const CommandFactory& command_factory) :
+        m_command_factory(command_factory) {
+    }
 
     virtual ~Command() {
     }
@@ -233,33 +238,23 @@ class CommandFactory {
 
     std::map<const std::string, command_info> m_commands;
 
-    // The constructor is private because CommandFactory is a singleton
-    CommandFactory() :
-        m_commands() {
-    }
-
 public:
-
-    // CommandFactory is a singleton, this returns the only instance
-    static CommandFactory& instance();
-
-    // Return a vector with names and descriptions of all commands
-    static std::vector<std::pair<std::string, std::string>> help();
-
-    static int max_command_name_length();
-
-    static bool add(const std::string& name, const std::string& description, create_command_type create_function);
-
-    static std::string get_description(const std::string& name);
 
     bool register_command(const std::string& name, const std::string& description, create_command_type create_function);
 
+    // Return a vector with names and descriptions of all commands
+    std::vector<std::pair<std::string, std::string>> help() const;
+
+    int max_command_name_length() const;
+
+    std::string get_description(const std::string& name) const;
+
     // This will create a C++ command object from the given name and
     // return it wrapped in a unique_ptr.
-    std::unique_ptr<Command> create_command(const std::string& name);
+    std::unique_ptr<Command> create_command(const std::string& name) const;
 
 }; // class CommandFactory
 
-void register_commands();
+void register_commands(CommandFactory& cmd_factory);
 
 #endif // CMD_HPP

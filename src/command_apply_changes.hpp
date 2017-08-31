@@ -39,7 +39,9 @@ class CommandApplyChanges : public Command, public with_single_osm_input, public
 
 public:
 
-    CommandApplyChanges() = default;
+    explicit CommandApplyChanges(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

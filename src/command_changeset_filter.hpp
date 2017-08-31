@@ -47,7 +47,9 @@ class CommandChangesetFilter : public Command, public with_single_osm_input, pub
 
 public:
 
-    CommandChangesetFilter() = default;
+    explicit CommandChangesetFilter(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

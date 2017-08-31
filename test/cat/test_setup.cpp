@@ -4,8 +4,8 @@
 #include "command_cat.hpp"
 
 TEST_CASE("cat") {
-
-    CommandCat cmd;
+    CommandFactory factory;
+    CommandCat cmd{factory};
 
     SECTION("no parameters") {
         REQUIRE_THROWS_AS(cmd.setup({}), const argument_error&);

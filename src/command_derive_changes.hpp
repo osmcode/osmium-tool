@@ -40,7 +40,9 @@ class CommandDeriveChanges : public Command, public with_multiple_osm_inputs, pu
 
 public:
 
-    CommandDeriveChanges() = default;
+    explicit CommandDeriveChanges(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

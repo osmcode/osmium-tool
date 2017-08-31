@@ -51,8 +51,6 @@ int main(int argc, char *argv[]) {
     _setmode(1, _O_BINARY);
 #endif
 
-    register_commands();
-
     std::string command{argv[0]};
 
     // remove path from command
@@ -97,7 +95,9 @@ int main(int argc, char *argv[]) {
         return return_code::okay;
     }
 
-    std::unique_ptr<Command> cmd = CommandFactory::instance().create_command(command);
+    CommandFactory command_factory;
+    register_commands(command_factory);
+    std::unique_ptr<Command> cmd = command_factory.create_command(command);
 
     if (!cmd) {
         std::cerr << "Unknown command or option '" << command << "'. Try 'osmium help'.\n";

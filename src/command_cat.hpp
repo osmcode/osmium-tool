@@ -32,7 +32,9 @@ class CommandCat : public Command, public with_multiple_osm_inputs, public with_
 
 public:
 
-    CommandCat() = default;
+    explicit CommandCat(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
 
     bool setup(const std::vector<std::string>& arguments) override final;
 

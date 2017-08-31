@@ -29,53 +29,48 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp"
 
-CommandFactory& CommandFactory::instance() {
-    static CommandFactory factory;
-    return factory;
+bool CommandFactory::register_command(const std::string& name, const std::string& description, create_command_type create_function) {
+    command_info info{description, create_function};
+    return m_commands.insert(std::make_pair(name, info)).second;
 }
 
-std::vector<std::pair<std::string, std::string>> CommandFactory::help() {
+std::vector<std::pair<std::string, std::string>> CommandFactory::help() const {
     std::vector<std::pair<std::string, std::string>> commands;
-    for (const auto& cmd : instance().m_commands) {
+
+    for (const auto& cmd : m_commands) {
         commands.push_back(std::make_pair(cmd.first, cmd.second.description));
     }
+
     return commands;
 }
 
-int CommandFactory::max_command_name_length() {
+int CommandFactory::max_command_name_length() const {
     osmium::max_op<int> max_width;
 
-    for (const auto& cmd : instance().m_commands) {
-        max_width.update(int(cmd.first.length()));
+    for (const auto& cmd : m_commands) {
+        max_width.update(static_cast<int>(cmd.first.length()));
     }
 
     return max_width();
 }
 
-bool CommandFactory::add(const std::string& name, const std::string& description, create_command_type create_function) {
-    return instance().register_command(name, description, create_function);
-}
+std::string CommandFactory::get_description(const std::string& name) const {
+    const auto it = m_commands.find(name);
 
-std::string CommandFactory::get_description(const std::string& name) {
-    auto it = instance().m_commands.find(name);
-    if (it == instance().m_commands.end()) {
+    if (it == m_commands.end()) {
         return "";
     }
+
     return it->second.description;
 }
 
-bool CommandFactory::register_command(const std::string& name, const std::string& description, create_command_type create_function) {
-    command_info info {description, create_function};
-    return m_commands.insert(std::make_pair(name, info)).second;
-}
-
-std::unique_ptr<Command> CommandFactory::create_command(const std::string& name) {
+std::unique_ptr<Command> CommandFactory::create_command(const std::string& name) const {
     const auto it = m_commands.find(name);
 
-    if (it != m_commands.end()) {
-        return std::unique_ptr<Command>((it->second.create)());
+    if (it == m_commands.end()) {
+        return std::unique_ptr<Command>{};
     }
 
-    return std::unique_ptr<Command>();
+    return std::unique_ptr<Command>{(it->second.create)()};
 }
 
