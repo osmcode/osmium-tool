@@ -28,6 +28,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/header.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
+#include <osmium/memory/buffer.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
 

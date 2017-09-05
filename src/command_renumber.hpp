@@ -28,10 +28,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/handler/check_order.hpp>
 #include <osmium/index/nwr_array.hpp>
 #include <osmium/memory/buffer.hpp>
+#include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
 
-#include <algorithm>
-#include <iterator>
+#include <cstddef>
 #include <string>
 #include <unordered_map>
 #include <vector>

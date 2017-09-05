@@ -1,4 +1,6 @@
 
+#include "cmd.hpp"
+
 #include "command_add_locations_to_ways.hpp"
 #include "command_apply_changes.hpp"
 #include "command_cat.hpp"

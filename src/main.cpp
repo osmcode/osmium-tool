@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <new>
 #include <string>
+#include <system_error>
 #include <vector>
 
 #ifdef _WIN32
@@ -37,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/handler/check_order.hpp>
 #include <osmium/geom/factory.hpp>
+#include <osmium/osm/location.hpp>
 
 #include "cmd.hpp"
 
