@@ -154,7 +154,15 @@ class OutputAction {
 
 public:
 
+    OutputAction() noexcept = default;
+
     virtual ~OutputAction() noexcept = default;
+
+    OutputAction(const OutputAction&) = delete;
+    OutputAction& operator=(const OutputAction&) = delete;
+
+    OutputAction(OutputAction&&) noexcept = delete;
+    OutputAction& operator=(OutputAction&&) noexcept = delete;
 
     virtual void left(osmium::OSMObject& /* object */) {
     }

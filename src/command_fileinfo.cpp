@@ -151,7 +151,15 @@ class Output {
 
 public:
 
+    Output() noexcept = default;
+
     virtual ~Output() noexcept = default;
+
+    Output(const Output&) = delete;
+    Output& operator=(const Output&) = delete;
+
+    Output(Output&&) noexcept = delete;
+    Output& operator=(Output&&) noexcept = delete;
 
     virtual void file(const std::string& filename, const osmium::io::File& input_file) = 0;
     virtual void header(const osmium::io::Header& header) = 0;
@@ -587,11 +595,11 @@ void CommandFileinfo::show_arguments() {
 bool CommandFileinfo::run() {
     std::unique_ptr<Output> output;
     if (m_json_output) {
-        output.reset(new JSONOutput());
+        output.reset(new JSONOutput{});
     } else if (m_get_value.empty()) {
-        output.reset(new HumanReadableOutput());
+        output.reset(new HumanReadableOutput{});
     } else {
-        output.reset(new SimpleOutput(m_get_value));
+        output.reset(new SimpleOutput{m_get_value});
     }
 
     output->file(m_input_filename, m_input_file);
