@@ -277,28 +277,18 @@ if(CLANG_TIDY)
 
     list(APPEND CT_CHECKS "bugprone-*")
 
-    list(APPEND CT_CHECKS "cert-*"
-                         "-cert-err60-cpp") # even the std lib doesn't do this
+    list(APPEND CT_CHECKS "cert-*")
 
-    # disabled, because it is slow
-#    list(APPEND CT_CHECKS "clang-analyzer-*")
+    list(APPEND CT_CHECKS "clang-analyzer-*")
 
     list(APPEND CT_CHECKS "google-*"
-                         "-google-build-using-namespace"
-                         "-google-explicit-constructor"
-                         "-google-readability-casting"
-                         "-google-readability-function"
                          "-google-runtime-references")
 
     list(APPEND CT_CHECKS "hicpp-*")
 
-    list(APPEND CT_CHECKS "llvm-*"
-                         "-llvm-include-order")
+    list(APPEND CT_CHECKS "llvm-*")
 
-    list(APPEND CT_CHECKS "misc-*"
-                         "-misc-argument-comment"
-                         "-misc-macro-parentheses"
-                         "-misc-unused-parameters")
+    list(APPEND CT_CHECKS "misc-*")
 
     list(APPEND CT_CHECKS "modernize-*"
                           "-modernize-make-unique") # not available in C++11
@@ -306,9 +296,7 @@ if(CLANG_TIDY)
     list(APPEND CT_CHECKS "performance-*")
 
     list(APPEND CT_CHECKS "readability-*"
-                         "-readability-identifier-naming"
                          "-readability-implicit-bool-cast"
-                         "-readability-named-parameter"
                          "-readability-redundant-member-init")
 
     string(REPLACE ";" "," ALL_CHECKS "${CT_CHECKS}")
