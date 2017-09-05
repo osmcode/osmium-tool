@@ -20,15 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstddef>
-#include <fstream>
-#include <iostream>
-#include <stdexcept>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_getid.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/index/relations_map.hpp>
 #include <osmium/io/header.hpp>
@@ -41,9 +35,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_getid.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <cstddef>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
 
 void CommandGetId::parse_and_add_id(const std::string& s) {
     auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr, m_default_item_type);

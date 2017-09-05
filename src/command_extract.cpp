@@ -20,30 +20,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <vector>
-
-#include <boost/program_options.hpp>
-
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/istreamwrapper.h>
-
-#include <osmium/geom/coordinates.hpp>
-#include <osmium/handler/check_order.hpp>
-#include <osmium/io/any_input.hpp>
-#include <osmium/io/header.hpp>
-#include <osmium/io/writer_options.hpp>
-#include <osmium/osm.hpp>
-#include <osmium/osm/box.hpp>
-#include <osmium/util/progress_bar.hpp>
-#include <osmium/util/string.hpp>
-#include <osmium/util/verbose_output.hpp>
-
 #include "command_extract.hpp"
 #include "exception.hpp"
 
@@ -57,6 +33,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "extract/strategy_simple.hpp"
 #include "extract/strategy_smart.hpp"
 #include "util.hpp"
+
+#include <osmium/geom/coordinates.hpp>
+#include <osmium/handler/check_order.hpp>
+#include <osmium/io/any_input.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/writer_options.hpp>
+#include <osmium/osm.hpp>
+#include <osmium/osm/box.hpp>
+#include <osmium/util/progress_bar.hpp>
+#include <osmium/util/string.hpp>
+#include <osmium/util/verbose_output.hpp>
+
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
+#include <rapidjson/istreamwrapper.h>
+
+#include <boost/program_options.hpp>
+
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace {
 

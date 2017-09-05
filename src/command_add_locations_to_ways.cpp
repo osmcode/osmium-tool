@@ -20,13 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <iostream>
-#include <iterator>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_add_locations_to_ways.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/index/map.hpp>
 #include <osmium/io/file.hpp>
@@ -42,9 +38,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include "command_add_locations_to_ways.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <utility>
+#include <vector>
 
 bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments) {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();

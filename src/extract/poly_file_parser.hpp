@@ -23,10 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <memory>
-#include <string>
-#include <vector>
-
 #include <osmium/builder/osm_object_builder.hpp>
 #include <osmium/util/compatibility.hpp>
 
@@ -37,6 +33,10 @@ namespace osmium {
     } // namespace memory
 
 } // namespace osmium
+
+#include <memory>
+#include <string>
+#include <vector>
 
 /**
  *  Thrown when there is a problem with parsing a poly file.

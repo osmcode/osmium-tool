@@ -20,10 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <osmium/handler/check_order.hpp>
-
 #include "strategy_simple.hpp"
 #include "../util.hpp"
+
+#include <osmium/handler/check_order.hpp>
 
 namespace strategy_simple {
 

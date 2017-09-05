@@ -23,12 +23,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstdint>
+#include "options.hpp"
 
 #include <osmium/fwd.hpp>
 #include <osmium/io/writer_options.hpp>
 
-#include "options.hpp"
+#include <cstdint>
 
 class ExportFormat {
 

@@ -23,18 +23,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <unordered_map>
-#include <vector>
+#include "cmd.hpp" // IWYU pragma: export
 
 #include <osmium/handler/check_order.hpp>
 #include <osmium/index/nwr_array.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/types.hpp>
 
-#include "cmd.hpp" // IWYU pragma: export
+#include <algorithm>
+#include <iterator>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 /**
  * Holds the mapping from old IDs to new IDs of one object type.

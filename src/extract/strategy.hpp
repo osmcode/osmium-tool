@@ -23,7 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <memory>
+#include "extract.hpp"
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/reader.hpp>
@@ -38,7 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "extract.hpp"
+#include <memory>
 
 template <typename T>
 class ExtractData : public T {

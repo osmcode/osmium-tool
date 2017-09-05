@@ -20,6 +20,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "command_show.hpp"
+#include "exception.hpp"
+#include "util.hpp"
+
+#include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+
+#include <boost/program_options.hpp>
+
 #include <cerrno>
 #include <csignal>
 #include <cstdlib>
@@ -31,17 +42,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _MSC_VER
 # include <unistd.h>
 #endif
-
-#include <boost/program_options.hpp>
-
-#include <osmium/io/file.hpp>
-#include <osmium/io/header.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
-
-#include "command_show.hpp"
-#include "exception.hpp"
-#include "util.hpp"
 
 #ifndef _MSC_VER
 void CommandShow::setup_pager_from_env() noexcept {

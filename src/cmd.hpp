@@ -23,21 +23,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <osmium/io/file.hpp>
+#include <osmium/io/writer_options.hpp>
+#include <osmium/osm/entity_bits.hpp>
+#include <osmium/util/file.hpp>
+#include <osmium/util/verbose_output.hpp>
+
+#include <boost/program_options.hpp>
+
 #include <functional>
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <boost/program_options.hpp>
-namespace po = boost::program_options;
-
-#include <osmium/io/file.hpp>
-#include <osmium/io/writer_options.hpp>
-#include <osmium/osm/entity_bits.hpp>
-#include <osmium/util/file.hpp>
-#include <osmium/util/verbose_output.hpp>
 
 const char* get_osmium_version() noexcept;
 const char* get_osmium_long_version() noexcept;
@@ -52,6 +51,8 @@ namespace osmium {
 } // namespace osmium
 
 class CommandFactory;
+
+namespace po = boost::program_options;
 
 /**
  * Virtual base class for commands that can be called from the command line.

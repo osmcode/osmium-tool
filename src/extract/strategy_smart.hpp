@@ -23,14 +23,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <memory>
-#include <string>
-#include <vector>
+#include "strategy.hpp"
 
 #include <osmium/index/id_set.hpp>
 #include <osmium/index/relations_map.hpp>
 
-#include "strategy.hpp"
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace strategy_smart {
 

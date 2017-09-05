@@ -20,16 +20,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <iostream>
+#include "command_help.hpp"
+
 #include <iomanip>
+#include <iostream>
 #include <string>
 #include <vector>
 
 #ifndef _MSC_VER
 # include <unistd.h>
 #endif
-
-#include "command_help.hpp"
 
 bool CommandHelp::setup(const std::vector<std::string>& arguments) {
     m_topic = arguments.empty() ? "help" : arguments.front();

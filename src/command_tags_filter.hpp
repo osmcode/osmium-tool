@@ -23,8 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
+#include "cmd.hpp" // IWYU pragma: export
 
 #include <osmium/fwd.hpp>
 #include <osmium/index/id_set.hpp>
@@ -34,7 +33,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/types.hpp>
 #include <osmium/tags/tags_filter.hpp>
 
-#include "cmd.hpp" // IWYU pragma: export
+#include <string>
+#include <vector>
 
 namespace osmium {
 

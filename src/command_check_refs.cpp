@@ -20,14 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <cstdint>
-#include <iostream>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_check_refs.hpp"
+#include "util.hpp"
 
 #include <osmium/handler.hpp>
 #include <osmium/handler/check_order.hpp>
@@ -39,8 +33,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include "command_check_refs.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <algorithm>
+#include <cstdint>
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 
 bool CommandCheckRefs::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

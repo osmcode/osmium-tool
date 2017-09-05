@@ -23,12 +23,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <memory>
-#include <vector>
+#include "strategy.hpp"
 
 #include <osmium/index/id_set.hpp>
 
-#include "strategy.hpp"
+#include <memory>
+#include <vector>
 
 namespace strategy_simple {
 

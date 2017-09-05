@@ -23,18 +23,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
-
-#include <rapidjson/document.h>
+#include "cmd.hpp" // IWYU pragma: export
+#include "export/options.hpp"
 
 #include <osmium/handler/node_locations_for_ways.hpp>
 #include <osmium/index/map/all.hpp>
 #include <osmium/io/writer_options.hpp>
 
-#include "cmd.hpp" // IWYU pragma: export
+#include <rapidjson/document.h>
 
-#include "export/options.hpp"
+#include <string>
+#include <vector>
 
 class CommandExport : public Command, public with_single_osm_input {
 

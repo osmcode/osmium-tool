@@ -20,28 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <cstdint>
-#include <iostream>
-#include <iterator>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <utility>
-#include <vector>
-
-#ifndef _MSC_VER
-# include <unistd.h>
-#endif
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#include <rapidjson/prettywriter.h>
-#include <rapidjson/stringbuffer.h>
-#pragma GCC diagnostic pop
-
-#include <boost/crc.hpp>
-#include <boost/program_options.hpp>
+#include "command_fileinfo.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/handler.hpp>
 #include <osmium/io/file.hpp>
@@ -57,9 +38,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include "command_fileinfo.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#include <rapidjson/prettywriter.h>
+#include <rapidjson/stringbuffer.h>
+#pragma GCC diagnostic pop
+
+#include <boost/crc.hpp>
+#include <boost/program_options.hpp>
+
+#include <algorithm>
+#include <cstdint>
+#include <iostream>
+#include <iterator>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
+
+#ifndef _MSC_VER
+# include <unistd.h>
+#endif
 
 /*************************************************************************/
 

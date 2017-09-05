@@ -23,8 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <vector>
-
 #include "extract.hpp"
 
 namespace osmium {
@@ -33,6 +31,8 @@ namespace osmium {
     class Segment;
 
 } // namespace osmium
+
+#include <vector>
 
 class ExtractPolygon : public Extract {
 

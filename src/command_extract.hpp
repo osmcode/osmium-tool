@@ -23,17 +23,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstddef>
-#include <memory>
-#include <string>
-#include <vector>
+#include "cmd.hpp" // IWYU pragma: export
+#include "extract/extract.hpp"
+#include "extract/strategy.hpp"
 
 #include <osmium/memory/buffer.hpp>
 #include <osmium/util/options.hpp>
 
-#include "cmd.hpp" // IWYU pragma: export
-#include "extract/extract.hpp"
-#include "extract/strategy.hpp"
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <vector>
 
 class CommandExtract : public Command, public with_single_osm_input, public with_osm_output {
 

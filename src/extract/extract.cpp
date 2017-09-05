@@ -20,12 +20,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <sstream>
-#include <string>
+#include "extract.hpp"
 
 #include <osmium/io/writer_options.hpp>
 
-#include "extract.hpp"
+#include <sstream>
+#include <string>
 
 namespace osmium {
 

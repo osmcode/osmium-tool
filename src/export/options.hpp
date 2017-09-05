@@ -23,9 +23,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-
 #include <osmium/tags/tags_filter.hpp>
+
+#include <string>
 
 enum class unique_id_type {
     none    = 0,

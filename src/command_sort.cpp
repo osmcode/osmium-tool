@@ -20,12 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_sort.hpp"
 
 #include <osmium/io/header.hpp>
 #include <osmium/io/output_iterator.hpp>
@@ -39,7 +34,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include "command_sort.hpp"
+#include <boost/program_options.hpp>
+
+#include <algorithm>
+#include <string>
+#include <utility>
+#include <vector>
 
 bool CommandSort::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_common{add_common_options()};

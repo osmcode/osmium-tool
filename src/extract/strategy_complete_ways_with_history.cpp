@@ -20,10 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "strategy_complete_ways_with_history.hpp"
+
 #include <memory>
 #include <vector>
-
-#include "strategy_complete_ways_with_history.hpp"
 
 namespace strategy_complete_ways_with_history {
 

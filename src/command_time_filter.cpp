@@ -20,13 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <ctime>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_time_filter.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/diff_iterator.hpp>
 #include <osmium/io/file.hpp>
@@ -41,9 +37,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/timestamp.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_time_filter.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <algorithm>
+#include <ctime>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_common{add_common_options()};

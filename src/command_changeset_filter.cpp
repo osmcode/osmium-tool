@@ -20,12 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_changeset_filter.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/geom/relations.hpp>
 #include <osmium/io/header.hpp>
@@ -40,9 +37,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_changeset_filter.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <algorithm>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 bool CommandChangesetFilter::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

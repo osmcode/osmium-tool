@@ -20,26 +20,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <memory>
-#include <queue>
-#include <string>
-#include <vector>
-#include <utility>
-
-#include <boost/program_options.hpp>
+#include "command_merge.hpp"
 
 #include <osmium/io/header.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/object.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_merge.hpp"
+#include <boost/program_options.hpp>
+
+#include <algorithm>
+#include <memory>
+#include <queue>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace osmium {
 

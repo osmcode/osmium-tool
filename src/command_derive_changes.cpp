@@ -20,11 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <ctime>
-#include <string>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_derive_changes.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/builder/attr.hpp>
 #include <osmium/io/file.hpp>
@@ -37,9 +35,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/object.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_derive_changes.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <ctime>
+#include <string>
+#include <vector>
 
 bool CommandDeriveChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

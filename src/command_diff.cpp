@@ -20,15 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstdint>
-#include <iostream>
-#include <memory>
-#include <sstream>
-#include <string>
-#include <vector>
-
-#include <boost/crc.hpp>
-#include <boost/program_options.hpp>
+#include "command_diff.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/file.hpp>
@@ -43,9 +37,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/item_type.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_diff.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/crc.hpp>
+#include <boost/program_options.hpp>
+
+#include <cstdint>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <vector>
 
 bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

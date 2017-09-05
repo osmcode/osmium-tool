@@ -23,8 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
+#include "cmd.hpp" // IWYU pragma: export
 
 #include <osmium/handler/node_locations_for_ways.hpp>
 #include <osmium/index/map/all.hpp>
@@ -40,7 +39,8 @@ namespace osmium {
 
 } // namespace osmium
 
-#include "cmd.hpp" // IWYU pragma: export
+#include <string>
+#include <vector>
 
 using index_type = osmium::index::map::Map<osmium::unsigned_object_id_type, osmium::Location>;
 using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;

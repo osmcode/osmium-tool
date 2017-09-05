@@ -20,8 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstddef>
-#include <string>
+#include "osm_file_parser.hpp"
 
 #include <osmium/area/assembler.hpp>
 #include <osmium/area/multipolygon_collector.hpp>
@@ -32,7 +31,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/memory/buffer.hpp>
 
-#include "osm_file_parser.hpp"
+#include <cstddef>
+#include <string>
 
 using index_type = osmium::index::map::SparseMemArray<osmium::unsigned_object_id_type, osmium::Location>;
 using location_handler_type = osmium::handler::NodeLocationsForWays<index_type>;

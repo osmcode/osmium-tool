@@ -23,13 +23,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
+#include "cmd.hpp" // IWYU pragma: export
 
+#include <osmium/osm/box.hpp>
 #include <osmium/osm/timestamp.hpp>
 #include <osmium/osm/types.hpp>
 
-#include "cmd.hpp" // IWYU pragma: export
+#include <string>
+#include <vector>
 
 class CommandChangesetFilter : public Command, public with_single_osm_input, public with_osm_output {
 

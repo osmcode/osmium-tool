@@ -23,10 +23,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "cmd.hpp" // IWYU pragma: export
+
 #include <string>
 #include <vector>
-
-#include "cmd.hpp" // IWYU pragma: export
 
 class CommandMerge : public Command, public with_multiple_osm_inputs, public with_osm_output {
 

@@ -23,8 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-
 namespace osmium {
 
     namespace memory {
@@ -32,6 +30,8 @@ namespace osmium {
     } // namespace memory
 
 } // namespace osmium
+
+#include <string>
 
 /**
  * Gets areas from OSM files.

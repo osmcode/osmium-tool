@@ -23,10 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+#include "export_format.hpp"
 
 #include <osmium/fwd.hpp>
 #include <osmium/handler.hpp>
@@ -34,7 +31,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/tags/tags_filter.hpp>
 
-#include "export_format.hpp"
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 class ExportHandler : public osmium::handler::Handler {
 

@@ -23,7 +23,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
+#include "export_format.hpp"
+
+#include <osmium/fwd.hpp>
+#include <osmium/geom/rapid_geojson.hpp>
+#include <osmium/io/writer_options.hpp>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
@@ -34,11 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <rapidjson/stringbuffer.h>
 #pragma GCC diagnostic pop
 
-#include <osmium/fwd.hpp>
-#include <osmium/geom/rapid_geojson.hpp>
-#include <osmium/io/writer_options.hpp>
-
-#include "export_format.hpp"
+#include <string>
 
 using writer_type = rapidjson::Writer<rapidjson::StringBuffer>;
 

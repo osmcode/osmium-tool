@@ -23,15 +23,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
-
 #include <osmium/osm/box.hpp>
 #include <osmium/io/file.hpp>
 #include <osmium/io/writer_options.hpp>
 #include <osmium/io/writer.hpp>
+
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace osmium {
 

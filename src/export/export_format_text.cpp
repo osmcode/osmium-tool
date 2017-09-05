@@ -20,10 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "export_format_text.hpp"
+
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/detail/string_util.hpp>
-
-#include "export_format_text.hpp"
 
 static constexpr const std::size_t initial_buffer_size = 1024 * 1024;
 static constexpr const std::size_t flush_buffer_size   =  800 * 1024;

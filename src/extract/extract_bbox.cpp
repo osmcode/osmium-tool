@@ -20,11 +20,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
+#include "extract_bbox.hpp"
 
 #include <osmium/osm/location.hpp>
 
-#include "extract_bbox.hpp"
+#include <string>
 
 bool ExtractBBox::contains(const osmium::Location& location) const noexcept {
     return location.valid() && envelope().contains(location);

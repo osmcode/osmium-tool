@@ -23,12 +23,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
+#include "cmd.hpp" // IWYU pragma: export
 
 #include <osmium/osm/timestamp.hpp>
 
-#include "cmd.hpp" // IWYU pragma: export
+#include <string>
+#include <vector>
 
 class CommandTimeFilter : public Command, public with_single_osm_input, public with_osm_output {
 

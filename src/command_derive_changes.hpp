@@ -23,12 +23,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
+#include "cmd.hpp" // IWYU pragma: export
 
 #include <osmium/memory/buffer.hpp>
 
-#include "cmd.hpp" // IWYU pragma: export
+namespace osmium {
+
+    namespace io {
+        class Writer;
+    } // namespace io
+
+    class OSMObject;
+
+} // namespace osmium
+
+#include <string>
+#include <vector>
 
 class CommandDeriveChanges : public Command, public with_multiple_osm_inputs, public with_osm_output {
 

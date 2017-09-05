@@ -20,11 +20,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <osmium/handler/check_order.hpp>
-#include <osmium/util/file.hpp>
-
 #include "strategy_complete_ways.hpp"
 #include "../util.hpp"
+
+#include <osmium/handler/check_order.hpp>
+#include <osmium/util/file.hpp>
 
 namespace strategy_complete_ways {
 

@@ -19,6 +19,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "command_renumber.hpp"
+
+#include <osmium/io/detail/read_write.hpp>
+#include <osmium/io/header.hpp>
+#include <osmium/io/input_iterator.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/osm.hpp>
+#include <osmium/util/file.hpp>
+#include <osmium/util/memory_mapping.hpp>
+#include <osmium/util/progress_bar.hpp>
+#include <osmium/util/verbose_output.hpp>
+
+#include <boost/program_options.hpp>
+
 #include <algorithm>
 #include <cerrno>
 #include <cstring>
@@ -27,29 +42,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <iterator>
 #include <stdexcept>
 #include <string>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <utility>
 #include <vector>
 
 #ifdef _WIN32
 # include <io.h>
 #endif
-
-#include <boost/program_options.hpp>
-
-#include <osmium/io/header.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
-#include <osmium/io/detail/read_write.hpp>
-#include <osmium/io/input_iterator.hpp>
-#include <osmium/osm.hpp>
-#include <osmium/util/file.hpp>
-#include <osmium/util/progress_bar.hpp>
-#include <osmium/util/memory_mapping.hpp>
-#include <osmium/util/verbose_output.hpp>
-
-#include "command_renumber.hpp"
 
 namespace osmium {
 

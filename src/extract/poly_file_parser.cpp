@@ -20,17 +20,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
+#include "../exception.hpp"
+#include "poly_file_parser.hpp"
 
 #include <osmium/geom/coordinates.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/util/string.hpp>
 
-#include "../exception.hpp"
-#include "poly_file_parser.hpp"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 OSMIUM_NORETURN void PolyFileParser::error(const std::string& message) {
     throw poly_error{std::string{"In file '"} + m_file_name + "' on line " + std::to_string(m_line + 1) + ":\n" + message};

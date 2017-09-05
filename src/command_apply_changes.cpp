@@ -20,14 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <algorithm>
-#include <stdexcept>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <boost/function_output_iterator.hpp>
-#include <boost/program_options.hpp>
+#include "command_apply_changes.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/index/id_set.hpp>
 #include <osmium/index/map/sparse_mem_array.hpp>
@@ -47,9 +42,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include "command_apply_changes.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/function_output_iterator.hpp>
+#include <boost/program_options.hpp>
+
+#include <algorithm>
+#include <stdexcept>
+#include <string>
+#include <utility>
+#include <vector>
 
 using location_index_type = osmium::index::map::SparseMemArray<osmium::unsigned_object_id_type, osmium::Location>;
 

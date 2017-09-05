@@ -20,11 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_cat.hpp"
+#include "util.hpp"
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
@@ -34,8 +31,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_cat.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <string>
+#include <utility>
+#include <vector>
 
 bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

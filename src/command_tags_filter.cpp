@@ -20,12 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <fstream>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "command_tags_filter.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/index/relations_map.hpp>
 #include <osmium/io/header.hpp>
@@ -37,9 +34,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "command_tags_filter.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <fstream>
+#include <string>
+#include <utility>
+#include <vector>
 
 void CommandTagsFilter::add_filter(osmium::osm_entity_bits::type entities, const osmium::TagMatcher& matcher) {
     if (entities & osmium::osm_entity_bits::node) {

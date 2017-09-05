@@ -20,22 +20,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cassert>
-#include <fstream>
-#include <string>
-#include <vector>
-
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/istreamwrapper.h>
+#include "../exception.hpp"
+#include "geojson_file_parser.hpp"
 
 #include <osmium/builder/osm_object_builder.hpp>
 #include <osmium/geom/coordinates.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/location.hpp>
 
-#include "../exception.hpp"
-#include "geojson_file_parser.hpp"
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
+#include <rapidjson/istreamwrapper.h>
+
+#include <cassert>
+#include <fstream>
+#include <string>
+#include <vector>
 
 std::string get_value_as_string(const rapidjson::Value& object, const char* key) {
     assert(object.IsObject());

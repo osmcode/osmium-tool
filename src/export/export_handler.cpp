@@ -20,21 +20,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstring>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
+#include "export_handler.hpp"
+#include "../exception.hpp"
+#include "../util.hpp"
 
 #include <osmium/geom/factory.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/tags/taglist.hpp>
 
-#include "../exception.hpp"
-#include "../util.hpp"
-#include "export_handler.hpp"
+#include <cstring>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 static bool check_filter(const osmium::TagList& tags, const char* area_tag_value, const osmium::TagsFilter& filter) noexcept {
     const char* area_tag = tags.get_value_by_key("area");

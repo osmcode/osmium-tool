@@ -20,6 +20,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "extract_polygon.hpp"
+
+#include <osmium/geom/wkt.hpp>
+#include <osmium/osm/location.hpp>
+#include <osmium/osm/segment.hpp>
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -27,12 +33,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <osmium/geom/wkt.hpp>
-#include <osmium/osm/location.hpp>
-#include <osmium/osm/segment.hpp>
-
-#include "extract_polygon.hpp"
 
 static void add_ring(std::vector<osmium::Segment>& segments, const osmium::NodeRefList& ring) {
     auto it = ring.begin();

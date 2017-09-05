@@ -20,19 +20,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cctype>
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
+#include "command_export.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
-#include <boost/program_options.hpp>
-
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/istreamwrapper.h>
+#include "export/export_handler.hpp"
+#include "export/export_format_json.hpp"
+#include "export/export_format_text.hpp"
 
 #include <osmium/area/assembler.hpp>
 #include <osmium/area/multipolygon_manager.hpp>
@@ -44,13 +38,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include "command_export.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
+#include <rapidjson/istreamwrapper.h>
 
-#include "export/export_handler.hpp"
-#include "export/export_format_json.hpp"
-#include "export/export_format_text.hpp"
+#include <boost/program_options.hpp>
+
+#include <cctype>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 static std::string get_attr_string(const rapidjson::Value& object, const char* key) {
     const auto it = object.FindMember(key);

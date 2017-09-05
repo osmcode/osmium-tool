@@ -23,13 +23,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
+#include "export_format.hpp"
 
 #include <osmium/fwd.hpp>
 #include <osmium/geom/wkt.hpp>
 #include <osmium/io/writer_options.hpp>
 
-#include "export_format.hpp"
+#include <string>
 
 class ExportFormatText : public ExportFormat {
 
