@@ -117,7 +117,7 @@ void CommandDeriveChanges::write_deleted(osmium::io::Writer& writer, osmium::OSM
         object.set_visible(false);
         writer(object);
     } else {
-        using namespace osmium::builder::attr;
+        using namespace osmium::builder::attr; // NOLINT
         osmium::builder::add_node(m_buffer,
             _deleted(),
             _id(object.id()),
