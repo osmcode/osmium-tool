@@ -62,7 +62,7 @@ This program will not work on full history files.
     **osmium-index-types**(5) man page.
 
 -n, --keep-untagged
-:   If this is set features without any tags will be in the exported data.
+:   If this is set, features without any tags will be in the exported data.
     By default these features will be omitted from the output. Tags are the
     OSM tags, not attributes (like id, version, uid, ...) without the tags
     removed by the **exclude_tags** or **include_tags** settings.

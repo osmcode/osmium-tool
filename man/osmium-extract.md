@@ -362,12 +362,12 @@ try it:
 
 Extract the city of Karlsruhe using a boundary polygon:
 
-    osmium -p karlsruhe-boundary.osm.bz2 germany-latest.osm.pbf \
+    osmium extract -p karlsruhe-boundary.osm.bz2 germany-latest.osm.pbf \
         -o karlsruhe.osm.pbf
 
 Extract the city of Munich using a bounding box:
 
-    osmium -b 11.35,48.05,11.73,48.25 germany-latest.osm.pbf \
+    osmium extract -b 11.35,48.05,11.73,48.25 germany-latest.osm.pbf \
         -o munich.osm.pbf
 
 
