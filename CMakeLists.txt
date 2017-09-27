@@ -220,6 +220,7 @@ SET(OSMIUM_COMMANDS
     sort
     tags-filter
     time-filter
+    values-filter
 )
 
 set(OSMIUM_SOURCE_FILES
