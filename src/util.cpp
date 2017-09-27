@@ -131,6 +131,8 @@ osmium::StringMatcher get_string_matcher(std::string string) {
         return osmium::StringMatcher::always_true{};
     }
 
+    ///TODO: Currently lists of words and wildcards can't be combined.
+
     if (string.empty() || (string.back() != '*' && string.front() != '*')) {
         if (string.find(',') == std::string::npos) {
             return osmium::StringMatcher::equal{string};

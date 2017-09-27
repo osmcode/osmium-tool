@@ -19,6 +19,7 @@
 #include "command_show.hpp"
 #include "command_sort.hpp"
 #include "command_tags_filter.hpp"
+#include "command_values_filter.hpp"
 #include "command_time_filter.hpp"
 
 void register_commands(CommandFactory& cmd_factory) {
@@ -91,6 +92,10 @@ void register_commands(CommandFactory& cmd_factory) {
 
     cmd_factory.register_command("tags-filter", "Filter OSM data based on tags", [&]() {
         return new CommandTagsFilter{cmd_factory};
+    });
+
+    cmd_factory.register_command("values-filter", "Filter OSM data based on tag values", [&]() {
+        return new CommandValuesFilter{cmd_factory};
     });
 
     cmd_factory.register_command("time-filter", "Filter OSM data from a point in time or a time span out of a history file", [&]() {
