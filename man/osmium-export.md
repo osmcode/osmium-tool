@@ -33,7 +33,10 @@ different ways it can do that which have different advantages and
 disadvantages. The default is good enough for most cases, but see the
 **osmium-index-types**(5) man page for details.
 
-This program will not work on full history files.
+This command will not work on full history files.
+
+This command will work with negative IDs on OSM objects (for instance on
+files created with JOSM).
 
 
 # OPTIONS
@@ -78,7 +81,8 @@ This program will not work on full history files.
     case the ID is a string, the first character is the type of object ('n'
     for nodes, 'w' for linestrings created from ways, and 'a' for areas
     created from ways and/or relations, after that there is a unique ID based
-    on the original OSM object ID(s).
+    on the original OSM object ID(s). If the input file has negative IDs, this
+    can create IDs such as 'w-12'.
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@

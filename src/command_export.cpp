@@ -401,8 +401,9 @@ bool CommandExport::run() {
         reader.close();
     } else {
         const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
-        auto location_index = map_factory.create_map(m_index_type_name);
-        location_handler_type location_handler{*location_index};
+        auto location_index_pos = map_factory.create_map(m_index_type_name);
+        auto location_index_neg = map_factory.create_map(m_index_type_name);
+        location_handler_type location_handler{*location_index_pos, *location_index_neg};
         location_handler.ignore_errors();
 
         osmium::io::Reader reader{m_input_filename};
@@ -410,7 +411,9 @@ bool CommandExport::run() {
             osmium::apply(buffer, export_handler);
         }));
         reader.close();
-        m_vout << "About " << (location_index->used_memory() / (1024 * 1024)) << " MBytes used for node location index (in main memory or on disk).\n";
+        m_vout << "About "
+               << ((location_index_pos->used_memory() + location_index_neg->used_memory()) / (1024 * 1024))
+               << " MBytes used for node location index (in main memory or on disk).\n";
     }
     m_vout << "Second pass done.\n";
     export_handler.close();
