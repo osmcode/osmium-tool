@@ -62,20 +62,22 @@ namespace {
 
     osmium::Box parse_bbox(const rapidjson::Value& value) {
         if (value.IsArray()) {
-            if (value.Size() == 4) {
-                if (value[0].IsNumber() && value[1].IsNumber() && value[2].IsNumber() && value[3].IsNumber()) {
-                    const osmium::Location bottom_left{value[0].GetDouble(), value[1].GetDouble()};
-                    const osmium::Location top_right{value[2].GetDouble(), value[3].GetDouble()};
-
-                    if (bottom_left < top_right) {
-                        return osmium::Box{bottom_left, top_right};
-                    }
-                    throw config_error{"'bbox' array elements must be in order: left, bottom, right, top."};
-                }
-                throw config_error{"'bbox' array elements must be numbers."};
-            } else {
+            if (value.Size() != 4) {
                 throw config_error{"'bbox' must be an array with exactly four elements."};
             }
+
+            if (!value[0].IsNumber() || !value[1].IsNumber() || !value[2].IsNumber() || !value[3].IsNumber()) {
+                throw config_error{"'bbox' array elements must be numbers."};
+            }
+
+            const osmium::Location location1{value[0].GetDouble(), value[1].GetDouble()};
+            const osmium::Location location2{value[2].GetDouble(), value[3].GetDouble()};
+
+            osmium::Box box;
+            box.extend(location1);
+            box.extend(location2);
+
+            return box;
         } else if (value.IsObject()) {
             const auto left   = value.FindMember("left");
             const auto right  = value.FindMember("right");

@@ -193,18 +193,18 @@ osmium::Box parse_bbox(const std::string& str, const std::string& option_name) {
         throw argument_error{std::string{"Need exactly four coordinates in "} + option_name + " option."};
     }
 
-    osmium::Location bottom_left;
-    bottom_left.set_lon(coordinates[0].c_str());
-    bottom_left.set_lat(coordinates[1].c_str());
-    osmium::Location top_right;
-    top_right.set_lon(coordinates[2].c_str());
-    top_right.set_lat(coordinates[3].c_str());
+    osmium::Location location1;
+    location1.set_lon(coordinates[0].c_str());
+    location1.set_lat(coordinates[1].c_str());
 
-    if (bottom_left.x() < top_right.x() &&
-        bottom_left.y() < top_right.y()) {
-        return {bottom_left, top_right};
-    }
+    osmium::Location location2;
+    location2.set_lon(coordinates[2].c_str());
+    location2.set_lat(coordinates[3].c_str());
 
-    throw argument_error{std::string{"Need LEFT < RIGHT and BOTTOM < TOP in "} + option_name + " option."};
+    osmium::Box box;
+    box.extend(location1);
+    box.extend(location2);
+
+    return box;
 }
 

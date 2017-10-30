@@ -54,9 +54,10 @@ to merge several extracts without problems.
 
 # OPTIONS
 
--b, --bbox=LEFT,BOTTOM,RIGHT,TOP
+-b, --bbox=LONG1,LAT1,LONG2,LAT2
 :   Set the bounding box to cut out. Can not be used with --polygon/-p,
-    --config/-c, or --directory/-d.
+    --config/-c, or --directory/-d. The coordinates LONG1,LAT1 are from one
+    arbitrary corner, the coordinates LONG2,LAT2 are from the opposite corner.
 
 -c, --config=FILE
 :   Set the name of the config file. Can not be used with the --bbox/-b or
@@ -153,8 +154,8 @@ There are several formats for specifying the regions:
 **box**:
 
 A bounding box in one of two formats. The first is a simple array with
-four real numbers specifying the left, bottom, right, and top boundary
-(in that order):
+four real numbers, the first two specifying the coordinates of an arbitrary
+corner, the second two specifying the coordinates of the opposite corner.
 
     {
         "output": "munich.osm.pbf",

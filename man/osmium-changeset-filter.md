@@ -27,8 +27,10 @@ STDOUT.
 -b, --before=TIMESTAMP
 :   Only copy changesets created before the given time.
 
--B, --bbox=LEFT,BOTTOM,RIGHT,TOP
+-B, --bbox=LONG1,LAT1,LONG2,LAT2
 :   Only copy changesets with a bounding box overlapping the specified box.
+    The coordinates LONG1,LAT1 are from one arbitrary corner, the coordinates
+    LONG2,LAT2 are from the opposite corner.
 
 -c, --with-changes
 :   Only copy changesets with changes.
