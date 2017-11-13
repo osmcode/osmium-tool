@@ -63,7 +63,7 @@ You also need the following libraries:
         CentOS: zlib-devel
 
     Expat
-        http://expat.sourceforge.net/
+        https://libexpat.github.io/
         Debian/Ubuntu: libexpat1-dev
         openSUSE: libexpat-devel
         Fedora: expat-devel
