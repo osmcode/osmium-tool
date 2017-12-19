@@ -60,6 +60,16 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 git pull
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
+CD %otdir%\..
+
+IF NOT EXIST protozero ECHO cloning protozero && git clone --depth 1 https://github.com/mapbox/protozero.git
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+CD protozero
+git fetch
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+git pull
+IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+
 CD %otdir%
 IF EXIST build ECHO deleting build dir... && RD /Q /S build
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR

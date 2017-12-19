@@ -54,8 +54,7 @@
 #
 #----------------------------------------------------------------------
 
-# This is the list of directories where we look for osmium and protozero
-# includes.
+# This is the list of directories where we look for osmium includes.
 set(_osmium_include_path
         ../libosmium
         ~/Library/Frameworks
@@ -112,29 +111,14 @@ endif()
 if(Osmium_USE_PBF)
     find_package(ZLIB)
     find_package(Threads)
-
-    message(STATUS "Looking for protozero")
-    find_path(PROTOZERO_INCLUDE_DIR protozero/version.hpp
-        PATH_SUFFIXES include
-        PATHS ${_osmium_include_path}
-              ${OSMIUM_INCLUDE_DIR}
-    )
-    if(PROTOZERO_INCLUDE_DIR)
-        message(STATUS "Looking for protozero - found")
-    else()
-        message(STATUS "Looking for protozero - not found")
-    endif()
+    find_package(Protozero 1.5.1)
 
     list(APPEND OSMIUM_EXTRA_FIND_VARS ZLIB_FOUND Threads_FOUND PROTOZERO_INCLUDE_DIR)
-    if(ZLIB_FOUND AND Threads_FOUND AND PROTOZERO_INCLUDE_DIR)
+    if(ZLIB_FOUND AND Threads_FOUND AND PROTOZERO_FOUND)
         list(APPEND OSMIUM_PBF_LIBRARIES
             ${ZLIB_LIBRARIES}
             ${CMAKE_THREAD_LIBS_INIT}
         )
-        if(WIN32)
-            # This is needed for the ntohl() function
-            list(APPEND OSMIUM_PBF_LIBRARIES ws2_32)
-        endif()
         list(APPEND OSMIUM_INCLUDE_DIRS
             ${ZLIB_INCLUDE_DIR}
             ${PROTOZERO_INCLUDE_DIR}

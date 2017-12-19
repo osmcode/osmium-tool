@@ -21,10 +21,8 @@ You also need the following libraries:
         Debian/Ubuntu: libosmium2-dev
 
     Protozero (>= 1.5.1)
-        This is included in the libosmium repository and might or might not
-        have been installed with it. See the libosmium README.
         https://github.com/mapbox/protozero
-        Debian/Ubuntu: protozero
+        Debian/Ubuntu: libprotozero-dev
         Fedora: protozero-devel
 
     Utfcpp

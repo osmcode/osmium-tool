@@ -207,6 +207,7 @@ matrix:
 
 install:
   - git clone --quiet --depth 1 https://github.com/osmcode/libosmium.git ../libosmium
+  - git clone --quiet --depth 1 https://github.com/mapbox/protozero.git ../protozero
   - |
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
       brew install cmake boost || true
