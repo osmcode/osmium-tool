@@ -83,11 +83,7 @@ You also need the following libraries:
 
 ## Building
 
-Osmium uses CMake for its builds. For Unix/Linux systems a simple Makefile
-wrapper is provided to make the build even easier. Just type `make` to compile.
-Results will be in the `build` directory.
-
-Or you can go the long route explicitly calling CMake as follows:
+Osmium uses CMake for its builds, as follows:
 
     mkdir build
     cd build
