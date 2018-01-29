@@ -8,7 +8,8 @@ Some rules for contributing to this project:
 
 If you are reporting a problem:
 
-* Describe exactly what you did, what you expected to happen and what did happen
-  instead. Include relevant information about the platform, OS version etc. you
-  are using. Include shell commands you typed in, log files, errors messages etc.
+* Describe exactly what you were trying to achieve, what you did, what you
+  expected to happen and what did happen instead. Include relevant information
+  about the platform, OS version etc. you are using. Include shell commands you
+  typed in, log files, errors messages etc.
 
