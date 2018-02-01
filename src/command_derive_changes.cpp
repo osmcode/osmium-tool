@@ -118,12 +118,28 @@ void CommandDeriveChanges::write_deleted(osmium::io::Writer& writer, osmium::OSM
         writer(object);
     } else {
         using namespace osmium::builder::attr; // NOLINT
-        osmium::builder::add_node(m_buffer,
-            _deleted(),
-            _id(object.id()),
-            _version(object.version()),
-            _timestamp(object.timestamp())
-        );
+        if (object.type() == osmium::item_type::node) {
+            osmium::builder::add_node(m_buffer,
+                _deleted(),
+                _id(object.id()),
+                _version(object.version()),
+                _timestamp(object.timestamp())
+            );
+        } else if (object.type() == osmium::item_type::way) {
+            osmium::builder::add_way(m_buffer,
+                 _deleted(),
+                 _id(object.id()),
+                 _version(object.version()),
+                 _timestamp(object.timestamp())
+             );
+        } else if (object.type() == osmium::item_type::relation) {
+            osmium::builder::add_relation(m_buffer,
+                 _deleted(),
+                 _id(object.id()),
+                 _version(object.version()),
+                 _timestamp(object.timestamp())
+             );
+        }
         writer(m_buffer.get<osmium::OSMObject>(0));
         m_buffer.clear();
     }
