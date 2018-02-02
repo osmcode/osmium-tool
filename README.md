@@ -19,19 +19,20 @@ You also need the following libraries:
     Libosmium (>= 2.13.1)
         http://osmcode.org/libosmium
         Debian/Ubuntu: libosmium2-dev
+        Fedora/CentOS: libosmium-devel
 
     Protozero (>= 1.5.1)
         https://github.com/mapbox/protozero
         Debian/Ubuntu: libprotozero-dev
-        Fedora: protozero-devel
+        Fedora/CentOS: protozero-devel
 
     Utfcpp
         This is included in the libosmium repository and might or might not
         have been installed with it. See the libosmium README.
         http://utfcpp.sourceforge.net/
         Debian/Ubuntu: libutfcpp-dev
+        Fedora/CentOS: utf8cpp-devel
         openSUSE: utfcpp
-        Fedora: utf8cpp-devel
 
     RapidJSON (>= 1.1)
         This is included in the osmium-tool repository, so you usually do
@@ -42,57 +43,88 @@ You also need the following libraries:
     boost-program-options (>= 1.55)
         http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
+        Fedora/CentOS: boost-devel
+        openSUSE: boost
 
     boost-crc
         http://www.boost.org/doc/libs/1_55_0/libs/crc/
         Debian/Ubuntu: libboost-dev
+        Fedora/CentOS: boost-devel
+        openSUSE: boost
 
     bz2lib
         http://www.bzip.org/
         Debian/Ubuntu: libbz2-dev
-        Fedora: bzip2-devel
-        CentOS: bzip2-devel
+        Fedora/CentOS: bzip2-devel
+        openSUSE: bzip2
 
     zlib
         http://www.zlib.net/
         Debian/Ubuntu: zlib1g-dev
+        Fedora/CentOS: zlib-devel
         openSUSE: zlib-devel
-        Fedora: zlib-devel
-        CentOS: zlib-devel
 
     Expat
         https://libexpat.github.io/
         Debian/Ubuntu: libexpat1-dev
         openSUSE: libexpat-devel
-        Fedora: expat-devel
-        CentOS: expat-devel
+        Fedora/CentOS: expat-devel
 
     cmake
         http://www.cmake.org/
         Debian/Ubuntu: cmake
+        Fedora/CentOS: cmake
         openSUSE: cmake
-        Fedora: cmake
 
     Pandoc
         (Needed to build documentation, optional)
         http://johnmacfarlane.net/pandoc/
         Debian/Ubuntu: pandoc
+        Fedora/CentOS: pandoc
         openSUSE: pandoc
-        Fedora: pandoc
+
+On Linux systems most of these libraries are available through your package
+manager, see the list above for the names of the packages. But make sure to
+check the versions. If the packaged version available is not new enough, you'll
+have to install from source. Most likely this is the case for Protozero and
+Libosmium.
+
+On macOS many of the libraries above will be available through Homebrew.
+
+When building the tool, CMake will automatically look for these libraries in
+the usual places on your system. In addition it will look for the Libosmium and
+Protozero libraries in the same directory where this Osmium repository is. So
+if you are building from the Git repository and want to use the newest
+Libosmium, Protozero, and Osmium, clone all of them into the same directory:
+
+    mkdir work
+    cd work
+    git clone https://github.com/mapbox/protozero
+    git clone https://github.com/osmcode/libosmium
+    git clone https://github.com/osmcode/osmium-tool
 
 
 ## Building
 
-Osmium uses CMake for its builds, as follows:
+Osmium uses CMake for its builds. On Linux and macOS you can build as follows:
 
     mkdir build
     cd build
     cmake ..
+    ccmake .  ## optional: change CMake settings if needed
     make
 
 To set the build type call cmake with `-DCMAKE_BUILD_TYPE=type`. Possible
 values are empty, Debug, Release, RelWithDebInfo, MinSizeRel, and Dev. The
 default is RelWithDebInfo.
+
+Please read the CMake documentation and get familiar with the `cmake` and
+`ccmake` tools which have many more options.
+
+On Windows you can compile with the Visual Studio C++ compiler using the
+batch script `build-local.bat`. This script calls `build-appveyor.bat`
+which downloads some precompiled libraries. You can also download and
+compile all the prerequisites yourself.
 
 
 ## Documentation
