@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" upload="false" generator="testdata">
+  <node id="36" version="1" timestamp="2015-02-02T18:00:00Z" uid="2" user="privacy_is_important" changeset="5" lat="2" lon="1.1">
+    <tag k="amenity" v="doctors" />
+    <tag k="name" v="Skin &amp; Laser Clinic" />
+  </node>
+  <node id="36" version="2" timestamp="2015-07-02T14:30:00Z" uid="3" user="local_mapper" changeset="6" lat="2" lon="1.1">
+    <tag k="amenity" v="doctors" />
+    <tag k="name" v="Skin &amp; Laser Clinic" />
+    <tag k="wheelchair" v="yes" />
+  </node>
+</osm>
