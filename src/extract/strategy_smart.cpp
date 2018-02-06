@@ -229,6 +229,10 @@ namespace strategy_smart {
     }; // class Pass3
 
     void Strategy::run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
+        if (input_file.filename().empty()) {
+            throw osmium::io_error{"Can not read from STDIN when using 'smart' strategy."};
+        }
+
         vout << "Running 'smart' strategy in three passes...\n";
         const std::size_t file_size = osmium::util::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size * 3, display_progress};
