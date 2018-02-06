@@ -498,6 +498,10 @@ bool CommandExtract::run() {
         }
     }
 
+    if (m_extracts.empty()) {
+        throw config_error{"No extract specified in config file or on the command line."};
+    }
+
     show_extracts();
 
     m_strategy = make_strategy(m_strategy_name);
