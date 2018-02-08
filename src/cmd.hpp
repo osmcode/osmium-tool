@@ -127,7 +127,7 @@ public:
     bool display_progress() const {
         switch (m_display_progress) {
             case display_progress_type::on_tty:
-                return osmium::util::isatty(2); // if STDERR is a TTY
+                return osmium::util::isatty(1) && osmium::util::isatty(2); // if STDOUT and STDERR are a TTY
             case display_progress_type::always:
                 return true;
             default:
