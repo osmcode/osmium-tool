@@ -6,13 +6,15 @@
 
 environment:
   matrix:
-  - config: Dev
-  - config: RelWithDebInfo
+  - config: Debug
+  - config: Release
 
 shallow_clone: true
 
 # Operating system (build VM template)
 os: Visual Studio 2015
+
+platform: x64
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -20,8 +22,12 @@ init:
 # clone directory
 clone_folder: c:\projects\osmium-tool
 
-platform: x64
+install:
+  - cd c:\projects
+  - git clone --depth 1 https://github.com/osmcode/libosmium
+  - git clone --depth 1 https://github.com/mapbox/protozero
 
 build_script:
+  - cd c:\projects/osmium-tool
   - build-appveyor.bat
 

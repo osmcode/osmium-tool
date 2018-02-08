@@ -4,73 +4,33 @@ SET EL=0
 
 ECHO ~~~~~~ %~f0 ~~~~~~
 
-SET CUSTOM_CMAKE=cmake-3.6.2-win64-x64
-::show all available env vars
 SET
-ECHO cmake on AppVeyor
-cmake -version
 
 ECHO activating VS cmd prompt && CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-SET otdir=%CD%
-SET PATH=%otdir%\%CUSTOM_CMAKE%\bin;%PATH%
-SET LODEPSDIR=%otdir%\libosmium-deps
-::libexpat.dll
-SET PATH=%LODEPSDIR%\expat\lib;%PATH%
-::zlibwapi.dll
-SET PATH=%LODEPSDIR%\zlib\lib;%PATH%
-::convert backslashes in bzip2 path to forward slashes
-::cmake cannot find it otherwise
-SET LIBBZIP2=%LODEPSDIR%\bzip2\lib\libbz2.lib
-SET LIBBZIP2=%LIBBZIP2:\=/%
+CD ..
 
-IF NOT EXIST cm.7z ECHO downloading cmake... && powershell Invoke-WebRequest https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/%CUSTOM_CMAKE%.7z -OutFile cm.7z
+nuget install expat.v140 -Version 2.2.5
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-IF NOT EXIST lodeps.7z ECHO downloading binary dependencies... && powershell Invoke-WebRequest https://mapbox.s3.amazonaws.com/windows-builds/windows-build-deps/libosmium-deps-win-14.0-x64.7z -OutFile lodeps.7z
+SET PATH=C:/projects/expat.v140.2.2.5/build/native/bin/x64/%config%;%PATH%
+
+nuget install zlib-vc140-static-64 -Version 1.2.11
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-IF NOT EXIST %CUSTOM_CMAKE% ECHO extracting cmake... && 7z x cm.7z | %windir%\system32\find "ing archive"
+nuget install bzip2.v140 -Version 1.0.6.9
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-IF NOT EXIST %LODEPSDIR% ECHO extracting binary dependencies... && 7z x lodeps.7z | %windir%\system32\find "ing archive"
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+SET PATH=C:/projects/bzip2.v140.1.0.6.9/build/native/bin/x64/%config%;%PATH%
 
-ECHO %LODEPSDIR%
-DIR %LODEPSDIR%
-::TREE %LODEPSDIR%
+CD osmium-tool
 
-::powershell (Get-ChildItem $env:LODEPSDIR\boost\lib -Filter *boost*.dll)[0].BaseName.split('_')[-1]
-FOR /F "tokens=1 usebackq" %%i in (`powershell ^(Get-ChildItem %LODEPSDIR%\boost\lib -Filter *boost*.dll^)[0].BaseName.split^('_'^)[-1]`) DO SET BOOST_VERSION=%%i
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
+ECHO config^: %config%
 
-ECHO BOOST_VERSION^: %BOOST_VERSION%
+SET libpostfix=""
+IF "%config%"=="Debug" SET libpostfix="d"
 
-ECHO our own cmake
-cmake -version
-
-CD %otdir%\..
-
-IF NOT EXIST libosmium ECHO cloning libosmium && git clone --depth 1 https://github.com/osmcode/libosmium.git
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-CD libosmium
-git fetch
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-git pull
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
-CD %otdir%\..
-
-IF NOT EXIST protozero ECHO cloning protozero && git clone --depth 1 https://github.com/mapbox/protozero.git
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-CD protozero
-git fetch
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-git pull
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
-CD %otdir%
 IF EXIST build ECHO deleting build dir... && RD /Q /S build
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
@@ -78,19 +38,18 @@ MKDIR build
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 CD build
-ECHO config^: %config%
 
 SET CMAKE_CMD=cmake .. -LA -G "Visual Studio 14 Win64" ^
 -DOsmium_DEBUG=TRUE ^
 -DCMAKE_BUILD_TYPE=%config% ^
--DBOOST_ROOT=%LODEPSDIR%\boost ^
--DBoost_PROGRAM_OPTIONS_LIBRARY=%LODEPSDIR%\boost\lib\libboost_program_options-vc140-mt-1_%BOOST_VERSION%.lib ^
--DZLIB_LIBRARY=%LODEPSDIR%\zlib\lib\zlibwapi.lib ^
--DZLIB_INCLUDE_DIR=%LODEPSDIR%\zlib\include ^
--DEXPAT_LIBRARY=%LODEPSDIR%\expat\lib\libexpat.lib ^
--DEXPAT_INCLUDE_DIR=%LODEPSDIR%\expat\include ^
--DBZIP2_LIBRARIES=%LIBBZIP2% ^
--DBZIP2_INCLUDE_DIR=%LODEPSDIR%\bzip2\include
+-DBOOST_ROOT=C:/Libraries/boost_1_63_0 ^
+-DZLIB_INCLUDE_DIR=C:/projects/zlib-vc140-static-64.1.2.11/lib/native/include ^
+-DZLIB_LIBRARY=C:/projects/zlib-vc140-static-64.1.2.11/lib/native/libs/x64/static/%config%/zlibstatic.lib ^
+-DEXPAT_INCLUDE_DIR=C:/projects/expat.v140.2.2.5/build/native/include ^
+-DEXPAT_LIBRARY=C:/projects/expat.v140.2.2.5/build/native/lib/x64/%config%/libexpat%libpostfix%.lib ^
+-DBZIP2_INCLUDE_DIR=C:/projects/bzip2.v140.1.0.6.9/build/native/include ^
+-DBZIP2_LIBRARIES=C:/projects/bzip2.v140.1.0.6.9/build/native/lib/x64/%config%/libbz2%libpostfix%.lib ^
+-DBoost_USE_STATIC_LIBS=ON
 
 ECHO calling^: %CMAKE_CMD%
 %CMAKE_CMD%
@@ -105,7 +64,6 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 ctest --output-on-failure -C %config%
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
-
 
 GOTO DONE
 
