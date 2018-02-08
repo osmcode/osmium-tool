@@ -224,19 +224,19 @@ $(DIR)/osmium.osm.bz2: $(INPUT) $(DIR) $(OSMIUM)
 	$(OSMIUM_CMD) $< -o $@
 
 $(DIR)/osmium-DCbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
-	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=gzip,pbf_add_metadata=true
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=gzip,add_metadata=true
 
 $(DIR)/osmium-dCbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
-	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=false,pbf_compression=gzip,pbf_add_metadata=true
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=false,pbf_compression=gzip,add_metadata=true
 
 $(DIR)/osmium-DcbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
-	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=none,pbf_add_metadata=true
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=none,add_metadata=true
 
 $(DIR)/osmium-dcbMg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
-	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=false,pbf_compression=none,pbf_add_metadata=true
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=false,pbf_compression=none,add_metadata=true
 
 $(DIR)/osmium-DCbmg.osm.pbf: $(INPUT) $(DIR) $(OSMIUM)
-	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=gzip,pbf_add_metadata=false
+	$(OSMIUM_CMD) $< -o $@ -f pbf,pbf_dense_nodes=true,pbf_compression=gzip,add_metadata=false
 
 # osmium from osmosis output
 
