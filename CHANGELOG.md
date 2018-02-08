@@ -8,10 +8,32 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+* Support for negative IDs in export command.
+
 ### Changed
+
+* Update included `catch.hpp` to version 1.12.0.
+* Removed Makefile. Undocumented and possibly confusing way of building.
+  As documented, use CMake directly instead.
+* Allow bbox setting with any two opposing corners, instead of insisting on
+  bottom-left and top-right corner. This affects the changeset-filter and
+  extract commands.
+* Allow GeoJSON input file to have a FeatureCollection instead of a Feature.
+  Only the first feature of this collection is used.
 
 ### Fixed
 
+* Bug in the derive-changes command if it is used without --keep-details. If
+  A deletion of any type of object was written as a deletion of a node.
+  (Thanks to Michael Reichert.)
+* Disable progress bar if STDOUT isn't a tty.
+* Show error when there are no extracts specified in extract command.
+* Improve STDIN handling in extract command. STDIN can now be used with the
+  `simple` strategy, with other strategies it will give you a nice error
+  message.
+* Lots of code cleanups based on `clang-tidy` warnings making the code more
+  robust.
+* Only install manpage directories, not CMake files. (Thanks Bas Couwenberg.)
 
 ## [1.7.1] - 2017-08-25
 
