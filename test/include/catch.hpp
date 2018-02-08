@@ -1,6 +1,6 @@
 /*
- *  Catch v1.10.0
- *  Generated: 2017-08-26 15:16:46.676990
+ *  Catch v1.12.0
+ *  Generated: 2018-01-11 21:56:34.893972
  *  ----------------------------------------------------------
  *  This file has been merged from multiple headers. Please don't edit it directly
  *  Copyright (c) 2012 Two Blue Cubes Ltd. All rights reserved.
@@ -228,7 +228,12 @@
     ( defined __GNUC__  && ( __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3 )) ) || \
     ( defined __clang__ && __clang_major__ >= 3 )
 
-#define CATCH_INTERNAL_CONFIG_COUNTER
+// Use of __COUNTER__ is suppressed during code analysis in CLion/AppCode 2017.2.x and former,
+// because __COUNTER__ is not properly handled by it.
+// This does not affect compilation
+#if ( !defined __JETBRAINS_IDE__ || __JETBRAINS_IDE__ >= 20170300L )
+    #define CATCH_INTERNAL_CONFIG_COUNTER
+#endif
 
 #endif
 
@@ -309,10 +314,7 @@
 #if defined(CATCH_INTERNAL_CONFIG_CPP11_UNIQUE_PTR) && !defined(CATCH_CONFIG_CPP11_NO_UNIQUE_PTR) && !defined(CATCH_CONFIG_CPP11_UNIQUE_PTR) && !defined(CATCH_CONFIG_NO_CPP11)
 #   define CATCH_CONFIG_CPP11_UNIQUE_PTR
 #endif
-// Use of __COUNTER__ is suppressed if __JETBRAINS_IDE__ is #defined (meaning we're being parsed by a JetBrains IDE for
-// analytics) because, at time of writing, __COUNTER__ is not properly handled by it.
-// This does not affect compilation
-#if defined(CATCH_INTERNAL_CONFIG_COUNTER) && !defined(CATCH_CONFIG_NO_COUNTER) && !defined(CATCH_CONFIG_COUNTER) && !defined(__JETBRAINS_IDE__)
+#if defined(CATCH_INTERNAL_CONFIG_COUNTER) && !defined(CATCH_CONFIG_NO_COUNTER) && !defined(CATCH_CONFIG_COUNTER)
 #   define CATCH_CONFIG_COUNTER
 #endif
 #if defined(CATCH_INTERNAL_CONFIG_CPP11_SHUFFLE) && !defined(CATCH_CONFIG_CPP11_NO_SHUFFLE) && !defined(CATCH_CONFIG_CPP11_SHUFFLE) && !defined(CATCH_CONFIG_NO_CPP11)
@@ -1318,10 +1320,12 @@ namespace Internal {
     template<> struct OperatorTraits<IsGreaterThanOrEqualTo>{ static const char* getName(){ return ">="; } };
 
     template<typename T>
-    T& removeConst(T const &t) { return const_cast<T&>(t); }
+    T& opCast(T const& t) { return const_cast<T&>(t); }
+
+// nullptr_t support based on pull request #154 from Konstantin Baumann
 #ifdef CATCH_CONFIG_CPP11_NULLPTR
-    inline std::nullptr_t removeConst(std::nullptr_t) { return nullptr; }
-#endif
+    inline std::nullptr_t opCast(std::nullptr_t) { return nullptr; }
+#endif // CATCH_CONFIG_CPP11_NULLPTR
 
     // So the compare overloads can be operator agnostic we convey the operator as a template
     // enum, which is used to specialise an Evaluator for doing the comparison.
@@ -1331,90 +1335,161 @@ namespace Internal {
     template<typename T1, typename T2>
     struct Evaluator<T1, T2, IsEqualTo> {
         static bool evaluate( T1 const& lhs, T2 const& rhs) {
-            return bool(removeConst(lhs) == removeConst(rhs) );
+            return bool( opCast( lhs ) ==  opCast( rhs ) );
         }
     };
     template<typename T1, typename T2>
     struct Evaluator<T1, T2, IsNotEqualTo> {
         static bool evaluate( T1 const& lhs, T2 const& rhs ) {
-            return bool(removeConst(lhs) != removeConst(rhs) );
+            return bool( opCast( lhs ) != opCast( rhs ) );
         }
     };
     template<typename T1, typename T2>
     struct Evaluator<T1, T2, IsLessThan> {
         static bool evaluate( T1 const& lhs, T2 const& rhs ) {
-            return bool(removeConst(lhs) < removeConst(rhs) );
+            return bool( opCast( lhs ) < opCast( rhs ) );
         }
     };
     template<typename T1, typename T2>
     struct Evaluator<T1, T2, IsGreaterThan> {
         static bool evaluate( T1 const& lhs, T2 const& rhs ) {
-            return bool(removeConst(lhs) > removeConst(rhs) );
+            return bool( opCast( lhs ) > opCast( rhs ) );
         }
     };
     template<typename T1, typename T2>
     struct Evaluator<T1, T2, IsGreaterThanOrEqualTo> {
         static bool evaluate( T1 const& lhs, T2 const& rhs ) {
-            return bool(removeConst(lhs) >= removeConst(rhs) );
+            return bool( opCast( lhs ) >= opCast( rhs ) );
         }
     };
     template<typename T1, typename T2>
     struct Evaluator<T1, T2, IsLessThanOrEqualTo> {
         static bool evaluate( T1 const& lhs, T2 const& rhs ) {
-            return bool(removeConst(lhs) <= removeConst(rhs) );
+            return bool( opCast( lhs ) <= opCast( rhs ) );
         }
     };
 
-    // Special case for comparing a pointer to an int (deduced for p==0)
-    template<typename T>
-    struct Evaluator<int const&, T* const&, IsEqualTo> {
-        static bool evaluate( int lhs, T* rhs) {
-            return reinterpret_cast<void const*>( lhs ) ==  rhs;
-        }
-    };
-    template<typename T>
-    struct Evaluator<T* const&, int const&, IsEqualTo> {
-        static bool evaluate( T* lhs, int rhs) {
-            return lhs == reinterpret_cast<void const*>( rhs );
-        }
-    };
-    template<typename T>
-    struct Evaluator<int const&, T* const&, IsNotEqualTo> {
-        static bool evaluate( int lhs, T* rhs) {
-            return reinterpret_cast<void const*>( lhs ) !=  rhs;
-        }
-    };
-    template<typename T>
-    struct Evaluator<T* const&, int const&, IsNotEqualTo> {
-        static bool evaluate( T* lhs, int rhs) {
-            return lhs != reinterpret_cast<void const*>( rhs );
-        }
-    };
+    template<Operator Op, typename T1, typename T2>
+    bool applyEvaluator( T1 const& lhs, T2 const& rhs ) {
+        return Evaluator<T1, T2, Op>::evaluate( lhs, rhs );
+    }
 
-    template<typename T>
-    struct Evaluator<long const&, T* const&, IsEqualTo> {
-        static bool evaluate( long lhs, T* rhs) {
-            return reinterpret_cast<void const*>( lhs ) ==  rhs;
-        }
-    };
-    template<typename T>
-    struct Evaluator<T* const&, long const&, IsEqualTo> {
-        static bool evaluate( T* lhs, long rhs) {
-            return lhs == reinterpret_cast<void const*>( rhs );
-        }
-    };
-    template<typename T>
-    struct Evaluator<long const&, T* const&, IsNotEqualTo> {
-        static bool evaluate( long lhs, T* rhs) {
-            return reinterpret_cast<void const*>( lhs ) !=  rhs;
-        }
-    };
-    template<typename T>
-    struct Evaluator<T* const&, long const&, IsNotEqualTo> {
-        static bool evaluate( T* lhs, long rhs) {
-            return lhs != reinterpret_cast<void const*>( rhs );
-        }
-    };
+    // This level of indirection allows us to specialise for integer types
+    // to avoid signed/ unsigned warnings
+
+    // "base" overload
+    template<Operator Op, typename T1, typename T2>
+    bool compare( T1 const& lhs, T2 const& rhs ) {
+        return Evaluator<T1, T2, Op>::evaluate( lhs, rhs );
+    }
+
+    // unsigned X to int
+    template<Operator Op> bool compare( unsigned int lhs, int rhs ) {
+        return applyEvaluator<Op>( lhs, static_cast<unsigned int>( rhs ) );
+    }
+    template<Operator Op> bool compare( unsigned long lhs, int rhs ) {
+        return applyEvaluator<Op>( lhs, static_cast<unsigned int>( rhs ) );
+    }
+    template<Operator Op> bool compare( unsigned char lhs, int rhs ) {
+        return applyEvaluator<Op>( lhs, static_cast<unsigned int>( rhs ) );
+    }
+
+    // unsigned X to long
+    template<Operator Op> bool compare( unsigned int lhs, long rhs ) {
+        return applyEvaluator<Op>( lhs, static_cast<unsigned long>( rhs ) );
+    }
+    template<Operator Op> bool compare( unsigned long lhs, long rhs ) {
+        return applyEvaluator<Op>( lhs, static_cast<unsigned long>( rhs ) );
+    }
+    template<Operator Op> bool compare( unsigned char lhs, long rhs ) {
+        return applyEvaluator<Op>( lhs, static_cast<unsigned long>( rhs ) );
+    }
+
+    // int to unsigned X
+    template<Operator Op> bool compare( int lhs, unsigned int rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned int>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( int lhs, unsigned long rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned int>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( int lhs, unsigned char rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned int>( lhs ), rhs );
+    }
+
+    // long to unsigned X
+    template<Operator Op> bool compare( long lhs, unsigned int rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( long lhs, unsigned long rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( long lhs, unsigned char rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned long>( lhs ), rhs );
+    }
+
+    // pointer to long (when comparing against NULL)
+    template<Operator Op, typename T> bool compare( long lhs, T* rhs ) {
+        return Evaluator<T*, T*, Op>::evaluate( reinterpret_cast<T*>( lhs ), rhs );
+    }
+    template<Operator Op, typename T> bool compare( T* lhs, long rhs ) {
+        return Evaluator<T*, T*, Op>::evaluate( lhs, reinterpret_cast<T*>( rhs ) );
+    }
+
+    // pointer to int (when comparing against NULL)
+    template<Operator Op, typename T> bool compare( int lhs, T* rhs ) {
+        return Evaluator<T*, T*, Op>::evaluate( reinterpret_cast<T*>( lhs ), rhs );
+    }
+    template<Operator Op, typename T> bool compare( T* lhs, int rhs ) {
+        return Evaluator<T*, T*, Op>::evaluate( lhs, reinterpret_cast<T*>( rhs ) );
+    }
+
+#ifdef CATCH_CONFIG_CPP11_LONG_LONG
+    // long long to unsigned X
+    template<Operator Op> bool compare( long long lhs, unsigned int rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( long long lhs, unsigned long rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( long long lhs, unsigned long long rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( long long lhs, unsigned char rhs ) {
+        return applyEvaluator<Op>( static_cast<unsigned long>( lhs ), rhs );
+    }
+
+    // unsigned long long to X
+    template<Operator Op> bool compare( unsigned long long lhs, int rhs ) {
+        return applyEvaluator<Op>( static_cast<long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( unsigned long long lhs, long rhs ) {
+        return applyEvaluator<Op>( static_cast<long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( unsigned long long lhs, long long rhs ) {
+        return applyEvaluator<Op>( static_cast<long>( lhs ), rhs );
+    }
+    template<Operator Op> bool compare( unsigned long long lhs, char rhs ) {
+        return applyEvaluator<Op>( static_cast<long>( lhs ), rhs );
+    }
+
+    // pointer to long long (when comparing against NULL)
+    template<Operator Op, typename T> bool compare( long long lhs, T* rhs ) {
+        return Evaluator<T*, T*, Op>::evaluate( reinterpret_cast<T*>( lhs ), rhs );
+    }
+    template<Operator Op, typename T> bool compare( T* lhs, long long rhs ) {
+        return Evaluator<T*, T*, Op>::evaluate( lhs, reinterpret_cast<T*>( rhs ) );
+    }
+#endif // CATCH_CONFIG_CPP11_LONG_LONG
+
+#ifdef CATCH_CONFIG_CPP11_NULLPTR
+    // pointer to nullptr_t (when comparing against nullptr)
+    template<Operator Op, typename T> bool compare( std::nullptr_t, T* rhs ) {
+        return Evaluator<T*, T*, Op>::evaluate( nullptr, rhs );
+    }
+    template<Operator Op, typename T> bool compare( T* lhs, std::nullptr_t ) {
+        return Evaluator<T*, T*, Op>::evaluate( lhs, nullptr );
+    }
+#endif // CATCH_CONFIG_CPP11_NULLPTR
 
 } // end of namespace Internal
 } // end of namespace Catch
@@ -1835,7 +1910,7 @@ public:
 
     void endExpression() const {
         m_rb
-            .setResultType(  Internal::Evaluator<LhsT, RhsT, Op>::evaluate( m_lhs, m_rhs ) )
+            .setResultType( Internal::compare<Op>( m_lhs, m_rhs ) )
             .endExpression( *this );
     }
 
@@ -2756,7 +2831,8 @@ namespace Detail {
             if (relativeOK) {
                 return true;
             }
-            return std::fabs(lhs_v - rhs.m_value) < rhs.m_margin;
+
+            return std::fabs(lhs_v - rhs.m_value) <= rhs.m_margin;
         }
 
         template <typename T, typename = typename std::enable_if<std::is_constructible<double, T>::value>::type>
@@ -2828,7 +2904,7 @@ namespace Detail {
             if (relativeOK) {
                 return true;
             }
-            return std::fabs(lhs - rhs.m_value) < rhs.m_margin;
+            return std::fabs(lhs - rhs.m_value) <= rhs.m_margin;
         }
 
         friend bool operator == ( Approx const& lhs, double rhs ) {
@@ -5279,10 +5355,6 @@ namespace Catch {
             .describe( "should output be colourised" )
             .bind( &setUseColour, "yes|no" );
 
-        cli["--use-colour"]
-            .describe( "should output be colourised" )
-            .bind( &setUseColour, "yes|no" );
-
         cli["--libidentify"]
             .describe( "report name and version according to libidentify standard" )
             .bind( &ConfigData::libIdentify );
@@ -7215,7 +7287,7 @@ namespace Catch {
 namespace Catch {
 
     struct RandomNumberGenerator {
-        typedef std::ptrdiff_t result_type;
+        typedef unsigned int result_type;
 
         result_type operator()( result_type n ) const { return std::rand() % n; }
 
@@ -8136,7 +8208,7 @@ namespace Catch {
 
     std::string AssertionResult::getExpression() const {
         if( isFalseTest( m_info.resultDisposition ) )
-            return '!' + capturedExpressionWithSecondArgument(m_info.capturedExpression, m_info.secondArg);
+            return "!(" + capturedExpressionWithSecondArgument(m_info.capturedExpression, m_info.secondArg) + ")";
         else
             return capturedExpressionWithSecondArgument(m_info.capturedExpression, m_info.secondArg);
     }
@@ -8394,7 +8466,7 @@ namespace Catch {
     }
 
     inline Version libraryVersion() {
-        static Version version( 1, 10, 0, "", 0 );
+        static Version version( 1, 12, 0, "", 0 );
         return version;
     }
 
@@ -10208,12 +10280,12 @@ namespace Catch {
 
             bool includeResults = m_config->includeSuccessfulResults() || !result.isOk();
 
-            if( includeResults ) {
+            if( includeResults || result.getResultType() == ResultWas::Warning ) {
                 // Print any info messages in <Info> tags.
                 for( std::vector<MessageInfo>::const_iterator it = assertionStats.infoMessages.begin(), itEnd = assertionStats.infoMessages.end();
                      it != itEnd;
                      ++it ) {
-                    if( it->type == ResultWas::Info ) {
+                    if( it->type == ResultWas::Info && includeResults ) {
                         m_xml.scopedElement( "Info" )
                                 .writeText( it->message );
                     } else if ( it->type == ResultWas::Warning ) {
