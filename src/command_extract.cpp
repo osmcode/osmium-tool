@@ -78,7 +78,9 @@ namespace {
             box.extend(location2);
 
             return box;
-        } else if (value.IsObject()) {
+        }
+
+        if (value.IsObject()) {
             const auto left   = value.FindMember("left");
             const auto right  = value.FindMember("right");
             const auto top    = value.FindMember("top");
@@ -99,6 +101,7 @@ namespace {
 
                     throw config_error{"Need 'left' < 'right' and 'bottom' < 'top' in 'bbox' object."};
                 }
+
                 throw config_error{"Members in 'bbox' object must be numbers."};
             }
 
