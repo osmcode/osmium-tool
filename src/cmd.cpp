@@ -20,15 +20,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <cstdlib>
-#include <iostream>
+#include "cmd.hpp"
+#include "exception.hpp"
 
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/memory.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "cmd.hpp"
-#include "exception.hpp"
+#include <cstdlib>
+#include <iostream>
 
 po::options_description Command::add_common_options(bool with_progress) {
     po::options_description options("COMMON OPTIONS");

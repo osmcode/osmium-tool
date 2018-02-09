@@ -20,18 +20,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "exception.hpp"
+#include "util.hpp"
+
+#include <osmium/io/file.hpp>
+#include <osmium/tags/tags_filter.hpp>
+#include <osmium/util/file.hpp>
+#include <osmium/util/string.hpp>
+
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include <osmium/io/file.hpp>
-#include <osmium/util/file.hpp>
-#include <osmium/util/string.hpp>
-#include <osmium/tags/tags_filter.hpp>
-
-#include "exception.hpp"
-#include "util.hpp"
 
 /**
  * Get the suffix of the given file name. The suffix is everything after

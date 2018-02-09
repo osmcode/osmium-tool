@@ -20,10 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <string>
-#include <vector>
-
-#include <boost/program_options.hpp>
+#include "cmd.hpp"
+#include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/io/any_input.hpp> // IWYU pragma: keep
 #include <osmium/io/any_output.hpp> // IWYU pragma: keep
@@ -32,9 +31,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/writer_options.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include "cmd.hpp"
-#include "exception.hpp"
-#include "util.hpp"
+#include <boost/program_options.hpp>
+
+#include <string>
+#include <vector>
 
 void with_single_osm_input::setup_input_file(const boost::program_options::variables_map& vm) {
     if (vm.count("input-filename")) {

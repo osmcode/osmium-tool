@@ -26,10 +26,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/geom/relations.hpp>
 #include <osmium/io/header.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
 #include <osmium/osm/changeset.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/timestamp.hpp>

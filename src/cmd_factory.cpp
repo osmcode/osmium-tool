@@ -20,14 +20,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "cmd.hpp"
+
+#include <osmium/util/minmax.hpp>
+
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <osmium/util/minmax.hpp>
-
-#include "cmd.hpp"
 
 bool CommandFactory::register_command(const std::string& name, const std::string& description, create_command_type&& create_function) {
     command_info info{description, std::forward<create_command_type>(create_function)};

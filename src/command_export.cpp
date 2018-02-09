@@ -24,9 +24,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 #include "util.hpp"
 
-#include "export/export_handler.hpp"
 #include "export/export_format_json.hpp"
 #include "export/export_format_text.hpp"
+#include "export/export_handler.hpp"
 
 #include <osmium/area/assembler.hpp>
 #include <osmium/area/multipolygon_manager.hpp>

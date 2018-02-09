@@ -20,6 +20,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "cmd.hpp"
+
+#include <osmium/handler/check_order.hpp>
+#include <osmium/geom/factory.hpp>
+#include <osmium/osm/location.hpp>
+
+#include <boost/program_options/errors.hpp>
+
 #include <cerrno>
 #include <exception>
 #include <iostream>
@@ -33,14 +41,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # include <fcntl.h>
 # include <io.h>
 #endif
-
-#include <boost/program_options/errors.hpp>
-
-#include <osmium/handler/check_order.hpp>
-#include <osmium/geom/factory.hpp>
-#include <osmium/osm/location.hpp>
-
-#include "cmd.hpp"
 
 enum return_code : int {
     okay  = 0,
