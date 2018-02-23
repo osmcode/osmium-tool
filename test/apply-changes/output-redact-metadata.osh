@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version="0.6" generator="test">
-  <node id="36" version="1" timestamp="2015-02-02T18:00:00Z" visible="true" lat="2" lon="1.1">
+  <node id="36" version="1" timestamp="2015-02-02T00:00:00Z" visible="true" lat="2" lon="1.1">
     <tag k="amenity" v="doctors"/>
     <tag k="name" v="Skin &amp; Laser Clinic"/>
   </node>

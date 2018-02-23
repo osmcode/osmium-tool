@@ -29,13 +29,13 @@ check_apply_changes(data-low "--locations-on-ways" input-data-low.osm input-chan
 # Test some patching features useful to redact existing OSM files
 #-----------------------------------------------------------------------------
 # Version 1 contains a copyright violation. The diff file contains a v2 object (with visible=false) and a modified v1 object.
-check_apply_changes(redact-and-update "" input-redact-and-update.osh input-redact-and-update.osc "osh" output-redact-and-update.osh)
+check_apply_changes(redact-and-update "--redact" input-redact-and-update.osh input-redact-and-update.osc "osh" output-redact-and-update.osh)
 
 # The input history file contains version 1 and 2, the diff wants to replace v1 by a deleted object (to redact the sensitive data in v1).
 # The output history file should contain the redacted version 1 and an unmodified copy of v2.
-check_apply_changes(patch-old-version "" input-patch-old-version.osh input-patch-old-version.osc "osh" output-patch-old-version.osh)
+check_apply_changes(patch-old-version "--redact" input-patch-old-version.osh input-patch-old-version.osc "osh" output-patch-old-version.osh)
 
 # The input history file contains version 1 and 2 of an object. The diff wants to remove the metadata of v1. Version 2 should stay untouched.
-check_apply_changes(redact-metadata   "" input-redact-metadata.osh    input-redact-metadata.osc    "osh" output-redact-metadata.osh)
+check_apply_changes(redact-metadata "--redact" input-redact-metadata.osh input-redact-metadata.osc "osh" output-redact-metadata.osh)
 
 #-----------------------------------------------------------------------------

@@ -58,6 +58,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     opts_cmd.add_options()
     ("change-file-format", po::value<std::string>(), "Format of the change file(s)")
     ("simplify,s",        "Simplify change (deprecated)")
+    ("redact",            "Redact (patch) OSM files")
     ("remove-deleted,r",  "Remove deleted objects from output (deprecated)")
     ("with-history,H",    "Apply changes to history file")
     ("locations-on-ways", "Expect and update locations on ways")
@@ -113,10 +114,22 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         m_output_file.set_has_multiple_object_versions(true);
     } else {
         if (m_input_file.has_multiple_object_versions() && m_output_file.has_multiple_object_versions()) {
+            if (m_locations_on_ways) {
+                throw argument_error{"Can not use --locations-on-ways on history files."};
+            }
             m_with_history = true;
         } else if (m_input_file.has_multiple_object_versions() != m_output_file.has_multiple_object_versions()) {
             throw argument_error{"Input and output file must both be OSM data files or both OSM history files (force with --with-history)."};
         }
+    }
+
+    if (vm.count("redact")) {
+        if (m_locations_on_ways) {
+            throw argument_error{"Can not use --redact and --locations-on-ways together."};
+        }
+        m_with_history = true;
+        m_redact = true;
+        m_output_file.set_has_multiple_object_versions(true);
     }
 
     if (vm.count("simplify")) {
@@ -236,11 +249,21 @@ bool CommandApplyChanges::run() {
         const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
         auto out = osmium::io::make_output_iterator(writer);
         m_vout << "Applying changes and writing them to output...\n";
-        std::set_union(objects.begin(),
-                       objects.end(),
-                       input.begin(),
-                       input.end(),
-                       out);
+
+        if (m_redact) {
+            std::set_union(objects.begin(),
+                           objects.end(),
+                           input.begin(),
+                           input.end(),
+                           out,
+                           osmium::object_order_type_id_version_without_timestamp());
+        } else {
+            std::set_union(objects.begin(),
+                           objects.end(),
+                           input.begin(),
+                           input.end(),
+                           out);
+        }
     } else {
         // For normal data files we sort with the largest version of each
         // object first and then only copy this last version of any object

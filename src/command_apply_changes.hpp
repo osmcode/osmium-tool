@@ -36,6 +36,7 @@ class CommandApplyChanges : public Command, public with_single_osm_input, public
 
     bool m_with_history = false;
     bool m_locations_on_ways = false;
+    bool m_redact = false;
 
 public:
 

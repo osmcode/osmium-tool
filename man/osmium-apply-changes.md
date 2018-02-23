@@ -44,6 +44,12 @@ STDOUT.
     there for details on the format. Can not be used together with the
     **--with-history**,**-H** option.
 
+--redact
+:   Redact (patch) history files. Change files can contain any version of
+    any object which will replace that version of that object from the input.
+    This allows changing the history! This mode is for special use only, for
+    instance to remove copyrighted or private data.
+
 -r, --remove-deleted
 :   Deprecated. Remove deleted objects from the output. This is now the
     default if your input file is a normal OSM data file ('.osm').
