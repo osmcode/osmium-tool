@@ -100,6 +100,18 @@ matrix:
           packages: ['clang-5.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
       env: COMPILER='clang++-5.0' BUILD_TYPE='Dev'
 
+    - os: linux
+      compiler: linux-clang50-debug
+      addons:
+        apt:
+          sources: ['llvm-toolchain-trusty-5.0', 'ubuntu-toolchain-r-test', 'boost-latest']
+          packages: ['clang-5.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-tidy-5.0', 'g++-6', 'gcc-6']
+      env: COMPILER='clang++-5.0' BUILD_TYPE='Debug'
+           CXXFLAGS="-fsanitize=address,undefined,integer -fno-sanitize-recover=all -fno-omit-frame-pointer"
+           LDFLAGS="-fsanitize=address,undefined,integer"
+      # LSAN doesn't work on container-based system
+      sudo: required
+
 
     # 2/ Linux GCC Builds
     - os: linux
