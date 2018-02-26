@@ -1,12 +1,12 @@
 
 #include "test.hpp" // IWYU pragma: keep
 
-#include <osmium/memory/buffer.hpp>
-
 #include "exception.hpp"
-#include "poly_file_parser.hpp"
-#include "osm_file_parser.hpp"
 #include "geojson_file_parser.hpp"
+#include "osm_file_parser.hpp"
+#include "poly_file_parser.hpp"
+
+#include <osmium/memory/buffer.hpp>
 
 TEST_CASE("Parse poly files") {
     osmium::memory::Buffer buffer{1024};
