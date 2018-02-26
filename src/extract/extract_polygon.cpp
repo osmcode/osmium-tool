@@ -53,9 +53,7 @@ const osmium::Area& ExtractPolygon::area() const noexcept {
 ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::string& description, const osmium::memory::Buffer& buffer, std::size_t offset) :
     Extract(output_file, description, buffer.get<osmium::Area>(offset).envelope()),
     m_buffer(buffer),
-    m_offset(offset),
-    m_bands(),
-    m_dy(0) {
+    m_offset(offset) {
 
     // get segments from all rings
     std::vector<osmium::Segment> segments;

@@ -35,7 +35,7 @@ class ExportFormatText : public ExportFormat {
 
     osmium::geom::WKTFactory<> m_factory;
     std::string m_buffer;
-    std::size_t m_commit_size;
+    std::size_t m_commit_size = 0;
     int m_fd;
     osmium::io::fsync m_fsync;
 

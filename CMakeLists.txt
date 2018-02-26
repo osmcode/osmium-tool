@@ -267,46 +267,16 @@ add_subdirectory(test)
 #
 #-----------------------------------------------------------------------------
 message(STATUS "Looking for clang-tidy")
-find_program(CLANG_TIDY NAMES clang-tidy clang-tidy-5.0 clang-tidy-4.0 clang-tidy-3.9 clang-tidy-3.8 clang-tidy-3.7)
+find_program(CLANG_TIDY NAMES clang-tidy clang-tidy-6.0 clang-tidy-5.0)
 
 if(CLANG_TIDY)
-    message(STATUS "Looking for clang-tidy - found")
-
-    # For a list of check options, see:
-    # http://clang.llvm.org/extra/clang-tidy/checks/list.html
-
-    list(APPEND CT_CHECKS "bugprone-*")
-
-    list(APPEND CT_CHECKS "cert-*")
-
-    list(APPEND CT_CHECKS "clang-analyzer-*")
-
-    list(APPEND CT_CHECKS "google-*"
-                         "-google-runtime-references")
-
-    list(APPEND CT_CHECKS "hicpp-*")
-
-    list(APPEND CT_CHECKS "llvm-*")
-
-    list(APPEND CT_CHECKS "misc-*")
-
-    list(APPEND CT_CHECKS "modernize-*"
-                          "-modernize-make-unique") # not available in C++11
-
-    list(APPEND CT_CHECKS "performance-*")
-
-    list(APPEND CT_CHECKS "readability-*"
-                         "-readability-implicit-bool-cast"
-                         "-readability-redundant-member-init")
-
-    string(REPLACE ";" "," ALL_CHECKS "${CT_CHECKS}")
+    message(STATUS "Looking for clang-tidy - found ${CLANG_TIDY}")
 
     file(GLOB _unit_tests RELATIVE "${CMAKE_SOURCE_DIR}/src" "${CMAKE_SOURCE_DIR}/test/*/*.cpp")
 
     add_custom_target(clang-tidy
         ${CLANG_TIDY}
         -p ${CMAKE_BINARY_DIR}
-        -checks="${ALL_CHECKS}"
         ${OSMIUM_SOURCE_FILES} ${_unit_tests}
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/src"
     )

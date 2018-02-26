@@ -91,7 +91,7 @@ void id_map::write(int fd) {
 
     osmium::io::detail::reliable_write(
         fd,
-        reinterpret_cast<const char*>(m_ids.data()),
+        reinterpret_cast<const char*>(m_ids.data()), // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
         sizeof(osmium::object_id_type) * m_ids.size()
     );
 }
@@ -246,7 +246,7 @@ void CommandRenumber::write_index(osmium::item_type type) {
     }
 
     const std::string f{filename(osmium::item_type_to_name(type))};
-    const int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666);
+    const int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666); // NOLINT(hicpp-signed-bitwise)
     if (fd < 0) {
         throw std::runtime_error{std::string{"Could not open file '"} + f + "': " + std::strerror(errno)};
     }

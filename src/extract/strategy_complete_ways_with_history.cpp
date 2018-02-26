@@ -36,8 +36,7 @@ namespace strategy_complete_ways_with_history {
         });
     }
 
-    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& /*options*/) :
-        ExtractStrategy() {
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& /*options*/) {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);

@@ -49,7 +49,7 @@ class ExportFormatJSON : public ExportFormat {
     bool m_text_sequence_format;
     bool m_with_record_separator;
     rapidjson::StringBuffer m_stream;
-    std::size_t m_committed_size;
+    std::size_t m_committed_size = 0;
     writer_type m_writer;
     osmium::geom::RapidGeoJSONFactory<writer_type> m_factory;
 

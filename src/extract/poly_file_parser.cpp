@@ -39,8 +39,7 @@ OSMIUM_NORETURN void PolyFileParser::error(const std::string& message) {
 PolyFileParser::PolyFileParser(osmium::memory::Buffer& buffer, const std::string& file_name) :
     m_buffer(buffer),
     m_builder(nullptr),
-    m_file_name(file_name),
-    m_data() {
+    m_file_name(file_name) {
     std::ifstream file{file_name};
     if (!file.is_open()) {
         throw config_error{std::string{"Could not open file '"} + file_name + "'"};

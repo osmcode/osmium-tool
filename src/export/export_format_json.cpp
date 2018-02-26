@@ -43,8 +43,6 @@ ExportFormatJSON::ExportFormatJSON(const std::string& output_format,
     m_fsync(fsync),
     m_text_sequence_format(output_format == "geojsonseq"),
     m_with_record_separator(m_text_sequence_format && options.print_record_separator),
-    m_stream(),
-    m_committed_size(0),
     m_writer(m_stream),
     m_factory(m_writer) {
     m_stream.Reserve(initial_buffer_size);

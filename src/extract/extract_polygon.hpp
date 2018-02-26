@@ -40,7 +40,7 @@ class ExtractPolygon : public Extract {
     std::size_t m_offset;
 
     std::vector<std::vector<osmium::Segment>> m_bands;
-    int32_t m_dy;
+    int32_t m_dy = 0;
 
     const osmium::Area& area() const noexcept;
 

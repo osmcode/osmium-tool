@@ -34,9 +34,6 @@ ExportFormatText::ExportFormatText(const std::string& /*output_format*/,
                                    osmium::io::fsync fsync,
                                    const options_type& options) :
     ExportFormat(options),
-    m_factory(),
-    m_buffer(),
-    m_commit_size(0),
     m_fd(osmium::io::detail::open_for_writing(output_filename, overwrite)),
     m_fsync(fsync) {
     m_buffer.reserve(initial_buffer_size);

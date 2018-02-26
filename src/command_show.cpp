@@ -181,7 +181,7 @@ static int execute_pager(const std::string& pager, bool with_color) {
     // parent
     ::close(pipefd[0]); // close read end of the pipe
 
-    if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
+    if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) { // NOLINT(cppcoreguidelines-pro-type-cstyle-cast)
         throw std::system_error{errno, std::system_category(), "Could not run pager: signal() call failed"};
     }
 
@@ -229,7 +229,7 @@ bool CommandShow::run() {
         if (pid < 0) {
             throw std::system_error{errno, std::system_category(), "Could not run pager: wait() call failed"};
         }
-        if (WIFEXITED(status) && WEXITSTATUS(status) == 1) {
+        if (WIFEXITED(status) && WEXITSTATUS(status) == 1) { // NOLINT(hicpp-signed-bitwise)
             throw argument_error{std::string{"Could not run pager '"} + m_pager + "'"};
         }
 #endif

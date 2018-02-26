@@ -27,8 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace strategy_simple {
 
-    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& options) :
-        ExtractStrategy() {
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& options) {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);

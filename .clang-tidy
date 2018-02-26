@@ -1,0 +1,50 @@
+---
+Checks: '*,-android-cloexec-*,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-no-array-decay,-hicpp-vararg,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion'
+#
+#  For a list of check options, see:
+#  http://clang.llvm.org/extra/clang-tidy/checks/list.html
+#
+#  Disabled checks:
+#
+#  android-cloexec-*
+#    O_CLOEXEC isn't available on Windows making this non-portable.
+#
+#  cppcoreguidelines-owning-memory
+#    Don't want to add dependency on gsl library.
+#
+#  cppcoreguidelines-pro-bounds-array-to-pointer-decay
+#    Limited use and many false positives including for all asserts.
+#
+#  cppcoreguidelines-pro-bounds-pointer-arithmetic
+#    Difficult to get by without it...
+#
+#  cppcoreguidelines-pro-type-static-cast-downcast
+#    This is needed and totally okay if we are sure about the types.
+#
+#  cppcoreguidelines-pro-type-vararg
+#    We need some of these functions at least and for some functions it isn't
+#    even clear that those are vararg functions.
+#
+#  fuchsia-*
+#    Much too strict.
+#
+#  google-runtime-references
+#    This is just a matter of preference.
+#
+#  hicpp-no-array-decay
+#    Alias for cppcoreguidelines-pro-bounds-array-to-pointer-decay.
+#
+#  hicpp-vararg
+#    Too strict, sometimes calling vararg functions is necessary.
+#
+#  modernize-make-unique
+#    This is a C++11 program and C++ doesn't have std::make_unique.
+#
+#  readability-implicit-bool-cast
+#    Old name for readability-implicit-bool-conversion.
+#
+#  readability-implicit-bool-conversion
+#    I don't think this makes the code more readable.
+#
+#WarningsAsErrors: '*'
+...

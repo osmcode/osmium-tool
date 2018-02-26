@@ -248,7 +248,6 @@ class JSONOutput : public Output {
 public:
 
     JSONOutput() :
-        m_stream(),
         m_writer(m_stream) {
         m_writer.StartObject();
     }
