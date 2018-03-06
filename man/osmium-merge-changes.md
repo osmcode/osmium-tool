@@ -29,6 +29,7 @@ STDOUT.
     version of the object will still appear because it is the latest version.
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
 

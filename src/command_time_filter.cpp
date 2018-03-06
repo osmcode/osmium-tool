@@ -29,7 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/header.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
-#include <osmium/io/reader.hpp>
+#include <osmium/io/reader_with_progress_bar.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/osm/diff_object.hpp>
 #include <osmium/osm/entity_bits.hpp>
@@ -73,6 +73,7 @@ bool CommandTimeFilter::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_file(vm);
     setup_output_file(vm);
 
@@ -126,7 +127,7 @@ void CommandTimeFilter::show_arguments() {
 
 bool CommandTimeFilter::run() {
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::object};
+    osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_file, osmium::osm_entity_bits::object};
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header{reader.header()};

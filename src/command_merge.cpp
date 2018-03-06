@@ -21,11 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_merge.hpp"
+#include "util.hpp"
 
 #include <osmium/io/header.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
 #include <osmium/io/reader.hpp>
+#include <osmium/io/reader_with_progress_bar.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/entity_bits.hpp>
@@ -36,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <memory>
+#include <numeric>
 #include <queue>
 #include <string>
 #include <utility>
@@ -75,6 +78,7 @@ bool CommandMerge::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_files(vm);
     setup_output_file(vm);
 
@@ -113,6 +117,10 @@ namespace {
 
         const osmium::OSMObject* get() noexcept {
             return &*iterator;
+        }
+
+        std::size_t offset() const noexcept {
+            return reader->offset();
         }
 
     }; // DataSource
@@ -162,14 +170,22 @@ bool CommandMerge::run() {
 
     if (m_input_files.size() == 1) {
         m_vout << "Single input file. Copying to output file...\n";
-        osmium::io::Reader reader{m_input_files[0]};
+        osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_files[0]};
         while (osmium::memory::Buffer buffer = reader.read()) {
             writer(std::move(buffer));
         }
     } else if (m_input_files.size() == 2) {
         // Use simpler code when there are exactly two files to merge
         m_vout << "Merging 2 input files to output file...\n";
-        osmium::io::Reader reader1(m_input_files[0], osmium::osm_entity_bits::object);
+
+        // The larger file should be first so the progress bar will work better
+        if (osmium::util::file_size(m_input_files[0].filename()) <
+            osmium::util::file_size(m_input_files[1].filename())) {
+            using std::swap;
+            swap(m_input_files[0], m_input_files[1]);
+        }
+
+        osmium::io::ReaderWithProgressBar reader1(display_progress(), m_input_files[0], osmium::osm_entity_bits::object);
         osmium::io::Reader reader2(m_input_files[1], osmium::osm_entity_bits::object);
         auto in1 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader1);
         auto in2 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader2);
@@ -181,6 +197,7 @@ bool CommandMerge::run() {
     } else {
         // Three or more files to merge
         m_vout << "Merging " << m_input_files.size() << " input files to output file...\n";
+        osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         std::vector<DataSource> data_sources;
         data_sources.reserve(m_input_files.size());
 
@@ -197,8 +214,9 @@ bool CommandMerge::run() {
             ++index;
         }
 
+        int n = 0;
         while (!queue.empty()) {
-            auto element = queue.top();
+            const auto element = queue.top();
             queue.pop();
             if (queue.empty() || element != queue.top()) {
                 writer(element.object());
@@ -207,6 +225,13 @@ bool CommandMerge::run() {
             const int index = element.data_source_index();
             if (data_sources[index].next()) {
                 queue.emplace(data_sources[index].get(), index);
+            }
+
+            if (n++ > 10000) {
+                n = 0;
+                progress_bar.update(std::accumulate(data_sources.cbegin(), data_sources.cend(), 0, [](std::size_t sum, const DataSource& source){
+                    return sum + source.offset();
+                }));
             }
         }
     }

@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/area/multipolygon_manager.hpp>
 #include <osmium/handler/check_order.hpp>
 #include <osmium/io/any_input.hpp>
+#include <osmium/io/reader_with_progress_bar.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/relations/manager_util.hpp>
@@ -209,6 +210,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     }
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_file(vm);
 
     if (vm.count("config")) {
@@ -394,7 +396,7 @@ bool CommandExport::run() {
     osmium::handler::CheckOrder check_order_handler;
 
     if (m_index_type_name == "none") {
-        osmium::io::Reader reader{m_input_file};
+        osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_file};
         osmium::apply(reader, check_order_handler, export_handler, mp_manager.handler([&export_handler](osmium::memory::Buffer&& buffer) {
             osmium::apply(buffer, export_handler);
         }));
@@ -406,7 +408,7 @@ bool CommandExport::run() {
         location_handler_type location_handler{*location_index_pos, *location_index_neg};
         location_handler.ignore_errors();
 
-        osmium::io::Reader reader{m_input_filename};
+        osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_filename};
         osmium::apply(reader, check_order_handler, location_handler, export_handler, mp_manager.handler([&export_handler](osmium::memory::Buffer&& buffer) {
             osmium::apply(buffer, export_handler);
         }));

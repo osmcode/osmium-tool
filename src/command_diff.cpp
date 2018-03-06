@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file_format.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/reader.hpp>
+#include <osmium/io/reader_with_progress_bar.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/io/writer_options.hpp>
 #include <osmium/memory/item.hpp>
@@ -81,6 +82,7 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_object_type_nwr(vm);
     setup_input_files(vm);
 
@@ -245,7 +247,7 @@ public:
 
 bool CommandDiff::run() {
     osmium::io::Reader reader1{m_input_files[0], osm_entity_bits()};
-    osmium::io::Reader reader2{m_input_files[1], osm_entity_bits()};
+    osmium::io::ReaderWithProgressBar reader2{display_progress(), m_input_files[1], osm_entity_bits()};
     auto in1 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader1);
     auto in2 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader2);
     auto it1 = in1.begin();

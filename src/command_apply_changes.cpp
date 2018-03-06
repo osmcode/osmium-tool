@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
 #include <osmium/io/reader.hpp>
+#include <osmium/io/reader_with_progress_bar.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/object_pointer_collection.hpp>
@@ -38,7 +39,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/object.hpp>
 #include <osmium/osm/object_comparisons.hpp>
 #include <osmium/osm/types.hpp>
-#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -89,6 +89,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_file(vm);
     setup_output_file(vm);
 
@@ -225,7 +226,7 @@ bool CommandApplyChanges::run() {
     }
 
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::object};
+    osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_file, osmium::osm_entity_bits::object};
 
     osmium::io::Header header;
     setup_header(header);
@@ -246,9 +247,9 @@ bool CommandApplyChanges::run() {
         m_vout << "Sorting change data...\n";
         objects.sort(osmium::object_order_type_id_version());
 
+        m_vout << "Applying changes and writing them to output...\n";
         const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
         auto out = osmium::io::make_output_iterator(writer);
-        m_vout << "Applying changes and writing them to output...\n";
 
         if (m_redact) {
             std::set_union(objects.begin(),
@@ -299,9 +300,7 @@ bool CommandApplyChanges::run() {
             m_vout << "Applying changes and writing them to output...\n";
             auto it = objects.begin();
             auto last_type = osmium::item_type::undefined;
-            osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
             while (osmium::memory::Buffer buffer = reader.read()) {
-                progress_bar.update(reader.offset());
                 for (auto& object : buffer.select<osmium::OSMObject>()) {
                     if (object.type() < last_type) {
                         throw std::runtime_error{"Input data out of order. Need nodes, ways, relations in ID order."};
@@ -346,14 +345,13 @@ bool CommandApplyChanges::run() {
                 }
                 ++it;
             }
-            progress_bar.done();
         } else {
+            m_vout << "Applying changes and writing them to output...\n";
             const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
             auto output_it = boost::make_function_output_iterator(
                                 copy_first_with_id(writer)
             );
 
-            m_vout << "Applying changes and writing them to output...\n";
             std::set_union(objects.begin(),
                            objects.end(),
                            input.begin(),

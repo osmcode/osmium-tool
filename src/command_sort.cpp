@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_sort.hpp"
+#include "util.hpp"
 
 #include <osmium/io/header.hpp>
 #include <osmium/io/output_iterator.hpp>
@@ -31,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -87,16 +89,20 @@ bool CommandSort::run() {
     osmium::Box bounding_box;
 
     m_vout << "Reading contents of input files...\n";
+    osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
     for (const std::string& file_name : m_filenames) {
         osmium::io::Reader reader{file_name, osmium::osm_entity_bits::object};
         osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
         while (osmium::memory::Buffer buffer = reader.read()) {
+            progress_bar.update(reader.offset());
             osmium::apply(buffer, objects);
             data.push_back(std::move(buffer));
         }
+        progress_bar.file_done(reader.file_size());
         reader.close();
     }
+    progress_bar.done();
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;

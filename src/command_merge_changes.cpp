@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_merge_changes.hpp"
+#include "util.hpp"
 
 #include <osmium/io/header.hpp>
 #include <osmium/io/output_iterator.hpp>
@@ -30,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/object_pointer_collection.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -77,6 +79,7 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_files(vm);
     setup_output_file(vm);
 
@@ -108,14 +111,18 @@ bool CommandMergeChanges::run() {
     // read all input files, keep the buffers around and add pointer
     // to each object to objects collection.
     m_vout << "Reading change file contents...\n";
+    osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
     for (osmium::io::File& change_file : m_input_files) {
         osmium::io::Reader reader{change_file, osmium::osm_entity_bits::object};
         while (osmium::memory::Buffer buffer = reader.read()) {
+            progress_bar.update(reader.offset());
             osmium::apply(buffer, objects);
             changes.push_back(std::move(buffer));
         }
+        progress_bar.file_done(reader.file_size());
         reader.close();
     }
+    progress_bar.done();
 
     // Now we sort all objects and write them in order into the
     // output_buffer, flushing the output_buffer whenever it is full.

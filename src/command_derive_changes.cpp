@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/header.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/reader.hpp>
+#include <osmium/io/reader_with_progress_bar.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/object.hpp>
@@ -72,6 +73,7 @@ bool CommandDeriveChanges::setup(const std::vector<std::string>& arguments) {
     po::notify(vm);
 
     setup_common(vm, desc);
+    setup_progress(vm);
     setup_input_files(vm);
     setup_output_file(vm);
 
@@ -148,7 +150,7 @@ void CommandDeriveChanges::write_deleted(osmium::io::Writer& writer, osmium::OSM
 bool CommandDeriveChanges::run() {
     m_vout << "Opening input files...\n";
     osmium::io::Reader reader1{m_input_files[0], osmium::osm_entity_bits::object};
-    osmium::io::Reader reader2{m_input_files[1], osmium::osm_entity_bits::object};
+    osmium::io::ReaderWithProgressBar reader2{display_progress(), m_input_files[1], osmium::osm_entity_bits::object};
     auto in1 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader1);
     auto in2 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader2);
     auto it1 = in1.begin();
@@ -156,6 +158,7 @@ bool CommandDeriveChanges::run() {
     auto end1 = in1.end();
     auto end2 = in2.end();
 
+    reader2.progress_bar().remove();
     m_vout << "Opening output file...\n";
     if (m_output_file.format() != osmium::io::file_format::xml || !m_output_file.is_true("xml_change_format")) {
         warning("Output format chosen is not the XML change format. Use .osc(.gz|bz2) as suffix or -f option.\n");
@@ -166,6 +169,7 @@ bool CommandDeriveChanges::run() {
 
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
+    reader2.progress_bar().remove();
     m_vout << "Deriving changes...\n";
     while (it1 != end1 || it2 != end2) {
         if (it2 == end2) {

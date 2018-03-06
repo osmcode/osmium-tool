@@ -83,6 +83,7 @@ None of the output formats print the headers of the input files.
     This affects the output as well as the return code of the command.
 
 @MAN_COMMON_OPTIONS@
+@MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 
 # DIAGNOSTICS
