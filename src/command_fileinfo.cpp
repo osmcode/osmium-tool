@@ -572,7 +572,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
                 throw argument_error{std::string{"Unknown value for --get/-g option '"} + m_get_value + "'. Use --show-variables/-G to see list of known values."};
             }
         }
-        if (m_get_value.substr(0, 5) == "data." && ! m_extended) {
+        if (m_get_value.substr(0, 5) == "data." && !m_extended) {
             throw argument_error{"You need to set --extended/-e for any 'data.*' variables to be available."};
         }
     }

@@ -55,7 +55,7 @@ void CommandGetId::parse_and_add_id(const std::string& s) {
 
 void CommandGetId::read_id_file(std::istream& stream) {
     m_vout << "Reading ID file...\n";
-    for (std::string line; std::getline(stream, line); ) {
+    for (std::string line; std::getline(stream, line);) {
         strip_whitespace(line);
         const auto pos = line.find_first_of(" #");
         if (pos != std::string::npos) {
@@ -230,13 +230,13 @@ void CommandGetId::show_arguments() {
 osmium::osm_entity_bits::type CommandGetId::get_needed_types() const {
     osmium::osm_entity_bits::type types = osmium::osm_entity_bits::nothing;
 
-    if (! m_ids(osmium::item_type::node).empty()) {
+    if (!m_ids(osmium::item_type::node).empty()) {
         types |= osmium::osm_entity_bits::node;
     }
-    if (! m_ids(osmium::item_type::way).empty()) {
+    if (!m_ids(osmium::item_type::way).empty()) {
         types |= osmium::osm_entity_bits::way;
     }
-    if (! m_ids(osmium::item_type::relation).empty()) {
+    if (!m_ids(osmium::item_type::relation).empty()) {
         types |= osmium::osm_entity_bits::relation;
     }
 

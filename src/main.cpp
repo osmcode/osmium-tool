@@ -22,8 +22,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp"
 
-#include <osmium/handler/check_order.hpp>
 #include <osmium/geom/factory.hpp>
+#include <osmium/handler/check_order.hpp>
 #include <osmium/osm/location.hpp>
 
 #include <boost/program_options/errors.hpp>

@@ -30,7 +30,7 @@ namespace strategy_complete_ways {
 
     void Data::add_relation_parents(osmium::unsigned_object_id_type id, const osmium::index::RelationsMapIndex& map) {
         map.for_each_parent(id, [&](osmium::unsigned_object_id_type parent_id) {
-            if (! relation_ids.get(parent_id)) {
+            if (!relation_ids.get(parent_id)) {
                 relation_ids.set(parent_id);
                 add_relation_parents(parent_id, map);
             }

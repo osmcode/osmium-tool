@@ -118,7 +118,7 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
 */
 
 bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
-    if (!location.valid() || ! envelope().contains(location)) {
+    if (!location.valid() || !envelope().contains(location)) {
         return false;
     }
 

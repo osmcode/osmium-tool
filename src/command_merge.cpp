@@ -156,7 +156,7 @@ namespace {
     }
 
     bool operator!=(const QueueElement& lhs, const QueueElement& rhs) noexcept {
-        return ! (lhs == rhs);
+        return !(lhs == rhs);
     }
 
 } // anonymous namespace

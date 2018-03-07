@@ -66,7 +66,7 @@ void CommandTagsFilter::read_expressions_file(const std::string& file_name) {
         throw argument_error{"Could not open file '" + file_name + "'"};
     }
 
-    for (std::string line; std::getline(file, line); ) {
+    for (std::string line; std::getline(file, line);) {
         const auto pos = line.find_first_of('#');
         if (pos != std::string::npos) {
             line.erase(pos);
@@ -155,13 +155,13 @@ void CommandTagsFilter::show_arguments() {
 osmium::osm_entity_bits::type CommandTagsFilter::get_needed_types() const {
     osmium::osm_entity_bits::type types = osmium::osm_entity_bits::nothing;
 
-    if (! m_ids(osmium::item_type::node).empty() || !m_filters(osmium::item_type::node).empty()) {
+    if (!m_ids(osmium::item_type::node).empty() || !m_filters(osmium::item_type::node).empty()) {
         types |= osmium::osm_entity_bits::node;
     }
-    if (! m_ids(osmium::item_type::way).empty() || !m_filters(osmium::item_type::way).empty()) {
+    if (!m_ids(osmium::item_type::way).empty() || !m_filters(osmium::item_type::way).empty()) {
         types |= osmium::osm_entity_bits::way;
     }
-    if (! m_ids(osmium::item_type::relation).empty() || !m_filters(osmium::item_type::relation).empty()) {
+    if (!m_ids(osmium::item_type::relation).empty() || !m_filters(osmium::item_type::relation).empty()) {
         types |= osmium::osm_entity_bits::relation;
     }
 
@@ -181,11 +181,11 @@ void CommandTagsFilter::add_members(const osmium::Relation& relation) {
 }
 
 void CommandTagsFilter::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id) {
-   rel_in_rel.for_each(parent_id, [&](osmium::unsigned_object_id_type member_id) {
+    rel_in_rel.for_each(parent_id, [&](osmium::unsigned_object_id_type member_id) {
         if (m_ids(osmium::item_type::relation).check_and_set(member_id)) {
             mark_rel_ids(rel_in_rel, member_id);
         }
-   });
+    });
 }
 
 bool CommandTagsFilter::find_relations_in_relations() {

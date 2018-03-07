@@ -25,8 +25,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/entity_bits.hpp>
-#include <osmium/util/string_matcher.hpp>
 #include <osmium/tags/matcher.hpp>
+#include <osmium/util/string_matcher.hpp>
 
 #include <string>
 #include <utility>

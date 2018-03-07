@@ -275,7 +275,7 @@ bool CommandDiff::run() {
             it2->set_diff(osmium::diff_indicator_type::right);
             ++count_right;
             if (action) {
-                 action->right(*it2);
+                action->right(*it2);
             }
             ++it2;
         } else if (it2 == end2 || *it1 < *it2) {

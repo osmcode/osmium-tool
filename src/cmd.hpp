@@ -59,7 +59,7 @@ namespace po = boost::program_options;
  */
 class Command {
 
-    osmium::osm_entity_bits::type m_osm_entity_bits {osmium::osm_entity_bits::all};
+    osmium::osm_entity_bits::type m_osm_entity_bits = osmium::osm_entity_bits::all;
 
     enum class display_progress_type {
         never  = 0,
