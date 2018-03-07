@@ -21,13 +21,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "extract_polygon.hpp"
+#include "../exception.hpp"
 
 #include <osmium/geom/wkt.hpp>
 #include <osmium/osm/location.hpp>
 #include <osmium/osm/segment.hpp>
 
 #include <algorithm>
-#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <string>
@@ -38,11 +38,14 @@ static void add_ring(std::vector<osmium::Segment>& segments, const osmium::NodeR
     auto it = ring.begin();
     const auto end = ring.end();
 
-    assert(it != end);
-    auto last_it = it++;
+    if (it == end) {
+        throw config_error{"Ring without any points."};
+    }
+
+    auto prev_it = it++;
     while (it != end) {
-        segments.emplace_back(last_it->location(), it->location());
-        last_it = it++;
+        segments.emplace_back(prev_it->location(), it->location());
+        prev_it = it++;
     }
 }
 

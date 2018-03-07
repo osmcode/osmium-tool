@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/file.hpp>
 #include <osmium/util/string.hpp>
 
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <string>
