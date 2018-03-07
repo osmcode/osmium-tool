@@ -6,7 +6,7 @@ created with the `osmium extract` command can be specified.
 
 The config file `extracts.json` contains a list of all extracts that should be
 created. In this case several different parts of Germany. You can [download a
-Germany extract](http://download.geofabrik.de/europe/germany.html) and then try
+Germany extract](https://download.geofabrik.de/europe/germany.html) and then try
 this out:
 
     osmium extract -v -c examples-extract.json germany-latest.osm.pbf

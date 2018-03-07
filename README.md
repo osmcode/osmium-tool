@@ -59,7 +59,7 @@ You also need the following libraries:
         openSUSE: bzip2
 
     zlib
-        http://www.zlib.net/
+        https://www.zlib.net/
         Debian/Ubuntu: zlib1g-dev
         Fedora/CentOS: zlib-devel
         openSUSE: zlib-devel
@@ -71,14 +71,14 @@ You also need the following libraries:
         Fedora/CentOS: expat-devel
 
     cmake
-        http://www.cmake.org/
+        https://cmake.org/
         Debian/Ubuntu: cmake
         Fedora/CentOS: cmake
         openSUSE: cmake
 
     Pandoc
         (Needed to build documentation, optional)
-        http://johnmacfarlane.net/pandoc/
+        http://pandoc.org/
         Debian/Ubuntu: pandoc
         Fedora/CentOS: pandoc
         openSUSE: pandoc

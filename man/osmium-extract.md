@@ -270,7 +270,7 @@ osm
     must be used, so the file format is detected correctly. Files for this can
     easily be obtained by searching for the area on OSM and then downloading
     the full relation using a URL like
-    http://www.openstreetmap.org/api/0.6/relation/RELATION-ID/full . Or
+    https://www.openstreetmap.org/api/0.6/relation/RELATION-ID/full . Or
     you can use **osmium getid -r** to get a specific relation from an OSM
     file. Note that both these approaches can get you very detailed boundaries
     which can take quite a while to cut out. Consider simplifying the boundary

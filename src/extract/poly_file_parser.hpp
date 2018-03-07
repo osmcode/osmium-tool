@@ -53,7 +53,7 @@ struct poly_error : public std::runtime_error {
  * Gets areas from .poly files.
  *
  * Format description:
- * http://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format
+ * https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format
  */
 class PolyFileParser {
 
