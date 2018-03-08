@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="osmium/1.7.1">
+  <node id="1" version="2" lat="50" lon="10">
+    <tag k="highway" v="bus_stop"/>
+    <tag k="name" v="School"/>
+  </node>
+  <node id="2" version="2" lat="50" lon="10.01"/>
+  <node id="3" version="1" lat="50" lon="10.02"/>
+  <way id="1" version="1">
+    <nd ref="1"/>
+    <nd ref="2"/>
+    <nd ref="3"/>
+    <tag k="highway" v="residential"/>
+  </way>
+  <way id="2" version="1">
+    <nd ref="1"/>
+    <nd ref="3"/>
+    <tag k="highway" v="path"/>
+  </way>
+  <relation id="1" version="1">
+    <member type="node" ref="1" role="stop"/>
+    <member type="way" ref="1" role=""/>
+    <tag k="type" v="route"/>
+    <tag k="route" v="bus"/>
+  </relation>
+</osm>

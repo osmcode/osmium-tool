@@ -47,6 +47,10 @@ class CommandDeriveChanges : public Command, public with_multiple_osm_inputs, pu
     bool m_keep_details = false;
     bool m_update_timestamp = false;
     bool m_increment_version = false;
+    bool m_ignore_metadata_changes = false;
+
+    template <typename TComp>
+    void derive_changes();
 
 public:
 

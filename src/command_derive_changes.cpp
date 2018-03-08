@@ -33,7 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/reader_with_progress_bar.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/osm/entity_bits.hpp>
-#include <osmium/osm/object.hpp>
+#include <osmium/osm/object_comparisons.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
@@ -48,6 +48,8 @@ bool CommandDeriveChanges::setup(const std::vector<std::string>& arguments) {
     ("increment-version", "Increment version of deleted objects")
     ("keep-details",      "Keep tags (and nodes of ways, members of relations) of deleted objects")
     ("update-timestamp",  "Set timestamp of deleted objects to current time")
+    ("ignore-timestamps", "Don't use the timestamp to compare two objects. Use this if both input files have\n" \
+            "version fields but one input file has not timestamps. This option prevents the diff become huge.\n")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -91,6 +93,10 @@ bool CommandDeriveChanges::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("update-timestamp")) {
         m_update_timestamp = true;
+    }
+
+    if (vm.count("ignore-timestamps")) {
+        m_ignore_metadata_changes = true;
     }
 
     return true;
@@ -148,6 +154,16 @@ void CommandDeriveChanges::write_deleted(osmium::io::Writer& writer, osmium::OSM
 }
 
 bool CommandDeriveChanges::run() {
+    if (m_ignore_metadata_changes) {
+        derive_changes<osmium::object_order_type_id_version_without_timestamp>();
+    } else {
+        derive_changes<osmium::object_order_type_id_version>();
+    }
+    return true;
+}
+
+template <typename TComp>
+void CommandDeriveChanges::derive_changes() {
     m_vout << "Opening input files...\n";
     osmium::io::Reader reader1{m_input_files[0], osmium::osm_entity_bits::object};
     osmium::io::ReaderWithProgressBar reader2{display_progress(), m_input_files[1], osmium::osm_entity_bits::object};
@@ -171,14 +187,15 @@ bool CommandDeriveChanges::run() {
 
     reader2.progress_bar().remove();
     m_vout << "Deriving changes...\n";
+    TComp comp;
     while (it1 != end1 || it2 != end2) {
         if (it2 == end2) {
             write_deleted(writer, *it1);
             ++it1;
-        } else if (it1 == end1 || *it2 < *it1) {
+        } else if (it1 == end1 || comp(*it2, *it1)) {
             writer(*it2);
             ++it2;
-        } else if (*it1 < *it2) {
+        } else if (comp(*it1, *it2)) {
             if (it2->id() != it1->id()) {
                 write_deleted(writer, *it1);
             }
@@ -195,7 +212,5 @@ bool CommandDeriveChanges::run() {
 
     show_memory_used();
     m_vout << "Done.\n";
-
-    return true;
 }
 

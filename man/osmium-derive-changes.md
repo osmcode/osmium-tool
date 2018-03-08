@@ -61,6 +61,14 @@ STDOUT.
 :   Update timestamp of deleted objects to the current time. This is the same
     behaviour as Osmosis.
 
+--ignore-timestamps
+:   Do not use the timestamp to compare two objects. If the objects in one
+    input file have timestamps but the objects in the other input file do not
+    have timestamps, all objects will be written to the input file twice
+    because their metadata changed (fields being added or dropped) although
+    their coordinates, tags or members did not change. This option prevents the
+    diff become huge under these circumstances.
+
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
