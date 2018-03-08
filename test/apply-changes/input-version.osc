@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osmChange version="0.6">
+  <modify>
+    <node id="1" version="3" lat="50.001" lon="10.0">
+      <tag k="highway" v="bus_stop" />
+      <tag k="name" v="School" />
+    </node>
+  </modify>
+  <delete>
+    <node id="3" version="1" visible="false"/>
+  </delete>
+  <create>
+    <node id="4" version="1" lat="50.0" lon="10.02"/>
+  </create>
+  <modify>
+    <way id="1" version="2">
+      <tag k="highway" v="residential" />
+      <nd ref="1"/>
+      <nd ref="2"/>
+      <nd ref="4"/>
+    </way>
+  </modify>
+</osmChange>

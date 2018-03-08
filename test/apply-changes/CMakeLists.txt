@@ -39,3 +39,8 @@ check_apply_changes(patch-old-version "--redact" input-patch-old-version.osh inp
 check_apply_changes(redact-metadata "--redact" input-redact-metadata.osh input-redact-metadata.osc "osh" output-redact-metadata.osh)
 
 #-----------------------------------------------------------------------------
+# Test the application of diffs which have only some metadata fields on files which have only some metadata fields
+#-----------------------------------------------------------------------------
+# The input file has version and timestamp fields, the diff has only version fields.
+check_apply_changes(version-on-version-timestamp "" input-version+timestamp.osm input-version.osc "osm" output-version-applied-on-version+timestamp.osm)
+check_apply_changes(version-on-version-timestamp-low "--locations-on-ways" input-version+timestamp.osm input-version.osc "osm" output-version-applied-on-version+timestamp-low.osm)

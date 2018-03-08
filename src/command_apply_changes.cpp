@@ -357,7 +357,7 @@ bool CommandApplyChanges::run() {
                            input.begin(),
                            input.end(),
                            output_it,
-                           osmium::object_order_type_id_reverse_version());
+                           osmium::object_order_type_id_reverse_version_without_timestamp());
         }
     }
 
