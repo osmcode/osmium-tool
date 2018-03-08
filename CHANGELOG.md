@@ -23,7 +23,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
-* Bug in the derive-changes command if it is used without --keep-details. If
+* Bug in the derive-changes command if it is used without --keep-details.
   A deletion of any type of object was written as a deletion of a node.
   (Thanks to Michael Reichert.)
 * Disable progress bar if STDOUT isn't a tty.
