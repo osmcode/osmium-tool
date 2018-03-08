@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" upload="false" generator="testdata">
+  <node id="10" version="1" timestamp="2015-01-01T01:00:00Z" lat="1" lon="1"/>
+  <node id="11" version="1" timestamp="2015-01-01T01:00:00Z" lat="2" lon="1"/>
+  <node id="12" version="1" timestamp="2015-01-01T01:00:00Z" lat="3" lon="1"/>
+  <node id="13" version="1" timestamp="2015-01-01T01:00:00Z" lat="4" lon="1">
+    <tag k="foo" v="bar"/>
+  </node>
+  <way id="20" version="1" timestamp="2015-01-01T01:00:00Z">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="foo" v="bar"/>
+  </way>
+  <way id="21" version="1" timestamp="2015-01-01T01:00:00Z">
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <tag k="xyz" v="abc"/>
+  </way>
+  <relation id="30" version="1" timestamp="2015-01-01T01:00:00Z">
+    <member type="node" ref="12" role="m1"/>
+    <member type="way" ref="20" role="m2"/>
+  </relation>
+</osm>
