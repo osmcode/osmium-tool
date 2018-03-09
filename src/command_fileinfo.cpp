@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/handler.hpp>
 #include <osmium/io/file.hpp>
+#include <osmium/io/metadata_options.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/osm.hpp>
@@ -76,6 +77,8 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::max_op<osmium::object_id_type> largest_node_id{0};
     osmium::max_op<osmium::object_id_type> largest_way_id{0};
     osmium::max_op<osmium::object_id_type> largest_relation_id{0};
+    osmium::io::metadata_options minimum_metadata{"all"};
+    osmium::io::metadata_options maximum_metadata{"none"};
 
     osmium::min_op<osmium::Timestamp> first_timestamp;
     osmium::max_op<osmium::Timestamp> last_timestamp;
@@ -107,6 +110,9 @@ struct InfoHandler : public osmium::handler::Handler {
     void osm_object(const osmium::OSMObject& object) {
         first_timestamp.update(object.timestamp());
         last_timestamp.update(object.timestamp());
+
+        minimum_metadata &= osmium::io::metadata_options(object);
+        maximum_metadata |= osmium::io::metadata_options(object);
 
         if (last_type == object.type()) {
             if (last_id == object.id()) {
@@ -233,6 +239,9 @@ public:
         std::cout << "  Largest node ID: "      << info_handler.largest_node_id()      << "\n";
         std::cout << "  Largest way ID: "       << info_handler.largest_way_id()       << "\n";
         std::cout << "  Largest relation ID: "  << info_handler.largest_relation_id()  << "\n";
+
+        std::cout << "  Minimum amount of metadata: " << info_handler.minimum_metadata  << "\n";
+        std::cout << "  Maximum amount of metadata: " << info_handler.maximum_metadata  << "\n";
     }
 
 }; // class HumanReadableOutput
@@ -365,6 +374,36 @@ public:
         m_writer.Int64(info_handler.largest_relation_id());
         m_writer.EndObject();
 
+        m_writer.String("metadata");
+        m_writer.StartObject();
+        m_writer.String("minimum");
+        m_writer.StartObject();
+        m_writer.String("version");
+        m_writer.Bool(info_handler.minimum_metadata.version());
+        m_writer.String("timestamp");
+        m_writer.Bool(info_handler.minimum_metadata.timestamp());
+        m_writer.String("changeset");
+        m_writer.Bool(info_handler.minimum_metadata.changeset());
+        m_writer.String("user");
+        m_writer.Bool(info_handler.minimum_metadata.user());
+        m_writer.String("uid");
+        m_writer.Bool(info_handler.minimum_metadata.uid());
+        m_writer.EndObject();
+        m_writer.String("maximum");
+        m_writer.StartObject();
+        m_writer.String("version");
+        m_writer.Bool(info_handler.maximum_metadata.version());
+        m_writer.String("timestamp");
+        m_writer.Bool(info_handler.maximum_metadata.timestamp());
+        m_writer.String("changeset");
+        m_writer.Bool(info_handler.maximum_metadata.changeset());
+        m_writer.String("user");
+        m_writer.Bool(info_handler.maximum_metadata.user());
+        m_writer.String("uid");
+        m_writer.Bool(info_handler.maximum_metadata.uid());
+        m_writer.EndObject();
+        m_writer.EndObject();
+
         m_writer.EndObject();
     }
 
@@ -480,6 +519,12 @@ public:
         if (m_get_value == "data.maxid.relations") {
             std::cout << info_handler.largest_relation_id() << "\n";
         }
+        if (m_get_value == "data.metadata.minimum") {
+            std::cout << info_handler.minimum_metadata << "\n";
+        }
+        if (m_get_value == "data.metadata.maximum") {
+            std::cout << info_handler.maximum_metadata << "\n";
+        }
     }
 
 }; // class SimpleOutput
@@ -554,7 +599,9 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         "data.maxid.nodes",
         "data.maxid.ways",
         "data.maxid.relations",
-        "data.maxid.changesets"
+        "data.maxid.changesets",
+        "data.metadata.minimum",
+        "data.metadata.maximum"
     };
 
     if (vm.count("show-variables")) {
