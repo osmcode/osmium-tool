@@ -271,14 +271,21 @@ bool CommandDiff::run() {
     uint64_t count_different = 0;
 
     while (it1 != end1 || it2 != end2) {
-        if (it1 == end1 || *it2 < *it1) {
+        if (it2 == end2) {
+            it1->set_diff(osmium::diff_indicator_type::left);
+            ++count_left;
+            if (action) {
+                action->left(*it1);
+            }
+            ++it1;
+        } else if (it1 == end1 || *it2 < *it1) {
             it2->set_diff(osmium::diff_indicator_type::right);
             ++count_right;
             if (action) {
                 action->right(*it2);
             }
             ++it2;
-        } else if (it2 == end2 || *it1 < *it2) {
+        } else if (*it1 < *it2) {
             it1->set_diff(osmium::diff_indicator_type::left);
             ++count_left;
             if (action) {
