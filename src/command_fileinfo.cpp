@@ -519,11 +519,35 @@ public:
         if (m_get_value == "data.maxid.relations") {
             std::cout << info_handler.largest_relation_id() << "\n";
         }
-        if (m_get_value == "metadata.all_objects") {
-            std::cout << info_handler.minimum_metadata << "\n";
+        if (m_get_value == "metadata.all_objects.version") {
+            std::cout << (info_handler.minimum_metadata.version() ? "yes\n" : "no\n");
         }
-        if (m_get_value == "metadata.some_objects") {
-            std::cout << info_handler.maximum_metadata << "\n";
+        if (m_get_value == "metadata.all_objects.timestamp") {
+            std::cout << (info_handler.minimum_metadata.timestamp() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.all_objects.changeset") {
+            std::cout << (info_handler.minimum_metadata.changeset() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.all_objects.uid") {
+            std::cout << (info_handler.minimum_metadata.uid() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.all_objects.user") {
+            std::cout << (info_handler.minimum_metadata.user() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.version") {
+            std::cout << (info_handler.maximum_metadata.version() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.timestamp") {
+            std::cout << (info_handler.maximum_metadata.timestamp() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.changeset") {
+            std::cout << (info_handler.maximum_metadata.changeset() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.uid") {
+            std::cout << (info_handler.maximum_metadata.uid() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.user") {
+            std::cout << (info_handler.maximum_metadata.user() ? "yes\n" : "no\n");
         }
     }
 
@@ -600,8 +624,16 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         "data.maxid.ways",
         "data.maxid.relations",
         "data.maxid.changesets",
-        "metadata.all_objects",
-        "metadata.some_objects"
+        "metadata.all_objects.version",
+        "metadata.all_objects.timestamp",
+        "metadata.all_objects.changeset",
+        "metadata.all_objects.uid",
+        "metadata.all_objects.user",
+        "metadata.some_objects.version",
+        "metadata.some_objects.timestamp",
+        "metadata.some_objects.changeset",
+        "metadata.some_objects.uid",
+        "metadata.some_objects.user"
     };
 
     if (vm.count("show-variables")) {
