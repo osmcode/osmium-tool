@@ -24,16 +24,16 @@ add_test(NAME fileinfo-g-fail COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/f
 set_tests_properties(fileinfo-g-fail PROPERTIES WILL_FAIL true)
 
 # Test the metadata properties
-add_test(NAME fileinfo-metadata-min-mixed-version-timestamp COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi2.osm -e -g data.metadata.minimum)
+add_test(NAME fileinfo-metadata-min-mixed-version-timestamp COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi2.osm -e -g metadata.all_objects)
 set_tests_properties(fileinfo-metadata-min-mixed-version-timestamp PROPERTIES PASS_REGULAR_EXPRESSION "^version\\+timestamp\n$")
 
-add_test(NAME fileinfo-metadata-max-mixed-all COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi2.osm -e -g data.metadata.maximum)
+add_test(NAME fileinfo-metadata-max-mixed-all COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi2.osm -e -g metadata.some_objects)
 set_tests_properties(fileinfo-metadata-max-mixed-all PROPERTIES PASS_REGULAR_EXPRESSION "^all\n$")
 
-add_test(NAME fileinfo-metadata-min-version-timestamp COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi3.osm -e -g data.metadata.minimum)
+add_test(NAME fileinfo-metadata-min-version-timestamp COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi3.osm -e -g metadata.all_objects)
 set_tests_properties(fileinfo-metadata-min-version-timestamp PROPERTIES PASS_REGULAR_EXPRESSION "^version\\+timestamp\n$")
 
-add_test(NAME fileinfo-metadata-max-version-timestamp COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi3.osm -e -g data.metadata.maximum)
+add_test(NAME fileinfo-metadata-max-version-timestamp COMMAND osmium fileinfo ${CMAKE_SOURCE_DIR}/test/fileinfo/fi3.osm -e -g metadata.some_objects)
 set_tests_properties(fileinfo-metadata-max-version-timestamp PROPERTIES PASS_REGULAR_EXPRESSION "^version\\+timestamp\n$")
 
 #-----------------------------------------------------------------------------
