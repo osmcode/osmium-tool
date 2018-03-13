@@ -23,7 +23,7 @@ Normally this command will output the data in human readable form. If the
 If the **-g**, **--get** option is used, only the value of the named variable
 will be printed.
 
-The output is split into three sections:
+The output is split into four sections:
 
 File
 :   This section shows the information available without opening the
@@ -47,6 +47,13 @@ Data
     id, and whether there were multiple versions of the same object in
     the file (history files and change files can have that). See the
     **osmium-sort**(1) man page for details of the expected ordering.
+
+Metadata
+:   This section shows which metadata attributes are used in the file.
+    It contains information which attributes are used by all objects in
+    the file and which are only used by some objects. This section is
+    only shown if the **--extended** option was used because the whole
+    file has to be read.
 
 This commands reads its input file only once, ie. it can read from STDIN.
 
@@ -100,9 +107,26 @@ The following variables are available:
     data.maxid.ways - INTEGER
     data.maxid.relations - INTEGER
     data.maxid.changesets - INTEGER
+    metadata.all_objects.version - BOOL (yes|no)
+    metadata.all_objects.timestamp - BOOL (yes|no)
+    metadata.all_objects.changeset - BOOL (yes|no)
+    metadata.all_objects.uid - BOOL (yes|no)
+    metadata.all_objects.user - BOOL (yes|no)
+    metadata.some_objects.version - BOOL (yes|no)
+    metadata.some_objects.timestamp - BOOL (yes|no)
+    metadata.some_objects.changeset - BOOL (yes|no)
+    metadata.some_objects.uid - BOOL (yes|no)
+    metadata.some_objects.user - BOOL (yes|no)
 
 All timestamps are in the usual OSM ISO format `yy-mm-ddThh::mm::ssZ`. Boxes
 are in the format `(xmin, ymin, xmax, ymax)`.
+
+There are two variables for each metadata field. The `metadata.all_objects.*`
+variables are true if all objects in the file have the attribute. The
+`metadata.some_objects.*` variables are true if at least one object in the file
+has the attribute. Please note that objects last modified by anonymous users
+(until 2007) do not have `user` and `uid` attributes and can lead to wrong
+results.
 
 
 # DIAGNOSTICS
