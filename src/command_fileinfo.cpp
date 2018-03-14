@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/crc.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/osm/metadata_options.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/minmax.hpp>
 #include <osmium/util/progress_bar.hpp>
@@ -76,6 +77,8 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::max_op<osmium::object_id_type> largest_node_id{0};
     osmium::max_op<osmium::object_id_type> largest_way_id{0};
     osmium::max_op<osmium::object_id_type> largest_relation_id{0};
+    osmium::metadata_options metadata_all_objects{"all"};
+    osmium::metadata_options metadata_some_objects{"none"};
 
     osmium::min_op<osmium::Timestamp> first_timestamp;
     osmium::max_op<osmium::Timestamp> last_timestamp;
@@ -107,6 +110,9 @@ struct InfoHandler : public osmium::handler::Handler {
     void osm_object(const osmium::OSMObject& object) {
         first_timestamp.update(object.timestamp());
         last_timestamp.update(object.timestamp());
+
+        metadata_all_objects &= osmium::detect_available_metadata(object);
+        metadata_some_objects |= osmium::detect_available_metadata(object);
 
         if (last_type == object.type()) {
             if (last_id == object.id()) {
@@ -233,6 +239,9 @@ public:
         std::cout << "  Largest node ID: "      << info_handler.largest_node_id()      << "\n";
         std::cout << "  Largest way ID: "       << info_handler.largest_way_id()       << "\n";
         std::cout << "  Largest relation ID: "  << info_handler.largest_relation_id()  << "\n";
+
+        std::cout << "  All objects have following metadata attributes: " << info_handler.metadata_all_objects  << "\n";
+        std::cout << "  Some objects have following metadata attributes: " << info_handler.metadata_some_objects  << "\n";
     }
 
 }; // class HumanReadableOutput
@@ -365,6 +374,36 @@ public:
         m_writer.Int64(info_handler.largest_relation_id());
         m_writer.EndObject();
 
+        m_writer.String("metadata");
+        m_writer.StartObject();
+        m_writer.String("all_objects");
+        m_writer.StartObject();
+        m_writer.String("version");
+        m_writer.Bool(info_handler.metadata_all_objects.version());
+        m_writer.String("timestamp");
+        m_writer.Bool(info_handler.metadata_all_objects.timestamp());
+        m_writer.String("changeset");
+        m_writer.Bool(info_handler.metadata_all_objects.changeset());
+        m_writer.String("user");
+        m_writer.Bool(info_handler.metadata_all_objects.user());
+        m_writer.String("uid");
+        m_writer.Bool(info_handler.metadata_all_objects.uid());
+        m_writer.EndObject();
+        m_writer.String("some_objects");
+        m_writer.StartObject();
+        m_writer.String("version");
+        m_writer.Bool(info_handler.metadata_some_objects.version());
+        m_writer.String("timestamp");
+        m_writer.Bool(info_handler.metadata_some_objects.timestamp());
+        m_writer.String("changeset");
+        m_writer.Bool(info_handler.metadata_some_objects.changeset());
+        m_writer.String("user");
+        m_writer.Bool(info_handler.metadata_some_objects.user());
+        m_writer.String("uid");
+        m_writer.Bool(info_handler.metadata_some_objects.uid());
+        m_writer.EndObject();
+        m_writer.EndObject();
+
         m_writer.EndObject();
     }
 
@@ -480,6 +519,36 @@ public:
         if (m_get_value == "data.maxid.relations") {
             std::cout << info_handler.largest_relation_id() << "\n";
         }
+        if (m_get_value == "metadata.all_objects.version") {
+            std::cout << (info_handler.metadata_all_objects.version() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.all_objects.timestamp") {
+            std::cout << (info_handler.metadata_all_objects.timestamp() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.all_objects.changeset") {
+            std::cout << (info_handler.metadata_all_objects.changeset() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.all_objects.uid") {
+            std::cout << (info_handler.metadata_all_objects.uid() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.all_objects.user") {
+            std::cout << (info_handler.metadata_all_objects.user() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.version") {
+            std::cout << (info_handler.metadata_some_objects.version() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.timestamp") {
+            std::cout << (info_handler.metadata_some_objects.timestamp() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.changeset") {
+            std::cout << (info_handler.metadata_some_objects.changeset() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.uid") {
+            std::cout << (info_handler.metadata_some_objects.uid() ? "yes\n" : "no\n");
+        }
+        if (m_get_value == "metadata.some_objects.user") {
+            std::cout << (info_handler.metadata_some_objects.user() ? "yes\n" : "no\n");
+        }
     }
 
 }; // class SimpleOutput
@@ -554,7 +623,17 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         "data.maxid.nodes",
         "data.maxid.ways",
         "data.maxid.relations",
-        "data.maxid.changesets"
+        "data.maxid.changesets",
+        "metadata.all_objects.version",
+        "metadata.all_objects.timestamp",
+        "metadata.all_objects.changeset",
+        "metadata.all_objects.uid",
+        "metadata.all_objects.user",
+        "metadata.some_objects.version",
+        "metadata.some_objects.timestamp",
+        "metadata.some_objects.changeset",
+        "metadata.some_objects.uid",
+        "metadata.some_objects.user"
     };
 
     if (vm.count("show-variables")) {

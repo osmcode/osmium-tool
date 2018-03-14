@@ -25,3 +25,5 @@ Data:
   Largest node ID: 4
   Largest way ID: 0
   Largest relation ID: 0
+  All objects have following metadata attributes: all
+  Some objects have following metadata attributes: all
