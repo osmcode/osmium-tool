@@ -32,4 +32,25 @@ check_merge2(i2r-2-only-version input2-only-version.osm input1.osm output2-2-onl
 check_merge2(i2f-1-only-version input1-only-version.osm input2.osm output2-1-only-version.osm)
 check_merge2(i2r-1-only-version input2.osm input1-only-version.osm output2-1-only-version.osm)
 
+# If two input files do not have timestamp attributes …
+check_merge3(i3f-1-only-version input1-only-version.osm input2.osm input3.osm output3-1-only-version.osm)
+check_merge3(i3r-1-only-version input3.osm input2.osm input1-only-version.osm output3-1-only-version.osm)
+check_merge3(i3m-1-only-version input2.osm input3.osm input1-only-version.osm output3-1-only-version.osm)
+
+check_merge3(i3f-2-only-version input1.osm input2-only-version.osm input3.osm output3-2-only-version.osm)
+check_merge3(i3r-2-only-version input3.osm input2-only-version.osm input1.osm output3-2-only-version.osm)
+check_merge3(i3m-2-only-version input3.osm input1.osm input2-only-version.osm output3-2-only-version.osm)
+
+check_merge3(i3f-12-only-version input1-only-version.osm input2-only-version.osm input3.osm output3-12-only-version.osm)
+check_merge3(i3r-12-only-version input3.osm input2-only-version.osm input1-only-version.osm output3-12-only-version.osm)
+check_merge3(i3m-12-only-version input3.osm input1-only-version.osm input2-only-version.osm output3-12-only-version.osm)
+
+check_merge3(i3f-13-only-version input1-only-version.osm input2.osm input3-only-version.osm output3-13-only-version.osm)
+check_merge3(i3r-13-only-version input3-only-version.osm input2.osm input1-only-version.osm output3-13-only-version.osm)
+check_merge3(i3m-13-only-version input2.osm input1-only-version.osm input3-only-version.osm output3-13-only-version.osm)
+
+check_merge3(i3f-23-only-version input1.osm input2-only-version.osm input3-only-version.osm output3-23-only-version.osm)
+check_merge3(i3r-23-only-version input3-only-version.osm input2-only-version.osm input1.osm output3-23-only-version.osm)
+check_merge3(i3m-23-only-version input2-only-version.osm input3-only-version.osm input1.osm output3-23-only-version.osm)
+
 #-----------------------------------------------------------------------------
