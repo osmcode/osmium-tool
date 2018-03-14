@@ -26,13 +26,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/handler.hpp>
 #include <osmium/io/file.hpp>
-#include <osmium/osm/metadata_options.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/crc.hpp>
 #include <osmium/osm/object_comparisons.hpp>
+#include <osmium/osm/metadata_options.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/minmax.hpp>
 #include <osmium/util/progress_bar.hpp>
@@ -77,8 +77,8 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::max_op<osmium::object_id_type> largest_node_id{0};
     osmium::max_op<osmium::object_id_type> largest_way_id{0};
     osmium::max_op<osmium::object_id_type> largest_relation_id{0};
-    osmium::metadata_options minimum_metadata{"all"};
-    osmium::metadata_options maximum_metadata{"none"};
+    osmium::metadata_options metadata_all_objects{"all"};
+    osmium::metadata_options metadata_some_objects{"none"};
 
     osmium::min_op<osmium::Timestamp> first_timestamp;
     osmium::max_op<osmium::Timestamp> last_timestamp;
@@ -111,8 +111,8 @@ struct InfoHandler : public osmium::handler::Handler {
         first_timestamp.update(object.timestamp());
         last_timestamp.update(object.timestamp());
 
-        minimum_metadata &= osmium::detect_available_metadata(object);
-        maximum_metadata |= osmium::detect_available_metadata(object);
+        metadata_all_objects &= osmium::detect_available_metadata(object);
+        metadata_some_objects |= osmium::detect_available_metadata(object);
 
         if (last_type == object.type()) {
             if (last_id == object.id()) {
@@ -240,8 +240,8 @@ public:
         std::cout << "  Largest way ID: "       << info_handler.largest_way_id()       << "\n";
         std::cout << "  Largest relation ID: "  << info_handler.largest_relation_id()  << "\n";
 
-        std::cout << "  All objects have following metadata attributes: " << info_handler.minimum_metadata  << "\n";
-        std::cout << "  Some objects have following metadata attributes: " << info_handler.maximum_metadata  << "\n";
+        std::cout << "  All objects have following metadata attributes: " << info_handler.metadata_all_objects  << "\n";
+        std::cout << "  Some objects have following metadata attributes: " << info_handler.metadata_some_objects  << "\n";
     }
 
 }; // class HumanReadableOutput
@@ -379,28 +379,28 @@ public:
         m_writer.String("all_objects");
         m_writer.StartObject();
         m_writer.String("version");
-        m_writer.Bool(info_handler.minimum_metadata.version());
+        m_writer.Bool(info_handler.metadata_all_objects.version());
         m_writer.String("timestamp");
-        m_writer.Bool(info_handler.minimum_metadata.timestamp());
+        m_writer.Bool(info_handler.metadata_all_objects.timestamp());
         m_writer.String("changeset");
-        m_writer.Bool(info_handler.minimum_metadata.changeset());
+        m_writer.Bool(info_handler.metadata_all_objects.changeset());
         m_writer.String("user");
-        m_writer.Bool(info_handler.minimum_metadata.user());
+        m_writer.Bool(info_handler.metadata_all_objects.user());
         m_writer.String("uid");
-        m_writer.Bool(info_handler.minimum_metadata.uid());
+        m_writer.Bool(info_handler.metadata_all_objects.uid());
         m_writer.EndObject();
         m_writer.String("some_objects");
         m_writer.StartObject();
         m_writer.String("version");
-        m_writer.Bool(info_handler.maximum_metadata.version());
+        m_writer.Bool(info_handler.metadata_some_objects.version());
         m_writer.String("timestamp");
-        m_writer.Bool(info_handler.maximum_metadata.timestamp());
+        m_writer.Bool(info_handler.metadata_some_objects.timestamp());
         m_writer.String("changeset");
-        m_writer.Bool(info_handler.maximum_metadata.changeset());
+        m_writer.Bool(info_handler.metadata_some_objects.changeset());
         m_writer.String("user");
-        m_writer.Bool(info_handler.maximum_metadata.user());
+        m_writer.Bool(info_handler.metadata_some_objects.user());
         m_writer.String("uid");
-        m_writer.Bool(info_handler.maximum_metadata.uid());
+        m_writer.Bool(info_handler.metadata_some_objects.uid());
         m_writer.EndObject();
         m_writer.EndObject();
 
@@ -520,34 +520,34 @@ public:
             std::cout << info_handler.largest_relation_id() << "\n";
         }
         if (m_get_value == "metadata.all_objects.version") {
-            std::cout << (info_handler.minimum_metadata.version() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_all_objects.version() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.all_objects.timestamp") {
-            std::cout << (info_handler.minimum_metadata.timestamp() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_all_objects.timestamp() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.all_objects.changeset") {
-            std::cout << (info_handler.minimum_metadata.changeset() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_all_objects.changeset() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.all_objects.uid") {
-            std::cout << (info_handler.minimum_metadata.uid() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_all_objects.uid() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.all_objects.user") {
-            std::cout << (info_handler.minimum_metadata.user() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_all_objects.user() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.some_objects.version") {
-            std::cout << (info_handler.maximum_metadata.version() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_some_objects.version() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.some_objects.timestamp") {
-            std::cout << (info_handler.maximum_metadata.timestamp() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_some_objects.timestamp() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.some_objects.changeset") {
-            std::cout << (info_handler.maximum_metadata.changeset() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_some_objects.changeset() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.some_objects.uid") {
-            std::cout << (info_handler.maximum_metadata.uid() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_some_objects.uid() ? "yes\n" : "no\n");
         }
         if (m_get_value == "metadata.some_objects.user") {
-            std::cout << (info_handler.maximum_metadata.user() ? "yes\n" : "no\n");
+            std::cout << (info_handler.metadata_some_objects.user() ? "yes\n" : "no\n");
         }
     }
 
