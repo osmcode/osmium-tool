@@ -24,5 +24,10 @@ check_sort2(history input-history1.osm input-history2.osm output-history.osm)
 check_sort1(neg input-neg.osm output-neg.osm osm)
 check_sort1(change input-change.osc output-change.osc osc)
 
+# Tests with limited metadata
+check_sort2(simple-1-only-version input-simple1-only-version.osm input-simple2.osm output-simple-1-only-version.osm)
+check_sort1(mixed-metadata input-simple-onefile.osm output-simple-onefile.osm osm)
+check_sort1(history-partially-only-version input-history-partially-only-version.osm output-history-partially-only-version.osm osm)
+check_sort1(history-only-version input-history-only-version.osm output-history-only-version.osm osm)
 
 #-----------------------------------------------------------------------------
