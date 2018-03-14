@@ -26,5 +26,8 @@ check_merge2(i2f input1.osm input2.osm output2.osm)
 check_merge2(i2r input2.osm input1.osm output2.osm)
 check_merge3(i3f input1.osm input2.osm input3.osm output3.osm)
 
+# If both input files do not have timestamp attributes
+check_merge2(i2f-only-version input1-only-version.osm input2-only-version.osm output2-12-only-version.osm)
+check_merge2(i2r-only-version input2-only-version.osm input1-only-version.osm output2-12-only-version.osm)
 
 #-----------------------------------------------------------------------------
