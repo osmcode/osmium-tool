@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osmChange version="0.6" generator="test">
+  <create>
+    <node id="10" version="1" lat="1" lon="1"/>
+  </create>
+  <modify>
+    <node id="11" version="2" timestamp="2015-01-01T02:00:00Z" uid="1" user="test" changeset="2" lat="2" lon="2"/>
+  </modify>
+  <create>
+    <node id="12" version="1" lat="3" lon="1"/>
+  </create>
+  <delete>
+    <node id="13" version="2" timestamp="2015-01-01T02:00:00Z" uid="1" user="test" changeset="2" lat="4" lon="1"/>
+  </delete>
+  <create>
+    <node id="14" version="1" timestamp="2015-01-01T02:00:00Z" uid="1" user="test" changeset="2" lat="5" lon="1"/>
+    <way id="20" version="1">
+      <nd ref="10"/>
+      <nd ref="11"/>
+      <nd ref="12"/>
+      <tag k="foo" v="bar"/>
+    </way>
+  </create>
+  <modify>
+    <way id="21" version="2" timestamp="2015-01-01T02:00:00Z" uid="1" user="test" changeset="2">
+      <nd ref="12"/>
+      <nd ref="14"/>
+      <tag k="xyz" v="new"/>
+    </way>
+  </modify>
+  <create>
+    <relation id="30" version="1">
+      <member type="node" ref="12" role="m1"/>
+      <member type="way" ref="20" role="m2"/>
+    </relation>
+  </create>
+</osmChange>
