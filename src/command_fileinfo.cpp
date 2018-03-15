@@ -31,8 +31,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/crc.hpp>
-#include <osmium/osm/object_comparisons.hpp>
 #include <osmium/osm/metadata_options.hpp>
+#include <osmium/osm/object_comparisons.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/minmax.hpp>
 #include <osmium/util/progress_bar.hpp>
