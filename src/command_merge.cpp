@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/object.hpp>
+#include <osmium/osm/object_comparisons.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
@@ -193,7 +194,8 @@ bool CommandMerge::run() {
 
         std::set_union(in1.cbegin(), in1.cend(),
                        in2.cbegin(), in2.cend(),
-                       out);
+                       out,
+                       osmium::object_order_type_id_version_without_timestamp());
     } else {
         // Three or more files to merge
         m_vout << "Merging " << m_input_files.size() << " input files to output file...\n";
