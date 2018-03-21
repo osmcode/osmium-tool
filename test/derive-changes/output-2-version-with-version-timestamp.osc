@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osmChange version="0.6" generator="test">
+  <modify>
+    <node id="1" version="3" timestamp="2017-12-03T00:00:00Z" lat="50.001" lon="10">
+      <tag k="highway" v="bus_stop"/>
+      <tag k="name" v="School"/>
+    </node>
+  </modify>
+  <delete>
+    <node id="3" version="1"/>
+  </delete>
+  <create>
+    <node id="4" version="1" timestamp="2017-12-03T00:00:00Z" lat="50" lon="10.02"/>
+  </create>
+  <modify>
+    <way id="1" version="2" timestamp="2017-12-03T00:00:00Z">
+      <nd ref="1"/>
+      <nd ref="2"/>
+      <nd ref="4"/>
+      <tag k="highway" v="residential"/>
+    </way>
+  </modify>
+</osmChange>
