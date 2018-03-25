@@ -23,7 +23,7 @@ it will also include deleted versions of objects.
 If only a single point in time was given, the result will be a normal OSM file
 without history containing no deleted objects.
 
-The format for the timestamps is "yyyy-mm-ddThh:mm::ssZ".
+The format for the timestamps is "yyyy-mm-ddThh:mm:ssZ".
 
 This commands reads its input file only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
