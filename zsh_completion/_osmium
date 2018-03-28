@@ -98,7 +98,10 @@ _osmium-apply-changes() {
         '--change-file-format[Format of the change file(s)]' \
         '--locations-on-ways[update OSM file with locations on ways]' \
         '(--with-history)-H[update OSM history file]' \
-        '(-H)--with-history[update OSM history file]'
+        '(-H)--with-history[update OSM history file]' \
+        '--redact[Redact (patch) OSM history file]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-cat() {
@@ -163,7 +166,9 @@ _osmium-derive-changes() {
         ${(f)"$(_osmium-output-options)"} \
         '--increment-version[increment version of deleted objects]' \
         '--keep-details[keep details of deleted objects]' \
-        '--update-timestamp[update timestamp of deleted objects]'
+        '--update-timestamp[update timestamp of deleted objects]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-diff() {
@@ -178,6 +183,8 @@ _osmium-diff() {
         '(-c)--suppress-common[suppress common objects]' \
         '(--summary)-s[Show summary on STDERR]' \
         '(-s)--summary[Show summary on STDERR]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]' \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_object_type' \
         '*--object-type[read only objects of given output types]:OSM entity type:_osmium_object_type'
 }
@@ -208,7 +215,9 @@ _osmium-export() {
         '(--omit-rs)-r[omit record separator when using geojsonseq format]' \
         '(-r)--omit-rs[omit record separator when using geojsonseq format]' \
         '(--add-unique-id)-u[add unique id]:unique id format:_export_id_type' \
-        '(-u)--add-unique-id[add unique id]:unique id format:_export_id_type'
+        '(-u)--add-unique-id[add unique id]:unique id format:_export_id_type' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-extract() {
@@ -274,7 +283,9 @@ _osmium-merge() {
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
-        ${(f)"$(_osmium-output-options)"}
+        ${(f)"$(_osmium-output-options)"} \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-merge-changes() {
@@ -284,7 +295,9 @@ _osmium-merge-changes() {
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
         '(--simplify)-s[only write last version of any object]' \
-        '(-s)--simplify[only write last version of any object]'
+        '(-s)--simplify[only write last version of any object]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-renumber() {
@@ -323,7 +336,9 @@ _osmium-sort() {
         ${(f)"$(_osmium-common-options)"} \
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
-        ${(f)"$(_osmium-output-options)"}
+        ${(f)"$(_osmium-output-options)"} \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]'
 }
 
 _osmium-tags-filter() {
@@ -338,6 +353,8 @@ _osmium-tags-filter() {
         '(-i)--invert-match[invert the sense of matching, exclude objects with matching tags]' \
         '(--omit-referenced)-R[omit referenced objects]' \
         '(-R)--omit-referenced[omit referenced objects]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]' \
         "*:Filter expressions (format\: [nwr]*/key=[value]):"
 }
 
@@ -347,6 +364,8 @@ _osmium-time-filter() {
         ${(f)"$(_osmium-single-input-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]' \
         "2::start time (format\: yyyy-mm-ddThh\:mm\:ssZ):" \
         "3::end time (format\: yyyy-mm-ddThh\:mm\:ssZ):"
 }
