@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.8.0] - 2018-03-31
+
+### Added
+
 * Support for negative IDs in export command.
 * Lots of tests with missing metadata (Thanks to Michael Reichert).
 * Add metadata options to the extended output of fileinfo command (Thanks to
@@ -369,7 +378,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...v1.8.0
 [1.7.1]: https://github.com/osmcode/osmium-tool/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/osmcode/osmium-tool/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/osmcode/osmium-tool/compare/v1.6.0...v1.6.1
