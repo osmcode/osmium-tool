@@ -21,7 +21,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-* Update included `catch.hpp` to version 1.12.0.
+- Needs libosmium 2.14.0.
+* Update included `catch.hpp` to version 1.12.1.
 * Removed Makefile. Undocumented and possibly confusing way of building.
   As documented, use CMake directly instead.
 * Allow bbox setting with any two opposing corners, instead of insisting on
