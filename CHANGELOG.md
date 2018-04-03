@@ -8,6 +8,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Add area matching to `tags-filter`. The `tags-filter` command can now match
+  "areas" using the "a/" prefix. Areas in this sense are all closed ways with
+  4 or more nodes and all relations with tag "type=multipolygon" or
+  "type=boundary".
+
 ### Changed
 
 ### Fixed

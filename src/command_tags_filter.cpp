@@ -51,6 +51,9 @@ void CommandTagsFilter::add_filter(osmium::osm_entity_bits::type entities, const
     if (entities & osmium::osm_entity_bits::relation) {
         m_filters(osmium::item_type::relation).add_rule(true, matcher);
     }
+    if (entities & osmium::osm_entity_bits::area) {
+        m_area_filters.add_rule(true, matcher);
+    }
 }
 
 void CommandTagsFilter::parse_and_add_expression(const std::string& expression) {
@@ -148,8 +151,8 @@ void CommandTagsFilter::show_arguments() {
     m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
     m_vout << "  looking for tags...\n";
     m_vout << "    on nodes: "     << yes_no(!m_filters(osmium::item_type::node).empty());
-    m_vout << "    on ways: "      << yes_no(!m_filters(osmium::item_type::way).empty());
-    m_vout << "    on relations: " << yes_no(!m_filters(osmium::item_type::relation).empty());
+    m_vout << "    on ways: "      << yes_no(!m_filters(osmium::item_type::way).empty() || !m_area_filters.empty());
+    m_vout << "    on relations: " << yes_no(!m_filters(osmium::item_type::relation).empty() || !m_area_filters.empty());
 }
 
 osmium::osm_entity_bits::type CommandTagsFilter::get_needed_types() const {
@@ -158,10 +161,10 @@ osmium::osm_entity_bits::type CommandTagsFilter::get_needed_types() const {
     if (!m_ids(osmium::item_type::node).empty() || !m_filters(osmium::item_type::node).empty()) {
         types |= osmium::osm_entity_bits::node;
     }
-    if (!m_ids(osmium::item_type::way).empty() || !m_filters(osmium::item_type::way).empty()) {
+    if (!m_ids(osmium::item_type::way).empty() || !m_filters(osmium::item_type::way).empty() || !m_area_filters.empty()) {
         types |= osmium::osm_entity_bits::way;
     }
-    if (!m_ids(osmium::item_type::relation).empty() || !m_filters(osmium::item_type::relation).empty()) {
+    if (!m_ids(osmium::item_type::relation).empty() || !m_filters(osmium::item_type::relation).empty() || !m_area_filters.empty()) {
         types |= osmium::osm_entity_bits::relation;
     }
 
@@ -180,6 +183,46 @@ void CommandTagsFilter::add_members(const osmium::Relation& relation) {
     }
 }
 
+bool CommandTagsFilter::matches_node(const osmium::Node& node) const noexcept {
+    return osmium::tags::match_any_of(node.tags(), m_filters(osmium::item_type::node));
+}
+
+bool CommandTagsFilter::matches_way(const osmium::Way& way) const noexcept {
+    return osmium::tags::match_any_of(way.tags(), m_filters(osmium::item_type::way)) ||
+           (way.is_closed() &&
+            way.nodes().size() >= 4 &&
+               osmium::tags::match_any_of(way.tags(), m_area_filters));
+}
+
+static bool is_multipolygon(const osmium::Relation& relation) noexcept {
+    const char* type = relation.tags().get_value_by_key("type");
+    if (type == nullptr) {
+        return false;
+    }
+
+    return !std::strcmp(type, "multipolygon") || !std::strcmp(type, "boundary");
+}
+
+bool CommandTagsFilter::matches_relation(const osmium::Relation& relation) const noexcept {
+    return osmium::tags::match_any_of(relation.tags(), m_filters(osmium::item_type::relation)) ||
+           (is_multipolygon(relation) &&
+               osmium::tags::match_any_of(relation.tags(), m_area_filters));
+}
+
+bool CommandTagsFilter::matches_object(const osmium::OSMObject& object) const noexcept {
+    switch (object.type()) {
+        case osmium::item_type::node:
+            return matches_node(static_cast<const osmium::Node&>(object));
+        case osmium::item_type::way:
+            return matches_way(static_cast<const osmium::Way&>(object));
+        case osmium::item_type::relation:
+            return matches_relation(static_cast<const osmium::Relation&>(object));
+        default:
+            break;
+    }
+    return false;
+}
+
 void CommandTagsFilter::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id) {
     rel_in_rel.for_each(parent_id, [&](osmium::unsigned_object_id_type member_id) {
         if (m_ids(osmium::item_type::relation).check_and_set(member_id)) {
@@ -189,8 +232,6 @@ void CommandTagsFilter::mark_rel_ids(const osmium::index::RelationsMapIndex& rel
 }
 
 bool CommandTagsFilter::find_relations_in_relations() {
-    const auto& filter = m_filters(osmium::item_type::relation);
-
     m_vout << "  Reading input file to find relations in relations...\n";
     osmium::index::RelationsMapStash stash;
 
@@ -198,7 +239,7 @@ bool CommandTagsFilter::find_relations_in_relations() {
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             stash.add_members(relation);
-            if (osmium::tags::match_any_of(relation.tags(), filter) != m_invert_match) {
+            if (matches_relation(relation) != m_invert_match) {
                 m_ids(osmium::item_type::relation).set(relation.positive_id());
             }
         }
@@ -245,7 +286,7 @@ void CommandTagsFilter::find_nodes_in_ways() {
         for (const auto& way : buffer.select<osmium::Way>()) {
             if (m_ids(osmium::item_type::way).get(way.positive_id())) {
                 add_nodes(way);
-            } else if (osmium::tags::match_any_of(way.tags(), m_filters(osmium::item_type::way)) != m_invert_match) {
+            } else if (matches_way(way) != m_invert_match) {
                 m_ids(osmium::item_type::way).set(way.positive_id());
                 add_nodes(way);
             }
@@ -256,7 +297,7 @@ void CommandTagsFilter::find_nodes_in_ways() {
 
 void CommandTagsFilter::find_referenced_objects() {
     m_vout << "Following references...\n";
-    bool todo = !m_filters(osmium::item_type::relation).empty();
+    bool todo = !m_filters(osmium::item_type::relation).empty() || !m_area_filters.empty();
     if (todo) {
         todo = find_relations_in_relations();
     }
@@ -265,7 +306,7 @@ void CommandTagsFilter::find_referenced_objects() {
         find_nodes_and_ways_in_relations();
     }
 
-    if (!m_ids(osmium::item_type::way).empty() || !m_filters(osmium::item_type::way).empty()) {
+    if (!m_ids(osmium::item_type::way).empty() || !m_filters(osmium::item_type::way).empty() || !m_area_filters.empty()) {
         find_nodes_in_ways();
     }
     m_vout << "Done following references.\n";
@@ -293,8 +334,7 @@ bool CommandTagsFilter::run() {
             if (m_ids(object.type()).get(object.positive_id())) {
                 writer(object);
             } else if (!m_add_referenced_objects || object.type() == osmium::item_type::node) {
-                const auto& filter = m_filters(object.type());
-                if (osmium::tags::match_any_of(object.tags(), filter) != m_invert_match) {
+                if (matches_object(object) != m_invert_match) {
                     writer(object);
                 }
             }

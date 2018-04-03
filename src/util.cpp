@@ -90,8 +90,11 @@ osmium::osm_entity_bits::type get_types(const std::string& str) {
             case 'r':
                 entities |= osmium::osm_entity_bits::relation;
                 break;
+            case 'a':
+                entities |= osmium::osm_entity_bits::area;
+                break;
             default:
-                throw argument_error{std::string{"Unknown object type '"} + c + "' (allowed are 'n', 'w', and 'r')."};
+                throw argument_error{std::string{"Unknown object type '"} + c + "' (allowed are 'n', 'w', 'r', and 'a')."};
         }
     }
 

@@ -12,10 +12,10 @@ osmium-tags-filter - filter objects matching specified keys/tags
 
 # DESCRIPTION
 
-Get objects matching the specified expressions from the input and write them to
-the output. Expressions can either be specified on the command line or in an
-expressions file. See the **FILTER EXPRESSIONS** section for a description of
-the filter expression format.
+Get objects matching at least one of the specified expressions from the input
+and write them to the output. Expressions can either be specified on the
+command line or in an expressions file. See the **FILTER EXPRESSIONS** section
+for a description of the filter expression format.
 
 All objects matching the expressions will be read from *OSM-FILE* and written
 to the output. All objects referenced from those objects will also be added
@@ -57,9 +57,11 @@ A filter expression specifies a tag or tags that should be found in the data
 and the type of object (node, way, or relation) that should be matched.
 
 The object type(s) comes first, then a slash (/) and then the rest of the
-expression. Object types are specified as 'n' (for nodes), 'w' (for ways), and
-'r' (for relations). Any combination of them can be used. If the object type is
-not specified, the expression matches all object types.
+expression. Object types are specified as 'n' (for nodes), 'w' (for ways),
+'r' (for relations), and 'a' (for areas - closed ways with 4 or more nodes and
+relations with `type=multipolygon` or `type=boundary` tag). Any combination of
+them can be used. If the object type is not specified, the expression matches
+all object types.
 
 Some examples:
 
@@ -94,6 +96,11 @@ n/addr:\*
 n/name=\*Paris\*
 :   Matches all nodes with a name that contains the word "Paris".
 
+a/building
+:   Matches any closed ways with 4 or more nodes or relations tagged
+    "building". Relations must also have a tag "type=multipolygon" or
+    "type=boundary".
+
 If there is no equal sign ("=") in the expression only keys are matched and
 values can by anything. If there is an equal sign ("=") in the expression, the
 key is to the left and the value to the right. An exclamation sign ("!") before
@@ -109,6 +116,12 @@ comma-expressions and "\*"-expressions.
 The filter expressions specified in a file and/or on the command line are
 matched in the order they are given. To achieve best performance, put
 expressions expected to match more often first.
+
+Area matches (with leading "a/") do not check whether the matched object is a
+valid (multi)polygon, they only check whether an object might possibly be
+turned into a (multi)polygon. This is the case for all closed ways (where the
+first and last node are the same) with 4 or more nodes and for all relations
+that have an additional "type=multipolygon" or "type=boundary" tag.
 
 
 # DIAGNOSTICS
