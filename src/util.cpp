@@ -70,7 +70,7 @@ std::size_t file_size_sum(const std::vector<osmium::io::File>& files) {
     std::size_t sum = 0;
 
     for (const auto& file : files) {
-        sum += osmium::util::file_size(file.filename());
+        sum += osmium::file_size(file.filename());
     }
 
     return sum;

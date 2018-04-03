@@ -70,7 +70,7 @@ class Command {
 protected:
 
     const CommandFactory& m_command_factory;
-    osmium::util::VerboseOutput m_vout{false};
+    osmium::VerboseOutput m_vout{false};
 
 public:
 
@@ -116,7 +116,7 @@ public:
     void setup_progress(const boost::program_options::variables_map& vm);
     void setup_object_type_nwrc(const boost::program_options::variables_map& vm);
     void setup_object_type_nwr(const boost::program_options::variables_map& vm);
-    void show_object_types(osmium::util::VerboseOutput& vout);
+    void show_object_types(osmium::VerboseOutput& vout);
     void print_arguments(const std::string& command);
     void show_memory_used();
 
@@ -127,7 +127,7 @@ public:
     bool display_progress() const {
         switch (m_display_progress) {
             case display_progress_type::on_tty:
-                return osmium::util::isatty(1) && osmium::util::isatty(2); // if STDOUT and STDERR are a TTY
+                return osmium::isatty(1) && osmium::isatty(2); // if STDOUT and STDERR are a TTY
             case display_progress_type::always:
                 return true;
             default:
@@ -152,7 +152,7 @@ public:
 
     po::options_description add_single_input_options();
 
-    void show_single_input_arguments(osmium::util::VerboseOutput& vout);
+    void show_single_input_arguments(osmium::VerboseOutput& vout);
 
     const osmium::io::File& input_file() const {
         return m_input_file;
@@ -174,7 +174,7 @@ public:
 
     po::options_description add_multiple_inputs_options();
 
-    void show_multiple_inputs_arguments(osmium::util::VerboseOutput& vout);
+    void show_multiple_inputs_arguments(osmium::VerboseOutput& vout);
 
     const std::vector<osmium::io::File>& input_files() const {
         return m_input_files;
@@ -207,7 +207,7 @@ public:
 
     po::options_description add_output_options();
 
-    void show_output_arguments(osmium::util::VerboseOutput& vout);
+    void show_output_arguments(osmium::VerboseOutput& vout);
 
     const osmium::io::File& output_file() const {
         return m_output_file;

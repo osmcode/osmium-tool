@@ -36,7 +36,7 @@ namespace strategy_complete_ways_with_history {
         });
     }
 
-    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& /*options*/) {
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/) {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);
@@ -156,13 +156,13 @@ namespace strategy_complete_ways_with_history {
 
     }; // class Pass2
 
-    void Strategy::run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
+    void Strategy::run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
         if (input_file.filename().empty()) {
             throw osmium::io_error{"Can not read from STDIN when using 'complete_ways' strategy."};
         }
 
         vout << "Running 'complete_ways' strategy in two passes...\n";
-        const std::size_t file_size = osmium::util::file_size(input_file.filename());
+        const std::size_t file_size = osmium::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size * 2, display_progress};
 
         vout << "First pass (of two)...\n";

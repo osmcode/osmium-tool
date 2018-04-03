@@ -327,7 +327,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
-static void print_taglist(osmium::util::VerboseOutput& vout, const std::vector<std::string>& strings) {
+static void print_taglist(osmium::VerboseOutput& vout, const std::vector<std::string>& strings) {
     for (const auto& str : strings) {
         vout << "    " << str << '\n';
     }

@@ -187,7 +187,7 @@ public:
         std::cout << "  Compression: " << input_file.compression() << "\n";
 
         if (!input_file.filename().empty()) {
-            std::cout << "  Size: " << osmium::util::file_size(input_file.filename()) << "\n";
+            std::cout << "  Size: " << osmium::file_size(input_file.filename()) << "\n";
         }
     }
 
@@ -276,7 +276,7 @@ public:
 
         if (!input_file.filename().empty()) {
             m_writer.String("size");
-            m_writer.Int64(osmium::util::file_size(input_file.filename()));
+            m_writer.Int64(osmium::file_size(input_file.filename()));
         }
 
         m_writer.EndObject();
@@ -438,7 +438,7 @@ public:
             if (input_file.filename().empty()) {
                 std::cout << 0 << "\n";
             } else {
-                std::cout << osmium::util::file_size(input_file.filename()) << "\n";
+                std::cout << osmium::file_size(input_file.filename()) << "\n";
             }
         }
     }

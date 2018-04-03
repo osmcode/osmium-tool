@@ -77,10 +77,10 @@ public:
 
     virtual const char* name() const noexcept = 0;
 
-    virtual void show_arguments(osmium::util::VerboseOutput& /*vout*/) {
+    virtual void show_arguments(osmium::VerboseOutput& /*vout*/) {
     }
 
-    virtual void run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) = 0;
+    virtual void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) = 0;
 
 }; // class ExtractStrategy
 

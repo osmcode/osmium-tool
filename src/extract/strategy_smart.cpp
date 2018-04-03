@@ -54,7 +54,7 @@ namespace strategy_smart {
         });
     }
 
-    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& options) {
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options) {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);
@@ -91,7 +91,7 @@ namespace strategy_smart {
         return it != m_types.end();
     }
 
-    void Strategy::show_arguments(osmium::util::VerboseOutput& vout) {
+    void Strategy::show_arguments(osmium::VerboseOutput& vout) {
         vout << "Additional strategy options:\n";
         if (m_types.empty()) {
             vout << "  types: any\n";
@@ -226,13 +226,13 @@ namespace strategy_smart {
 
     }; // class Pass3
 
-    void Strategy::run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
+    void Strategy::run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
         if (input_file.filename().empty()) {
             throw osmium::io_error{"Can not read from STDIN when using 'smart' strategy."};
         }
 
         vout << "Running 'smart' strategy in three passes...\n";
-        const std::size_t file_size = osmium::util::file_size(input_file.filename());
+        const std::size_t file_size = osmium::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size * 3, display_progress};
 
         vout << "First pass (of three)...\n";

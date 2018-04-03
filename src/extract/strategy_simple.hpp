@@ -47,11 +47,11 @@ namespace strategy_simple {
 
     public:
 
-        explicit Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& /*options*/);
+        explicit Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/);
 
         const char* name() const noexcept override final;
 
-        void run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) override final;
+        void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) override final;
 
     }; // class Strategy
 

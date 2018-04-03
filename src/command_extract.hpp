@@ -42,7 +42,7 @@ class CommandExtract : public Command, public with_single_osm_input, public with
     std::string m_config_file_name;
     std::string m_config_directory;
     std::string m_output_directory;
-    osmium::util::Options m_options;
+    osmium::Options m_options;
     std::string m_strategy_name;
     std::unique_ptr<ExtractStrategy> m_strategy;
     std::vector<std::unique_ptr<Extract>> m_extracts;
