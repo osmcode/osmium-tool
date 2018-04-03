@@ -58,11 +58,13 @@ bool ExportHandler::is_area(const osmium::Area& area) const noexcept {
 ExportHandler::ExportHandler(std::unique_ptr<ExportFormat>&& handler,
                              const std::vector<std::string>& linear_tags,
                              const std::vector<std::string>& area_tags,
+                             geometry_types geometry_types,
                              bool show_errors,
                              bool stop_on_error) :
     m_handler(std::move(handler)),
     m_linear_filter(true),
     m_area_filter(true),
+    m_geometry_types(geometry_types),
     m_show_errors(show_errors),
     m_stop_on_error(stop_on_error) {
     if (!linear_tags.empty()) {
@@ -84,6 +86,10 @@ void ExportHandler::show_error(const std::runtime_error& error) {
 }
 
 void ExportHandler::node(const osmium::Node& node) {
+    if (!m_geometry_types.point) {
+        return;
+    }
+
     if (node.tags().empty() && !m_handler->options().keep_untagged) {
         return;
     }
@@ -98,6 +104,10 @@ void ExportHandler::node(const osmium::Node& node) {
 }
 
 void ExportHandler::way(const osmium::Way& way) {
+    if (!m_geometry_types.linestring) {
+        return;
+    }
+
     if (way.nodes().size() <= 1) {
         return;
     }
@@ -114,6 +124,10 @@ void ExportHandler::way(const osmium::Way& way) {
 }
 
 void ExportHandler::area(const osmium::Area& area) {
+    if (!m_geometry_types.polygon) {
+        return;
+    }
+
     if (!area.from_way() || is_area(area)) {
         try {
             m_handler->area(area);

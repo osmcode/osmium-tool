@@ -12,6 +12,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   "areas" using the "a/" prefix. Areas in this sense are all closed ways with
   4 or more nodes and all relations with tag "type=multipolygon" or
   "type=boundary".
+- Add `--geometry-types` option to the `export` command allowing you to
+  restrict the geometry types written out.
 
 ### Changed
 

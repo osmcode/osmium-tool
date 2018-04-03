@@ -36,6 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/memory/buffer.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/relations/manager_util.hpp>
+#include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
@@ -169,6 +170,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     ("add-unique-id,u", po::value<std::string>(), "Add unique id to each feature ('counter' or 'type_id')")
     ("config,c", po::value<std::string>(), "Config file")
     ("fsync", "Call fsync after writing file")
+    ("geometry-types", po::value<std::string>(), "Geometry types that should be written (default: 'point,linestring,polygon')")
     ("index-type,i", po::value<std::string>()->default_value(default_index_type), "Index type to use")
     ("keep-untagged,n", "Keep features that don't have any tags")
     ("output,o", po::value<std::string>(), "Output file (default: STDOUT)")
@@ -237,6 +239,27 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("fsync")) {
         m_fsync = osmium::io::fsync::yes;
+    }
+
+    if (vm.count("geometry-types")) {
+        m_geometry_types.clear();
+        const auto types = osmium::split_string(vm["geometry-types"].as<std::string>(), ',');
+        for (const auto& type : types) {
+            if (type == "point") {
+                m_geometry_types.point = true;
+            } else if (type == "linestring") {
+                m_geometry_types.linestring = true;
+            } else if (type == "polygon") {
+                m_geometry_types.polygon = true;
+            } else if (type == "multipolygon") {
+                m_geometry_types.polygon = true;
+            } else {
+                throw argument_error{"Unknown geometry type in --geometry-types option: " + type + "."};
+            }
+        }
+        if (m_geometry_types.empty()) {
+            throw argument_error{"No geometry types in --geometry-types option."};
+        }
     }
 
     if (vm.count("index-type")) {
@@ -392,7 +415,7 @@ bool CommandExport::run() {
     m_vout << "Second pass (of two) through input file...\n";
 
     auto handler = create_handler(m_output_format, m_output_filename, m_output_overwrite, m_fsync, m_options);
-    ExportHandler export_handler{std::move(handler), m_linear_tags, m_area_tags, m_show_errors, m_stop_on_error};
+    ExportHandler export_handler{std::move(handler), m_linear_tags, m_area_tags, m_geometry_types, m_show_errors, m_stop_on_error};
     osmium::handler::CheckOrder check_order_handler;
 
     if (m_index_type_name == "none") {

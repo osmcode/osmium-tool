@@ -42,6 +42,9 @@ class ExportHandler : public osmium::handler::Handler {
     osmium::TagsFilter m_linear_filter;
     osmium::TagsFilter m_area_filter;
     uint64_t m_error_count = 0;
+
+    geometry_types m_geometry_types;
+
     bool m_show_errors;
     bool m_stop_on_error;
 
@@ -56,6 +59,7 @@ public:
     ExportHandler(std::unique_ptr<ExportFormat>&& handler,
                   const std::vector<std::string>& linear_tags,
                   const std::vector<std::string>& area_tags,
+                  geometry_types geometry_types,
                   bool show_errors,
                   bool stop_on_error);
 
