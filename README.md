@@ -108,6 +108,7 @@ Libosmium, Protozero, and Osmium, clone all of them into the same directory:
 
 Osmium uses CMake for its builds. On Linux and macOS you can build as follows:
 
+    cd osmium-tool
     mkdir build
     cd build
     cmake ..
