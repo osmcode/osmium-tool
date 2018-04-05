@@ -32,7 +32,7 @@ You also need the following libraries:
         http://utfcpp.sourceforge.net/
         Debian/Ubuntu: libutfcpp-dev
         Fedora/CentOS: utf8cpp-devel
-        openSUSE: utfcpp
+        openSUSE: utfcpp-devel
 
     RapidJSON (>= 1.1)
         This is included in the osmium-tool repository, so you usually do
@@ -44,13 +44,13 @@ You also need the following libraries:
         http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
         Fedora/CentOS: boost-devel
-        openSUSE: boost
+        openSUSE: boost_1_61-devel
 
     boost-crc
         http://www.boost.org/doc/libs/1_55_0/libs/crc/
         Debian/Ubuntu: libboost-dev
         Fedora/CentOS: boost-devel
-        openSUSE: boost
+        openSUSE: boost_1_61-devel
 
     bz2lib
         http://www.bzip.org/
@@ -108,6 +108,7 @@ Libosmium, Protozero, and Osmium, clone all of them into the same directory:
 
 Osmium uses CMake for its builds. On Linux and macOS you can build as follows:
 
+    cd osmium-tool
     mkdir build
     cd build
     cmake ..
