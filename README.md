@@ -32,7 +32,7 @@ You also need the following libraries:
         http://utfcpp.sourceforge.net/
         Debian/Ubuntu: libutfcpp-dev
         Fedora/CentOS: utf8cpp-devel
-        openSUSE: utfcpp
+        openSUSE: utfcpp-devel
 
     RapidJSON (>= 1.1)
         This is included in the osmium-tool repository, so you usually do
@@ -44,19 +44,19 @@ You also need the following libraries:
         http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
         Fedora/CentOS: boost-devel
-        openSUSE: boost
+        openSUSE: boost-devel
 
     boost-crc
         http://www.boost.org/doc/libs/1_55_0/libs/crc/
         Debian/Ubuntu: libboost-dev
         Fedora/CentOS: boost-devel
-        openSUSE: boost
+        openSUSE: boost-devel
 
     bz2lib
         http://www.bzip.org/
         Debian/Ubuntu: libbz2-dev
         Fedora/CentOS: bzip2-devel
-        openSUSE: bzip2
+        openSUSE: libbz2-devel
 
     zlib
         https://www.zlib.net/
@@ -67,8 +67,8 @@ You also need the following libraries:
     Expat
         https://libexpat.github.io/
         Debian/Ubuntu: libexpat1-dev
-        openSUSE: libexpat-devel
         Fedora/CentOS: expat-devel
+        openSUSE: libexpat-devel
 
     cmake
         https://cmake.org/
