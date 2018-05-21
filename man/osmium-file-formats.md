@@ -113,6 +113,6 @@ Here are some examples:
 # SEE ALSO
 
 * **osmium**(1)
-* [Osmium website](http://osmcode.org/osmium-tool/)
-* [OSM File Formats Manual](http://osmcode.org/file-formats-manual/)
+* [Osmium website](https://osmcode.org/osmium-tool/)
+* [OSM File Formats Manual](https://osmcode.org/file-formats-manual/)
 

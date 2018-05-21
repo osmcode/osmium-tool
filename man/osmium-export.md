@@ -49,7 +49,7 @@ files created with JOSM).
     node or areas that can't be assembled from multipolygon relations. This
     output is not suitable for automated use, there are other tools that can
     create very detailed errors reports that are better for that (see
-    http://osmcode.org/osm-area-tools/).
+    https://osmcode.org/osm-area-tools/).
 
 -E, --stop-on-error
 :   Usually geometry errors (due to missing node locations or broken polygons)
@@ -285,7 +285,7 @@ Use a config file and export into GeoJSON Text Sequence format:
 
 * **osmium**(1), **osmium-file-formats**(5), **osmium-index-types**(5),
   **osmium-add-node-locations-to-ways**(1)
-* [Osmium website](http://osmcode.org/osmium-tool/)
+* [Osmium website](https://osmcode.org/osmium-tool/)
 * [GeoJSON](http://geojson.org/)
 * [RFC7946](https://tools.ietf.org/html/rfc7946)
 * [RFC8142](https://tools.ietf.org/html/rfc8142)

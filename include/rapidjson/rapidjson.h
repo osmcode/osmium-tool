@@ -5,7 +5,7 @@
 // Licensed under the MIT License (the "License"); you may not use this file except
 // in compliance with the License. You may obtain a copy of the License at
 //
-// http://opensource.org/licenses/MIT
+// https://opensource.org/licenses/MIT
 //
 // Unless required by applicable law or agreed to in writing, software distributed 
 // under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
@@ -204,7 +204,7 @@
 
     Default detection implemented with reference to
     \li https://gcc.gnu.org/onlinedocs/gcc-4.6.0/cpp/Common-Predefined-Macros.html
-    \li http://www.boost.org/doc/libs/1_42_0/boost/detail/endian.hpp
+    \li https://www.boost.org/doc/libs/1_42_0/boost/detail/endian.hpp
 */
 #ifndef RAPIDJSON_ENDIAN
 // Detect with GCC 4.6's macro

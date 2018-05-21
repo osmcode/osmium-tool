@@ -57,6 +57,6 @@ memory was used for the index.
 # SEE ALSO
 
 * **osmium**(1), **osmium-add-locations-to-ways**(1), **osmium-export**(1)
-* [Osmium website](http://osmcode.org/osmium-tool/)
-* [Index types](http://osmcode.org/osmium-concepts/#indexes)
+* [Osmium website](https://osmcode.org/osmium-tool/)
+* [Index types](https://osmcode.org/osmium-concepts/#indexes)
 
