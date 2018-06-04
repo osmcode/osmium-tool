@@ -8,12 +8,28 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-* Support for negative IDs in export command.
-* Lots of tests with missing metadata (Thanks to Michael Reichert).
-* Add metadata options to the extended output of fileinfo command (Thanks to
+- Add area matching to `tags-filter`. The `tags-filter` command can now match
+  "areas" using the "a/" prefix. Areas in this sense are all closed ways with
+  4 or more nodes and all relations with tag "type=multipolygon" or
+  "type=boundary".
+- Add `--geometry-types` option to the `export` command allowing you to
+  restrict the geometry types written out.
+
+### Changed
+
+### Fixed
+
+
+## [1.8.0] - 2018-03-31
+
+### Added
+
+- Support for negative IDs in export command.
+- Lots of tests with missing metadata (Thanks to Michael Reichert).
+- Add metadata options to the extended output of fileinfo command (Thanks to
   Michael Reichert).
-* Add progress bars to many commands.
-* Add `--redact` option to the `apply-changes` command to redact (patch)
+- Add progress bars to many commands.
+- Add `--redact` option to the `apply-changes` command to redact (patch)
   history files. The change files can contain any version of any object which
   will replace that version of that object from the input. This allows changing
   the history! This mode is for special use only, for instance to remove
@@ -21,30 +37,31 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-* Update included `catch.hpp` to version 1.12.0.
-* Removed Makefile. Undocumented and possibly confusing way of building.
+- Needs libosmium 2.14.0.
+- Update included `catch.hpp` to version 1.12.1.
+- Removed Makefile. Undocumented and possibly confusing way of building.
   As documented, use CMake directly instead.
-* Allow bbox setting with any two opposing corners, instead of insisting on
+- Allow bbox setting with any two opposing corners, instead of insisting on
   bottom-left and top-right corner. This affects the changeset-filter and
   extract commands.
-* Allow GeoJSON input file to have a FeatureCollection instead of a Feature.
+- Allow GeoJSON input file to have a FeatureCollection instead of a Feature.
   Only the first feature of this collection is used.
 
 ### Fixed
 
-* Bug in the derive-changes command if it is used without `--keep-details`.
+- Bug in the derive-changes command if it is used without `--keep-details`.
   A deletion of any type of object was written as a deletion of a node.
   (Thanks to Michael Reichert.)
-* Fix assertion failure in diff command.
-* Throw exception instead of using assert to catch broken rings.
-* Disable progress bar if STDOUT isn't a tty.
-* Show error when there are no extracts specified in extract command.
-* Improve STDIN handling in extract command. STDIN can now be used with the
+- Fix assertion failure in diff command.
+- Throw exception instead of using assert to catch broken rings.
+- Disable progress bar if STDOUT isn't a tty.
+- Show error when there are no extracts specified in extract command.
+- Improve STDIN handling in extract command. STDIN can now be used with the
   `simple` strategy, with other strategies it will give you a nice error
   message.
-* Lots of code cleanups based on `clang-tidy` warnings making the code more
+- Lots of code cleanups based on `clang-tidy` warnings making the code more
   robust.
-* Only install manpage directories, not CMake files. (Thanks Bas Couwenberg.)
+- Only install manpage directories, not CMake files. (Thanks Bas Couwenberg.)
 
 ## [1.7.1] - 2017-08-25
 
@@ -368,7 +385,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...v1.8.0
 [1.7.1]: https://github.com/osmcode/osmium-tool/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/osmcode/osmium-tool/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/osmcode/osmium-tool/compare/v1.6.0...v1.6.1

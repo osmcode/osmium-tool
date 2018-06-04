@@ -70,7 +70,7 @@ po::options_description with_single_osm_input::add_single_input_options() {
     return options;
 }
 
-void with_single_osm_input::show_single_input_arguments(osmium::util::VerboseOutput& vout) {
+void with_single_osm_input::show_single_input_arguments(osmium::VerboseOutput& vout) {
     vout << "  input options:\n";
     vout << "    file name: " << m_input_filename << "\n";
     vout << "    file format: " << m_input_format << "\n";
@@ -119,7 +119,7 @@ po::options_description with_multiple_osm_inputs::add_multiple_inputs_options() 
     return options;
 }
 
-void with_multiple_osm_inputs::show_multiple_inputs_arguments(osmium::util::VerboseOutput& vout) {
+void with_multiple_osm_inputs::show_multiple_inputs_arguments(osmium::VerboseOutput& vout) {
     vout << "  input options:\n";
     vout << "    file names: \n";
     for (const auto& fn : m_input_filenames) {
@@ -190,7 +190,7 @@ po::options_description with_osm_output::add_output_options() {
     return options;
 }
 
-void with_osm_output::show_output_arguments(osmium::util::VerboseOutput& vout) {
+void with_osm_output::show_output_arguments(osmium::VerboseOutput& vout) {
     vout << "  output options:\n";
     vout << "    file name: " << m_output_filename << "\n";
     vout << "    file format: " << m_output_format << "\n";

@@ -114,7 +114,7 @@ void Command::setup_object_type_nwr(const boost::program_options::variables_map&
     }
 }
 
-void Command::show_object_types(osmium::util::VerboseOutput& vout) {
+void Command::show_object_types(osmium::VerboseOutput& vout) {
     vout << "    object types:";
     if (osm_entity_bits() & osmium::osm_entity_bits::node) {
         vout << " node";

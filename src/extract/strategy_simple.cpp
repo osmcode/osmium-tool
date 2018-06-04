@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace strategy_simple {
 
-    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::util::Options& options) {
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options) {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);
@@ -102,9 +102,9 @@ namespace strategy_simple {
 
     }; // class Pass1
 
-    void Strategy::run(osmium::util::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
+    void Strategy::run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
         vout << "Running 'simple' strategy in one pass...\n";
-        const std::size_t file_size = input_file.filename().empty() ? 0 : osmium::util::file_size(input_file.filename());
+        const std::size_t file_size = input_file.filename().empty() ? 0 : osmium::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size, display_progress};
 
         Pass1 pass1{*this};

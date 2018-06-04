@@ -70,7 +70,7 @@ std::size_t file_size_sum(const std::vector<osmium::io::File>& files) {
     std::size_t sum = 0;
 
     for (const auto& file : files) {
-        sum += osmium::util::file_size(file.filename());
+        sum += osmium::file_size(file.filename());
     }
 
     return sum;
@@ -90,8 +90,11 @@ osmium::osm_entity_bits::type get_types(const std::string& str) {
             case 'r':
                 entities |= osmium::osm_entity_bits::relation;
                 break;
+            case 'a':
+                entities |= osmium::osm_entity_bits::area;
+                break;
             default:
-                throw argument_error{std::string{"Unknown object type '"} + c + "' (allowed are 'n', 'w', and 'r')."};
+                throw argument_error{std::string{"Unknown object type '"} + c + "' (allowed are 'n', 'w', 'r', and 'a')."};
         }
     }
 

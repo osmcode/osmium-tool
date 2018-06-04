@@ -109,7 +109,7 @@ class RefCheckHandler : public osmium::handler::Handler {
     uint64_t m_missing_nodes_in_relations = 0;
     uint64_t m_missing_ways_in_relations = 0;
 
-    osmium::util::VerboseOutput& m_vout;
+    osmium::VerboseOutput& m_vout;
     osmium::ProgressBar& m_progress_bar;
     bool m_show_ids;
     bool m_check_relations;
@@ -124,7 +124,7 @@ class RefCheckHandler : public osmium::handler::Handler {
 
 public:
 
-    RefCheckHandler(osmium::util::VerboseOutput& vout, osmium::ProgressBar& progress_bar, bool show_ids, bool check_relations) :
+    RefCheckHandler(osmium::VerboseOutput& vout, osmium::ProgressBar& progress_bar, bool show_ids, bool check_relations) :
         m_vout(vout),
         m_progress_bar(progress_bar),
         m_show_ids(show_ids),

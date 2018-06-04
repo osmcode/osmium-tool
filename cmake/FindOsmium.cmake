@@ -324,7 +324,7 @@ if(MSVC)
     add_definitions(-DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-if(APPLE)
+if(APPLE AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 # following only available from cmake 2.8.12:
 #   add_compile_options(-stdlib=libc++)
 # so using this instead:

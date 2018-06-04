@@ -52,6 +52,8 @@ class CommandExport : public Command, public with_single_osm_input {
     std::string m_output_filename;
     std::string m_output_format;
 
+    geometry_types m_geometry_types;
+
     osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
     osmium::io::fsync m_fsync = osmium::io::fsync::no;
 

@@ -50,6 +50,7 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
     bool m_invert_match = false;
 
     osmium::nwr_array<osmium::TagsFilter> m_filters;
+    osmium::TagsFilter m_area_filters;
 
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
 
@@ -59,6 +60,11 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
 
     void add_nodes(const osmium::Way& way);
     void add_members(const osmium::Relation& relation);
+
+    bool matches_node(const osmium::Node& node) const noexcept;
+    bool matches_way(const osmium::Way& way) const noexcept;
+    bool matches_relation(const osmium::Relation& relation) const noexcept;
+    bool matches_object(const osmium::OSMObject& object) const noexcept;
 
     void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id);
     bool find_relations_in_relations();

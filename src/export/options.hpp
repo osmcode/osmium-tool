@@ -50,4 +50,22 @@ struct options_type {
     bool print_record_separator = true;
 };
 
+struct geometry_types {
+
+    bool point = true;
+    bool linestring = true;
+    bool polygon = true;
+
+    void clear() noexcept {
+        point = false;
+        linestring = false;
+        polygon = false;
+    }
+
+    bool empty() const noexcept {
+        return !point && !linestring && !polygon;
+    }
+
+}; // struct geometry_types
+
 #endif // EXPORT_OPTIONS_HPP
