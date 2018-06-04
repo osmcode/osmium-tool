@@ -66,5 +66,7 @@ check_changeset_filter(cfe-before01 "--before=2013-03-22T04:20:24Z" input-open.o
 check_changeset_filter(cfe-before02 "--before=2013-03-22T04:20:25Z" input-open.osm output-open.osm)
 check_changeset_filter(cfe-before03 "--before=2013-03-22T04:20:26Z" input-open.osm output-open.osm)
 
+check_changeset_filter(cf1-bbox01 "--bbox 120,-11,121,-10" input1.osm output1-first.osm)
+check_changeset_filter(cf1-bbox02 "--bbox 130,-31,131,-30" input1.osm output1-empty.osm)
 
 #-----------------------------------------------------------------------------
