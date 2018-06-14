@@ -2,7 +2,7 @@
 Checks: '*,-android-cloexec-*,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-no-array-decay,-hicpp-vararg,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion'
 #
 #  For a list of check options, see:
-#  http://clang.llvm.org/extra/clang-tidy/checks/list.html
+#  https://clang.llvm.org/extra/clang-tidy/checks/list.html
 #
 #  Disabled checks:
 #

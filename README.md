@@ -6,7 +6,7 @@ the Osmium library.
 
 Official web site: https://osmcode.org/osmium-tool/
 
-[![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.svg)](http://travis-ci.org/osmcode/osmium-tool)
+[![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.svg)](https://travis-ci.org/osmcode/osmium-tool)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/osmcode/osmium-tool?svg=true)](https://ci.appveyor.com/project/Mapbox/osmium-tool)
 
 ## Prerequisites
@@ -41,13 +41,13 @@ You also need the following libraries:
         Debian/Ubuntu: rapidjson-dev
 
     boost-program-options (>= 1.55)
-        http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
+        https://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
         Fedora/CentOS: boost-devel
         openSUSE: boost-devel
 
     boost-crc
-        http://www.boost.org/doc/libs/1_55_0/libs/crc/
+        https://www.boost.org/doc/libs/1_55_0/libs/crc/
         Debian/Ubuntu: libboost-dev
         Fedora/CentOS: boost-devel
         openSUSE: boost-devel
@@ -78,7 +78,7 @@ You also need the following libraries:
 
     Pandoc
         (Needed to build documentation, optional)
-        http://pandoc.org/
+        https://pandoc.org/
         Debian/Ubuntu: pandoc
         Fedora/CentOS: pandoc
         openSUSE: pandoc
