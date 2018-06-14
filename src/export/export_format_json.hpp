@@ -59,7 +59,6 @@ class ExportFormatJSON : public ExportFormat {
 
     void start_feature(const std::string& prefix, osmium::object_id_type id);
     void add_attributes(const osmium::OSMObject& object);
-    bool add_tags(const osmium::OSMObject& object);
     void finish_feature(const osmium::OSMObject& object);
 
 public:

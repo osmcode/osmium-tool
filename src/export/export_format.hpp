@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/fwd.hpp>
 #include <osmium/io/writer_options.hpp>
+#include <osmium/osm/object.hpp>
 
 #include <cstdint>
 
@@ -62,6 +63,50 @@ public:
     virtual void area(const osmium::Area&) = 0;
 
     virtual void close() = 0;
+
+    template <typename TFunc>
+    bool add_tags(const osmium::OSMObject& object, TFunc&& func) {
+        bool has_tags = false;
+
+        for (const auto& tag : object.tags()) {
+            if (options().tags_filter(tag)) {
+
+                // If the tag key looks like any of the attribute keys, drop
+                // the tag on the floor. This should be okay for most cases
+                // when the attribute name chosen is sufficiently special.
+                if (!options().type.empty() && tag.key() == options().type) {
+                    continue;
+                }
+                if (!options().id.empty() && tag.key() == options().id) {
+                    continue;
+                }
+                if (!options().version.empty() && tag.key() == options().version) {
+                    continue;
+                }
+                if (!options().changeset.empty() && tag.key() == options().changeset) {
+                    continue;
+                }
+                if (!options().uid.empty() && tag.key() == options().uid) {
+                    continue;
+                }
+                if (!options().user.empty() && tag.key() == options().user) {
+                    continue;
+                }
+                if (!options().timestamp.empty() && tag.key() == options().timestamp) {
+                    continue;
+                }
+                if (!options().way_nodes.empty() && tag.key() == options().way_nodes) {
+                    continue;
+                }
+
+                has_tags = true;
+
+                std::forward<TFunc>(func)(tag);
+            }
+        }
+
+        return has_tags;
+    }
 
 }; // class ExportFormat
 

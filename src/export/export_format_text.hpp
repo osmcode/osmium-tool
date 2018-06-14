@@ -43,7 +43,6 @@ class ExportFormatText : public ExportFormat {
 
     void start_feature(char type, osmium::object_id_type id);
     void add_attributes(const osmium::OSMObject& object);
-    bool add_tags(const osmium::OSMObject& object);
     void finish_feature(const osmium::OSMObject& object);
 
 public:

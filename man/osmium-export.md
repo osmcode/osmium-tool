@@ -207,6 +207,11 @@ output this attribute), `true` (output this attribute with the attribute name
 prefixed by the `@` sign) or any string, in which case the string will be used
 as the attribute name.
 
+Depending on your choice of values for the `attributes` objects, attributes
+can have the same name as tag keys. If this is the case, the conflicting tag
+is silently dropped. So if there is a tag "@id=foo" and you have set `id` to
+`true` in the `attributes` object, the tag will not show up in the output.
+
 Note that the `id` is not necessarily unique. Even the combination `type` and
 `id` is  not unique, because a way may end up as LineString and as Polygon
 on the file. See the `--add-unique-id` option for a unique ID.

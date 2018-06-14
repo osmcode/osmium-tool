@@ -128,28 +128,19 @@ void ExportFormatText::add_attributes(const osmium::OSMObject& object) {
     }
 }
 
-bool ExportFormatText::add_tags(const osmium::OSMObject& object) {
-    bool has_tags = false;
-
-    for (const auto& tag : object.tags()) {
-        if (options().tags_filter(tag)) {
-            has_tags = true;
-            osmium::io::detail::append_utf8_encoded_string(m_buffer, tag.key());
-            m_buffer.append(1, '=');
-            osmium::io::detail::append_utf8_encoded_string(m_buffer, tag.value());
-            m_buffer.append(1, ',');
-        }
-    }
-
-    return has_tags;
-}
-
 void ExportFormatText::finish_feature(const osmium::OSMObject& object) {
     m_buffer.append(1, ' ');
 
     add_attributes(object);
 
-    if (add_tags(object) || options().keep_untagged) {
+    const bool has_tags = add_tags(object, [&](const osmium::Tag& tag) {
+        osmium::io::detail::append_utf8_encoded_string(m_buffer, tag.key());
+        m_buffer.append(1, '=');
+        osmium::io::detail::append_utf8_encoded_string(m_buffer, tag.value());
+        m_buffer.append(1, ',');
+    });
+
+    if (has_tags || options().keep_untagged) {
         if (m_buffer.back() == ',') {
             m_buffer.back() = '\n';
         } else {

@@ -139,27 +139,18 @@ void ExportFormatJSON::add_attributes(const osmium::OSMObject& object) {
     }
 }
 
-bool ExportFormatJSON::add_tags(const osmium::OSMObject& object) {
-    bool has_tags = false;
-
-    for (const auto& tag : object.tags()) {
-        if (options().tags_filter(tag)) {
-            has_tags = true;
-            m_writer.String(tag.key());
-            m_writer.String(tag.value());
-        }
-    }
-
-    return has_tags;
-}
-
 void ExportFormatJSON::finish_feature(const osmium::OSMObject& object) {
     m_writer.Key("properties");
     m_writer.StartObject(); // start properties
 
     add_attributes(object);
 
-    if (add_tags(object) || options().keep_untagged) {
+    const bool has_tags = add_tags(object, [&](const osmium::Tag& tag) {
+        m_writer.String(tag.key());
+        m_writer.String(tag.value());
+    });
+
+    if (has_tags || options().keep_untagged) {
         m_writer.EndObject(); // end properties
         m_writer.EndObject(); // end feature
 
