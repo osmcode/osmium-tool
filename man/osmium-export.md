@@ -44,6 +44,11 @@ files created with JOSM).
 -c, --config=FILE
 :   Read configuration from specified file.
 
+-C, --print-default-config
+:   Print the default config to STDOUT. Useful if you want to change it and
+    not write the whole thing manually. If you use this options all other
+    options are ignored.
+
 -e, --show-errors
 :   Output any geometry errors on STDERR. This includes ways with a single
     node or areas that can't be assembled from multipolygon relations. This
@@ -68,7 +73,8 @@ files created with JOSM).
 
 -I, --show-index-types
 :   Shows a list of available index types. For details see the
-    **osmium-index-types**(5) man page.
+    **osmium-index-types**(5) man page. If you use this options all other
+    options are ignored.
 
 -n, --keep-untagged
 :   If this is set, features without any tags will be in the exported data.

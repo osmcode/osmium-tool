@@ -208,8 +208,10 @@ _osmium-export() {
         '(-E)--stop-on-error[stop on first geometry error]' \
         '(--index-type -I --show-index-types)-i[set index type]:index types:_osmium_export_index_types' \
         '(-i -I --show-index-types)--index-type[set index type]:index types:_osmium_export_index_types' \
-        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --show-index-types)-I[show a list of available index types]' \
-        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u -I)--show-index-types[show a list of available index types]' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --print-default-config -C --show-index-types)-I[show a list of available index types]' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --print-default-config -C -I)--show-index-types[show a list of available index types]' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --show-index-types -I)-C[print default config on STDOUT]' \
+        '(--help -h --verbose -v --input-format -F --fsync --output -o --overwrite -O --output-format -f --config -c --show-errors -e --stop-on-error -E --index-type -i --keep-untagged -n --omit-rs -r --add-unique-id -u --show-index-types -I)--print-default-config[print default config on STDOUT]' \
         '(--keep-untagged)-n[keep untagged features]' \
         '(-n)--keep-untagged[keep untagged features]' \
         '(--omit-rs)-r[omit record separator when using geojsonseq format]' \

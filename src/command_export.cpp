@@ -176,6 +176,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     ("output,o", po::value<std::string>(), "Output file (default: STDOUT)")
     ("output-format,f", po::value<std::string>(), "Output format (default depends on output file suffix)")
     ("overwrite,O", "Allow existing output file to be overwritten")
+    ("print-default-config,C", "Print default config on STDOUT")
     ("show-errors,e", "Output any geometry errors on STDOUT")
     ("stop-on-error,E", "Stop on the first error encountered")
     ("show-index-types,I", "Show available index types")
@@ -202,6 +203,27 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     po::variables_map vm;
     po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
+
+    if (vm.count("print-default-config")) {
+        std::cout << R"({
+    "attributes": {
+        "type":      false,
+        "id":        false,
+        "version":   false,
+        "changeset": false,
+        "timestamp": false,
+        "uid":       false,
+        "user":      false,
+        "way_nodes": false
+    },
+    "linear_tags":  [],
+    "area_tags":    [],
+    "exclude_tags": [],
+    "include_tags": []
+}
+)";
+        return false;
+    }
 
     if (vm.count("show-index-types")) {
         for (const auto& map_type : map_factory.map_types()) {
