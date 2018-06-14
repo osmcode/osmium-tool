@@ -4,7 +4,7 @@
 A multipurpose command line tool for working with OpenStreetMap data based on
 the Osmium library.
 
-Official web site: http://osmcode.org/osmium-tool/
+Official web site: https://osmcode.org/osmium-tool/
 
 [![Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.svg)](http://travis-ci.org/osmcode/osmium-tool)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/osmcode/osmium-tool?svg=true)](https://ci.appveyor.com/project/Mapbox/osmium-tool)
@@ -17,7 +17,7 @@ later are known to work. It also works on modern Visual Studio C++ compilers.
 You also need the following libraries:
 
     Libosmium (>= 2.14.0)
-        http://osmcode.org/libosmium
+        https://osmcode.org/libosmium
         Debian/Ubuntu: libosmium2-dev
         Fedora/CentOS: libosmium-devel
 
@@ -130,8 +130,8 @@ compile all the prerequisites yourself.
 
 ## Documentation
 
-See the [Osmium Tool website](http://osmcode.org/osmium-tool/)
-and [Osmium Tool Manual](http://osmcode.org/osmium-tool/manual.html).
+See the [Osmium Tool website](https://osmcode.org/osmium-tool/)
+and [Osmium Tool Manual](https://osmcode.org/osmium-tool/manual.html).
 
 There are man pages in the 'man' directory. To build them you need 'pandoc'.
 If the `pandoc` command was found during the CMake config step, the manpages

@@ -141,5 +141,5 @@ killer" to find out more about this.
   **osmium-tags-filter**(1),
   **osmium-time-filter**(1),
   **osmium-file-formats**(5)
-* [Osmium website](http://osmcode.org/osmium-tool/)
+* [Osmium website](https://osmcode.org/osmium-tool/)
 
