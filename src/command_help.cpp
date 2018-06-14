@@ -46,7 +46,7 @@ static void show_help(const std::string& topic, const std::string& info) {
 #endif
     // show info string and link on Windows systems
     std::cout << info << "\n";
-    std::cout << "You'll find more documentation at http://osmcode.org/osmium-tool/\n";
+    std::cout << "You'll find more documentation at https://osmcode.org/osmium-tool/\n";
 }
 
 bool CommandHelp::run() {
