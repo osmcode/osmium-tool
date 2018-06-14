@@ -69,5 +69,5 @@ just a single change file:
 # SEE ALSO
 
 * **osmium**(1), **osmium-file-formats**(5), **osmium-merge**(1)
-* [Osmium website](http://osmcode.org/osmium-tool/)
+* [Osmium website](https://osmcode.org/osmium-tool/)
 

@@ -6,7 +6,7 @@
  *  Copyright (c) 2012 Two Blue Cubes Ltd. All rights reserved.
  *
  *  Distributed under the Boost Software License, Version 1.0. (See accompanying
- *  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ *  file LICENSE_1_0.txt or copy at https://www.boost.org/LICENSE_1_0.txt)
  */
 #ifndef TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
 #define TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
@@ -155,7 +155,7 @@
 #ifdef __CYGWIN__
 
 // Required for some versions of Cygwin to declare gettimeofday
-// see: http://stackoverflow.com/questions/36901803/gettimeofday-not-declared-in-this-scope-cygwin
+// see: https://stackoverflow.com/questions/36901803/gettimeofday-not-declared-in-this-scope-cygwin
 #   define _BSD_SOURCE
 
 #endif // __CYGWIN__
@@ -2124,7 +2124,7 @@ namespace Catch{
 #ifdef CATCH_PLATFORM_MAC
 
     // The following code snippet based on:
-    // http://cocoawithlove.com/2008/03/break-into-debugger.html
+    // https://cocoawithlove.com/2008/03/break-into-debugger.html
     #if defined(__ppc64__) || defined(__ppc__)
         #define CATCH_TRAP() \
                 __asm__("li r0, 20\nsc\nnop\nli r0, 37\nli r4, 2\nsc\nnop\n" \
@@ -8001,7 +8001,7 @@ namespace {
 
     // use POSIX/ ANSI console terminal codes
     // Thanks to Adam Strzelecki for original contribution
-    // (http://github.com/nanoant)
+    // (https://github.com/nanoant)
     // https://github.com/philsquared/Catch/pull/131
     class PosixColourImpl : public IColourImpl {
     public:
@@ -8863,7 +8863,7 @@ namespace Catch {
     namespace Catch{
 
         // The following function is taken directly from the following technical note:
-        // http://developer.apple.com/library/mac/#qa/qa2004/qa1361.html
+        // https://developer.apple.com/library/mac/#qa/qa2004/qa1361.html
 
         // Returns true if the current process is being debugged (either
         // running under the debugger or has a debugger attached post facto).
@@ -9994,7 +9994,7 @@ namespace Catch {
         void encodeTo( std::ostream& os ) const {
 
             // Apostrophe escaping not necessary if we always use " to write attributes
-            // (see: http://www.w3.org/TR/xml/#syntax)
+            // (see: https://www.w3.org/TR/xml/#syntax)
 
             for( std::size_t i = 0; i < m_str.size(); ++ i ) {
                 char c = m_str[i];
@@ -10003,7 +10003,7 @@ namespace Catch {
                     case '&':   os << "&amp;"; break;
 
                     case '>':
-                        // See: http://www.w3.org/TR/xml/#syntax
+                        // See: https://www.w3.org/TR/xml/#syntax
                         if( i > 2 && m_str[i-1] == ']' && m_str[i-2] == ']' )
                             os << "&gt;";
                         else
@@ -10021,7 +10021,7 @@ namespace Catch {
                         // Escape control chars - based on contribution by @espenalb in PR #465 and
                         // by @mrpi PR #588
                         if ( ( c >= 0 && c < '\x09' ) || ( c > '\x0D' && c < '\x20') || c=='\x7F' ) {
-                            // see http://stackoverflow.com/questions/404107/why-are-control-characters-illegal-in-xml-1-0
+                            // see https://stackoverflow.com/questions/404107/why-are-control-characters-illegal-in-xml-1-0
                             os << "\\x" << std::uppercase << std::hex << std::setfill('0') << std::setw(2)
                                << static_cast<int>( c );
                         }
