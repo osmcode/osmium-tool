@@ -132,7 +132,7 @@ as the "generator".
             "output": "hamburg.osm.pbf",
             "output_format": "pbf",
             "description": "optional description",
-            "box": ...
+            "bbox": ...
         },
         {
             "output": "berlin.osm.pbf",
@@ -151,7 +151,7 @@ as the "generator".
 
 There are several formats for specifying the regions:
 
-**box**:
+**bbox**:
 
 A bounding box in one of two formats. The first is a simple array with
 four real numbers, the first two specifying the coordinates of an arbitrary
