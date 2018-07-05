@@ -61,7 +61,7 @@ files created with JOSM).
     are ignored and the features are omitted from the output. If this option
     is set, any error will immediately stop the program.
 
---geometry-type=TYPES
+--geometry-types=TYPES
 :   Specify the geometry types that should be written out. Usually all created
     geometries (points, linestrings, and (multi)polygons) are written to the
     output, but you can restrict the types using this option. TYPES is a
