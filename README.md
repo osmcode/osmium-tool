@@ -46,12 +46,6 @@ You also need the following libraries:
         Fedora/CentOS: boost-devel
         openSUSE: boost-devel
 
-    boost-crc
-        https://www.boost.org/doc/libs/1_55_0/libs/crc/
-        Debian/Ubuntu: libboost-dev
-        Fedora/CentOS: boost-devel
-        openSUSE: boost-devel
-
     bz2lib
         http://www.bzip.org/
         Debian/Ubuntu: libbz2-dev

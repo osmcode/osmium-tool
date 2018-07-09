@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/crc.hpp>
+#include <osmium/osm/crc_zlib.hpp>
 #include <osmium/osm/metadata_options.hpp>
 #include <osmium/osm/object_comparisons.hpp>
 #include <osmium/util/file.hpp>
@@ -45,7 +46,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <rapidjson/stringbuffer.h>
 #pragma GCC diagnostic pop
 
-#include <boost/crc.hpp>
 #include <boost/program_options.hpp>
 
 #include <algorithm>
@@ -89,7 +89,7 @@ struct InfoHandler : public osmium::handler::Handler {
     osmium::min_op<osmium::Timestamp> first_timestamp;
     osmium::max_op<osmium::Timestamp> last_timestamp;
 
-    osmium::CRC<boost::crc_32_type> crc32;
+    osmium::CRC<osmium::CRC_zlib> crc32;
 
     bool ordered = true;
     bool multiple_versions = false;

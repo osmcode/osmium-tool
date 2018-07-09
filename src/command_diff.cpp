@@ -35,10 +35,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/memory/item.hpp>
 #include <osmium/osm.hpp>
 #include <osmium/osm/crc.hpp>
+#include <osmium/osm/crc_zlib.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include <boost/crc.hpp>
 #include <boost/program_options.hpp>
 
 #include <cstdint>
@@ -293,8 +293,8 @@ bool CommandDiff::run() {
             }
             ++it1;
         } else { /* *it1 == *it2 */
-            osmium::CRC<boost::crc_32_type> crc1;
-            osmium::CRC<boost::crc_32_type> crc2;
+            osmium::CRC<osmium::CRC_zlib> crc1;
+            osmium::CRC<osmium::CRC_zlib> crc2;
             switch (it1->type()) {
                 case osmium::item_type::node:
                     crc1.update(static_cast<const osmium::Node&>(*it1));
