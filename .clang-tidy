@@ -1,5 +1,5 @@
 ---
-Checks: '*,-android-cloexec-*,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-no-array-decay,-hicpp-vararg,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion'
+Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-no-array-decay,-hicpp-vararg,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
@@ -8,6 +8,10 @@ Checks: '*,-android-cloexec-*,-cppcoreguidelines-owning-memory,-cppcoreguideline
 #
 #  android-cloexec-*
 #    O_CLOEXEC isn't available on Windows making this non-portable.
+#
+#  bugprone-use-after-move
+#    Generates too many false positives. A bug report has been sent:
+#    https://bugs.llvm.org/show_bug.cgi?id=36516
 #
 #  cppcoreguidelines-owning-memory
 #    Don't want to add dependency on gsl library.
