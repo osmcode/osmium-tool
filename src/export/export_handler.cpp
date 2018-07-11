@@ -112,7 +112,8 @@ void ExportHandler::way(const osmium::Way& way) {
         return;
     }
 
-    if (!way.is_closed() || is_linear(way)) {
+    if ((way.tags().empty() && m_handler->options().keep_untagged)
+        || (!way.is_closed() || is_linear(way))) {
         try {
             m_handler->way(way);
         } catch (const osmium::geometry_error& e) {
