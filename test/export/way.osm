@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" upload="false" generator="testdata">
+  <node id="10" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="1" lon="1"/>
+  <node id="11" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="2" lon="1"/>
+  <node id="12" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="2" lon="2"/>
+  <node id="13" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="1" lon="2"/>
+
+  <!-- non-closed way without tags -> linestring -->
+  <way id="20" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+  </way>
+
+  <!-- non-closed way with tags -> linestring -->
+  <way id="21" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- non-closed way with area=no -> linestring -->
+  <way id="22" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="no"/>
+  </way>
+
+  <!-- non-closed way with invalid area tag -> linestring -->
+  <way id="23" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="something"/>
+  </way>
+
+  <!-- non-closed way with area=yes -> no output, because it can't build an area -->
+  <way id="24" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="yes"/>
+  </way>
+
+  <!-- non-closed way with area=no and linestring tag -> linestring -->
+  <way id="25" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="no"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- non-closed way with invalid area tag and linestring tag -> linestring -->
+  <way id="26" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="something"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- non-closed way with area=yes and linestring tag -> no output, because it can't build an area -->
+  <way id="27" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="yes"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- non-closed way with area=no and polygon tag -> linestring -->
+  <way id="28" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="no"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+  <!-- non-closed way with invalid area tag and polygon tag -> linestring -->
+  <way id="29" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="something"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+  <!-- non-closed way with area=yes and polygon tag -> no output, because it can't build an area -->
+  <way id="30" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="area" v="yes"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+  <!-- closed way without tags -->
+  <way id="40" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+  </way>
+
+  <!-- closed way with barrier tag -->
+  <way id="41" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- closed way with landuse tag -->
+  <way id="42" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+  <!-- closed way with barrier and landuse tag -->
+  <way id="43" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="barrier" v="fence"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+  <!-- closed way with area=no -> linestring -->
+  <way id="44" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="no"/>
+  </way>
+
+  <!-- closed way with invalid area tag -->
+  <way id="45" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="something"/>
+  </way>
+
+  <!-- closed way with area=yes -> multipolygon -->
+  <way id="46" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="yes"/>
+  </way>
+
+  <!-- closed way with area=no and linestring tag -> linestring -->
+  <way id="47" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="no"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- closed way with invalid area tag and linestring tag -->
+  <way id="48" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="something"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- closed way with area=yes and linestring tag -> multipolygon -->
+  <way id="49" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="yes"/>
+    <tag k="barrier" v="fence"/>
+  </way>
+
+  <!-- closed way with area=no and polygon tag -> linestring -->
+  <way id="50" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="no"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+  <!-- closed way with invalid area tag and polygon tag -->
+  <way id="51" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="something"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+  <!-- closed way with area=yes and polygon tag -> multipolygon -->
+  <way id="52" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+    <tag k="area" v="yes"/>
+    <tag k="landuse" v="grass"/>
+  </way>
+
+</osm>

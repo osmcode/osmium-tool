@@ -24,3 +24,16 @@ check_export(error-area "-f geojson -E" input-incomplete-relation.osm none.geojs
 set_tests_properties(export-error-area PROPERTIES WILL_FAIL true)
 
 #-----------------------------------------------------------------------------
+
+check_export(c-empty-empty-n "-f text --keep-untagged -c export/config-empty-empty.json" way.osm way-all-n.txt)
+check_export(c-empty-empty   "-f text                 -c export/config-empty-empty.json" way.osm way-all.txt)
+
+check_export(c-tag-empty  "-f text -c export/config-tag-empty.json" way.osm way-tag-empty.txt)
+check_export(c-empty-tag  "-f text -c export/config-empty-tag.json" way.osm way-empty-tag.txt)
+check_export(c-tag-tag    "-f text -c export/config-tag-tag.json"   way.osm way-tag-tag.txt)
+
+check_export(c-tagx-empty "-f text -c export/config-tagx-empty.json" way.osm way-tagx-empty.txt)
+check_export(c-empty-tagx "-f text -c export/config-empty-tagx.json" way.osm way-empty-tagx.txt)
+check_export(c-tagx-tagx  "-f text -c export/config-tagx-tagx.json"  way.osm way-tagx-tagx.txt)
+
+#-----------------------------------------------------------------------------

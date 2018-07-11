@@ -1,0 +1,34 @@
+POINT(1 1) @id=10
+POINT(1 2) @id=11
+POINT(2 2) @id=12
+POINT(2 1) @id=13
+LINESTRING(1 1,1 2,2 2) @id=20
+LINESTRING(1 1,1 2,2 2) @id=21,barrier=fence
+LINESTRING(1 1,1 2,2 2) @id=22,area=no
+LINESTRING(1 1,1 2,2 2) @id=23,area=something
+LINESTRING(1 1,1 2,2 2) @id=24,area=yes
+LINESTRING(1 1,1 2,2 2) @id=25,area=no,barrier=fence
+LINESTRING(1 1,1 2,2 2) @id=26,area=something,barrier=fence
+LINESTRING(1 1,1 2,2 2) @id=27,area=yes,barrier=fence
+LINESTRING(1 1,1 2,2 2) @id=28,area=no,landuse=grass
+LINESTRING(1 1,1 2,2 2) @id=29,area=something,landuse=grass
+LINESTRING(1 1,1 2,2 2) @id=30,area=yes,landuse=grass
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=40
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=41,barrier=fence
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=42,landuse=grass
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=43,barrier=fence,landuse=grass
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=44,area=no
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=45,area=something
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=47,area=no,barrier=fence
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=48,area=something,barrier=fence
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=50,area=no,landuse=grass
+LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=51,area=something,landuse=grass
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=41,barrier=fence
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=42,landuse=grass
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=43,barrier=fence,landuse=grass
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=45,area=something
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=46,area=yes
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=48,area=something,barrier=fence
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=49,area=yes,barrier=fence
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=51,area=something,landuse=grass
+MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=52,area=yes,landuse=grass
