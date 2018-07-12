@@ -36,43 +36,44 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-static bool check_filter(const osmium::TagList& tags, const char* area_tag_value, const osmium::TagsFilter& filter) noexcept {
+static bool check_conditions(const osmium::TagList& tags, const Ruleset& r1, const Ruleset& r2, bool is_no) noexcept {
     const char* area_tag = tags.get_value_by_key("area");
-
     if (area_tag) {
-        // has "area" tag and check that it does NOT have the area_tag_value
-        return std::strcmp(area_tag, area_tag_value) != 0;
+        if (std::strcmp(area_tag, "no") == 0) {
+            return is_no;
+        }
+        if (std::strcmp(area_tag, "yes") == 0) {
+            return !is_no;
+        }
     }
 
-    return osmium::tags::match_any_of(tags, filter);
+    if (r1.rule_type() == tags_filter_rule_type::other) {
+        return osmium::tags::match_none_of(tags, r2.filter());
+    }
+
+    return osmium::tags::match_any_of(tags, r1.filter());
 }
 
-bool ExportHandler::is_linear(const osmium::Way& way) const noexcept {
-    return check_filter(way.tags(), "yes", m_linear_filter);
+bool ExportHandler::is_linear(const osmium::TagList& tags) const noexcept {
+    return check_conditions(tags, m_linear_ruleset, m_area_ruleset, true);
 }
 
-bool ExportHandler::is_area(const osmium::Area& area) const noexcept {
-    return check_filter(area.tags(), "no", m_area_filter);
+bool ExportHandler::is_area(const osmium::TagList& tags) const noexcept {
+    return check_conditions(tags, m_area_ruleset, m_linear_ruleset, false);
 }
 
 ExportHandler::ExportHandler(std::unique_ptr<ExportFormat>&& handler,
-                             const std::vector<std::string>& linear_tags,
-                             const std::vector<std::string>& area_tags,
+                             const Ruleset& linear_ruleset,
+                             const Ruleset& area_ruleset,
                              geometry_types geometry_types,
                              bool show_errors,
                              bool stop_on_error) :
     m_handler(std::move(handler)),
-    m_linear_filter(true),
-    m_area_filter(true),
+    m_linear_ruleset(linear_ruleset),
+    m_area_ruleset(area_ruleset),
     m_geometry_types(geometry_types),
     m_show_errors(show_errors),
     m_stop_on_error(stop_on_error) {
-    if (!linear_tags.empty()) {
-        initialize_tags_filter(m_linear_filter, false, linear_tags);
-    }
-    if (!area_tags.empty()) {
-        initialize_tags_filter(m_area_filter, false, area_tags);
-    }
 }
 
 void ExportHandler::show_error(const std::runtime_error& error) {
@@ -116,7 +117,7 @@ void ExportHandler::way(const osmium::Way& way) {
     }
 
     if ((way.tags().empty() && m_handler->options().keep_untagged)
-        || (!way.is_closed() || is_linear(way))) {
+        || !way.is_closed() || is_linear(way.tags())) {
         try {
             m_handler->way(way);
         } catch (const osmium::geometry_error& e) {
@@ -132,7 +133,7 @@ void ExportHandler::area(const osmium::Area& area) {
         return;
     }
 
-    if (!area.from_way() || is_area(area)) {
+    if (!area.from_way() || is_area(area.tags())) {
         try {
             m_handler->area(area);
         } catch (const osmium::geometry_error& e) {

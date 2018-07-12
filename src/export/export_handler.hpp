@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "export_format.hpp"
+#include "ruleset.hpp"
 
 #include <osmium/fwd.hpp>
 #include <osmium/handler.hpp>
@@ -39,8 +40,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 class ExportHandler : public osmium::handler::Handler {
 
     std::unique_ptr<ExportFormat> m_handler;
-    osmium::TagsFilter m_linear_filter;
-    osmium::TagsFilter m_area_filter;
+    const Ruleset& m_linear_ruleset;
+    const Ruleset& m_area_ruleset;
     uint64_t m_error_count = 0;
 
     geometry_types m_geometry_types;
@@ -48,17 +49,17 @@ class ExportHandler : public osmium::handler::Handler {
     bool m_show_errors;
     bool m_stop_on_error;
 
-    bool is_linear(const osmium::Way& way) const noexcept;
+    bool is_linear(const osmium::TagList& tags) const noexcept;
 
-    bool is_area(const osmium::Area& area) const noexcept;
+    bool is_area(const osmium::TagList& tags) const noexcept;
 
     void show_error(const std::runtime_error& error);
 
 public:
 
     ExportHandler(std::unique_ptr<ExportFormat>&& handler,
-                  const std::vector<std::string>& linear_tags,
-                  const std::vector<std::string>& area_tags,
+                  const Ruleset& linear_ruleset,
+                  const Ruleset& area_ruleset,
                   geometry_types geometry_types,
                   bool show_errors,
                   bool stop_on_error);

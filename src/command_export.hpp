@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp" // IWYU pragma: export
 #include "export/options.hpp"
+#include "export/ruleset.hpp"
 
 #include <osmium/handler/node_locations_for_ways.hpp>
 #include <osmium/index/map/all.hpp>
@@ -42,8 +43,9 @@ class CommandExport : public Command, public with_single_osm_input {
 
     options_type m_options{};
 
-    std::vector<std::string> m_linear_tags;
-    std::vector<std::string> m_area_tags;
+    Ruleset m_linear_ruleset;
+    Ruleset m_area_ruleset;
+
     std::vector<std::string> m_include_tags;
     std::vector<std::string> m_exclude_tags;
 

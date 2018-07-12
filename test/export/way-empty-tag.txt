@@ -19,9 +19,7 @@ LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=50,area=no,landuse=grass
 LINESTRING(1 1,1 2,2 2,2 1,1 1) @id=51,area=something,landuse=grass
 MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=42,landuse=grass
 MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=43,barrier=fence,landuse=grass
-MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=45,area=something
 MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=46,area=yes
-MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=48,area=something,barrier=fence
 MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=49,area=yes,barrier=fence
 MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=51,area=something,landuse=grass
 MULTIPOLYGON(((1 1,2 1,2 2,1 2,1 1))) @id=52,area=yes,landuse=grass

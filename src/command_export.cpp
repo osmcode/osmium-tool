@@ -88,6 +88,51 @@ void CommandExport::parse_options(const rapidjson::Value& attributes) {
     m_options.way_nodes = get_attr_string(attributes, "way_nodes");
 }
 
+static Ruleset parse_tags_ruleset(const rapidjson::Value& object, const char* key) {
+    Ruleset ruleset;
+
+    const auto json = object.FindMember(key);
+    if (json == object.MemberEnd() || json->value.IsNull()) {
+        // When this is not set, the default is "other". This is later
+        // changed to "any" if both linear_tags and area_tags are missing.
+        ruleset.set_rule_type(tags_filter_rule_type::other);
+        return ruleset;
+    }
+
+    if (json->value.IsFalse()) {
+        ruleset.set_rule_type(tags_filter_rule_type::none);
+        return ruleset;
+    }
+
+    if (json->value.IsTrue()) {
+        ruleset.set_rule_type(tags_filter_rule_type::any);
+        return ruleset;
+    }
+
+    if (!json->value.IsArray()) {
+        throw config_error{std::string{"'"} + key + "' member in top-level object must be false, true, null, or array."};
+    }
+
+    if (json->value.GetArray().Empty()) {
+        ruleset.set_rule_type(tags_filter_rule_type::any);
+        return ruleset;
+    }
+
+    ruleset.set_rule_type(tags_filter_rule_type::list);
+
+    for (const auto& value : json->value.GetArray()) {
+        if (!value.IsString()) {
+            throw config_error{std::string{"Array elements in '"} + key + "' must be strings."};
+        }
+
+        if (value.GetString()[0] != '\0') {
+            ruleset.add_rule(value.GetString());
+        }
+    }
+
+    return ruleset;
+}
+
 static bool parse_string_array(const rapidjson::Value& object, const char* key, std::vector<std::string>& result) {
     const auto json = object.FindMember(key);
     if (json == object.MemberEnd()) {
@@ -133,8 +178,14 @@ void CommandExport::parse_config_file() {
         parse_options(json_attr->value);
     }
 
-    parse_string_array(doc, "linear_tags", m_linear_tags);
-    parse_string_array(doc, "area_tags", m_area_tags);
+    m_linear_ruleset = parse_tags_ruleset(doc, "linear_tags");
+    m_area_ruleset   = parse_tags_ruleset(doc, "area_tags");
+
+    if (m_linear_ruleset.rule_type() == tags_filter_rule_type::other &&
+        m_area_ruleset.rule_type() == tags_filter_rule_type::other) {
+        m_linear_ruleset.set_rule_type(tags_filter_rule_type::any);
+        m_area_ruleset.set_rule_type(tags_filter_rule_type::any);
+    }
 
     parse_string_array(doc, "include_tags", m_include_tags);
     parse_string_array(doc, "exclude_tags", m_exclude_tags);
@@ -216,8 +267,8 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         "user":      false,
         "way_nodes": false
     },
-    "linear_tags":  [],
-    "area_tags":    [],
+    "linear_tags":  true,
+    "area_tags":    true,
     "exclude_tags": [],
     "include_tags": []
 }
@@ -355,6 +406,24 @@ static void print_taglist(osmium::VerboseOutput& vout, const std::vector<std::st
     }
 }
 
+static void print_ruleset(osmium::VerboseOutput& vout, const Ruleset& ruleset) {
+    switch (ruleset.rule_type()) {
+        case tags_filter_rule_type::none:
+            vout << "none\n";
+            break;
+        case tags_filter_rule_type::any:
+            vout << "any\n";
+            break;
+        case tags_filter_rule_type::list:
+            vout << "one of the following:\n";
+            print_taglist(vout, ruleset.tags());
+            break;
+        case tags_filter_rule_type::other:
+            vout << "if area tags don't match\n";
+            break;
+    }
+}
+
 static const char* print_unique_id_type(unique_id_type unique_id) {
     switch (unique_id) {
         case unique_id_type::counter:
@@ -391,10 +460,10 @@ void CommandExport::show_arguments() {
     m_vout << "    user:      " << (m_options.user.empty()      ? "(omitted)" : m_options.user)      << '\n';
     m_vout << "    way_nodes: " << (m_options.way_nodes.empty() ? "(omitted)" : m_options.way_nodes) << '\n';
 
-    m_vout << "  linear tags:\n";
-    print_taglist(m_vout, m_linear_tags);
-    m_vout << "  area tags:\n";
-    print_taglist(m_vout, m_area_tags);
+    m_vout << "  linear tags: ";
+    print_ruleset(m_vout, m_linear_ruleset);
+    m_vout << "  area tags:   ";
+    print_ruleset(m_vout, m_area_ruleset);
 
     if (!m_include_tags.empty()) {
         m_vout << "  include only these tags:\n";
@@ -436,8 +505,11 @@ bool CommandExport::run() {
 
     m_vout << "Second pass (of two) through input file...\n";
 
+    m_linear_ruleset.init_filter();
+    m_area_ruleset.init_filter();
+
     auto handler = create_handler(m_output_format, m_output_filename, m_output_overwrite, m_fsync, m_options);
-    ExportHandler export_handler{std::move(handler), m_linear_tags, m_area_tags, m_geometry_types, m_show_errors, m_stop_on_error};
+    ExportHandler export_handler{std::move(handler), m_linear_ruleset, m_area_ruleset, m_geometry_types, m_show_errors, m_stop_on_error};
     osmium::handler::CheckOrder check_order_handler;
 
     if (m_index_type_name == "none") {

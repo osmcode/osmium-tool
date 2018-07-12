@@ -182,7 +182,7 @@ osmium::TagMatcher get_tag_matcher(const std::string& expression) {
     return osmium::TagMatcher{get_string_matcher(key), get_string_matcher(value), invert};
 }
 
-void initialize_tags_filter(osmium::TagsFilter& tags_filter, bool default_result, const std::vector<std::string>& strings) {
+void initialize_tags_filter(osmium::TagsFilter& tags_filter, const bool default_result, const std::vector<std::string>& strings) {
     tags_filter.set_default_result(default_result);
     for (const auto& str : strings) {
         assert(!str.empty());

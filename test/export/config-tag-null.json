@@ -1,0 +1,15 @@
+{
+    "attributes": {
+        "type":      false,
+        "id":        true,
+        "version":   false,
+        "changeset": false,
+        "timestamp": false,
+        "uid":       false,
+        "user":      false,
+        "way_nodes": false
+    },
+    "linear_tags":  ["barrier"],
+    "exclude_tags": [],
+    "include_tags": []
+}
