@@ -116,15 +116,19 @@ void ExportHandler::way(const osmium::Way& way) {
         return;
     }
 
-    if ((way.tags().empty() && m_handler->options().keep_untagged)
-        || !way.is_closed() || is_linear(way.tags())) {
-        try {
-            m_handler->way(way);
-        } catch (const osmium::geometry_error& e) {
-            show_error(e);
-        } catch (const osmium::invalid_location& e) {
-            show_error(e);
+    try {
+        if (!way.nodes().front().location() || !way.nodes().back().location()) {
+            throw osmium::invalid_location{"invalid location"};
         }
+        if ((way.tags().empty() && m_handler->options().keep_untagged)
+            || !way.ends_have_same_location()
+            || is_linear(way.tags())) {
+                m_handler->way(way);
+        }
+    } catch (const osmium::geometry_error& e) {
+        show_error(e);
+    } catch (const osmium::invalid_location& e) {
+        show_error(e);
     }
 }
 
