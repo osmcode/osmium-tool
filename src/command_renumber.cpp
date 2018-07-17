@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_renumber.hpp"
+#include "exception.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/header.hpp>
@@ -27,9 +28,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/osm.hpp>
+#include <osmium/osm/types_from_string.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/memory_mapping.hpp>
 #include <osmium/util/progress_bar.hpp>
+#include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
@@ -38,6 +41,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <cerrno>
 #include <cstring>
 #include <fcntl.h>
+#include <fstream>
 #include <iostream>
 #include <iterator>
 #include <stdexcept>
@@ -59,17 +63,24 @@ namespace osmium {
 
 } // namespace osmium
 
+osmium::object_id_type id_map::add_offset_to_id(osmium::object_id_type id) const noexcept {
+    if (m_start_id < 0) {
+        return -id + m_start_id + 1;
+    }
+    return id + m_start_id - 1;
+}
+
 osmium::object_id_type id_map::operator()(osmium::object_id_type id) {
     // Search for id in m_extra_ids and return if found.
     const auto it = m_extra_ids.find(id);
     if (it != m_extra_ids.end()) {
-        return it->second;
+        return add_offset_to_id(it->second);
     }
 
     // New ID is larger than all existing IDs. Add it to end and return.
     if (m_ids.empty() || osmium::id_order{}(m_ids.back(), id)) {
         m_ids.push_back(id);
-        return m_ids.size();
+        return add_offset_to_id(m_ids.size());
     }
 
     const auto element = std::lower_bound(m_ids.cbegin(), m_ids.cend(), id, osmium::id_order{});
@@ -77,11 +88,11 @@ osmium::object_id_type id_map::operator()(osmium::object_id_type id) {
     if (element == m_ids.cend() || *element != id) {
         m_ids.push_back(m_ids.back());
         m_extra_ids[id] = m_ids.size();
-        return m_ids.size();
+        return add_offset_to_id(m_ids.size());
     }
 
     // Old ID found in m_ids, return.
-    return osmium::object_id_type(std::distance(m_ids.cbegin(), element) + 1);
+    return add_offset_to_id(osmium::object_id_type(std::distance(m_ids.cbegin(), element) + 1));
 }
 
 void id_map::write(int fd) {
@@ -94,6 +105,21 @@ void id_map::write(int fd) {
         reinterpret_cast<const char*>(m_ids.data()), // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
         sizeof(osmium::object_id_type) * m_ids.size()
     );
+}
+
+void id_map::print(osmium::object_id_type new_id) {
+    for (const auto& m : m_extra_ids) {
+        m_ids[m.second - 1] = m.first;
+    }
+
+    for (const auto& id : m_ids) {
+        std::cout << id << ' ' << new_id << '\n';
+        if (new_id > 0) {
+            ++new_id;
+        } else {
+            --new_id;
+        }
+    }
 }
 
 void id_map::read(int fd, std::size_t file_size) {
@@ -113,11 +139,55 @@ void id_map::read(int fd, std::size_t file_size) {
     }
 }
 
+static osmium::object_id_type get_start_id(const std::string& s) noexcept {
+    const auto id = osmium::string_to_object_id(s.c_str());
+    if (id == 0) {
+        return 1;
+    }
+    return id;
+}
+
+void CommandRenumber::set_start_ids(const std::string& str) {
+    const auto start_ids = osmium::split_string(str, ',');
+    if (start_ids.size() == 1) {
+        const auto id = get_start_id(start_ids[0]);
+        m_id_map(osmium::item_type::node).set_start_id(id);
+        m_id_map(osmium::item_type::way).set_start_id(id);
+        m_id_map(osmium::item_type::relation).set_start_id(id);
+    } else if (start_ids.size() == 3) {
+        m_id_map(osmium::item_type::node).set_start_id(get_start_id(start_ids[0]));
+        m_id_map(osmium::item_type::way).set_start_id(get_start_id(start_ids[1]));
+        m_id_map(osmium::item_type::relation).set_start_id(get_start_id(start_ids[2]));
+    } else {
+        throw argument_error{"The --start-id/s option must be followed by exactly 1 ID or 3 IDs separated by commas"};
+    }
+}
+
+void CommandRenumber::show_index(const std::string& type) {
+    auto t = osmium::item_type::undefined;
+
+    if (type == "n" || type == "node") {
+        t = osmium::item_type::node;
+    } else if (type == "w" || type == "way") {
+        t = osmium::item_type::way;
+    } else if (type == "r" || type == "relation") {
+        t = osmium::item_type::relation;
+    } else {
+        throw argument_error{"Invalid value for --show-index option. Allowed are 'node', 'way', or 'relation'"};
+    }
+
+    read_start_ids_file();
+    read_index(t);
+    m_id_map(t).print(m_id_map(t).start_id());
+}
+
 bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("index-directory,i", po::value<std::string>(), "Index directory")
     ("object-type,t", po::value<std::vector<std::string>>(), "Renumber only objects of given type (node, way, relation)")
+    ("show-index", po::value<std::string>(), "Show contents of index file")
+    ("start-id,s", po::value<std::string>(), "Comma separated list of first node, way, and relation id to use (default: 1,1,1)")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -142,14 +212,23 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
+    if (vm.count("index-directory")) {
+        m_index_directory = vm["index-directory"].as<std::string>();
+    }
+
+    if (vm.count("show-index")) {
+        show_index(vm["show-index"].as<std::string>());
+        return false;
+    }
+
     setup_common(vm, desc);
     setup_progress(vm);
     setup_object_type_nwr(vm);
     setup_input_file(vm);
     setup_output_file(vm);
 
-    if (vm.count("index-directory")) {
-        m_index_directory = vm["index-directory"].as<std::string>();
+    if (vm.count("start-id")) {
+        set_start_ids(vm["start-id"].as<std::string>());
     }
 
     return true;
@@ -161,15 +240,15 @@ void CommandRenumber::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    index directory: " << m_index_directory << "\n";
-    m_vout << "    object types that will be renumbered:";
+    m_vout << "    object types that will be renumbered and their start IDs:";
     if (osm_entity_bits() & osmium::osm_entity_bits::node) {
-        m_vout << " node";
+        m_vout << " node (" << m_id_map(osmium::item_type::node).start_id() << ')';
     }
     if (osm_entity_bits() & osmium::osm_entity_bits::way) {
-        m_vout << " way";
+        m_vout << " way (" << m_id_map(osmium::item_type::way).start_id() << ')';
     }
     if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
-        m_vout << " relation";
+        m_vout << " relation (" << m_id_map(osmium::item_type::relation).start_id() << ')';
     }
     m_vout << "\n";
 }
@@ -270,9 +349,20 @@ void read_relations(const osmium::io::File& input_file, id_map& map) {
     reader.close();
 }
 
+void CommandRenumber::read_start_ids_file() {
+    std::ifstream start_id_file{m_index_directory + "/start_ids"};
+    if (start_id_file.is_open()) {
+        std::string line;
+        start_id_file >> line;
+        start_id_file.close();
+        set_start_ids(line);
+    }
+}
+
 bool CommandRenumber::run() {
     if (!m_index_directory.empty()) {
         m_vout << "Reading index files...\n";
+        read_start_ids_file();
         read_index(osmium::item_type::node);
         read_index(osmium::item_type::way);
         read_index(osmium::item_type::relation);
@@ -314,6 +404,13 @@ bool CommandRenumber::run() {
 
     if (!m_index_directory.empty()) {
         m_vout << "Writing index files...\n";
+
+        std::ofstream start_id_file{m_index_directory + "/start_ids"};
+        start_id_file << m_id_map(osmium::item_type::node).start_id() << ','
+                      << m_id_map(osmium::item_type::way).start_id() << ','
+                      << m_id_map(osmium::item_type::relation).start_id() << '\n';
+        start_id_file.close();
+
         write_index(osmium::item_type::node);
         write_index(osmium::item_type::way);
         write_index(osmium::item_type::relation);

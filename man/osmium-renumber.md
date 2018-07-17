@@ -47,6 +47,20 @@ IDs.
     directory. The files written will be named `nodes.idx`, `ways.idx`, and
     `relations.idx`. See also the **INDEX FILES** section below.
 
+--show-index=TYPE
+:   Print the content of the index for TYPE (node, way, or relation) on
+    STDOUT. Each line contains the old ID, a space character and then the
+    new ID. Any other options (except **--index-directory/-i**) are ignored
+    if this option is used.
+
+-s, --start-id=FIRST_ID or FIRST_NODE_ID,FIRST_WAY_ID,FIRST_RELATION_ID
+:   Set the first ID that should be used. If the ID is positive, IDs are
+    counted upwards, if the ID is negative, they are counted downwards.
+    This can be set to either a single ID which is used for all object types
+    or a comma-separated list of three IDs used for the first node, way, and
+    relation, respectively. If this is not set, IDs for all object types
+    start at 1.
+
 -t, --object-type=TYPE
 :   Renumber only objects of given type (*node*, *way*, or *relation*). By
     default all objects of all types are renumbered. This option can be given
@@ -60,16 +74,21 @@ IDs.
 
 # INDEX FILES
 
-When the `-i` or `--index-directory` option is used, index files named
+When the **-i** or **--index-directory** option is specified, index files named
 `nodes.idx`, `ways.idx`, and `relations.idx` are read from and written to the
-given directory. This can be used to force consistent mapping over several
-invocations of `osmium renumber`, for instance when you want to remap an OSM
-data file and a corresponding OSM change file.
+given directory together with a file called `start_ids` that contains the start
+IDs set with **--start-id/-s**.
 
-The index files are in binary format, but you can use the following command
-line to convert them into something readable:
+This can be used to force consistent mapping over several invocations of
+`osmium renumber`, for instance when you want to remap an OSM data file and a
+corresponding OSM change file.
 
-    od -An -td8 -w8 TYPE.idx | cat -n
+The index files are in binary format, but you can print the indexes in text
+format using the **--show-index** option:
+
+    osmium renumber -i idxdir --show-index node     >nodes-index.txt
+    osmium renumber -i idxdir --show-index way      >ways-index.txt
+    osmium renumber -i idxdir --show-index relation >relations-index.txt
 
 
 # DIAGNOSTICS
@@ -104,6 +123,11 @@ Renumber a PBF file and output to a compressed XML file:
 
 Renumbering Germany currently (spring 2016) takes less than three minutes and
 needs about 3 GB RAM.
+
+Renumber a PBF file starting the node IDs at 1 (and counting upwards), the
+way IDs at 100 and the relation IDs at -200 (and counting downwards.
+
+    osmium renumber -o renumbered.osm.pbf -s 1,100,-200 athens.osm.pbf
 
 Renumber an OSM file storing the indexes on disk:
 

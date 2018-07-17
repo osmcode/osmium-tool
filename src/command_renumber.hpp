@@ -61,9 +61,21 @@ class id_map {
     // in m_ids we have to take the first of potentially several identical
     // IDs we find (using std::lower_bound), its position is then the new ID.
 
+    osmium::object_id_type m_start_id = 1;
+
 public:
 
     id_map() = default;
+
+    osmium::object_id_type start_id() const noexcept {
+        return m_start_id;
+    }
+
+    void set_start_id(osmium::object_id_type start_id) noexcept {
+        m_start_id = start_id;
+    }
+
+    osmium::object_id_type add_offset_to_id(osmium::object_id_type id) const noexcept;
 
     // Map from old ID to new ID. If the old ID has been seen before, it will
     // be returned, otherwise a new ID will be allocated and stored.
@@ -73,6 +85,8 @@ public:
     // the mappings from m_extra_ids into the m_ids vector. After this
     // operation this object becomes unusable!
     void write(int fd);
+
+    void print(osmium::object_id_type new_id);
 
     // Read the mappings from a binary file into m_ids and m_extra_ids.
     void read(int fd, std::size_t file_size);
@@ -98,9 +112,15 @@ class CommandRenumber : public Command, public with_single_osm_input, public wit
 
     std::string filename(const char* name) const;
 
+    void set_start_ids(const std::string& str);
+
+    void read_start_ids_file();
+
     void read_index(osmium::item_type type);
 
     void write_index(osmium::item_type type);
+
+    void show_index(const std::string& type);
 
 public:
 
