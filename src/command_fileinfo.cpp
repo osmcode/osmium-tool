@@ -461,12 +461,15 @@ public:
     void file(const std::string& input_filename, const osmium::io::File& input_file) final {
         if (m_get_value == "file.name") {
             std::cout << input_filename << "\n";
+            return;
         }
         if (m_get_value == "file.format") {
             std::cout << input_file.format() << "\n";
+            return;
         }
         if (m_get_value == "file.compression") {
             std::cout << input_file.compression() << "\n";
+            return;
         }
         if (m_get_value == "file.size") {
             if (input_file.filename().empty()) {
@@ -474,12 +477,14 @@ public:
             } else {
                 std::cout << osmium::file_size(input_file.filename()) << "\n";
             }
+            return;
         }
     }
 
     void header(const osmium::io::Header& header) final {
         if (m_get_value == "header.with_history") {
             std::cout << yes_no(header.has_multiple_object_versions());
+            return;
         }
 
         for (const auto& option : header) {
@@ -494,6 +499,7 @@ public:
     void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) final {
         if (m_get_value == "data.bbox") {
             std::cout << info_handler.bounds << "\n";
+            return;
         }
 
         if (m_get_value == "data.timestamp.first") {
@@ -502,6 +508,7 @@ public:
             } else {
                 std::cout << info_handler.first_timestamp() << "\n";
             }
+            return;
         }
 
         if (m_get_value == "data.timestamp.last") {
@@ -510,10 +517,12 @@ public:
             } else {
                 std::cout << info_handler.last_timestamp() << "\n";
             }
+            return;
         }
 
         if (m_get_value == "data.objects_ordered") {
             std::cout << (info_handler.ordered ? "yes\n" : "no\n");
+            return;
         }
 
         if (m_get_value == "data.multiple_versions") {
@@ -522,80 +531,104 @@ public:
             } else {
                 std::cout << "unknown\n";
             }
+            return;
         }
 
         if (m_get_value == "data.crc32") {
             std::cout << std::hex << info_handler.crc32().checksum() << std::dec << "\n";
+            return;
         }
 
         if (m_get_value == "data.count.changesets") {
             std::cout << info_handler.changesets << "\n";
+            return;
         }
         if (m_get_value == "data.count.nodes") {
             std::cout << info_handler.nodes << "\n";
+            return;
         }
         if (m_get_value == "data.count.ways") {
             std::cout << info_handler.ways << "\n";
+            return;
         }
         if (m_get_value == "data.count.relations") {
             std::cout << info_handler.relations << "\n";
+            return;
         }
 
         if (m_get_value == "data.minid.changesets") {
             std::cout << get_smallest(info_handler.smallest_changeset_id()) << "\n";
+            return;
         }
         if (m_get_value == "data.minid.nodes") {
             std::cout << get_smallest(info_handler.smallest_node_id()) << "\n";
+            return;
         }
         if (m_get_value == "data.minid.ways") {
             std::cout << get_smallest(info_handler.smallest_way_id()) << "\n";
+            return;
         }
         if (m_get_value == "data.minid.relations") {
             std::cout << get_smallest(info_handler.smallest_relation_id()) << "\n";
+            return;
         }
 
         if (m_get_value == "data.maxid.changesets") {
             std::cout << get_largest(info_handler.largest_changeset_id()) << "\n";
+            return;
         }
         if (m_get_value == "data.maxid.nodes") {
             std::cout << get_largest(info_handler.largest_node_id()) << "\n";
+            return;
         }
         if (m_get_value == "data.maxid.ways") {
             std::cout << get_largest(info_handler.largest_way_id()) << "\n";
+            return;
         }
         if (m_get_value == "data.maxid.relations") {
             std::cout << get_largest(info_handler.largest_relation_id()) << "\n";
+            return;
         }
 
         if (m_get_value == "metadata.all_objects.version") {
             std::cout << (info_handler.metadata_all_objects.version() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.all_objects.timestamp") {
             std::cout << (info_handler.metadata_all_objects.timestamp() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.all_objects.changeset") {
             std::cout << (info_handler.metadata_all_objects.changeset() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.all_objects.uid") {
             std::cout << (info_handler.metadata_all_objects.uid() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.all_objects.user") {
             std::cout << (info_handler.metadata_all_objects.user() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.some_objects.version") {
             std::cout << (info_handler.metadata_some_objects.version() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.some_objects.timestamp") {
             std::cout << (info_handler.metadata_some_objects.timestamp() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.some_objects.changeset") {
             std::cout << (info_handler.metadata_some_objects.changeset() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.some_objects.uid") {
             std::cout << (info_handler.metadata_some_objects.uid() ? "yes\n" : "no\n");
+            return;
         }
         if (m_get_value == "metadata.some_objects.user") {
             std::cout << (info_handler.metadata_some_objects.user() ? "yes\n" : "no\n");
+            return;
         }
     }
 
@@ -645,7 +678,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         m_json_output = true;
     }
 
-    std::vector<std::string> known_values = {
+    const std::vector<std::string> known_values = {
         "file.name",
         "file.format",
         "file.compression",
