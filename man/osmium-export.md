@@ -33,6 +33,11 @@ different ways it can do that which have different advantages and
 disadvantages. The default is good enough for most cases, but see the
 **osmium-index-types**(5) man page for details.
 
+Objects with invalid geometries are silently omitted from the output. This is
+the case for ways with less than two nodes or closed ways or relations that
+can't be assembled into a valid (multi)polygon. See the options
+--show-errors/-e and --stop-on-error/-E for how to modify this behaviour.
+
 This command will not work on full history files.
 
 This command will work with negative IDs on OSM objects (for instance on
@@ -226,23 +231,49 @@ and as (Multi)Polygon. See the `--add-unique-id` option for a unique ID.
 # AREA HANDLING
 
 Multipolygon relations will be assembled into multipolygon geometries forming
-areas. Some closed ways will also form areas. Here are the more detailed rules:
+areas. Some closed ways will also form areas. Here are the detailed rules:
 
-* Non-closed ways (last node not the same as the first node) are always
-  linestrings, not areas.
-* Relations tagged `type=multipolygon` or `type=boundary` are always assembled
-  into areas. If they are not valid, they are omitted from the output (unless
-  --stop-on-error/-E is specified). (An error message will be produced if the
-  --show-errors/-e option is specified).
-* For closed ways the tags are checked. If they have an `area` tag other than
-  `area=no`, they are areas and a polygon is created. If they have an `area`
-  tag other than `area=yes`, they are linestrings. So closed ways can be both,
-  an area and a linestring!
-* The configuration options `area_tags` and `linear_tags` can be used to
-  augment the area check. If any of the tags on a closed way matches any of
-  the expressions in `area_tags`, a polygon is created. If any of the tags on
-  a closed way matches any of the expressions in `linear_tags`, a linestring
-  is created. Again: If both match, an area and a linestring is created.
+Non-closed way
+: A non-closed way (with the last node location not the same as the first
+  node location) is always (regardless of any tags) a linestring, not an area.
+
+Relation
+: A relation tagged `type=multipolygon` or `type=boundary` is always
+  (regardless of any tags) assembled into an area.
+
+Closed way
+: For a closed way (with the last node location the same as the first node
+  location) the tags are checked: If the way has an `area=yes` tag, an
+  area is created. If the way has an `area=no` tag, a linestring is created.
+  An `area` tag with a value other than `yes` or `no` is ignored. The
+  configuration settings `area_tags` and `linear_tags` can be used to
+  augment the area check. If any of the tags matches the `area_tags`, an
+  area is created. If any of the tags matches the `linear_tags`, a linestring
+  is created. If both match, an area and a linestring is created. This is
+  important because some objects have tags that make them both, an area and
+  a linestring.
+
+The `area_tags` and `linear_tags` can have the following values:
+
+true
+:   All tags match. (An empty list `[]` can also be used to mean the same,
+    but this use is deprecated because it can be confusing.)
+
+false
+:   No tags match.
+
+Array
+:   The array contains one or more expressions as descibed in the FILTER
+    EXPRESSION section.
+
+null
+:   If the `area_tags` or `linear_tags` is set to null or not set at all,
+    the inverse of the other setting is used. So if you do not set the
+    `linear_tags` but have some expressions in `area_tags`, areas will be
+    created for all objects matching those expressions and linestrings for
+    everything else. This can be simpler, because you only have to keep
+    one list, but in cases where an object can be interpreted as both an
+    area and a linestring, only one interpretation will be used.
 
 
 # OUTPUT FORMATS
