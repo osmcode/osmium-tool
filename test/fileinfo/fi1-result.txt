@@ -2,7 +2,7 @@ File:
   Name: fileinfo/fi1.osm
   Format: XML
   Compression: none
-  Size: 438
+  Size: 630
 Header:
   Bounding boxes:
   With history: no
@@ -16,14 +16,18 @@ Data:
     Last: 2015-01-01T04:00:00Z
   Objects ordered (by type and id): yes
   Multiple versions of same object: no
-  CRC32: 8e178104
+  CRC32: 95828746
   Number of changesets: 0
   Number of nodes: 3
-  Number of ways: 0
+  Number of ways: 2
   Number of relations: 0
+  Smallest changeset ID: 0
+  Smallest node ID: 1
+  Smallest way ID: -4
+  Smallest relation ID: 0
   Largest changeset ID: 0
   Largest node ID: 4
-  Largest way ID: 0
+  Largest way ID: -3
   Largest relation ID: 0
   All objects have following metadata attributes: all
   Some objects have following metadata attributes: all

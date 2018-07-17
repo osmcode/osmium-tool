@@ -103,6 +103,10 @@ The following variables are available:
     data.count.ways - INTEGER
     data.count.relations - INTEGER
     data.count.changesets - INTEGER
+    data.minid.nodes - INTEGER
+    data.minid.ways - INTEGER
+    data.minid.relations - INTEGER
+    data.minid.changesets - INTEGER
     data.maxid.nodes - INTEGER
     data.maxid.ways - INTEGER
     data.maxid.relations - INTEGER
