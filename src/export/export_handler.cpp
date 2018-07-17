@@ -109,6 +109,9 @@ void ExportHandler::way(const osmium::Way& way) {
     }
 
     if (way.nodes().size() <= 1) {
+        if (m_show_errors) {
+            std::cerr << "Geometry error: Way with less than two nodes (id=" << way.id() << ")\n";
+        }
         return;
     }
 
