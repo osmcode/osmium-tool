@@ -93,7 +93,7 @@ w/name,name:de=Kastanienallee,Kastanienstrasse
 n/addr:\*
 :   Matches all nodes with any key starting with "addr:"
 
-n/name=\*Paris\*
+n/name=\*Paris
 :   Matches all nodes with a name that contains the word "Paris".
 
 a/building
@@ -102,7 +102,7 @@ a/building
     "type=boundary".
 
 If there is no equal sign ("=") in the expression only keys are matched and
-values can by anything. If there is an equal sign ("=") in the expression, the
+values can be anything. If there is an equal sign ("=") in the expression, the
 key is to the left and the value to the right. An exclamation sign ("!") before
 the equal sign means: A tag with that key, but not the value(s) to the right of
 the equal sign. A leading or trailing asterisk ("\*") can be used for substring

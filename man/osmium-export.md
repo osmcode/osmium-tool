@@ -46,7 +46,7 @@ files created with JOSM).
 
 -C, --print-default-config
 :   Print the default config to STDOUT. Useful if you want to change it and
-    not write the whole thing manually. If you use this options all other
+    not write the whole thing manually. If you use this option all other
     options are ignored.
 
 -e, --show-errors
@@ -169,11 +169,11 @@ name,name:de=Kastanienallee,Kastanienstrasse
 addr:\*
 :   Matches all objects with any key starting with "addr:"
 
-name=\*Paris\*
+name=\*Paris
 :   Matches all objects with a name that contains the word "Paris".
 
 If there is no equal sign ("=") in the expression only keys are matched and
-values can by anything. If there is an equal sign ("=") in the expression, the
+values can be anything. If there is an equal sign ("=") in the expression, the
 key is to the left and the value to the right. An exclamation sign ("!") before
 the equal sign means: A tag with that key, but not the value(s) to the right of
 the equal sign. A leading or trailing asterisk ("\*") can be used for substring
@@ -219,8 +219,8 @@ is silently dropped. So if there is a tag "@id=foo" and you have set `id` to
 `true` in the `attributes` object, the tag will not show up in the output.
 
 Note that the `id` is not necessarily unique. Even the combination `type` and
-`id` is  not unique, because a way may end up as LineString and as Polygon
-on the file. See the `--add-unique-id` option for a unique ID.
+`id` is  not unique, because a way may end up in the output file as LineString
+and as (Multi)Polygon. See the `--add-unique-id` option for a unique ID.
 
 
 # AREA HANDLING
