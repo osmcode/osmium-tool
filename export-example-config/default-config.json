@@ -9,8 +9,8 @@
             "user":      false,
             "way_nodes": false
         },
-        "linear_tags":  [],
-        "area_tags":    [],
+        "linear_tags":  true,
+        "area_tags":    true,
         "exclude_tags": [],
         "include_tags": []
     }

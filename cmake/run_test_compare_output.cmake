@@ -42,8 +42,10 @@ execute_process(
     ERROR_VARIABLE stderr
 )
 
-if(NOT (stderr STREQUAL ""))
-    message(SEND_ERROR "Command tested wrote to stderr: ${stderr}")
+if(NOT ("$ENV{osmium_cmake_stderr}" STREQUAL "ignore"))
+    if(NOT (stderr STREQUAL ""))
+        message(SEND_ERROR "Command tested wrote to stderr: ${stderr}")
+    endif()
 endif()
 
 if(result)

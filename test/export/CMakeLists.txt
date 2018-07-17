@@ -26,17 +26,23 @@ set_tests_properties(export-error-area PROPERTIES WILL_FAIL true)
 #-----------------------------------------------------------------------------
 
 check_export(c-empty-empty-n "-E -f text --keep-untagged -c export/config-empty-empty.json" way.osm way-all-n.txt)
+set_tests_properties(export-c-empty-empty-n PROPERTIES ENVIRONMENT osmium_cmake_stderr=ignore)
 check_export(c-empty-empty   "-E -f text                 -c export/config-empty-empty.json" way.osm way-all.txt)
+set_tests_properties(export-c-empty-empty PROPERTIES ENVIRONMENT osmium_cmake_stderr=ignore)
 
 check_export(c-null-null  "-E -f text -c export/config-null-null.json" way.osm way-all.txt)
 check_export(c-undefined  "-E -f text -c export/config-undefined.json" way.osm way-all.txt)
 
 check_export(c-tag-empty  "-E -f text -c export/config-tag-empty.json" way.osm way-tag-empty.txt)
+set_tests_properties(export-c-tag-empty PROPERTIES ENVIRONMENT osmium_cmake_stderr=ignore)
 check_export(c-empty-tag  "-E -f text -c export/config-empty-tag.json" way.osm way-empty-tag.txt)
+set_tests_properties(export-c-empty-tag PROPERTIES ENVIRONMENT osmium_cmake_stderr=ignore)
 check_export(c-tag-tag    "-E -f text -c export/config-tag-tag.json"   way.osm way-tag-tag.txt)
 
 check_export(c-tagx-empty "-E -f text -c export/config-tagx-empty.json" way.osm way-tagx-empty.txt)
+set_tests_properties(export-c-tagx-empty PROPERTIES ENVIRONMENT osmium_cmake_stderr=ignore)
 check_export(c-empty-tagx "-E -f text -c export/config-empty-tagx.json" way.osm way-empty-tagx.txt)
+set_tests_properties(export-c-empty-tagx PROPERTIES ENVIRONMENT osmium_cmake_stderr=ignore)
 check_export(c-tagx-tagx  "-E -f text -c export/config-tagx-tagx.json"  way.osm way-tagx-tagx.txt)
 
 check_export(c-true-true   "-E -f text -c export/config-true-true.json"   way.osm way-all.txt)

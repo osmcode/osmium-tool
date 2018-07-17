@@ -110,10 +110,12 @@ static Ruleset parse_tags_ruleset(const rapidjson::Value& object, const char* ke
     }
 
     if (!json->value.IsArray()) {
-        throw config_error{std::string{"'"} + key + "' member in top-level object must be false, true, null, or array."};
+        throw config_error{std::string{"'"} + key + "' member in top-level object must be false, true, null, or an array."};
     }
 
     if (json->value.GetArray().Empty()) {
+        std::cerr << "Warning! An empty array for 'linear_tags' or 'area_tags' matches any tags.\n"
+                  << "         Please use 'true' instead of the array.\n";
         ruleset.set_rule_type(tags_filter_rule_type::any);
         return ruleset;
     }
