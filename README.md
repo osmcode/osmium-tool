@@ -21,7 +21,7 @@ You also need the following libraries:
         Debian/Ubuntu: libosmium2-dev
         Fedora/CentOS: libosmium-devel
 
-    Protozero (>= 1.5.1)
+    Protozero (>= 1.6.3)
         https://github.com/mapbox/protozero
         Debian/Ubuntu: libprotozero-dev
         Fedora/CentOS: protozero-devel

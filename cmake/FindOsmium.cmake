@@ -111,7 +111,7 @@ endif()
 if(Osmium_USE_PBF)
     find_package(ZLIB)
     find_package(Threads)
-    find_package(Protozero 1.5.1)
+    find_package(Protozero 1.6.3)
 
     list(APPEND OSMIUM_EXTRA_FIND_VARS ZLIB_FOUND Threads_FOUND PROTOZERO_INCLUDE_DIR)
     if(ZLIB_FOUND AND Threads_FOUND AND PROTOZERO_FOUND)
