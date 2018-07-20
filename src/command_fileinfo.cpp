@@ -93,9 +93,14 @@ struct InfoHandler : public osmium::handler::Handler {
 
     bool ordered = true;
     bool multiple_versions = false;
+    bool calculate_crc = false;
 
     osmium::item_type last_type = osmium::item_type::undefined;
     osmium::object_id_type last_id = 0;
+
+    explicit InfoHandler(bool with_crc) :
+        calculate_crc(with_crc) {
+    }
 
     void changeset(const osmium::Changeset& changeset) {
         if (last_type == osmium::item_type::changeset) {
@@ -107,7 +112,9 @@ struct InfoHandler : public osmium::handler::Handler {
         }
 
         last_id = changeset.id();
-        crc32.update(changeset);
+        if (calculate_crc) {
+            crc32.update(changeset);
+        }
         ++changesets;
 
         smallest_changeset_id.update(changeset.id());
@@ -137,7 +144,9 @@ struct InfoHandler : public osmium::handler::Handler {
     }
 
     void node(const osmium::Node& node) {
-        crc32.update(node);
+        if (calculate_crc) {
+            crc32.update(node);
+        }
         bounds.extend(node.location());
         ++nodes;
 
@@ -146,7 +155,9 @@ struct InfoHandler : public osmium::handler::Handler {
     }
 
     void way(const osmium::Way& way) {
-        crc32.update(way);
+        if (calculate_crc) {
+            crc32.update(way);
+        }
         ++ways;
 
         smallest_way_id.update(way.id());
@@ -154,7 +165,9 @@ struct InfoHandler : public osmium::handler::Handler {
     }
 
     void relation(const osmium::Relation& relation) {
-        crc32.update(relation);
+        if (calculate_crc) {
+            crc32.update(relation);
+        }
         ++relations;
 
         smallest_relation_id.update(relation.id());
@@ -164,6 +177,10 @@ struct InfoHandler : public osmium::handler::Handler {
 }; // struct InfoHandler
 
 class Output {
+
+protected:
+
+    bool m_calculate_crc;
 
 public:
 
@@ -176,6 +193,10 @@ public:
 
     Output(Output&&) noexcept = delete;
     Output& operator=(Output&&) noexcept = delete;
+
+    void set_crc(bool with_crc) noexcept {
+        m_calculate_crc = with_crc;
+    }
 
     virtual void file(const std::string& filename, const osmium::io::File& input_file) = 0;
     virtual void header(const osmium::io::Header& header) = 0;
@@ -246,7 +267,11 @@ public:
             std::cout << "unknown (because objects in file are unordered)\n";
         }
 
-        std::cout << "  CRC32: " << std::hex << info_handler.crc32().checksum() << std::dec << "\n";
+        if (m_calculate_crc) {
+            std::cout << "  CRC32: " << std::hex << info_handler.crc32().checksum() << std::dec << "\n";
+        } else {
+            std::cout << "  CRC32: not calculated (use --crc/-c to enable)\n";
+        }
 
         std::cout << "  Number of changesets: " << info_handler.changesets << "\n";
         std::cout << "  Number of nodes: "      << info_handler.nodes      << "\n";
@@ -367,10 +392,12 @@ public:
             m_writer.Bool(info_handler.multiple_versions);
         }
 
-        m_writer.String("crc32");
-        std::stringstream ss;
-        ss << std::hex << info_handler.crc32().checksum() << std::dec;
-        m_writer.String(ss.str().c_str());
+        if (m_calculate_crc) {
+            m_writer.String("crc32");
+            std::stringstream ss;
+            ss << std::hex << info_handler.crc32().checksum() << std::dec;
+            m_writer.String(ss.str().c_str());
+        }
 
         m_writer.String("count");
         m_writer.StartObject();
@@ -644,6 +671,8 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     ("get,g", po::value<std::string>(), "Get value")
     ("show-variables,G", "Show variables for --get option")
     ("json,j", "JSON output")
+    ("crc,c", "Calculate CRC")
+    ("no-crc", "Do not calculate CRC")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -676,6 +705,14 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
 
     if (vm.count("json")) {
         m_json_output = true;
+    }
+
+    if (vm.count("crc") && vm.count("no-crc")) {
+        throw argument_error{"Can not use --crc/-c option and --no-crc at the same time."};
+    }
+
+    if (m_extended && (vm.count("crc") || (m_json_output && !vm.count("no-crc")))) {
+        m_calculate_crc = true;
     }
 
     const std::vector<std::string> known_values = {
@@ -739,6 +776,11 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         if (m_get_value.substr(0, 5) == "data." && !m_extended) {
             throw argument_error{"You need to set --extended/-e for any 'data.*' variables to be available."};
         }
+        if (m_get_value == "data.crc32") {
+            m_calculate_crc = true;
+        } else {
+            m_calculate_crc = false;
+        }
     }
 
     if (vm.count("get") && vm.count("json")) {
@@ -753,6 +795,7 @@ void CommandFileinfo::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    extended output: " << (m_extended ? "yes\n" : "no\n");
+    m_vout << "    calculate CRC: " << (m_calculate_crc ? "yes\n" : "no\n");
 }
 
 bool CommandFileinfo::run() {
@@ -765,6 +808,7 @@ bool CommandFileinfo::run() {
         output.reset(new SimpleOutput{m_get_value});
     }
 
+    output->set_crc(m_calculate_crc);
     output->file(m_input_filename, m_input_file);
 
     osmium::io::Reader reader{m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing};
@@ -772,7 +816,7 @@ bool CommandFileinfo::run() {
     output->header(header);
 
     if (m_extended) {
-        InfoHandler info_handler;
+        InfoHandler info_handler{m_calculate_crc};
         osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
         while (osmium::memory::Buffer buffer = reader.read()) {
             progress_bar.update(reader.offset());
