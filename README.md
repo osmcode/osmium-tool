@@ -16,7 +16,7 @@ later are known to work. It also works on modern Visual Studio C++ compilers.
 
 You also need the following libraries:
 
-    Libosmium (>= 2.14.0)
+    Libosmium (>= 2.14.2)
         https://osmcode.org/libosmium
         Debian/Ubuntu: libosmium2-dev
         Fedora/CentOS: libosmium-devel
@@ -25,14 +25,6 @@ You also need the following libraries:
         https://github.com/mapbox/protozero
         Debian/Ubuntu: libprotozero-dev
         Fedora/CentOS: protozero-devel
-
-    Utfcpp
-        This is included in the libosmium repository and might or might not
-        have been installed with it. See the libosmium README.
-        http://utfcpp.sourceforge.net/
-        Debian/Ubuntu: libutfcpp-dev
-        Fedora/CentOS: utf8cpp-devel
-        openSUSE: utfcpp-devel
 
     RapidJSON (>= 1.1)
         This is included in the osmium-tool repository, so you usually do
