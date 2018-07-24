@@ -14,10 +14,46 @@ This project adheres to [Semantic Versioning](https://semver.org/).
   "type=boundary".
 - Add `--geometry-types` option to the `export` command allowing you to
   restrict the geometry types written out.
+- Also print out smallest node, way, and relation ID in `fileinfo` command.
+- In the `renumber` command, the start IDs for nodes, ways, and relations
+  can now be set together or separately with the `--start-id` option. Negative
+  IDs are now also allowed. Also there is a new `--show-index` function that
+  prints out the ID mappings in the index.
+- More tests and updated documentation.
+- Add `-C`, `--print-default-config` option to the `export` command writing
+  out the default configuration to stdout.
 
 ### Changed
 
+- Newest version of libosmium (2.14.2) and protozoro (1.6.3) are now required.
+- Calculation of CRC32 in the fileinfo command is now optional.
+  Calculating the CRC32 is very expensive and going without it makes the
+  program much much faster. Use --crc/-c to enable it. It will also be
+  automatically enabled for JSON output to stay compatible with earlier
+  versions of Osmium which might be used in an automated context (you can
+  disable this with `--no-crc`). It is also enabled if `-g data.crc32` is
+  specified. If it is enabled we are using the CRC32 implementation from
+  zlib which is faster than the one from boost we used before. This is
+  possible through some changes in libosmium.
+- Treat ways with same node end locations as closed in `export` command
+  instead of looking at the IDs. This is more consistent with what the
+  libosmium `MultipolygonManager` does.
+- In the `export` command, the decision whether a way is treated as a
+  linestring or polygon has changed. See the man page for details.
+- Create linestring geometries for untagged ways if `-n` or `--keep-untagged`
+  option is set. It doesn't matter whether they are closed or not, they are
+  only written out as linestrings.
+
 ### Fixed
+
+- Show error for ways with less than 2 nodes if --show-errors is set.
+- Attributes (such as id, version, timestamp, etc.) can appear in the
+  properties of the output with arbitrary configurable names. These could
+  overlap with tag keys which we don't want. This change removes tags with
+  those keys on the assumption that the names chosen for the attributes
+  are sufficiently different (something like "@id") from normal tag keys
+  that this will not happen very often and those tags are useless anyway.
+- Make `--(no)-progress` option work in `sort` command.
 
 
 ## [1.8.0] - 2018-03-31
