@@ -31,3 +31,20 @@ build_script:
   - cd c:\projects/osmium-tool
   - build-appveyor.bat
 
+after_build:
+  - cd c:\projects
+  - mkdir osmium-tool-bin
+  - set dllsuffix=""
+  - if "%config%"=="Debug" set dllsuffix="d"
+  - appveyor DownloadFile "https://raw.githubusercontent.com/libexpat/libexpat/master/expat/COPYING" -FileName osmium-tool-bin\COPYING-expat.txt
+  - appveyor DownloadFile "https://raw.githubusercontent.com/asimonov-im/bzip2/master/LICENSE" -FileName osmium-tool-bin\LICENSE-bzip2.txt
+  - copy /y C:\projects\osmium-tool\LICENSE.txt osmium-tool-bin
+  - copy /y C:\projects\osmium-tool\LICENSE-rapidjson.txt osmium-tool-bin
+  - copy /y C:\projects\osmium-tool\build\src\%config%\osmium.exe osmium-tool-bin
+  - copy /y C:\projects\expat.v140.2.2.5\build\native\bin\x64\%config%\libexpat%dllsuffix%.dll osmium-tool-bin
+  - copy /y C:\projects\bzip2.v140.1.0.6.9\build\native\bin\x64\MT-%config%\bzip2%dllsuffix%.dll osmium-tool-bin
+  - 7z a c:\projects\osmium-tool\osmium_%config%_%platform%.zip osmium-tool-bin -tzip
+
+artifacts:
+- path: osmium_%config%_%platform%.zip
+

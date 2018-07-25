@@ -48,7 +48,7 @@ SET CMAKE_CMD=cmake .. -LA -G "Visual Studio 14 Win64" ^
 -DEXPAT_INCLUDE_DIR=C:/projects/expat.v140.2.2.5/build/native/include ^
 -DEXPAT_LIBRARY=C:/projects/expat.v140.2.2.5/build/native/lib/x64/%config%/libexpat%libpostfix%.lib ^
 -DBZIP2_INCLUDE_DIR=C:/projects/bzip2.v140.1.0.6.9/build/native/include ^
--DBZIP2_LIBRARIES=C:/projects/bzip2.v140.1.0.6.9/build/native/lib/x64/%config%/libbz2%libpostfix%.lib ^
+-DBZIP2_LIBRARIES=C:/projects/bzip2.v140.1.0.6.9/build/native/lib/x64/MT-%config%/libbz2%libpostfix%.lib ^
 -DBoost_USE_STATIC_LIBS=ON
 
 ECHO calling^: %CMAKE_CMD%
