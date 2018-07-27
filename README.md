@@ -36,7 +36,7 @@ You also need the following libraries:
         https://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev
         Fedora/CentOS: boost-devel
-        openSUSE: boost-devel
+        openSUSE: boost-devel (use 'libboost_program_options-devel' for modern OS versions)
 
     bz2lib
         http://www.bzip.org/
