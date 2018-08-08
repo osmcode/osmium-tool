@@ -62,6 +62,9 @@ fileinfo
 getid
 :   get objects from OSM file by ID
 
+getparents
+:   get parents of objects from OSM file
+
 help
 :   show help about commands
 
@@ -133,6 +136,7 @@ killer" to find out more about this.
   **osmium-extract**(1),
   **osmium-fileinfo**(1),
   **osmium-getid**(1),
+  **osmium-getparents**(1),
   **osmium-merge**(1),
   **osmium-merge-changes**(1),
   **osmium-renumber**(1),

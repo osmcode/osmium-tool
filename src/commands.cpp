@@ -12,6 +12,7 @@
 #include "command_extract.hpp"
 #include "command_fileinfo.hpp"
 #include "command_getid.hpp"
+#include "command_getparents.hpp"
 #include "command_help.hpp"
 #include "command_merge.hpp"
 #include "command_merge_changes.hpp"
@@ -64,6 +65,10 @@ void register_commands(CommandFactory& cmd_factory) {
 
     cmd_factory.register_command("getid", "Get objects with given ID from OSM file", [&]() {
         return new CommandGetId{cmd_factory};
+    });
+
+    cmd_factory.register_command("getparents", "Get parents of objects from OSM file", [&]() {
+        return new CommandGetParents{cmd_factory};
     });
 
     cmd_factory.register_command("help", "Show osmium help", [&]() {

@@ -1,33 +1,36 @@
 
 # NAME
 
-osmium-getid - get objects from OSM file by ID
+osmium-getparents - get parents of objects from OSM file
 
 
 # SYNOPSIS
 
-**osmium getid** \[*OPTIONS*\] *OSM-FILE* *ID*...\
-**osmium getid** \[*OPTIONS*\] *OSM-FILE* -i *ID-FILE*\
-**osmium getid** \[*OPTIONS*\] *OSM-FILE* -I *ID-OSM-FILE*
+**osmium getparents** \[*OPTIONS*\] *OSM-FILE* *ID*...\
+**osmium getparents** \[*OPTIONS*\] *OSM-FILE* -i *ID-FILE*\
+**osmium getparents** \[*OPTIONS*\] *OSM-FILE* -I *ID-OSM-FILE*
 
 
 # DESCRIPTION
 
-Get objects with the given IDs from the input and write them to the output.
+Get objects referencing the objects with the specified IDs from the input and
+write them to the output. So this will get ways referencing any of the
+specified node IDs and relations referencing any specified node, way, or
+relation IDs. Only one level of indirection is resolved, so no relations of
+relations are found and no relations referencing ways referencing the specified
+node IDs.
 
-IDs can be given on the command line (first case in synopsis), or read from
-text files with one ID per line (second case in synopsis), or read from
-OSM files (third cases in synopsis). A mixture of these cases is also allowed.
+IDs can be specified on the command line (first case in synopsis), or read from
+text files with one ID per line (second case in synopsis), or read from OSM
+files (third cases in synopsis). A mixture of these cases is also allowed.
 
 All objects with these IDs will be read from *OSM-FILE* and written to the
-output. If the option **-r**, **--add-referenced** is used all objects
-referenced from those objects will also be added to the output.
+output. If the option **-s**, **--add-self** is specified, the objects with
+the specified IDs themselves will also be added to the output.
 
 Objects will be written out in the order they are found in the *OSM-FILE*.
 
-If the option **-r**, **--add-referenced** is *not* used, the input file is
-read only once, if it is used, the input file will possibly be read up to
-three times.
+The input file is read only once.
 
 On the command line or in the ID file, the IDs have the form: *TYPE-LETTER*
 *NUMBER*. The type letter is 'n' for nodes, 'w' for ways, and 'r' for
@@ -52,12 +55,8 @@ Note that all objects will be taken from the *OSM-FILE*, the *ID-OSM-FILE* is
 only used to detect which objects to get. This might matter if there are
 different object versions in the different files.
 
-The *OSM-FILE* can not be a history file unless the **-H**, **--with-history**
-option is used. Then all versions of the objects will be copied to the output.
-
-If referenced objects are missing from the input file, the type and IDs
-of those objects is written out to STDERR at the end of the program unless
-the **-H**, **--with-history** option was given.
+The *OSM-FILE* can be a history file, then all matching versions of the objects
+will be copied to the output.
 
 This command will not work with negative IDs.
 
@@ -68,13 +67,6 @@ This command will not work with negative IDs.
 :   Use TYPE ('node', 'way', or 'relation') for IDs without a type prefix
     (default: 'node'). It is also allowed to just use the first character
     of the type here.
-
---history
-:   Deprecated. Use --with-history instead.
-
--H, --with-history
-:   Make this program work on history files. This is only needed when using
-    the **-r** option.
 
 -i, --id-file[=FILE]
 :   Read IDs from text file instead of from the command line. Use the special
@@ -89,13 +81,11 @@ This command will not work with negative IDs.
 :   Like **-i** but get the IDs from an OSM file. This option can be used
     multiple times.
 
--r, --add-referenced
-:   Recursively find all objects referenced by the objects of the given IDs
-    and include them in the output. This only works correctly on non-history
-    files unless the `-H` option is also used.
+-s, --add-self
+:   Also add all objects with the specified IDs to the output.
 
 --verbose-ids
-:   Also print all requested and missing IDs. This is usually disabled, because
+:   Also print all requested IDs. This is usually disabled, because
     the lists can get quite long. (This option implies `--verbose`.)
 
 @MAN_COMMON_OPTIONS@
@@ -105,15 +95,13 @@ This command will not work with negative IDs.
 
 # DIAGNOSTICS
 
-**osmium getid** exits with exit code
+**osmium getparents** exits with exit code
 
 0
-  ~ if all IDs were found
+  ~ if there was no error.
 
 1
-  ~ if there was an error processing the data or not all IDs were found,
-    (this is only detected if the **-H**, **--with-history** option was not
-    used),
+  ~ if there was an error processing the data.
 
 2
   ~ if there was a problem with the command line arguments.
@@ -121,19 +109,20 @@ This command will not work with negative IDs.
 
 # MEMORY USAGE
 
-**osmium getid** does all its work on the fly and only keeps a table of all
-IDs it needs in main memory.
+**osmium getparents** does all its work on the fly and only keeps a table of
+all IDs it needs in main memory.
 
 
 # EXAMPLES
 
-Output nodes 17 and 1234, way 42, and relation 111 to STDOUT in OPL format:
+Output all ways referencing nodes 17 or 1234, and all relations with nodes 17
+or 1234, or way 42, or relation 111 as members to STDOUT in OPL format:
 
-    osmium getid -f opl planet.osm.pbf n1234 w42 n17 r111
+    osmium getparents -f opl planet.osm.pbf n1234 w42 n17 r111
 
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-getparents**(1), **osmium-file-formats**(5)
+* **osmium**(1), **osmium-getid**(1), **osmium-file-formats**(5)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

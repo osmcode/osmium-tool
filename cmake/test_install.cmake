@@ -8,6 +8,7 @@ set(OSMIUM_INSTALL_FILES
     share/man/man1/osmium-renumber.1
     share/man/man1/osmium-sort.1
     share/man/man1/osmium-getid.1
+    share/man/man1/osmium-getparents.1
     share/man/man1/osmium.1
     share/man/man1/osmium-add-locations-to-ways.1
     share/man/man1/osmium-apply-changes.1

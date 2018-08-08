@@ -22,6 +22,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - More tests and updated documentation.
 - Add `-C`, `--print-default-config` option to the `export` command writing
   out the default configuration to stdout.
+- New `getparents` command to get the ways used by specified nodes or
+  relations having specified members.
 
 ### Changed
 

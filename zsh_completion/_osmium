@@ -18,7 +18,7 @@ polygon_file_glob="'*.json *.geojson *.poly *.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) 
 
 _osmium() {
     local -a osmium_commands
-    osmium_commands=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter)
+    osmium_commands=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid getparents help merge merge-changes renumber show sort tags-filter time-filter)
     if (( CURRENT > 2 )); then
         # Remember the subcommand name
         local cmd=${words[2]}
@@ -277,6 +277,26 @@ _osmium-getid() {
         '(-H)--with-history[make it work with history files]' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]' \
+        '--verbose-ids[print all requested IDs]' \
+        "*:IDs (format\: [nwr]ID):"
+}
+
+_osmium-getparents() {
+    _arguments : \
+        ${(f)"$(_osmium-common-options)"} \
+        ${(f)"$(_osmium-single-input-options)"} \
+        ${(f)"$(_osmium-output-format-options)"} \
+        ${(f)"$(_osmium-output-options)"} \
+        '--default-type[default item type]' \
+        '-i[read OSM IDs from text file]' \
+        '--id-file[read OSM IDs from text file]' \
+        '-I[read OSM IDs from OSM file]' \
+        '--id-osm-file[read OSM IDs from OSM file]' \
+        '(--add-self)-s[add objects with specified IDs]' \
+        '(-s)--add-self[add objects with specified IDs]' \
+        '(--progress)--no-progress[disable progress bar]' \
+        '(--no-progress)--progress[enable progress bar]' \
+        '--verbose-ids[print all requested IDs]' \
         "*:IDs (format\: [nwr]ID):"
 }
 
@@ -466,7 +486,7 @@ _osmium_export_index_types() {
 
 _osmium-help() {
     local -a osmium_help_topics
-    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid help merge merge-changes renumber show sort tags-filter time-filter file-formats index-types)
+    osmium_help_topics=(add-locations-to-ways apply-changes cat diff changeset-filter check-refs derive-changes export extract fileinfo getid getparents help merge merge-changes renumber show sort tags-filter time-filter file-formats index-types)
     _describe -t osmium-help-topics 'osmium help topics' osmium_help_topics
 }
 

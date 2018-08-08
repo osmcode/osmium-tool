@@ -213,6 +213,7 @@ SET(OSMIUM_COMMANDS
     extract
     fileinfo
     getid
+    getparents
     merge
     merge-changes
     renumber
