@@ -54,13 +54,7 @@ class CommandGetParents : public Command, public with_single_osm_input, public w
 
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
 
-    void parse_and_add_id(const std::string& s);
-
-    void read_id_osm_file(const std::string& file_name);
-    void read_id_file(std::istream& stream);
-
     osmium::osm_entity_bits::type get_needed_types() const;
-    bool no_ids() const;
 
     void add_nodes(const osmium::Way& way);
     void add_members(const osmium::Relation& relation);

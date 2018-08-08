@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command_getid.hpp"
 #include "exception.hpp"
+#include "id_file.hpp"
 #include "util.hpp"
 
 #include <osmium/index/relations_map.hpp>
@@ -45,35 +46,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-void CommandGetId::parse_and_add_id(const std::string& s) {
-    auto p = osmium::string_to_object_id(s.c_str(), osmium::osm_entity_bits::nwr, m_default_item_type);
-    if (p.second < 0) {
-        throw std::runtime_error{"osmium-getid does not work with negative IDs"};
-    }
-    m_ids(p.first).set(p.second);
-}
-
-void CommandGetId::read_id_file(std::istream& stream) {
-    m_vout << "Reading ID file...\n";
-    for (std::string line; std::getline(stream, line);) {
-        strip_whitespace(line);
-        const auto pos = line.find_first_of(" #");
-        if (pos != std::string::npos) {
-            line.erase(pos);
-        }
-        if (!line.empty()) {
-            parse_and_add_id(line);
-        }
-    }
-}
-
-bool CommandGetId::no_ids() const {
-    return m_ids(osmium::item_type::node).empty() &&
-           m_ids(osmium::item_type::way).empty() &&
-           m_ids(osmium::item_type::relation).empty();
-}
-
-std::size_t CommandGetId::count_ids() const {
+std::size_t CommandGetId::count_ids() const noexcept {
     return m_ids(osmium::item_type::node).size() +
            m_ids(osmium::item_type::way).size() +
            m_ids(osmium::item_type::relation).size();
@@ -161,20 +134,23 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
                 if (m_input_filename.empty() || m_input_filename == "-") {
                     throw argument_error{"Can not read OSM input and IDs both from STDIN."};
                 }
-                read_id_file(std::cin);
+                m_vout << "Reading IDs from STDIN...\n";
+                read_id_file(std::cin, m_ids, m_default_item_type);
             } else {
                 std::ifstream id_file{filename};
                 if (!id_file.is_open()) {
                     throw argument_error{"Could not open file '" + filename + "'"};
                 }
-                read_id_file(id_file);
+                m_vout << "Reading ID file...\n";
+                read_id_file(id_file, m_ids, m_default_item_type);
             }
         }
     }
 
     if (vm.count("id-osm-file")) {
         for (const std::string& filename : vm["id-osm-file"].as<std::vector<std::string>>()) {
-            read_id_osm_file(filename);
+            m_vout << "Reading OSM ID file...\n";
+            read_id_osm_file(filename, m_ids);
         }
     }
 
@@ -184,11 +160,11 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
             sids += s + " ";
         }
         for (const auto& s : osmium::split_string(sids, "\t ;,/|", true)) {
-            parse_and_add_id(s);
+            parse_and_add_id(s, m_ids, m_default_item_type);
         }
     }
 
-    if (no_ids()) {
+    if (no_ids(m_ids)) {
         throw argument_error{"Please specify IDs to look for on command line or with option --id-file/-i or --id-osm-file/-I."};
     }
 
@@ -243,18 +219,6 @@ osmium::osm_entity_bits::type CommandGetId::get_needed_types() const {
     return types;
 }
 
-void CommandGetId::add_nodes(const osmium::Way& way) {
-    for (const auto& nr : way.nodes()) {
-        m_ids(osmium::item_type::node).set(nr.positive_ref());
-    }
-}
-
-void CommandGetId::add_members(const osmium::Relation& relation) {
-    for (const auto& member : relation.members()) {
-        m_ids(member.type()).set(member.positive_ref());
-    }
-}
-
 static void print_missing_ids(const char* type, const osmium::index::IdSetDense<osmium::unsigned_object_id_type>& set) {
     if (set.empty()) {
         return;
@@ -264,22 +228,6 @@ static void print_missing_ids(const char* type, const osmium::index::IdSetDense<
         std::cerr << ' ' << id;
     }
     std::cerr << '\n';
-}
-
-void CommandGetId::read_id_osm_file(const std::string& file_name) {
-    m_vout << "Reading OSM ID file...\n";
-    osmium::io::Reader reader{file_name, osmium::osm_entity_bits::object};
-    while (osmium::memory::Buffer buffer = reader.read()) {
-        for (const auto& object : buffer.select<osmium::OSMObject>()) {
-            m_ids(object.type()).set(object.positive_id());
-            if (object.type() == osmium::item_type::way) {
-                add_nodes(static_cast<const osmium::Way&>(object));
-            } else if (object.type() == osmium::item_type::relation) {
-                add_members(static_cast<const osmium::Relation&>(object));
-            }
-        }
-    }
-    reader.close();
 }
 
 void CommandGetId::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id) {
@@ -351,7 +299,7 @@ void CommandGetId::find_nodes_in_ways() {
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& way : buffer.select<osmium::Way>()) {
             if (m_ids(osmium::item_type::way).get(way.positive_id())) {
-                add_nodes(way);
+                add_nodes(way, m_ids);
             }
         }
     }
@@ -418,7 +366,7 @@ bool CommandGetId::run() {
     reader.close();
 
     if (!m_work_with_history) {
-        if (no_ids()) {
+        if (no_ids(m_ids)) {
             m_vout << "Found all objects.\n";
         } else {
             m_vout << "Did not find " << count_ids() << " object(s).\n";
@@ -434,6 +382,6 @@ bool CommandGetId::run() {
 
     m_vout << "Done.\n";
 
-    return m_work_with_history || no_ids();
+    return m_work_with_history || no_ids(m_ids);
 }
 

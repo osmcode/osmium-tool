@@ -226,6 +226,7 @@ SET(OSMIUM_COMMANDS
 set(OSMIUM_SOURCE_FILES
     cmd.cpp
     cmd_factory.cpp
+    id_file.cpp
     io.cpp
     util.cpp
     command_help.cpp

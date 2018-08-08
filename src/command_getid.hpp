@@ -55,19 +55,10 @@ class CommandGetId : public Command, public with_single_osm_input, public with_o
 
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
 
-    void parse_and_add_id(const std::string& s);
-
-    void read_id_osm_file(const std::string& file_name);
-    void read_id_file(std::istream& stream);
-
     osmium::osm_entity_bits::type get_needed_types() const;
-    bool no_ids() const;
-    std::size_t count_ids() const;
+    std::size_t count_ids() const noexcept;
 
     void find_referenced_objects();
-
-    void add_nodes(const osmium::Way& way);
-    void add_members(const osmium::Relation& relation);
 
     void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id);
     bool find_relations_in_relations();
