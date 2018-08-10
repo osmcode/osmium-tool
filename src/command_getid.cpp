@@ -110,17 +110,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     }
 
     if (vm.count("default-type")) {
-        std::string t{vm["default-type"].as<std::string>()};
-
-        if (t == "n" || t == "node") {
-            m_default_item_type = osmium::item_type::node;
-        } else if (t == "w" || t == "way") {
-            m_default_item_type = osmium::item_type::way;
-        } else if (t == "r" || t == "relation") {
-            m_default_item_type = osmium::item_type::relation;
-        } else {
-            throw argument_error{std::string{"Unknown default type '"} + t + "' (Allowed are 'node', 'way', and 'relation')."};
-        }
+        m_default_item_type = parse_item_type(vm["default-type"].as<std::string>());
     }
 
     if (vm.count("verbose-ids")) {

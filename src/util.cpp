@@ -212,3 +212,19 @@ osmium::Box parse_bbox(const std::string& str, const std::string& option_name) {
     return box;
 }
 
+osmium::item_type parse_item_type(const std::string& t) {
+    if (t == "n" || t == "node") {
+        return osmium::item_type::node;
+    }
+
+    if (t == "w" || t == "way") {
+        return osmium::item_type::way;
+    }
+
+    if (t == "r" || t == "relation") {
+        return osmium::item_type::relation;
+    }
+
+    throw argument_error{std::string{"Unknown default type '"} + t + "' (Allowed are 'node', 'way', and 'relation')."};
+}
+
