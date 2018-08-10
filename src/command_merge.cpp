@@ -229,7 +229,7 @@ bool CommandMerge::run() {
 
             if (n++ > 10000) {
                 n = 0;
-                progress_bar.update(std::accumulate(data_sources.cbegin(), data_sources.cend(), 0, [](std::size_t sum, const DataSource& source){
+                progress_bar.update(std::accumulate(data_sources.cbegin(), data_sources.cend(), static_cast<std::size_t>(0), [](std::size_t sum, const DataSource& source){
                     return sum + source.offset();
                 }));
             }
