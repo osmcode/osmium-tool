@@ -180,7 +180,7 @@ class Output {
 
 protected:
 
-    bool m_calculate_crc;
+    bool m_calculate_crc = false;
 
 public:
 
