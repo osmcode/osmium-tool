@@ -29,14 +29,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/geom/rapid_geojson.hpp>
 #include <osmium/io/writer_options.hpp>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wold-style-cast"
 #ifndef RAPIDJSON_HAS_STDSTRING
 # define RAPIDJSON_HAS_STDSTRING 1
 #endif
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
-#pragma GCC diagnostic pop
 
 #include <string>
 

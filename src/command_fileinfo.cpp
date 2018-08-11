@@ -40,11 +40,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wold-style-cast"
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
-#pragma GCC diagnostic pop
 
 #include <boost/program_options.hpp>
 
