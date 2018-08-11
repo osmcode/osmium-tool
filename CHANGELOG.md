@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.9.0] - 2018-08-11
+
+### Added
+
 - Add area matching to `tags-filter`. The `tags-filter` command can now match
   "areas" using the "a/" prefix. Areas in this sense are all closed ways with
   4 or more nodes and all relations with tag "type=multipolygon" or
@@ -423,7 +432,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.8.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.9.0...HEAD
+[1.9.0]: https://github.com/osmcode/osmium-tool/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...v1.8.0
 [1.7.1]: https://github.com/osmcode/osmium-tool/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/osmcode/osmium-tool/compare/v1.6.1...v1.7.0

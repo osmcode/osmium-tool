@@ -25,7 +25,7 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev"
 project(osmium)
 
 set(OSMIUM_VERSION_MAJOR 1)
-set(OSMIUM_VERSION_MINOR 8)
+set(OSMIUM_VERSION_MINOR 9)
 set(OSMIUM_VERSION_PATCH 0)
 
 set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERSION_PATCH})
@@ -44,7 +44,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Boost 1.55.0 REQUIRED COMPONENTS program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-find_package(Osmium 2.14.0 REQUIRED COMPONENTS io)
+find_package(Osmium 2.14.2 REQUIRED COMPONENTS io)
 include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
 
 
