@@ -263,7 +263,7 @@ false
 :   No tags match.
 
 Array
-:   The array contains one or more expressions as descibed in the FILTER
+:   The array contains one or more expressions as described in the FILTER
     EXPRESSION section.
 
 null

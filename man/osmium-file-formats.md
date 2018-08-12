@@ -95,7 +95,7 @@ Here are some examples:
 :   PBF format.
 
 `pbf,add_metadata=false`
-:   PBF format, dont' write metadata
+:   PBF format, don't write metadata
 
 `osm.bz2`
 :   XML format, compressed with bzip2.
