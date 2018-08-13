@@ -105,6 +105,13 @@ To set the build type call cmake with `-DCMAKE_BUILD_TYPE=type`. Possible
 values are empty, Debug, Release, RelWithDebInfo, MinSizeRel, and Dev. The
 default is RelWithDebInfo.
 
+If you have another/older version of Protozero or Libosmium already installed and you 
+want to use the Git repository versions for building Osmium, set path variables in CMakeCache.txt after `cmake ..` to
+`PROTOZERO_INCLUDE_DIR:PATH=../protozero/include` 
+and/or 
+`OSMIUM_INCLUDE_DIR:PATH=../libosmium/include`
+assuming the installation location is as described above.
+
 Please read the CMake documentation and get familiar with the `cmake` and
 `ccmake` tools which have many more options.
 
