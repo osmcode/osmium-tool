@@ -10,7 +10,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+* Improved `export` command man page.
+
 ### Fixed
+
+* Regression: Default for `linear_tags` and `area_tags` should be `true`.
+  It was before v1.9.0 and it is documented this way.
 
 
 ## [1.9.0] - 2018-08-11
