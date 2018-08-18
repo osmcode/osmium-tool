@@ -10,6 +10,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+### Fixed
+
+
+## [1.9.1] - 2018-08-18
+
+### Changed
+
 * Improved `export` command man page.
 
 ### Fixed
@@ -437,7 +444,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.9.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.9.1...HEAD
+[1.9.1]: https://github.com/osmcode/osmium-tool/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/osmcode/osmium-tool/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...v1.8.0
 [1.7.1]: https://github.com/osmcode/osmium-tool/compare/v1.7.0...v1.7.1
