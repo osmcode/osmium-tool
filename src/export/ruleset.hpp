@@ -17,7 +17,7 @@ enum class tags_filter_rule_type {
 
 class Ruleset {
 
-    tags_filter_rule_type m_type = tags_filter_rule_type::none;
+    tags_filter_rule_type m_type = tags_filter_rule_type::any;
     std::vector<std::string> m_tags;
     osmium::TagsFilter m_filter{false};
 
