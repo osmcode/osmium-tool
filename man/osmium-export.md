@@ -130,14 +130,38 @@ the following optional names:
 
 * `attributes`: An object specifying which attributes of OSM objects to export.
    See the ATTRIBUTES section.
-* `linear_tags`: An array of expressions specifying tags that should be treated
-   as linear. See the FILTER EXPRESSION and AREA HANDLING sections.
-* `area_tags`: An array of expressions specifying tags that should be treated
-   as area tags. See the FILTER EXPRESSION and AREA HANDLING sections.
+* `linear_tags`: An expression specifying tags that should be treated
+   as linear tags. See below for details and also look at the AREA HANDLING
+   section.
+* `area_tags`: An expression specifying tags that should be treated
+   as area tags. See below for details and also look at the AREA HANDLING
+   section.
 * `exclude_tags`: A list of tag expressions. Tags matching these expressions
    are excluded from the output. See the FILTER EXPRESSION section.
 * `include_tags`: A list of tag expressions. Tags matching these expressions
    are included in the output. See the FILTER EXPRESSION section.
+
+The `area_tags` and `linear_tags` can have the following values:
+
+true
+:   All tags match. (An empty list `[]` can also be used to mean the same,
+    but this use is deprecated because it can be confusing.)
+
+false
+:   No tags match.
+
+Array
+:   The array contains one or more expressions as described in the FILTER
+    EXPRESSION section.
+
+null
+:   If the `area_tags` or `linear_tags` is set to null or not set at all,
+    the inverse of the other setting is used. So if you do not set the
+    `linear_tags` but have some expressions in `area_tags`, areas will be
+    created for all objects matching those expressions and linestrings for
+    everything else. This can be simpler, because you only have to keep
+    one list, but in cases where an object can be interpreted as both an
+    area and a linestring, only one interpretation will be used.
 
 The `exclude_tags` and `include_tags` options are mutually exclusive. If you
 want to just exclude some tags but leave most tags untouched, use the
@@ -252,28 +276,6 @@ Closed way
   is created. If both match, an area and a linestring is created. This is
   important because some objects have tags that make them both, an area and
   a linestring.
-
-The `area_tags` and `linear_tags` can have the following values:
-
-true
-:   All tags match. (An empty list `[]` can also be used to mean the same,
-    but this use is deprecated because it can be confusing.)
-
-false
-:   No tags match.
-
-Array
-:   The array contains one or more expressions as described in the FILTER
-    EXPRESSION section.
-
-null
-:   If the `area_tags` or `linear_tags` is set to null or not set at all,
-    the inverse of the other setting is used. So if you do not set the
-    `linear_tags` but have some expressions in `area_tags`, areas will be
-    created for all objects matching those expressions and linestrings for
-    everything else. This can be simpler, because you only have to keep
-    one list, but in cases where an object can be interpreted as both an
-    area and a linestring, only one interpretation will be used.
 
 
 # OUTPUT FORMATS
