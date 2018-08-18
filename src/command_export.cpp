@@ -421,7 +421,7 @@ static void print_ruleset(osmium::VerboseOutput& vout, const Ruleset& ruleset) {
             print_taglist(vout, ruleset.tags());
             break;
         case tags_filter_rule_type::other:
-            vout << "if area tags don't match\n";
+            vout << "if other tag list doesn't match\n";
             break;
     }
 }
