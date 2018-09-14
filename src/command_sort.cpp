@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_sort.hpp"
+#include "exception.hpp"
 #include "util.hpp"
 
 #include <osmium/io/header.hpp>
@@ -51,6 +52,7 @@ bool CommandSort::setup(const std::vector<std::string>& arguments) {
     po::options_description hidden;
     hidden.add_options()
     ("input-filenames", po::value<std::vector<std::string>>(), "OSM input files")
+    ("strategy,s", po::value<std::string>(), "Strategy (default: simple)")
     ;
 
     po::options_description desc;
@@ -75,15 +77,25 @@ bool CommandSort::setup(const std::vector<std::string>& arguments) {
         m_filenames = vm["input-filenames"].as<std::vector<std::string>>();
     }
 
+    if (vm.count("strategy")) {
+        m_strategy = vm["strategy"].as<std::string>();
+        if (m_strategy != "simple" && m_strategy != "multipass") {
+            throw argument_error{"Unknown strategy: " + m_strategy};
+        }
+    }
+
     return true;
 }
 
 void CommandSort::show_arguments() {
     show_multiple_inputs_arguments(m_vout);
     show_output_arguments(m_vout);
+
+    m_vout << "  other options:\n";
+    m_vout << "    strategy: " << m_strategy << "\n";
 }
 
-bool CommandSort::run() {
+bool CommandSort::run_single_pass() {
     std::vector<osmium::memory::Buffer> data;
     osmium::ObjectPointerCollection objects;
 
@@ -128,5 +140,76 @@ bool CommandSort::run() {
     m_vout << "Done.\n";
 
     return true;
+}
+
+bool CommandSort::run_multi_pass() {
+    osmium::Box bounding_box;
+
+    m_vout << "Reading input file headers...\n";
+    for (const std::string& file_name : m_filenames) {
+        osmium::io::Reader reader{file_name, osmium::osm_entity_bits::nothing};
+        osmium::io::Header header{reader.header()};
+        bounding_box.extend(header.joined_boxes());
+        reader.close();
+    }
+
+    m_vout << "Opening output file...\n";
+    osmium::io::Header header;
+    setup_header(header);
+    if (bounding_box) {
+        header.add_box(bounding_box);
+    }
+
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+
+    osmium::ProgressBar progress_bar{file_size_sum(m_input_files) * 3, display_progress()};
+
+    int pass = 1;
+    for (const auto entity : {osmium::osm_entity_bits::node, osmium::osm_entity_bits::way, osmium::osm_entity_bits::relation}) {
+        std::vector<osmium::memory::Buffer> data;
+        osmium::ObjectPointerCollection objects;
+
+        m_vout << "Pass " << pass++ << "...\n";
+        m_vout << "Reading contents of input files...\n";
+        for (const std::string& file_name : m_filenames) {
+            osmium::io::Reader reader{file_name, entity};
+            osmium::io::Header header{reader.header()};
+            bounding_box.extend(header.joined_boxes());
+            while (osmium::memory::Buffer buffer = reader.read()) {
+                progress_bar.update(reader.offset());
+                osmium::apply(buffer, objects);
+                data.push_back(std::move(buffer));
+            }
+            progress_bar.file_done(reader.file_size());
+            reader.close();
+        }
+
+        if (m_vout.verbose()) {
+            progress_bar.remove();
+        }
+        m_vout << "Sorting data...\n";
+        objects.sort(osmium::object_order_type_id_version());
+
+        m_vout << "Writing out sorted data...\n";
+        auto out = osmium::io::make_output_iterator(writer);
+        std::copy(objects.begin(), objects.end(), out);
+    }
+
+    progress_bar.done();
+
+    m_vout << "Closing output file...\n";
+    writer.close();
+
+    show_memory_used();
+    m_vout << "Done.\n";
+
+    return true;
+}
+
+bool CommandSort::run() {
+    if (m_strategy == "simple") {
+        return run_single_pass();
+    }
+    return run_multi_pass();
 }
 

@@ -29,7 +29,18 @@ This command works with normal OSM data files, history files, and change files.
 
 This commands reads its input file(s) only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
-STDOUT.
+STDOUT. (Unless the *multipass* strategy is used.)
+
+# OPTIONS
+
+-s, --strategy=STRATEGY
+:   Sorting strategy. The "simple" strategy reads all input files into memory,
+    does the sorting and writes everything out. The "multipass" strategy reads
+    the input files in three passes, one for nodes, one for ways, and one for
+    relations. After reading all objects of each type, they are sorted and
+    written out. This is a bit slower than the "simple" strategy, but uses
+    less memory. The "multi" strategy doesn't work when reading from STDIN.
+    Default: "simple".
 
 
 @MAN_COMMON_OPTIONS@

@@ -8,10 +8,12 @@
 
 function(check_sort2 _name _in1 _in2 _output)
     check_output(sort ${_name} "sort --generator=test -f osm sort/${_in1} sort/${_in2}" "sort/${_output}")
+    check_output(sort ${_name}_mp "sort --generator=test -f osm -s multipass sort/${_in1} sort/${_in2}" "sort/${_output}")
 endfunction()
 
 function(check_sort1 _name _input _output _format)
     check_output(sort ${_name} "sort --generator=test -f ${_format} sort/${_input}" "sort/${_output}")
+    check_output(sort ${_name}_mp "sort --generator=test -f ${_format} -s multipass sort/${_input}" "sort/${_output}")
 endfunction()
 
 

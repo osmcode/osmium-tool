@@ -11,6 +11,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 * The `fileinfo` command now has an `--object-type`/`-t` option like some
   other commands.
 * Extended `fileinfo` command to show internal buffer counts and sizes.
+* Add `--strategy` option to `sort` command. New `multipass` strategy which
+  reads the input file(s) three times making the sort a bit slower, but also
+  using less memory.
 
 ### Changed
 

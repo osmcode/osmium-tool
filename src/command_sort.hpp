@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 class CommandSort : public Command, public with_multiple_osm_inputs, public with_osm_output {
 
     std::vector<std::string> m_filenames;
+    std::string m_strategy{"simple"};
 
 public:
 
@@ -41,6 +42,10 @@ public:
     bool setup(const std::vector<std::string>& arguments) override final;
 
     void show_arguments() override final;
+
+    bool run_single_pass();
+
+    bool run_multi_pass();
 
     bool run() override final;
 
