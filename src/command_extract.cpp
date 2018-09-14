@@ -56,7 +56,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <memory>
 #include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <vector>
+
+#ifdef _WIN32
+#  ifndef WIN32_LEAN_AND_MEAN
+#   define WIN32_LEAN_AND_MEAN // Prevent winsock.h inclusion; avoid winsock2.h conflict
+#  endif
+# include <io.h>
+#endif
+
+#ifndef _MSC_VER
+# include <unistd.h>
+#endif
 
 namespace {
 
@@ -197,7 +210,28 @@ namespace {
 
 } // anonymous namespace
 
+static bool is_existing_directory(const char* name) {
+#ifdef _MSC_VER
+    // Windows implementation
+    // https://msdn.microsoft.com/en-us/library/14h5k7ff.aspx
+    struct _stat64 s{};
+    if (::_stati64(name, &s) != 0) {
+        return false;
+    }
+#else
+    // Unix implementation
+    struct stat s; // NOLINT clang-tidy
+    if (::stat(name, &s) != 0) {
+        return false;
+    }
+#endif
+    return S_ISDIR(s.st_mode);
+}
+
 void CommandExtract::set_directory(const std::string& directory) {
+    if (!is_existing_directory(directory.c_str())) {
+        throw config_error{"Output directory is missing or not accessible: " + directory};
+    }
     m_output_directory = directory;
     if (m_output_directory.empty() || m_output_directory.back() != '/') {
         m_output_directory += '/';
