@@ -116,6 +116,9 @@ The following variables are available:
     data.maxid.ways - INTEGER
     data.maxid.relations - INTEGER
     data.maxid.changesets - INTEGER
+    data.buffers.count - INTEGER
+    data.buffers.size - INTEGER
+    data.buffers.capcity - INTEGER
     metadata.all_objects.version - BOOL (yes|no)
     metadata.all_objects.timestamp - BOOL (yes|no)
     metadata.all_objects.changeset - BOOL (yes|no)

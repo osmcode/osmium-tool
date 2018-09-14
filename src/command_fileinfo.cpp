@@ -46,6 +46,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <boost/program_options.hpp>
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <iterator>
@@ -69,6 +70,10 @@ struct InfoHandler : public osmium::handler::Handler {
     uint64_t nodes      = 0;
     uint64_t ways       = 0;
     uint64_t relations  = 0;
+
+    uint64_t buffers_count    = 0;
+    uint64_t buffers_size     = 0;
+    uint64_t buffers_capacity = 0;
 
     osmium::min_op<osmium::object_id_type> smallest_changeset_id{};
     osmium::min_op<osmium::object_id_type> smallest_node_id{};
@@ -287,6 +292,16 @@ public:
 
         std::cout << "  All objects have following metadata attributes: " << info_handler.metadata_all_objects  << "\n";
         std::cout << "  Some objects have following metadata attributes: " << info_handler.metadata_some_objects  << "\n";
+
+        const auto num_objects = info_handler.changesets + info_handler.nodes + info_handler.ways + info_handler.relations;
+        std::cout << "  Number of buffers: " << info_handler.buffers_count << " (avg " << (num_objects / info_handler.buffers_count) << " objects per buffer)\n";
+
+        const auto buffers_size = static_cast<double>(info_handler.buffers_size / (1000 * 1000)) / 1000;
+        std::cout << "  Sum of buffer sizes: " << info_handler.buffers_size << " (" << buffers_size << " GB)\n";
+
+        const auto buffers_capacity= static_cast<double>(info_handler.buffers_capacity / (1000 * 1000)) / 1000;
+        const auto fill_factor = std::round(100 * static_cast<double>(info_handler.buffers_size) / info_handler.buffers_capacity);
+        std::cout << "  Sum of buffer capacities: " << info_handler.buffers_capacity << " (" << buffers_capacity << " GB, " << fill_factor << "% full)\n";
     }
 
 }; // class HumanReadableOutput
@@ -430,6 +445,16 @@ public:
         m_writer.Int64(get_largest(info_handler.largest_way_id()));
         m_writer.String("relations");
         m_writer.Int64(get_largest(info_handler.largest_relation_id()));
+        m_writer.EndObject();
+
+        m_writer.String("buffers");
+        m_writer.StartObject();
+        m_writer.String("count");
+        m_writer.Int64(get_largest(info_handler.buffers_count));
+        m_writer.String("size");
+        m_writer.Int64(get_largest(info_handler.buffers_size));
+        m_writer.String("capacity");
+        m_writer.Int64(get_largest(info_handler.buffers_capacity));
         m_writer.EndObject();
 
         m_writer.String("metadata");
@@ -614,6 +639,19 @@ public:
             return;
         }
 
+        if (m_get_value == "data.buffers.count") {
+            std::cout << info_handler.buffers_count << "\n";
+            return;
+        }
+        if (m_get_value == "data.buffers.size") {
+            std::cout << info_handler.buffers_size << "\n";
+            return;
+        }
+        if (m_get_value == "data.buffers.capacity") {
+            std::cout << info_handler.buffers_capacity << "\n";
+            return;
+        }
+
         if (m_get_value == "metadata.all_objects.version") {
             std::cout << (info_handler.metadata_all_objects.version() ? "yes\n" : "no\n");
             return;
@@ -745,6 +783,9 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         "data.maxid.ways",
         "data.maxid.relations",
         "data.maxid.changesets",
+        "data.buffers.count",
+        "data.buffers.size",
+        "data.buffers.capacity",
         "metadata.all_objects.version",
         "metadata.all_objects.timestamp",
         "metadata.all_objects.changeset",
@@ -820,6 +861,9 @@ bool CommandFileinfo::run() {
         osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
         while (osmium::memory::Buffer buffer = reader.read()) {
             progress_bar.update(reader.offset());
+            ++info_handler.buffers_count;
+            info_handler.buffers_size += buffer.committed();
+            info_handler.buffers_capacity += buffer.capacity();
             osmium::apply(buffer, info_handler);
         }
         progress_bar.done();
