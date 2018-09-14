@@ -352,6 +352,10 @@ strategy used. For the *simple* strategy it will at least be the number of
 extracts times the highest node ID used divided by 8. For the *complete_ways*
 twice that and for the *smart* strategy a bit more.
 
+If you want to split a large file into many extracts, do this in several
+steps. First create several larger extracts and then split them again and
+again into smaller pieces.
+
 
 # EXAMPLES
 
