@@ -101,6 +101,10 @@ bool CommandSort::run_single_pass() {
 
     osmium::Box bounding_box;
 
+    uint64_t buffers_count = 0;
+    uint64_t buffers_size = 0;
+    uint64_t buffers_capacity = 0;
+
     m_vout << "Reading contents of input files...\n";
     osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
     for (const std::string& file_name : m_filenames) {
@@ -108,6 +112,9 @@ bool CommandSort::run_single_pass() {
         osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
         while (osmium::memory::Buffer buffer = reader.read()) {
+            ++buffers_count;
+            buffers_size += buffer.committed();
+            buffers_capacity += buffer.capacity();
             progress_bar.update(reader.offset());
             osmium::apply(buffer, objects);
             data.push_back(std::move(buffer));
@@ -116,6 +123,15 @@ bool CommandSort::run_single_pass() {
         reader.close();
     }
     progress_bar.done();
+
+    m_vout << "Number of buffers: " << buffers_count << "\n";
+
+    const auto buffers_size_rounded = static_cast<double>(buffers_size / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
+    m_vout << "Sum of buffer sizes: " << buffers_size << " (" << buffers_size_rounded << " GB)\n";
+
+    const auto buffers_capacity_rounded = static_cast<double>(buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
+    const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
+    m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
@@ -169,6 +185,10 @@ bool CommandSort::run_multi_pass() {
         std::vector<osmium::memory::Buffer> data;
         osmium::ObjectPointerCollection objects;
 
+        uint64_t buffers_count = 0;
+        uint64_t buffers_size = 0;
+        uint64_t buffers_capacity = 0;
+
         m_vout << "Pass " << pass++ << "...\n";
         m_vout << "Reading contents of input files...\n";
         for (const std::string& file_name : m_filenames) {
@@ -176,6 +196,9 @@ bool CommandSort::run_multi_pass() {
             osmium::io::Header header{reader.header()};
             bounding_box.extend(header.joined_boxes());
             while (osmium::memory::Buffer buffer = reader.read()) {
+                ++buffers_count;
+                buffers_size += buffer.committed();
+                buffers_capacity += buffer.capacity();
                 progress_bar.update(reader.offset());
                 osmium::apply(buffer, objects);
                 data.push_back(std::move(buffer));
@@ -187,6 +210,16 @@ bool CommandSort::run_multi_pass() {
         if (m_vout.verbose()) {
             progress_bar.remove();
         }
+
+        m_vout << "Number of buffers: " << buffers_count << "\n";
+
+        const auto buffers_size_rounded = static_cast<double>(buffers_size / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
+        m_vout << "Sum of buffer sizes: " << buffers_size << " (" << buffers_size_rounded << " GB)\n";
+
+        const auto buffers_capacity_rounded = static_cast<double>(buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
+        const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
+        m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
+
         m_vout << "Sorting data...\n";
         objects.sort(osmium::object_order_type_id_version());
 
