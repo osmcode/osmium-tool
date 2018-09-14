@@ -218,14 +218,15 @@ static bool is_existing_directory(const char* name) {
     if (::_stati64(name, &s) != 0) {
         return false;
     }
+    return s.st_mode & _S_IFDIR;
 #else
     // Unix implementation
     struct stat s; // NOLINT clang-tidy
     if (::stat(name, &s) != 0) {
         return false;
     }
-#endif
     return S_ISDIR(s.st_mode); // NOLINT(hicpp-signed-bitwise)
+#endif
 }
 
 void CommandExtract::set_directory(const std::string& directory) {
