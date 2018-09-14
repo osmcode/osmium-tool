@@ -10,8 +10,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 * The `fileinfo` command now has an `--object-type`/`-t` option like some
   other commands.
+* Extended `fileinfo` command to show internal buffer counts and sizes.
 
 ### Changed
+
+* Show better error message if output directory is missing for `extract`
+  command.
 
 ### Fixed
 
