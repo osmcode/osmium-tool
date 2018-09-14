@@ -296,10 +296,10 @@ public:
         const auto num_objects = info_handler.changesets + info_handler.nodes + info_handler.ways + info_handler.relations;
         std::cout << "  Number of buffers: " << info_handler.buffers_count << " (avg " << (num_objects / info_handler.buffers_count) << " objects per buffer)\n";
 
-        const auto buffers_size = static_cast<double>(info_handler.buffers_size / (1000 * 1000)) / 1000;
+        const auto buffers_size = static_cast<double>(info_handler.buffers_size / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
         std::cout << "  Sum of buffer sizes: " << info_handler.buffers_size << " (" << buffers_size << " GB)\n";
 
-        const auto buffers_capacity= static_cast<double>(info_handler.buffers_capacity / (1000 * 1000)) / 1000;
+        const auto buffers_capacity= static_cast<double>(info_handler.buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
         const auto fill_factor = std::round(100 * static_cast<double>(info_handler.buffers_size) / info_handler.buffers_capacity);
         std::cout << "  Sum of buffer capacities: " << info_handler.buffers_capacity << " (" << buffers_capacity << " GB, " << fill_factor << "% full)\n";
     }
