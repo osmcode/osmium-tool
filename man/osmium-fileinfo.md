@@ -72,6 +72,11 @@ This commands reads its input file only once, ie. it can read from STDIN.
 -j, --json
 :   Output in JSON format. Can not be used together with --get.
 
+-t, --object-type=TYPE
+:   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
+    By default all types are read. This option can be given multiple times.
+    This only takes effect if the **--extended** option is also used.
+
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@

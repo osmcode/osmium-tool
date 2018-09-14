@@ -670,6 +670,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     ("json,j", "JSON output")
     ("crc,c", "Calculate CRC")
     ("no-crc", "Do not calculate CRC")
+    ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -695,6 +696,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
 
     setup_common(vm, desc);
     setup_progress(vm);
+    setup_object_type_nwrc(vm);
 
     if (vm.count("extended")) {
         m_extended = true;
@@ -791,6 +793,7 @@ void CommandFileinfo::show_arguments() {
     show_single_input_arguments(m_vout);
 
     m_vout << "  other options:\n";
+    show_object_types(m_vout);
     m_vout << "    extended output: " << (m_extended ? "yes\n" : "no\n");
     m_vout << "    calculate CRC: " << (m_calculate_crc ? "yes\n" : "no\n");
 }
@@ -808,7 +811,7 @@ bool CommandFileinfo::run() {
     output->set_crc(m_calculate_crc);
     output->file(m_input_filename, m_input_file);
 
-    osmium::io::Reader reader{m_input_file, m_extended ? osmium::osm_entity_bits::all : osmium::osm_entity_bits::nothing};
+    osmium::io::Reader reader{m_input_file, m_extended ? osm_entity_bits() : osmium::osm_entity_bits::nothing};
     osmium::io::Header header{reader.header()};
     output->header(header);
 

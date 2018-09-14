@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+* The `fileinfo` command now has an `--object-type`/`-t` option like some
+  other commands.
+
 ### Changed
 
 ### Fixed
