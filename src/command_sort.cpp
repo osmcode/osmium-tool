@@ -130,8 +130,13 @@ bool CommandSort::run_single_pass() {
     m_vout << "Sum of buffer sizes: " << buffers_size << " (" << buffers_size_rounded << " GB)\n";
 
     const auto buffers_capacity_rounded = static_cast<double>(buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
-    const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
-    m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
+
+    if (buffers_capacity != 0) {
+        const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
+        m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
+    } else {
+        m_vout << "Sum of buffer capacities: 0 (0 GB)\n";
+    }
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
@@ -217,8 +222,13 @@ bool CommandSort::run_multi_pass() {
         m_vout << "Sum of buffer sizes: " << buffers_size << " (" << buffers_size_rounded << " GB)\n";
 
         const auto buffers_capacity_rounded = static_cast<double>(buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
-        const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
-        m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
+
+        if (buffers_capacity != 0) {
+            const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
+            m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
+        } else {
+            m_vout << "Sum of buffer capacities: 0 (0 GB)\n";
+        }
 
         m_vout << "Sorting data...\n";
         objects.sort(osmium::object_order_type_id_version());
