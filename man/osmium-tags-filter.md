@@ -35,7 +35,7 @@ The command will only work correctly on history files if the
 
 -e FILE, --expressions=FILE
 :   Read expressions from the specified file, one per line. Empty lines are
-    ignored. Everything after the comment character (#) is also ignored. The
+    ignored. Everything after the comment character (#) is also ignored. See
     the **FILTER EXPRESSIONS** section for further details.
 
 -i, --invert-match
