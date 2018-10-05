@@ -6,8 +6,6 @@
 
 language: generic
 
-sudo: false
-
 dist: trusty
 
 #-----------------------------------------------------------------------------
@@ -110,8 +108,6 @@ matrix:
 #      env: CC='clang-5.0' CXX='clang++-5.0' BUILD_TYPE='Debug'
 #           CXXFLAGS="-fsanitize=address,undefined,integer -fno-sanitize-recover=all -fno-omit-frame-pointer"
 #           LDFLAGS="-fsanitize=address,undefined,integer"
-#      # LSAN doesn't work on container-based system
-#      sudo: required
 
 
     # 2/ Linux GCC Builds
