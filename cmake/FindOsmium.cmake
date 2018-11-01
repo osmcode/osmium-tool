@@ -71,6 +71,9 @@ find_path(OSMIUM_INCLUDE_DIR osmium/version.hpp
 
 # Check libosmium version number
 if(Osmium_FIND_VERSION)
+    if(NOT EXISTS "${OSMIUM_INCLUDE_DIR}/osmium/version.hpp")
+        message(FATAL_ERROR "Missing ${OSMIUM_INCLUDE_DIR}/osmium/version.hpp. Either your libosmium version is too old, or libosmium wasn't found in the place you said.")
+    endif()
     file(STRINGS "${OSMIUM_INCLUDE_DIR}/osmium/version.hpp" _libosmium_version_define REGEX "#define LIBOSMIUM_VERSION_STRING")
     if("${_libosmium_version_define}" MATCHES "#define LIBOSMIUM_VERSION_STRING \"([0-9.]+)\"")
         set(_libosmium_version "${CMAKE_MATCH_1}")
