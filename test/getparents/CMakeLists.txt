@@ -7,11 +7,11 @@
 #-----------------------------------------------------------------------------
 
 function(check_getparents _name _input _ids _output)
-    check_output(getparents ${_name} "getparents --generator=test -f osm getparents/${_input} ${_ids}" "getparents/${_output}")
+    check_output(getparents ${_name} "getparents --generator=test --output-header=xml_josm_upload=false -f osm getparents/${_input} ${_ids}" "getparents/${_output}")
 endfunction()
 
 function(check_getparents_r _name _input _ids _output)
-    check_output(getparents ${_name}-s "getparents --generator=test -f osm --add-self getparents/${_input} ${_ids}" "getparents/${_output}")
+    check_output(getparents ${_name}-s "getparents --generator=test --output-header=xml_josm_upload=false -f osm --add-self getparents/${_input} ${_ids}" "getparents/${_output}")
 endfunction()
 
 #-----------------------------------------------------------------------------

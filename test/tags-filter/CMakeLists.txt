@@ -7,15 +7,15 @@
 #-----------------------------------------------------------------------------
 
 function(check_tags_filter_R _name _input _expressions _output)
-    check_output(tags-filter ${_name} "tags-filter --generator=test -f osm -R tags-filter/${_input} ${_expressions}" "tags-filter/${_output}")
+    check_output(tags-filter ${_name} "tags-filter --generator=test --output-header=xml_josm_upload=false -f osm -R tags-filter/${_input} ${_expressions}" "tags-filter/${_output}")
 endfunction()
 
 function(check_tags_filter_i _name _input _expressions _output)
-    check_output(tags-filter ${_name} "tags-filter --generator=test -f osm -i -R tags-filter/${_input} ${_expressions}" "tags-filter/${_output}")
+    check_output(tags-filter ${_name} "tags-filter --generator=test --output-header=xml_josm_upload=false -f osm -i -R tags-filter/${_input} ${_expressions}" "tags-filter/${_output}")
 endfunction()
 
 function(check_tags_filter _name _input _expressions _output)
-    check_output(tags-filter ${_name} "tags-filter --generator=test -f osm tags-filter/${_input} ${_expressions}" "tags-filter/${_output}")
+    check_output(tags-filter ${_name} "tags-filter --generator=test --output-header=xml_josm_upload=false -f osm tags-filter/${_input} ${_expressions}" "tags-filter/${_output}")
 endfunction()
 
 check_tags_filter_R(node input.osm n/amenity output-amenity.osm)
