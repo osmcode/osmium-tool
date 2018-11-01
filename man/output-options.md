@@ -21,6 +21,7 @@
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
---output-header=OPTION
-:   Add output header option. This option can be given several times. See the
-    *libosmium manual* for a list of allowed header options.
+--output-header=OPTION=VALUE
+:   Add output header option. This command line option can be used multiple
+    times for different OPTIONs. See the *libosmium manual* for a list of
+    available header options.
