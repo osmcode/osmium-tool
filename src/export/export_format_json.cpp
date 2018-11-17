@@ -106,17 +106,17 @@ void ExportFormatJSON::add_attributes(const osmium::OSMObject& object) {
 
     if (!options().version.empty()) {
         m_writer.String(options().version);
-        m_writer.Int(object.version());
+        m_writer.Int64(object.version());
     }
 
     if (!options().changeset.empty()) {
         m_writer.String(options().changeset);
-        m_writer.Int(object.changeset());
+        m_writer.Int64(object.changeset());
     }
 
     if (!options().uid.empty()) {
         m_writer.String(options().uid);
-        m_writer.Int(object.uid());
+        m_writer.Int64(object.uid());
     }
 
     if (!options().user.empty()) {

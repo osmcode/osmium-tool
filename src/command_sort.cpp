@@ -132,7 +132,7 @@ bool CommandSort::run_single_pass() {
     const auto buffers_capacity_rounded = static_cast<double>(buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
 
     if (buffers_capacity != 0) {
-        const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
+        const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / static_cast<double>(buffers_capacity));
         m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
     } else {
         m_vout << "Sum of buffer capacities: 0 (0 GB)\n";
@@ -224,7 +224,7 @@ bool CommandSort::run_multi_pass() {
         const auto buffers_capacity_rounded = static_cast<double>(buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
 
         if (buffers_capacity != 0) {
-            const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / buffers_capacity);
+            const auto fill_factor = std::round(100 * static_cast<double>(buffers_size) / static_cast<double>(buffers_capacity));
             m_vout << "Sum of buffer capacities: " << buffers_capacity << " (" << buffers_capacity_rounded << " GB, " << fill_factor << "% full)\n";
         } else {
             m_vout << "Sum of buffer capacities: 0 (0 GB)\n";

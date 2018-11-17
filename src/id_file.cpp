@@ -40,7 +40,7 @@ void parse_and_add_id(const std::string& s, ids_type& ids, osmium::item_type def
     if (p.second < 0) {
         throw std::runtime_error{"This command does not work with negative IDs"};
     }
-    ids(p.first).set(p.second);
+    ids(p.first).set(static_cast<osmium::unsigned_object_id_type>(p.second));
 }
 
 void read_id_file(std::istream& stream, ids_type& ids, osmium::item_type default_item_type) {

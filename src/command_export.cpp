@@ -195,7 +195,7 @@ void CommandExport::parse_config_file() {
 
 void CommandExport::canonicalize_output_format() {
     for (auto& c : m_output_format) {
-        c = std::tolower(c);
+        c = static_cast<char>(std::tolower(c));
     }
 
     if (m_output_format == "json") {
