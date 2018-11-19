@@ -108,10 +108,9 @@ default is RelWithDebInfo.
 Please read the CMake documentation and get familiar with the `cmake` and
 `ccmake` tools which have many more options.
 
-On Windows you can compile with the Visual Studio C++ compiler using the
-batch script `build-local.bat`. This script calls `build-appveyor.bat`
-which downloads some precompiled libraries. You can also download and
-compile all the prerequisites yourself.
+On Windows you can compile with the Visual Studio C++ compiler and nmake.
+The necessary dependencies can be installed with [conda](https://conda.io).
+See `appveyor.yml` for the necessary commands to compile osmium-tool.
 
 
 ## Documentation
