@@ -4,6 +4,12 @@
 #
 #-----------------------------------------------------------------------------
 
+os: Visual Studio 2017
+
+clone_depth: 1
+
+#-----------------------------------------------------------------------------
+
 environment:
   global:
     BZIP2_VER: 1.0.6
@@ -18,11 +24,6 @@ environment:
   - config: Release
     arch: x86
 
-shallow_clone: true
-
-# Operating system (build VM template)
-os: Visual Studio 2015
-
 # scripts that are called at very beginning, before repo cloning
 init:
   - if "%arch%"=="x86" (
@@ -33,7 +34,6 @@ init:
       set conda_root=C:\Miniconda36-x64)
   - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" %vcvarsall_arg%'
 
-# clone directory
 clone_folder: c:\projects\osmium-tool
 
 install:
