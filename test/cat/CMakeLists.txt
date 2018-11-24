@@ -20,7 +20,11 @@ endfunction()
 check_cat(cat12 input1.osm input2.osm output-cat12.osm)
 check_cat(cat21 input2.osm input1.osm output-cat21.osm)
 
-check_convert(osm2opl input1.osm output1.osm.opl opl)
+check_convert(osm input1.osm output1.osm.opl opl)
+check_convert(gzip input1.osm.gz output1.osm.opl opl)
+check_convert(bzip2 input1.osm.bz2 output1.osm.opl opl)
+check_convert(pbf input1.osm.pbf output1.osm.opl opl)
+check_convert(opl output1.osm.opl output1.osm.opl opl)
 
 
 #-----------------------------------------------------------------------------
