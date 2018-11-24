@@ -4,9 +4,11 @@
 #
 #-----------------------------------------------------------------------------
 
-os: Visual Studio 2017
+os: Visual Studio 2015
 
 clone_depth: 1
+
+clone_folder: c:\projects\osmium-tool
 
 #-----------------------------------------------------------------------------
 
@@ -27,14 +29,14 @@ environment:
 # scripts that are called at very beginning, before repo cloning
 init:
   - if "%arch%"=="x86" (
-      set vcvarsall_arg=x86&&
-      set conda_root=C:\Miniconda36)
+      set "vcvarsall_arg=x86" &&
+      set "conda_root=C:\Miniconda36"
+    )
   - if "%arch%"=="x64" (
-      set vcvarsall_arg=amd64&&
-      set conda_root=C:\Miniconda36-x64)
+      set "vcvarsall_arg=amd64" &&
+      set "conda_root=C:\Miniconda36-x64"
+    )
   - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" %vcvarsall_arg%'
-
-clone_folder: c:\projects\osmium-tool
 
 install:
   - set PATH=%PATH%;%conda_root%\Scripts
