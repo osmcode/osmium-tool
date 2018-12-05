@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "command_merge.hpp"
 #include "util.hpp"
 
+#include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/output_iterator.hpp>
@@ -43,14 +44,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <utility>
 #include <vector>
-
-namespace osmium {
-
-    namespace io {
-        class File;
-    } // namespace io
-
-} // namespace osmium
 
 bool CommandMerge::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};

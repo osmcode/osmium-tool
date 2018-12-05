@@ -23,24 +23,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <osmium/io/file.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/tags/matcher.hpp>
+#include <osmium/tags/tags_filter.hpp>
 #include <osmium/util/string_matcher.hpp>
 
 #include <string>
 #include <utility>
 #include <vector>
-
-namespace osmium {
-
-    class TagsFilter;
-
-    namespace io {
-        class File;
-    } // namespace io
-
-} // namespace osmium
 
 std::string get_filename_suffix(const std::string& file_name);
 const char* yes_no(bool choice) noexcept;

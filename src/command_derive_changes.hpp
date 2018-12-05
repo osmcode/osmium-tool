@@ -25,17 +25,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp" // IWYU pragma: export
 
+#include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
-
-namespace osmium {
-
-    namespace io {
-        class Writer;
-    } // namespace io
-
-    class OSMObject;
-
-} // namespace osmium
+#include <osmium/osm/object.hpp>
 
 #include <string>
 #include <vector>

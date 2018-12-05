@@ -27,17 +27,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/handler/node_locations_for_ways.hpp>
 #include <osmium/index/map/all.hpp>
-
-namespace osmium {
-
-    namespace io {
-        class Reader;
-        class Writer;
-    } // namespace io
-
-    class ProgressBar;
-
-} // namespace osmium
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/util/progress_bar.hpp>
 
 #include <string>
 #include <vector>

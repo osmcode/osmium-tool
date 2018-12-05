@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
+#include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/input_iterator.hpp>
 #include <osmium/io/reader.hpp>
@@ -54,14 +55,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifdef _WIN32
 # include <io.h>
 #endif
-
-namespace osmium {
-
-    namespace io {
-        class File;
-    } // namespace io
-
-} // namespace osmium
 
 osmium::object_id_type id_map::add_offset_to_id(osmium::object_id_type id) const noexcept {
     if (m_start_id < 0) {

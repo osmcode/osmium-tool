@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/fwd.hpp>
 #include <osmium/index/id_set.hpp>
 #include <osmium/index/nwr_array.hpp>
+#include <osmium/index/relations_map.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
@@ -35,14 +36,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 #include <vector>
-
-namespace osmium {
-
-    namespace index {
-        class RelationsMapIndex;
-    } // namespace index
-
-} // namespace osmium
 
 class CommandTagsFilter : public Command, public with_single_osm_input, public with_osm_output {
 

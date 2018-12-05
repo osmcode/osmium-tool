@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <osmium/io/file.hpp>
+#include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/util/file.hpp>
@@ -41,14 +42,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 const char* get_osmium_version() noexcept;
 const char* get_osmium_long_version() noexcept;
 const char* get_libosmium_version() noexcept;
-
-namespace osmium {
-
-    namespace io {
-        class Header;
-    } // namespace io
-
-} // namespace osmium
 
 class CommandFactory;
 
