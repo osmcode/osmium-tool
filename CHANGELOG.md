@@ -22,7 +22,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
-* Option `--invert-match/-i` didn't always work correctly.
+* Several fixes for the `tags-filter` command which could lead to wrong
+  results.
 
 
 ## [1.9.1] - 2018-08-18

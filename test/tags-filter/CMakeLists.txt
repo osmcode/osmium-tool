@@ -24,5 +24,7 @@ check_tags_filter(highway-i   "-i"    input.osm w/highway output-highway-i.osm)
 
 check_tags_filter(highway-n-i "-i"    input-nodes.osm w/highway output-nodes-highway-i.osm)
 
+check_tags_filter(note-rel    ""      input.osm r/note output-note-rel.osm)
+
 
 #-----------------------------------------------------------------------------

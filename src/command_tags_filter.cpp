@@ -245,6 +245,13 @@ bool CommandTagsFilter::find_relations_in_relations() {
             stash.add_members(relation);
             if (matches_relation(relation) != m_invert_match) {
                 m_ids(osmium::item_type::relation).set(relation.positive_id());
+                for (const auto& member : relation.members()) {
+                    if (member.type() == osmium::item_type::node) {
+                        m_ids(osmium::item_type::node).set(member.positive_ref());
+                    } else if (member.type() == osmium::item_type::way) {
+                        m_ids(osmium::item_type::way).set(member.positive_ref());
+                    }
+                }
             }
         }
     }
