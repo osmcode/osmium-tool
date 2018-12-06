@@ -14,39 +14,39 @@ dist: xenial
 addons_shortcuts:
   addons_clang35: &clang35
     apt:
-      sources: [ 'ubuntu-toolchain-r-test', 'boost-latest' ]
-      packages: [ 'libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-3.5']
+      sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+      packages: ['libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-3.5']
   addons_clang38: &clang38
     apt:
-      packages: [ 'libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-3.8']
+      packages: ['libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-3.8']
   addons_clang39: &clang39
     apt:
-      packages: [ 'libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-3.9']
+      packages: ['libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-3.9']
   addons_clang50: &clang50
     apt:
-      sources: [ 'ubuntu-toolchain-r-test' ]
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-5.0']
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-5.0']
   addons_clang60: &clang60
     apt:
-      sources: [ 'ubuntu-toolchain-r-test' ]
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-6.0']
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-6.0']
   addons_gcc48: &gcc48
     apt:
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc' 'g++-4.8', 'gcc-4.8']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-4.8', 'gcc-4.8']
   addons_gcc49: &gcc49
     apt:
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc' 'g++-4.9', 'gcc-4.9']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-4.9', 'gcc-4.9']
   addons_gcc5: &gcc5
     apt:
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc' 'g++-5', 'gcc-5']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-5', 'gcc-5']
   addons_gcc6: &gcc6
     apt:
-      sources: [ 'ubuntu-toolchain-r-test' ]
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc' 'g++-6', 'gcc-6']
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-6', 'gcc-6']
   addons_gcc7: &gcc7
     apt:
-      sources: [ 'ubuntu-toolchain-r-test' ]
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc' 'g++-7', 'gcc-7']
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-7', 'gcc-7']
 
 #-----------------------------------------------------------------------------
 
