@@ -6,210 +6,152 @@
 
 language: generic
 
-dist: trusty
+dist: xenial
+
+#-----------------------------------------------------------------------------
+
+# Save common build configurations as shortcuts, so we can reference them later.
+addons_shortcuts:
+  addons_clang35: &clang35
+    apt:
+      sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+      packages: ['libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'clang-3.5']
+  addons_clang38: &clang38
+    apt:
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-3.8']
+  addons_clang39: &clang39
+    apt:
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-3.9']
+  addons_clang50: &clang50
+    apt:
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-5.0']
+  addons_clang60: &clang60
+    apt:
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-6.0']
+  addons_gcc48: &gcc48
+    apt:
+      sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+      packages: ['libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'g++-4.8', 'gcc-4.8']
+  addons_gcc49: &gcc49
+    apt:
+      sources: ['ubuntu-toolchain-r-test', 'boost-latest']
+      packages: ['libboost1.55-all-dev', 'libboost-program-options1.55-dev', 'pandoc', 'g++-4.9', 'gcc-4.9']
+  addons_gcc5: &gcc5
+    apt:
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-5', 'gcc-5']
+  addons_gcc6: &gcc6
+    apt:
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-6', 'gcc-6']
+  addons_gcc7: &gcc7
+    apt:
+      sources: ['ubuntu-toolchain-r-test']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-7', 'gcc-7']
 
 #-----------------------------------------------------------------------------
 
 matrix:
   include:
 
-    # 1/ Linux Clang Builds
-    - os: linux
-      compiler: linux-clang35-release
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='clang-3.5' CXX='clang++-3.5' BUILD_TYPE='Release'
+    # Linux Clang Builds
 
     - os: linux
       compiler: linux-clang35-dev
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *clang35
       env: CC='clang-3.5' CXX='clang++-3.5' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-clang38-release
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='clang-3.8' CXX='clang++-3.8' BUILD_TYPE='Release'
+      dist: trusty
 
     - os: linux
       compiler: linux-clang38-dev
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *clang38
       env: CC='clang-3.8' CXX='clang++-3.8' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-clang39-release
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='clang-3.9' CXX='clang++-3.9' BUILD_TYPE='Release'
 
     - os: linux
       compiler: linux-clang39-dev
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-3.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *clang39
       env: CC='clang-3.9' CXX='clang++-3.9' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-clang40-release
-      addons:
-        apt:
-          sources: ['llvm-toolchain-trusty-4.0', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-4.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='clang-4.0' CXX='clang++-4.0' BUILD_TYPE='Release'
-
-    - os: linux
-      compiler: linux-clang40-dev
-      addons:
-        apt:
-          sources: ['llvm-toolchain-trusty-4.0', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-4.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='clang-4.0' CXX='clang++-4.0' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-clang50-release
-      addons:
-        apt:
-          sources: ['llvm-toolchain-trusty-5.0', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-5.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='clang-5.0' CXX='clang++-5.0' BUILD_TYPE='Release'
 
     - os: linux
       compiler: linux-clang50-dev
-      addons:
-        apt:
-          sources: ['llvm-toolchain-trusty-5.0', 'ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['clang-5.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *clang50
       env: CC='clang-5.0' CXX='clang++-5.0' BUILD_TYPE='Dev'
 
-# Disabled because it creates false-positives on the old travis systems
-#   - os: linux
-#      compiler: linux-clang50-debug
-#      addons:
-#        apt:
-#          sources: ['llvm-toolchain-trusty-5.0', 'ubuntu-toolchain-r-test', 'boost-latest']
-#          packages: ['clang-5.0', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc', 'g++-6', 'gcc-6']
-#      env: CC='clang-5.0' CXX='clang++-5.0' BUILD_TYPE='Debug'
+    - os: linux
+      compiler: linux-clang60-dev
+      addons: *clang60
+      env: CC='clang-6.0' CXX='clang++-6.0' BUILD_TYPE='Dev'
+
+#   Disabled, because it is triggered by the rapidjson library
+#    - os: linux
+#      compiler: linux-clang60-debug
+#      addons: *clang60
+#      env: CC='clang-6.0' CXX='clang++-6.0' BUILD_TYPE='Debug'
 #           CXXFLAGS="-fsanitize=address,undefined,integer -fno-sanitize-recover=all -fno-omit-frame-pointer"
 #           LDFLAGS="-fsanitize=address,undefined,integer"
 
-
-    # 2/ Linux GCC Builds
     - os: linux
-      compiler: linux-gcc48-release
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='gcc-4.8' CXX='g++-4.8' CXXFLAGS='-Wno-return-type' BUILD_TYPE='Release'
+      compiler: linux-clang60-release
+      addons: *clang60
+      env: CC='clang-6.0' CXX='clang++-6.0' BUILD_TYPE='Release'
+
+
+    # Linux GCC Builds
 
     - os: linux
       compiler: linux-gcc48-dev
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.8', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *gcc48
       env: CC='gcc-4.8' CXX='g++-4.8' CXXFLAGS='-Wno-return-type' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-gcc49-release
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='gcc-4.9' CXX='g++-4.9' BUILD_TYPE='Release'
+      dist: trusty
 
     - os: linux
       compiler: linux-gcc49-dev
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-4.9', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *gcc49
       env: CC='gcc-4.9' CXX='g++-4.9' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-gcc5-release
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='gcc-5' CXX='g++-5' BUILD_TYPE='Release'
+      dist: trusty
 
     - os: linux
       compiler: linux-gcc5-dev
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-5', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *gcc5
       env: CC='gcc-5' CXX='g++-5' BUILD_TYPE='Dev'
-
-
-    - os: linux
-      compiler: linux-gcc6-release
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-6', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
-      env: CC='gcc-6' CXX='g++-6' BUILD_TYPE='Release'
 
     - os: linux
       compiler: linux-gcc6-dev
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test', 'boost-latest']
-          packages: ['g++-6', 'libboost1.55-dev', 'libboost-program-options1.55-dev', 'pandoc']
+      addons: *gcc6
       env: CC='gcc-6' CXX='g++-6' BUILD_TYPE='Dev'
 
+    - os: linux
+      compiler: linux-gcc7-dev
+      addons: *gcc7
+      env: CC='gcc-7' CXX='g++-7' BUILD_TYPE='Dev'
 
-    # 3/ OSX Clang Builds
-    - os: osx
-      osx_image: xcode6.4
-      compiler: xcode64-clang-release
-      env: CXX='clang++' BUILD_TYPE='Release'
-
-    - os: osx
-      osx_image: xcode6.4
-      compiler: xcode64-clang-dev
-      env: CXX='clang++' BUILD_TYPE='Dev'
+    - os: linux
+      compiler: linux-gcc7-release
+      addons: *gcc7
+      env: CC='gcc-7' CXX='g++-7' BUILD_TYPE='Release'
 
 
-    - os: osx
-      osx_image: xcode7
-      compiler: xcode7-clang-release
-      env: CXX='clang++' BUILD_TYPE='Release'
-
-    - os: osx
-      osx_image: xcode7
-      compiler: xcode7-clang-dev
-      env: CXX='clang++' BUILD_TYPE='Dev'
-
-
-    - os: osx
-      osx_image: xcode8.3
-      compiler: xcode8-clang-release
-      env: CXX='clang++' BUILD_TYPE='Release'
+    # OSX Clang Builds
 
     - os: osx
       osx_image: xcode8.3
       compiler: xcode8-clang-dev
+      env: CXX='clang++' BUILD_TYPE='Dev'
+
+    - os: osx
+      osx_image: xcode9.4
+      compiler: xcode9-clang-dev
+      env: CXX='clang++' BUILD_TYPE='Dev'
+
+    - os: osx
+      osx_image: xcode10.1
+      compiler: xcode10-clang-release
+      env: CXX='clang++' BUILD_TYPE='Release'
+
+    - os: osx
+      osx_image: xcode10.1
+      compiler: xcode10-clang-dev
       env: CXX='clang++' BUILD_TYPE='Dev'
 
 #-----------------------------------------------------------------------------
