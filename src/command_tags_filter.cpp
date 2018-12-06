@@ -156,6 +156,10 @@ void CommandTagsFilter::show_arguments() {
 }
 
 osmium::osm_entity_bits::type CommandTagsFilter::get_needed_types() const {
+    if (m_invert_match) {
+        return osmium::osm_entity_bits::nwr;
+    }
+
     osmium::osm_entity_bits::type types = osmium::osm_entity_bits::nothing;
 
     if (!m_ids(osmium::item_type::node).empty() || !m_filters(osmium::item_type::node).empty()) {
@@ -297,7 +301,7 @@ void CommandTagsFilter::find_nodes_in_ways() {
 
 void CommandTagsFilter::find_referenced_objects() {
     m_vout << "Following references...\n";
-    bool todo = !m_filters(osmium::item_type::relation).empty() || !m_area_filters.empty();
+    bool todo = !m_filters(osmium::item_type::relation).empty() || !m_area_filters.empty() || m_invert_match;
     if (todo) {
         todo = find_relations_in_relations();
     }
