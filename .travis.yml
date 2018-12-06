@@ -29,7 +29,7 @@ addons_shortcuts:
   addons_clang60: &clang60
     apt:
       sources: [ 'ubuntu-toolchain-r-test' ]
-      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-6.0', 'g++-6', 'gcc-6']
+      packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'clang-6.0']
   addons_gcc48: &gcc48
     apt:
       packages: [ 'libboost-all-dev', 'libboost-program-options-dev', 'pandoc' 'g++-4.8', 'gcc-4.8']
