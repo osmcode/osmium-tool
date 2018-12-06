@@ -10,17 +10,19 @@ function(check_tags_filter _name _flags _input _expressions _output)
     check_output(tags-filter ${_name} "tags-filter --generator=test --output-header=xml_josm_upload=false -f osm ${_flags} tags-filter/${_input} ${_expressions}" "tags-filter/${_output}")
 endfunction()
 
-check_tags_filter(node-R    "-R"    input.osm n/amenity output-amenity.osm)
-check_tags_filter(highway-R "-R"    input.osm w/highway output-highway.osm)
-check_tags_filter(note      "-R"    input.osm note output-note.osm)
+check_tags_filter(node        ""      input.osm n/amenity output-amenity.osm)
+check_tags_filter(node-R      "-R"    input.osm n/amenity output-amenity.osm)
 
-check_tags_filter(note-i-R  "-i -R" input.osm note output-no-note.osm)
+check_tags_filter(highway-R   "-R"    input.osm w/highway output-highway-R.osm)
+check_tags_filter(note-R      "-R"    input.osm note output-note-R.osm)
 
-check_tags_filter(highway   ""      input.osm w/highway output-highway-r.osm)
+check_tags_filter(note-iR     "-i -R" input.osm note output-note-iR.osm)
 
-check_tags_filter(highway-i "-i"    input.osm w/highway output-highway-i.osm)
+check_tags_filter(highway     ""      input.osm w/highway output-highway.osm)
 
-check_tags_filter(highway-i-nodes "-i" input-nodes.osm w/highway output-nodes-highway-i.osm)
+check_tags_filter(highway-i   "-i"    input.osm w/highway output-highway-i.osm)
+
+check_tags_filter(highway-n-i "-i"    input-nodes.osm w/highway output-nodes-highway-i.osm)
 
 
 #-----------------------------------------------------------------------------
