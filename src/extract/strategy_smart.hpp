@@ -42,7 +42,7 @@ namespace strategy_smart {
         osmium::index::IdSetDense<osmium::unsigned_object_id_type> relation_ids;
         osmium::index::IdSetDense<osmium::unsigned_object_id_type> extra_relation_ids;
 
-        void add_relation(const osmium::Relation& relation);
+        void add_relation_members(const osmium::Relation& relation);
         void add_relation_parents(osmium::unsigned_object_id_type id, const osmium::index::RelationsMapIndex& map);
     };
 

@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace strategy_smart {
 
-    void Data::add_relation(const osmium::Relation& relation) {
+    void Data::add_relation_members(const osmium::Relation& relation) {
         for (const auto& member : relation.members()) {
             const auto ref = member.positive_ref();
             switch (member.type()) {
@@ -150,7 +150,7 @@ namespace strategy_smart {
                         if (e.node_ids.get(member.positive_ref())) {
                             e.relation_ids.set(relation.positive_id());
                             if (strategy().check_type(relation)) {
-                                e.add_relation(relation);
+                                e.add_relation_members(relation);
                             }
                             return;
                         }
@@ -159,7 +159,7 @@ namespace strategy_smart {
                         if (e.way_ids.get(member.positive_ref())) {
                             e.relation_ids.set(relation.positive_id());
                             if (strategy().check_type(relation)) {
-                                e.add_relation(relation);
+                                e.add_relation_members(relation);
                             }
                             return;
                         }
