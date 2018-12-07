@@ -14,6 +14,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 * Add `--strategy` option to `sort` command. New `multipass` strategy which
   reads the input file(s) three times making the sort a bit slower, but also
   using less memory.
+* New option `--remove-tags`/`-t` to `tags-filter` command. When used the
+  tags of all objects that are not matching the filter expression but are
+  included as references are removed.
 
 ### Changed
 

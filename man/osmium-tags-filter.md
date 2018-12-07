@@ -45,6 +45,12 @@ The command will only work correctly on history files if the
 :   Omit the nodes referenced from matching ways and members referenced from
     matching relations.
 
+-t, --remove-tags
+:   Remove tags from objects that are not matching the filter expression but
+    are included to complete references (nodes in ways and members of
+    relations). If an object is both matching the filter and used as a
+    reference it will keep its tags.
+
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
