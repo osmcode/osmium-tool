@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../util.hpp"
 
 #include <osmium/handler/check_order.hpp>
+#include <osmium/util/misc.hpp>
 #include <osmium/util/string.hpp>
 
 namespace strategy_smart {
@@ -60,22 +61,34 @@ namespace strategy_smart {
             m_extracts.emplace_back(*extract);
         }
 
+        m_types = {"multipolygon"};
         for (const auto& option : options) {
-            if (std::string{"types"} != option.first) {
+            if (option.first == "types") {
+                if (option.second.empty() || option.second == "any" || option.second == "true") {
+                    m_types.clear();
+                } else {
+                    m_types = osmium::split_string(option.second, ',', true);
+                }
+            } else if (option.first == "complete-partial-relations") {
+                if (!option.second.empty()) {
+                    m_complete_partial_relations_percentage = osmium::detail::str_to_int<std::size_t>(option.second.c_str());
+                    if (m_complete_partial_relations_percentage <= 0 ||
+                        m_complete_partial_relations_percentage > 100) {
+                        m_complete_partial_relations_percentage = 100;
+                    }
+                }
+            } else {
                 warning(std::string{"Ignoring unknown option '"} + option.first + "' for 'smart' strategy.\n");
             }
-        }
-
-        const auto types = options.get("types");
-        if (types.empty()) {
-            m_types = {"multipolygon"};
-        } else if (types != "any") {
-            m_types = osmium::split_string(types, ',', true);
         }
     }
 
     const char* Strategy::name() const noexcept {
         return "smart";
+    }
+
+    bool Strategy::check_members_count(const std::size_t size, const std::size_t wanted_members) const noexcept {
+        return wanted_members * 100 >= size * m_complete_partial_relations_percentage;
     }
 
     bool Strategy::check_type(const osmium::Relation& relation) const noexcept {
@@ -94,12 +107,21 @@ namespace strategy_smart {
     void Strategy::show_arguments(osmium::VerboseOutput& vout) {
         vout << "Additional strategy options:\n";
         if (m_types.empty()) {
-            vout << "  types: any\n";
+            vout << "  - [types] relation types: any\n";
         } else {
-            vout << "  types:\n";
+            std::string typelist;
             for (const auto& type : m_types) {
-                vout << "      " << type << '\n';
+                if (!typelist.empty()) {
+                    typelist += ", ";
+                }
+                typelist += type;
             }
+            vout << "  - [types] relation types: " << typelist << '\n';
+        }
+        if (m_complete_partial_relations_percentage == 100) {
+            vout << "  - [complete-partial-relations] do not complete partial relations\n";
+        } else {
+            vout << "  - [complete-partial-relations] complete partial relations when " << m_complete_partial_relations_percentage << "% or more members are in extract\n";
         }
         vout << '\n';
     }
@@ -144,29 +166,40 @@ namespace strategy_smart {
         }
 
         void erelation(extract_data& e, const osmium::Relation& relation) {
+            std::size_t wanted_members = 0;
             for (const auto& member : relation.members()) {
                 switch (member.type()) {
                     case osmium::item_type::node:
                         if (e.node_ids.get(member.positive_ref())) {
-                            e.relation_ids.set(relation.positive_id());
-                            if (strategy().check_type(relation)) {
-                                e.add_relation_members(relation);
+                            if (wanted_members == 0) {
+                                e.relation_ids.set(relation.positive_id());
+                                if (strategy().check_type(relation)) {
+                                    e.add_relation_members(relation);
+                                    return;
+                                }
                             }
-                            return;
+                            ++wanted_members;
                         }
                         break;
                     case osmium::item_type::way:
                         if (e.way_ids.get(member.positive_ref())) {
-                            e.relation_ids.set(relation.positive_id());
-                            if (strategy().check_type(relation)) {
-                                e.add_relation_members(relation);
+                            if (wanted_members == 0) {
+                                e.relation_ids.set(relation.positive_id());
+                                if (strategy().check_type(relation)) {
+                                    e.add_relation_members(relation);
+                                    return;
+                                }
                             }
-                            return;
+                            ++wanted_members;
                         }
                         break;
                     default:
                         break;
                 }
+            }
+
+            if (strategy().check_members_count(relation.members().size(), wanted_members)) {
+                e.add_relation_members(relation);
             }
         }
 

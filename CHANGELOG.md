@@ -17,6 +17,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 * New option `--remove-tags`/`-t` to `tags-filter` command. When used the
   tags of all objects that are not matching the filter expression but are
   included as references are removed.
+* New option for smart extract strategy: `complete-partial-relations=X` will
+  complete all relations with at least X percent of their members already in
+  the extract.
 
 ### Changed
 

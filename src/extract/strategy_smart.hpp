@@ -56,6 +56,9 @@ namespace strategy_smart {
 
         std::vector<std::string> m_types;
 
+        std::size_t m_complete_partial_relations_percentage = 100;
+
+        bool check_members_count(const std::size_t size, const std::size_t wanted_members) const noexcept;
         bool check_type(const osmium::Relation& relation) const noexcept;
 
     public:

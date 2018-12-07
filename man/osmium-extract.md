@@ -329,6 +329,13 @@ the -S option: "-S types=multipolygon,route". Note that especially boundary
 relations can be huge, so if you include them, be aware your result might be
 huge.
 
+The **smart** strategy allows another option "-S complete-partial-relations=X".
+If this is set, all relations that have more than X percent of their members
+already in the extract will have their full set of members in the extract. So
+this allows completing almost complete relations. It can be useful for instance
+to make sure a boundary relation is complete even if some of it is outside the
+polygon used for extraction.
+
 
 # DIAGNOSTICS
 
