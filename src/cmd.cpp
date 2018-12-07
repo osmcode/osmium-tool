@@ -30,8 +30,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstdlib>
 #include <iostream>
 
-po::options_description Command::add_common_options(bool with_progress) {
-    po::options_description options("COMMON OPTIONS");
+po::options_description Command::add_common_options(const bool with_progress) {
+    po::options_description options{"COMMON OPTIONS"};
 
     auto opts = options.add_options()
     ("help,h", "Show usage help")
@@ -87,7 +87,9 @@ void Command::setup_object_type_nwrc(const boost::program_options::variables_map
             } else if (t == "c" || t == "changeset") {
                 m_osm_entity_bits |= osmium::osm_entity_bits::changeset;
             } else {
-                throw argument_error{std::string{"Unknown object type '"} + t + "' (Allowed are 'node', 'way', 'relation', and 'changeset')."};
+                throw argument_error{std::string{"Unknown object type '"}
+                                     + t
+                                     + "' (Allowed are 'node', 'way', 'relation', and 'changeset')."};
             }
         }
     } else {

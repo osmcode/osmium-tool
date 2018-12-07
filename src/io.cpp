@@ -176,7 +176,7 @@ void with_osm_output::setup_output_file(const po::variables_map& vm) {
 }
 
 po::options_description with_osm_output::add_output_options() {
-    po::options_description options("OUTPUT OPTIONS");
+    po::options_description options{"OUTPUT OPTIONS"};
 
     options.add_options()
     ("output-format,f", po::value<std::string>(), "Format of output file")
