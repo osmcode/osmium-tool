@@ -30,10 +30,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandFileinfo : public Command, public with_single_osm_input {
 
+    std::string m_get_value;
     bool m_extended = false;
     bool m_json_output = false;
     bool m_calculate_crc = false;
-    std::string m_get_value;
 
 public:
 

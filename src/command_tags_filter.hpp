@@ -39,16 +39,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandTagsFilter : public Command, public with_single_osm_input, public with_osm_output {
 
-    int m_count_passes = 0;
-    bool m_add_referenced_objects = true;
-    bool m_invert_match = false;
-    bool m_remove_tags = false;
-
     osmium::nwr_array<osmium::TagsFilter> m_filters;
     osmium::TagsFilter m_area_filters;
 
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_matching_ids;
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_referenced_ids;
+
+    int m_count_passes = 0;
+    bool m_add_referenced_objects = true;
+    bool m_invert_match = false;
+    bool m_remove_tags = false;
 
     osmium::osm_entity_bits::type get_needed_types() const;
 

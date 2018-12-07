@@ -34,17 +34,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandChangesetFilter : public Command, public with_single_osm_input, public with_osm_output {
 
+    std::string m_user;
+    osmium::Box m_box;
+    osmium::Timestamp m_after = osmium::start_of_time();
+    osmium::Timestamp m_before = osmium::end_of_time();
+    osmium::user_id_type m_uid = 0;
+
     bool m_with_discussion = false;
     bool m_without_discussion = false;
     bool m_with_changes = false;
     bool m_without_changes = false;
     bool m_open = false;
     bool m_closed = false;
-    osmium::user_id_type m_uid = 0;
-    std::string m_user;
-    osmium::Timestamp m_after = osmium::start_of_time();
-    osmium::Timestamp m_before = osmium::end_of_time();
-    osmium::Box m_box;
 
 public:
 
