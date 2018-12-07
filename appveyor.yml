@@ -4,76 +4,30 @@
 #
 #-----------------------------------------------------------------------------
 
-os: Visual Studio 2015
-
-clone_depth: 1
-
-clone_folder: c:\projects\osmium-tool
-
-#-----------------------------------------------------------------------------
-
 environment:
-  global:
-    BZIP2_VER: 1.0.6
-    EXPAT_VER: 2.2.5
-    ZLIB_VER: 1.2.11
-    BOOST_PREFIX: C:\Libraries\boost_1_67_0
   matrix:
   - config: Debug
-    arch: x64
   - config: Release
-    arch: x64
-  - config: Release
-    arch: x86
+
+shallow_clone: true
+
+# Operating system (build VM template)
+os: Visual Studio 2015
+
+platform: x64
 
 # scripts that are called at very beginning, before repo cloning
 init:
-  - if "%arch%"=="x86" (
-      set "vcvarsall_arg=x86" &&
-      set "conda_root=C:\Miniconda36"
-    )
-  - if "%arch%"=="x64" (
-      set "vcvarsall_arg=amd64" &&
-      set "conda_root=C:\Miniconda36-x64"
-    )
-  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" %vcvarsall_arg%'
+
+# clone directory
+clone_folder: c:\projects\osmium-tool
 
 install:
-  - set PATH=%PATH%;%conda_root%\Scripts
-  - cd c:\
-  - conda config --set always_yes yes
-  - conda create --name osmium-tool
-  - activate osmium-tool
-  - conda install bzip2=%BZIP2_VER% expat=%EXPAT_VER% zlib=%ZLIB_VER%
   - cd c:\projects
   - git clone --depth 1 https://github.com/osmcode/libosmium
   - git clone --depth 1 https://github.com/mapbox/protozero
 
 build_script:
-  - cd c:\projects\osmium-tool
-  - mkdir build
-  - cd build
-  - >
-    cmake .. -LA -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%config%
-    -DBOOST_ROOT=%BOOST_PREFIX% -DBoost_USE_STATIC_LIBS=ON
-  - nmake
-
-after_build:
-  - set conda_library_path=%conda_root%\envs\osmium-tool\Library\bin
-  - mkdir osmium-tool-bin
-  - copy /y src\osmium.exe osmium-tool-bin
-  - copy /y %conda_library_path%\zlib.dll osmium-tool-bin
-  - copy /y %conda_library_path%\expat.dll osmium-tool-bin
-  - copy /y %conda_library_path%\libbz2.dll osmium-tool-bin
-  - copy /y c:\projects\osmium-tool\README.md osmium-tool-bin
-  - 7z a c:\projects\osmium-tool\osmium-tool_%config%_%arch%.zip osmium-tool-bin -tzip
-
-before_test:
-  - set PATH=c:\osmium-tool\build\osmium-tool-bin;%PATH%
-
-test_script:
-  - ctest --output-on-failure
-
-artifacts:
-  - path: osmium-tool_%config%_%arch%.zip
+  - cd c:\projects/osmium-tool
+  - build-appveyor.bat
 
