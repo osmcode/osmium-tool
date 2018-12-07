@@ -239,6 +239,7 @@ bool CommandTagsFilter::find_relations_in_relations() {
     m_vout << "  Reading input file to find relations in relations...\n";
     osmium::index::RelationsMapStash stash;
 
+    ++m_count_passes;
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
@@ -272,6 +273,7 @@ bool CommandTagsFilter::find_relations_in_relations() {
 void CommandTagsFilter::find_nodes_and_ways_in_relations() {
     m_vout << "  Reading input file to find nodes/ways in relations...\n";
 
+    ++m_count_passes;
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
@@ -292,6 +294,7 @@ void CommandTagsFilter::find_nodes_and_ways_in_relations() {
 void CommandTagsFilter::find_nodes_in_ways() {
     m_vout << "  Reading input file to find nodes in ways...\n";
 
+    ++m_count_passes;
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::way};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& way : buffer.select<osmium::Way>()) {
@@ -329,6 +332,7 @@ bool CommandTagsFilter::run() {
     }
 
     m_vout << "Opening input file...\n";
+    ++m_count_passes;
     osmium::io::Reader reader{m_input_file, get_needed_types()};
 
     m_vout << "Opening output file...\n";
@@ -361,6 +365,7 @@ bool CommandTagsFilter::run() {
 
     show_memory_used();
 
+    m_vout << "Needed " << m_count_passes << " passes through the input file.\n";
     m_vout << "Done.\n";
 
     return true;

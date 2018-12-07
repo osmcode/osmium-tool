@@ -39,6 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandTagsFilter : public Command, public with_single_osm_input, public with_osm_output {
 
+    int m_count_passes = 0;
     bool m_add_referenced_objects = true;
     bool m_invert_match = false;
 
