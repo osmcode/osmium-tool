@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.10.0] - 2018-12-10
+
+### Added
+
 * The `fileinfo` command now has an `--object-type`/`-t` option like some
   other commands.
 * Extended `fileinfo` command to show internal buffer counts and sizes.
@@ -466,7 +475,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.9.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/osmcode/osmium-tool/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/osmcode/osmium-tool/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/osmcode/osmium-tool/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/osmcode/osmium-tool/compare/v1.7.1...v1.8.0
