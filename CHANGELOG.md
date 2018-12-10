@@ -20,6 +20,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 * New option for smart extract strategy: `complete-partial-relations=X` will
   complete all relations with at least X percent of their members already in
   the extract.
+* New export format "pg" creates a file in the PostgreSQL COPY text format
+  with the GEOMETRY as WKB and the tags in JSON(B) format. This can be
+  imported into a PostgreSQL/PostGIS database very quickly.
 
 ### Changed
 

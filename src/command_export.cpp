@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "util.hpp"
 
 #include "export/export_format_json.hpp"
+#include "export/export_format_pg.hpp"
 #include "export/export_format_text.hpp"
 #include "export/export_handler.hpp"
 
@@ -365,8 +366,8 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
 
     canonicalize_output_format();
 
-    if (m_output_format != "geojson" && m_output_format != "geojsonseq" && m_output_format != "text") {
-        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', or 'text'."};
+    if (m_output_format != "geojson" && m_output_format != "geojsonseq" && m_output_format != "pg" && m_output_format != "text") {
+        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', 'pg', or 'text'."};
     }
 
     if (vm.count("overwrite")) {
@@ -490,6 +491,10 @@ static std::unique_ptr<ExportFormat> create_handler(const std::string& output_fo
         return std::unique_ptr<ExportFormat>{new ExportFormatJSON{output_format, output_filename, overwrite, fsync, options}};
     }
 
+    if (output_format == "pg") {
+        return std::unique_ptr<ExportFormat>{new ExportFormatPg{output_format, output_filename, overwrite, fsync, options}};
+    }
+
     if (output_format == "text") {
         return std::unique_ptr<ExportFormat>{new ExportFormatText{output_format, output_filename, overwrite, fsync, options}};
     }
@@ -511,6 +516,10 @@ bool CommandExport::run() {
     m_area_ruleset.init_filter();
 
     auto handler = create_handler(m_output_format, m_output_filename, m_output_overwrite, m_fsync, m_options);
+    if (m_vout.verbose()) {
+        handler->debug_output(m_vout, m_output_filename);
+    }
+
     ExportHandler export_handler{std::move(handler), m_linear_ruleset, m_area_ruleset, m_geometry_types, m_show_errors, m_stop_on_error};
     osmium::handler::CheckOrder check_order_handler;
 

@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/fwd.hpp>
 #include <osmium/io/writer_options.hpp>
 #include <osmium/osm/object.hpp>
+#include <osmium/util/verbose_output.hpp>
 
 #include <cstdint>
 
@@ -63,6 +64,9 @@ public:
     virtual void area(const osmium::Area&) = 0;
 
     virtual void close() = 0;
+
+    virtual void debug_output(osmium::VerboseOutput& /*out*/, const std::string& /*filename*/) {
+    }
 
     template <typename TFunc>
     bool add_tags(const osmium::OSMObject& object, TFunc&& func) {

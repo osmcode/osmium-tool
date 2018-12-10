@@ -287,6 +287,11 @@ The following output formats are supported:
 * `geojsonseq` (alias: `jsonseq`): GeoJSON Text Sequence (RFC8142). Each line
   (beginning with a RS (0x1e, record separator) and ending in a linefeed
   character) contains one GeoJSON object. Used for streaming GeoJSON.
+* `pg`: PostgreSQL COPY text format. One line per object containing the
+  WGS84 geometry as WKB, the tags in JSON format and, optionally, more columns
+  for id and attributes. You have to create the table manually, then use the
+  PostgreSQL COPY command to import the data. Enable verbose output to see
+  the SQL commands needed to create the table and load the data.
 * `text` (alias: `txt`): A simple text format with the geometry in WKT format
   followed by the comma-delimited tags. This is mainly intended for debugging
   at the moment. THE FORMAT MIGHT CHANGE WITHOUT NOTICE!
