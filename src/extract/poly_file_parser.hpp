@@ -24,15 +24,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <osmium/builder/osm_object_builder.hpp>
+#include <osmium/memory/buffer.hpp>
 #include <osmium/util/compatibility.hpp>
-
-namespace osmium {
-
-    namespace memory {
-        class Buffer;
-    } // namespace memory
-
-} // namespace osmium
 
 #include <memory>
 #include <string>

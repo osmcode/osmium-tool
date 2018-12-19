@@ -25,12 +25,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "extract.hpp"
 
-namespace osmium {
-
-    class Area;
-    class Segment;
-
-} // namespace osmium
+#include <osmium/osm/area.hpp>
+#include <osmium/osm/segment.hpp>
 
 #include <vector>
 

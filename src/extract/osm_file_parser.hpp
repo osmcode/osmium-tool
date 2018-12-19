@@ -23,13 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-namespace osmium {
-
-    namespace memory {
-        class Buffer;
-    } // namespace memory
-
-} // namespace osmium
+#include <osmium/memory/buffer.hpp>
 
 #include <string>
 

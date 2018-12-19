@@ -23,30 +23,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include <osmium/osm/box.hpp>
 #include <osmium/io/file.hpp>
-#include <osmium/io/writer_options.hpp>
+#include <osmium/io/header.hpp>
 #include <osmium/io/writer.hpp>
+#include <osmium/io/writer_options.hpp>
+#include <osmium/memory/item.hpp>
+#include <osmium/osm/box.hpp>
+#include <osmium/osm/location.hpp>
 
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-
-namespace osmium {
-
-    class Box;
-    class Location;
-
-    namespace io {
-        class Header;
-    } // namespace io
-
-    namespace memory {
-        class Item;
-    } // namespace memory
-
-} // namespace osmium
 
 class Extract {
 
