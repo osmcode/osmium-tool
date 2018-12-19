@@ -100,7 +100,15 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
         const auto outer_ring = parse_ring(array[0]);
         osmium::builder::OuterRingBuilder ring_builder{builder};
         for (const auto& c : outer_ring) {
-            ring_builder.add_node_ref(0, osmium::Location{c.x, c.y});
+            osmium::Location loc{c.x, c.y};
+            if (loc.valid()) {
+                ring_builder.add_node_ref(0, loc);
+            } else {
+                throw config_error{"Invalid location in boundary (multi)polygon: (" +
+                                   std::to_string(c.x) +
+                                   ", " +
+                                   std::to_string(c.y) + ")."};
+            }
         }
     }
 
@@ -108,7 +116,15 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
         const auto inner_ring = parse_ring(array[i]);
         osmium::builder::InnerRingBuilder ring_builder{builder};
         for (const auto& c : inner_ring) {
-            ring_builder.add_node_ref(0, osmium::Location{c.x, c.y});
+            osmium::Location loc{c.x, c.y};
+            if (loc.valid()) {
+                ring_builder.add_node_ref(0, loc);
+            } else {
+                throw config_error{"Invalid location in boundary (multi)polygon: (" +
+                                   std::to_string(c.x) +
+                                   ", " +
+                                   std::to_string(c.y) + ")."};
+            }
         }
     }
 }

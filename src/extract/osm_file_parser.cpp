@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "../exception.hpp"
 #include "osm_file_parser.hpp"
 
 #include <osmium/area/assembler.hpp>
@@ -55,7 +56,7 @@ std::size_t OSMFileParser::operator()() {
     }
 
     bool has_ring = false;
-    {
+    try {
         index_type index;
         location_handler_type location_handler{index};
         osmium::builder::AreaBuilder builder{m_buffer};
@@ -73,6 +74,10 @@ std::size_t OSMFileParser::operator()() {
             }
         }));
         reader.close();
+    } catch (const osmium::invalid_location&) {
+        throw config_error{"Invalid location in boundary (multi)polygon in '" + m_file_name + "'."};
+    } catch (const osmium::not_found&) {
+        throw config_error{"Missing node in boundary (multi)polygon in '" + m_file_name + "'."};
     }
 
     if (has_ring) {

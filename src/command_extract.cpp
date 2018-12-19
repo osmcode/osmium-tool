@@ -83,8 +83,29 @@ namespace {
                 throw config_error{"'bbox' array elements must be numbers."};
             }
 
-            const osmium::Location location1{value[0].GetDouble(), value[1].GetDouble()};
-            const osmium::Location location2{value[2].GetDouble(), value[3].GetDouble()};
+            const auto value0 = value[0].GetDouble();
+            const auto value1 = value[1].GetDouble();
+            const auto value2 = value[2].GetDouble();
+            const auto value3 = value[3].GetDouble();
+
+            if (value0 < -180.0 || value0 > 180.0) {
+                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value0) + "."};
+            }
+
+            if (value1 < -90.0 || value1 > 90.0) {
+                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value1) + "."};
+            }
+
+            if (value2 < -180.0 || value2 > 180.0) {
+                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value2) + "."};
+            }
+
+            if (value3 < -90.0 || value3 > 90.0) {
+                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value3) + "."};
+            }
+
+            const osmium::Location location1{value0, value1};
+            const osmium::Location location2{value2, value3};
 
             osmium::Box box;
             box.extend(location1);
@@ -104,8 +125,29 @@ namespace {
                 if (left->value.IsNumber() && right->value.IsNumber() &&
                     top->value.IsNumber()  && bottom->value.IsNumber()) {
 
-                    const osmium::Location bottom_left{left->value.GetDouble(), bottom->value.GetDouble()};
-                    const osmium::Location top_right{right->value.GetDouble(), top->value.GetDouble()};
+                    const auto left_value = left->value.GetDouble();
+                    const auto bottom_value = bottom->value.GetDouble();
+                    const auto right_value = right->value.GetDouble();
+                    const auto top_value = top->value.GetDouble();
+
+                    if (left_value < -180.0 || left_value > 180.0) {
+                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(left_value) + "."};
+                    }
+
+                    if (right_value < -180.0 || right_value > 180.0) {
+                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(right_value) + "."};
+                    }
+
+                    if (top_value < -90.0 || top_value > 90.0) {
+                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(top_value) + "."};
+                    }
+
+                    if (bottom_value < -90.0 || bottom_value > 90.0) {
+                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(bottom_value) + "."};
+                    }
+
+                    const osmium::Location bottom_left{left_value, bottom_value};
+                    const osmium::Location top_right{right_value, top_value};
 
                     if (bottom_left.x() < top_right.x() &&
                         bottom_left.y() < top_right.y()) {

@@ -94,6 +94,10 @@ void PolyFileParser::parse_ring() {
         }
         coordinates.emplace_back(lon, lat);
 
+        if (!coordinates.back().valid()) {
+            throw config_error{"Invalid location in boundary (multi)polygon: (" + std::to_string(lon) + ", " + std::to_string(lat) + ")."};
+        }
+
         ++m_line;
     }
 }
