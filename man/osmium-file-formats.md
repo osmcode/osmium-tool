@@ -60,7 +60,7 @@ STDOUT, or because you have an unusual file name, you have to set the format
 manually. You can also set the format manually if you want to specify special
 format options.
 
-Most **osmium** commands support the **--input-format** (**--F**) and
+Most **osmium** commands support the **--input-format** (**-F**) and
 **--output-format** (**-f**) options to set the format. They take a
 comma-separated list of arguments, the first is the format, further arguments
 set additional options.
