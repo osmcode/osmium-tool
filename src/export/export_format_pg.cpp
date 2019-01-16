@@ -236,13 +236,13 @@ void ExportFormatPg::debug_output(osmium::VerboseOutput& out, const std::string&
     if (options().unique_id == unique_id_type::counter) {
         out << "    id        BIGINT PRIMARY KEY,\n";
     } else if (options().unique_id == unique_id_type::type_id) {
-        out << "    id        VARCHAR PRIMARY KEY,\n";
+        out << "    id        TEXT PRIMARY KEY,\n";
     }
 
-    out << "    geom      GEOMETRY,\n";
+    out << "    geom      GEOMETRY, -- or GEOGRAPHY\n";
 
     if (!options().type.empty()) {
-        out << "    osm_type  VARCHAR,\n";
+        out << "    osm_type  TEXT,\n";
     }
 
     if (!options().id.empty()) {
@@ -262,7 +262,7 @@ void ExportFormatPg::debug_output(osmium::VerboseOutput& out, const std::string&
     }
 
     if (!options().user.empty()) {
-        out << "    user      VARCHAR,\n";
+        out << "    user      TEXT,\n";
     }
 
     if (!options().timestamp.empty()) {
@@ -273,7 +273,7 @@ void ExportFormatPg::debug_output(osmium::VerboseOutput& out, const std::string&
         out << "    way_nodes BIGINT[],\n";
     }
 
-    out << "    tags      JSON -- or JSONB\n";
+    out << "    tags      JSONB -- or JSON, or TEXT\n";
     out << ");\n";
     out << "Then load data with something like this:\n";
     out << "\\copy osmdata FROM '" << filename << "'\n";
