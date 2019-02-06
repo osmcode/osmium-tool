@@ -124,7 +124,7 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
             m_output_action = "compact";
         } else {
             m_output_action = "osm";
-            m_output_file = osmium::io::File(m_output_filename, m_output_format);
+            m_output_file = osmium::io::File{m_output_filename, m_output_format};
             m_output_file.check();
 
             auto f = m_output_file.format();
