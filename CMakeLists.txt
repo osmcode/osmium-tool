@@ -110,16 +110,18 @@ endif()
 #
 #-----------------------------------------------------------------------------
 if(MSVC)
-    set(USUAL_COMPILE_OPTIONS "/Ox")
+    set(DEV_COMPILE_OPTIONS "/Ox")
+    set(RWD_COMPILE_OPTIONS "/Ox /DNDEBUG")
 else()
-    set(USUAL_COMPILE_OPTIONS "-O3 -g")
+    set(DEV_COMPILE_OPTIONS "-O3 -g")
+    set(RWD_COMPILE_OPTIONS "-O3 -g -DNDEBUG")
 endif()
 
 if(WIN32)
     add_definitions(-DWIN32 -D_WIN32 -DMSWIN32 -DBGDWIN32)
 endif()
 
-set(CMAKE_CXX_FLAGS_DEV "${USUAL_COMPILE_OPTIONS}"
+set(CMAKE_CXX_FLAGS_DEV "${DEV_COMPILE_OPTIONS}"
     CACHE STRING "Flags used by the compiler during developer builds."
     FORCE)
 
@@ -131,7 +133,7 @@ mark_as_advanced(
     CMAKE_EXE_LINKER_FLAGS_DEV
 )
 
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${USUAL_COMPILE_OPTIONS}"
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${RWD_COMPILE_OPTIONS}"
     CACHE STRING "Flags used by the compiler during RELWITHDEBINFO builds."
     FORCE)
 
