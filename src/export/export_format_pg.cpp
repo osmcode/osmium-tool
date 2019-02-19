@@ -28,8 +28,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef RAPIDJSON_HAS_STDSTRING
 # define RAPIDJSON_HAS_STDSTRING 1
 #endif
-#include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 #include <limits>
 #include <string>
