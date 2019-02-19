@@ -132,7 +132,7 @@ void id_map::read(int fd, std::size_t file_size) {
     }
 }
 
-static osmium::object_id_type get_start_id(const std::string& s) noexcept {
+static osmium::object_id_type get_start_id(const std::string& s) {
     const auto id = osmium::string_to_object_id(s.c_str());
     if (id == 0) {
         return 1;
