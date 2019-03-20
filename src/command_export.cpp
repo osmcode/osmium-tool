@@ -400,6 +400,10 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         initialize_tags_filter(m_options.tags_filter, true, m_exclude_tags);
     }
 
+    if (m_input_file.filename().empty()) {
+        throw config_error{"Can not read from STDIN, because input file has to be read twice."};
+    }
+
     return true;
 }
 

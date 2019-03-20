@@ -38,6 +38,9 @@ the case for ways with less than two nodes or closed ways or relations that
 can't be assembled into a valid (multi)polygon. See the options
 --show-errors/-e and --stop-on-error/-E for how to modify this behaviour.
 
+The input file will be read twice (once for the relations, once for nodes and
+ways), so this command can not read its input from STDIN.
+
 This command will not work on full history files.
 
 This command will work with negative IDs on OSM objects (for instance on
