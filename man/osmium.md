@@ -109,9 +109,9 @@ osmium commands still need to load quite a bit of data into main memory. In
 some cases this means that only smaller datasets can be handled. Look into the
 man pages for the individual commands to learn more about their memory use.
 
-If you use the **-v**, **\--verbose** option on most commands they will print
-out their peak memory usage at the end. This is the actual amount of memory
-used including the program code itself, any needed libraries and the data.
+If you use the **-v**, **\--verbose** option on most commands osmium will print
+out the peak memory usage at the end. This is the actual amount of memory
+used including the program code itself, any needed libraries, and the data.
 (Printing of memory usage is currently only available on Linux systems.)
 
 If an osmium command exits with an "Out of memory" error, try running it with

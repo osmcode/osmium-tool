@@ -91,7 +91,7 @@ To see all changesets by user "foo":
 
 To create an OPL file containing only open changesets:
 
-    osmium changeset-filter \--open -o open-changesets.opl.bz2 changesets.osm.bz2
+    osmium changeset-filter --open -o open-changesets.opl.bz2 changesets.osm.bz2
 
 
 # SEE ALSO

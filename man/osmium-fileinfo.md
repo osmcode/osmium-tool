@@ -64,13 +64,13 @@ This commands reads its input file only once, ie. it can read from STDIN.
     is to read only the header of the file.
 
 -g, \--get=VARIABLE
-:   Get value of VARIABLE. Can not be used together with \--json.
+:   Get value of VARIABLE. Can not be used together with **\--json**.
 
 -G, \--show-variables
 :   Show a list of all variable names.
 
 -j, \--json
-:   Output in JSON format. Can not be used together with \--get.
+:   Output in JSON format. Can not be used together with **\--get**.
 
 -t, \--object-type=TYPE
 :   Read only objects of given type (*node*, *way*, *relation*, *changeset*).

@@ -104,7 +104,7 @@ disk in *.osm.bz2* format.
 
 Apply changes in `362.osc.gz` to planet file and write result to `new.osm.pbf`:
 
-    osmium apply-changes \--output=new.osm.pbf planet.osm.pbf 362.osc.gz
+    osmium apply-changes --output=new.osm.pbf planet.osm.pbf 362.osc.gz
 
 
 # SEE ALSO

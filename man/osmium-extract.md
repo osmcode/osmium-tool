@@ -19,17 +19,17 @@ The region (geographical extent) can be given as a bounding box or as a
 
 There are three ways of calling this command:
 
-* Specify a config file with the \--config/-c option. It can define any number
+* Specify a config file with the **\--config/-c** option. It can define any number
   of regions you want to cut out. See the **CONFIG FILE** section for details.
 
-* Specify a bounding box to cut out with the \--bbox/-b option.
+* Specify a bounding box to cut out with the **\--bbox/-b** option.
 
-* Specify a (multi)polygon to cut out with the \--polygon/-p option.
+* Specify a (multi)polygon to cut out with the **\--polygon/-p** option.
 
 The input file is assumed to be ordered in the usual order: nodes first, then
 ways, then relations.
 
-If the `\--with-history` option is used, the command will work correctly for
+If the **\--with-history** option is used, the command will work correctly for
 history files. This currently works for the **complete_ways** strategy only.
 The **simple** or **smart** strategies do not work with history files. A
 history extract will contain every version of all objects with at least one
@@ -43,7 +43,7 @@ almost all cases this will be good enough, but if you want to make really sure
 you got everything, use a small buffer around your region.
 
 By default no **bounds** will be set in the header of the output file. Use
-the \--set-bounds option if you need this.
+the **\--set-bounds** option if you need this.
 
 Note that **osmium extract** will never clip any OSM objects, ie. it will not
 remove node references outside the region from ways or unused relation members
@@ -55,21 +55,23 @@ to merge several extracts without problems.
 # OPTIONS
 
 -b, \--bbox=LONG1,LAT1,LONG2,LAT2
-:   Set the bounding box to cut out. Can not be used with \--polygon/-p,
-    \--config/-c, or --directory/-d. The coordinates LONG1,LAT1 are from one
-    arbitrary corner, the coordinates LONG2,LAT2 are from the opposite corner.
+:   Set the bounding box to cut out. Can not be used with **\--polygon/-p**,
+    **\--config/-c**, or **\--directory/-d**. The coordinates LONG1,LAT1 are
+    from one arbitrary corner, the coordinates LONG2,LAT2 are from the opposite
+    corner.
 
 -c, \--config=FILE
-:   Set the name of the config file. Can not be used with the \--bbox/-b or
-    \--polygon/-p option. If this is set, the --output/-o and --output-format/-f
-    options are ignored, because they are set in the config file.
+:   Set the name of the config file. Can not be used with the **\--bbox/-b** or
+    **\--polygon/-p** option. If this is set, the **\--output/-o** and
+    **\--output-format/-f** options are ignored, because they are set in the
+    config file.
 
 -d, \--directory=DIRECTORY
 :   Output directory. Output file names in the config file are relative to
     this directory. Overwrites the setting of the same name in the config
-    file. This option is ignored when the \--bbox/-b or --polygon/-p options
-    are used, set the output directory and name with the \--output/-o option
-    in that case.
+    file. This option is ignored when the **\--bbox/-b** or **\--polygon/-p**
+    options are used, set the output directory and name with the
+    **\--output/-o** option in that case.
 
 -H, \--with-history
 :   Specify that the input file is a history file. The output file(s) will also
@@ -79,8 +81,8 @@ to merge several extracts without problems.
 :   Set the polygon to cut out based on the contents of the file. The file
     has to be a GeoJSON, poly, or OSM file as described in the
     **(MULTI)POLYGON FILE FORMATS** section. It has to have the right suffix
-    to be detected correctly. Can not be used with \--bbox/-b, --config/-c,
-    or \--directory/-d.
+    to be detected correctly. Can not be used with **\--bbox/-b**,
+    **\--config/-c**, or **\--directory/-d**.
 
 -s, \--strategy=STRATEGY
 :   Use the given strategy to extract the region. For possible values and

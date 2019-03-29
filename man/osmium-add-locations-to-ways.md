@@ -17,7 +17,7 @@ taking the locations from the nodes and adding them to the ways. This makes
 it easier for other programs to assemble the way geometries.
 
 The input file must contain all nodes needed for the ways, otherwise there will
-be an error. You can change this behaviour using the `\--ignore-missing-nodes`
+be an error. You can change this behaviour using the **\--ignore-missing-nodes**
 option.
 
 Nodes without any tags will not be copied (unless the **\--keep-untagged-nodes**,

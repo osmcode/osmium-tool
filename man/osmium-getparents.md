@@ -86,7 +86,7 @@ This command will not work with negative IDs.
 
 \--verbose-ids
 :   Also print all requested IDs. This is usually disabled, because
-    the lists can get quite long. (This option implies `\--verbose`.)
+    the lists can get quite long. (This option implies **\--verbose**.)
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@

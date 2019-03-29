@@ -36,7 +36,8 @@ disadvantages. The default is good enough for most cases, but see the
 Objects with invalid geometries are silently omitted from the output. This is
 the case for ways with less than two nodes or closed ways or relations that
 can't be assembled into a valid (multi)polygon. See the options
-\--show-errors/-e and --stop-on-error/-E for how to modify this behaviour.
+**\--show-errors/-e** and **\--stop-on-error/-E** for how to modify this
+behaviour.
 
 The input file will be read twice (once for the relations, once for nodes and
 ways), so this command can not read its input from STDIN.
@@ -252,7 +253,7 @@ is silently dropped. So if there is a tag "@id=foo" and you have set `id` to
 
 Note that the `id` is not necessarily unique. Even the combination `type` and
 `id` is  not unique, because a way may end up in the output file as LineString
-and as (Multi)Polygon. See the `\--add-unique-id` option for a unique ID.
+and as (Multi)Polygon. See the **\--add-unique-id** option for a unique ID.
 
 
 # AREA HANDLING
