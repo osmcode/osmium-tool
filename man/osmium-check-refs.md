@@ -19,9 +19,9 @@ Referential integrity is often broken in extracts. This can lead to problems
 with some uses of the OSM data. Use this command to make sure your data is
 good.
 
-If the option -r is not given, this command will only check if all nodes
-referenced in ways are in the file, with the option, relations will also be
-checked.
+If the option **\--check-relations/-r** is not given, this command will only
+check if all nodes referenced in ways are in the file, with the option,
+relations will also be checked.
 
 This command expects the input file to be ordered in the usual way: First
 nodes in order of ID, then ways in order of ID, then relations in order of ID.
