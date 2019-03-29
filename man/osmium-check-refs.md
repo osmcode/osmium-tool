@@ -52,8 +52,8 @@ This commands reads its input file only once, ie. it can read from STDIN.
 **osmium check-refs** will do the check in one pass through the input data. It
 needs enough main memory to store all temporary data.
 
-Largest memory need will be about 1 bit for each node ID, that's roughly 540 MB
-these days (Summer 2017). With the **-r**, **\--check-relations** option memory
+Largest memory need will be about 1 bit for each node ID, that's roughly 760 MB
+these days (spring 2019). With the **\--check-relations/-r** option memory
 use will be a bit bigger.
 
 
