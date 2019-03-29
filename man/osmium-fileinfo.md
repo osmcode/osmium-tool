@@ -14,13 +14,13 @@ osmium-fileinfo - show information about an OSM file
 Shows various information about OSM files such as the file type, bounding boxes
 in the header, etc.
 
-This command will usually only read the file header. Use the **\--extended**
+This command will usually only read the file header. Use the **\--extended/-e**
 option to show more information.
 
 Normally this command will output the data in human readable form. If the
-**-j**, **\--json** option is used, the output will be in JSON format instead.
+**\--json/-j** option is used, the output will be in JSON format instead.
 
-If the **-g**, **\--get** option is used, only the value of the named variable
+If the **\--get/-g** option is used, only the value of the named variable
 will be printed.
 
 The output is split into four sections:
@@ -38,7 +38,7 @@ Header
 
 Data
 :   This section shows the information available from reading the whole
-    file. It is only shown if the **\--extended** option was used. It
+    file. It is only shown if the **\--extended/-e** option was used. It
     shows the actual bounding box calculated from the nodes in the file,
     the first and last timestamp of all objects in the file, a CRC32
     checksum of the data in the file, the number of changesets, nodes,
@@ -52,7 +52,7 @@ Metadata
 :   This section shows which metadata attributes are used in the file.
     It contains information which attributes are used by all objects in
     the file and which are only used by some objects. This section is
-    only shown if the **\--extended** option was used because the whole
+    only shown if the **\--extended/-e** option was used because the whole
     file has to be read.
 
 This commands reads its input file only once, ie. it can read from STDIN.
@@ -64,18 +64,18 @@ This commands reads its input file only once, ie. it can read from STDIN.
     is to read only the header of the file.
 
 -g, \--get=VARIABLE
-:   Get value of VARIABLE. Can not be used together with **\--json**.
+:   Get value of VARIABLE. Can not be used together with **\--json/-j**.
 
 -G, \--show-variables
 :   Show a list of all variable names.
 
 -j, \--json
-:   Output in JSON format. Can not be used together with **\--get**.
+:   Output in JSON format. Can not be used together with **\--get/-g**.
 
 -t, \--object-type=TYPE
 :   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
     By default all types are read. This option can be given multiple times.
-    This only takes effect if the **\--extended** option is also used.
+    This only takes effect if the **\--extended/-e** option is also used.
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@

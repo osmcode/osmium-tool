@@ -25,7 +25,7 @@ text files with one ID per line (second case in synopsis), or read from OSM
 files (third cases in synopsis). A mixture of these cases is also allowed.
 
 All objects with these IDs will be read from *OSM-FILE* and written to the
-output. If the option **-s**, **\--add-self** is specified, the objects with
+output. If the option **\--add-self/-s** is specified, the objects with
 the specified IDs themselves will also be added to the output.
 
 Objects will be written out in the order they are found in the *OSM-FILE*.
@@ -45,7 +45,7 @@ On the command line, the list of IDs can be in separate arguments or in a
 single argument separated by spaces, tabs, commas (,), semicolons (;), forward
 slashes (/) or pipe characters (|).
 
-In an ID file (option **-i**/**\--id-file**) each line must start with an ID in
+In an ID file (option **\--id-file/-i**) each line must start with an ID in
 the format described above. Leading space characters in the line are ignored.
 Lines can optionally contain a space character or a hash sign ('#') after the
 ID. Any characters after that are ignored. (This also allows files in OPL

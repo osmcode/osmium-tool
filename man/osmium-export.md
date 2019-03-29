@@ -253,7 +253,7 @@ is silently dropped. So if there is a tag "@id=foo" and you have set `id` to
 
 Note that the `id` is not necessarily unique. Even the combination `type` and
 `id` is  not unique, because a way may end up in the output file as LineString
-and as (Multi)Polygon. See the **\--add-unique-id** option for a unique ID.
+and as (Multi)Polygon. See the **\--add-unique-id/-u** option for a unique ID.
 
 
 # AREA HANDLING

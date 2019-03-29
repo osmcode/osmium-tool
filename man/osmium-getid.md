@@ -20,12 +20,12 @@ text files with one ID per line (second case in synopsis), or read from
 OSM files (third cases in synopsis). A mixture of these cases is also allowed.
 
 All objects with these IDs will be read from *OSM-FILE* and written to the
-output. If the option **-r**, **\--add-referenced** is used all objects
+output. If the option **\--add-referenced/-r** is used all objects
 referenced from those objects will also be added to the output.
 
 Objects will be written out in the order they are found in the *OSM-FILE*.
 
-If the option **-r**, **\--add-referenced** is *not* used, the input file is
+If the option **\--add-referenced/-r** is *not* used, the input file is
 read only once, if it is used, the input file will possibly be read up to
 three times.
 
@@ -42,7 +42,7 @@ On the command line, the list of IDs can be in separate arguments or in a
 single argument separated by spaces, tabs, commas (,), semicolons (;), forward
 slashes (/) or pipe characters (|).
 
-In an ID file (option **-i**/**\--id-file**) each line must start with an ID in
+In an ID file (option **\--id-file/-i**) each line must start with an ID in
 the format described above. Leading space characters in the line are ignored.
 Lines can optionally contain a space character or a hash sign ('#') after the
 ID. Any characters after that are ignored. (This also allows files in OPL
@@ -52,12 +52,12 @@ Note that all objects will be taken from the *OSM-FILE*, the *ID-OSM-FILE* is
 only used to detect which objects to get. This might matter if there are
 different object versions in the different files.
 
-The *OSM-FILE* can not be a history file unless the **-H**, **\--with-history**
+The *OSM-FILE* can not be a history file unless the **\--with-history/-H**
 option is used. Then all versions of the objects will be copied to the output.
 
 If referenced objects are missing from the input file, the type and IDs
 of those objects is written out to STDERR at the end of the program unless
-the **-H**, **\--with-history** option was given.
+the **\--with-history/-H** option was given.
 
 This command will not work with negative IDs.
 
@@ -70,7 +70,7 @@ This command will not work with negative IDs.
     of the type here.
 
 \--history
-:   Deprecated. Use **\--with-history** instead.
+:   Deprecated. Use **\--with-history/-H** instead.
 
 -H, \--with-history
 :   Make this program work on history files. This is only needed when using
@@ -86,8 +86,8 @@ This command will not work with negative IDs.
     times.
 
 -I, \--id-osm-file=OSMFILE
-:   Like **-i** but get the IDs from an OSM file. This option can be used
-    multiple times.
+:   Like **\--id-file/-i** but get the IDs from an OSM file. This option can be
+    used multiple times.
 
 -r, \--add-referenced
 :   Recursively find all objects referenced by the objects of the given IDs
@@ -112,7 +112,7 @@ This command will not work with negative IDs.
 
 1
   ~ if there was an error processing the data or not all IDs were found,
-    (this is only detected if the **-H**, **\--with-history** option was not
+    (this is only detected if the **\--with-history/-H** option was not
     used),
 
 2

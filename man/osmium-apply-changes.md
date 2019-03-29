@@ -21,7 +21,7 @@ the change files are given or in what order they contain the data.
 
 Changes can be applied to normal OSM data files or OSM history files with this
 command. File formats will be autodetected from the file name suffixes, see
-the **\--with-history** option if that doesn't work.
+the **\--with-history/-H** option if that doesn't work.
 
 This commands reads its input file(s) only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
@@ -42,7 +42,7 @@ STDOUT.
 :   Input has and output should have node locations on ways. Can be used
     to update files created by the **osmium-add-locations-to-ways**. See
     there for details on the format. Can not be used together with the
-    **\--with-history**,**-H** option.
+    **\--with-history/-H** option.
 
 \--redact
 :   Redact (patch) history files. Change files can contain any version of

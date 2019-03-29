@@ -10,11 +10,11 @@ keep an index of the node locations in memory or in a temporary file on disk
 while doing their work. There are several different ways this can be done which
 have different advantages and disadvantages.
 
-Use the **\--show-index-types**, **-I** option on these commands to show all
+Use the **\--show-index-types/-I** option on these commands to show all
 available index types. It depends on your operating system which index types
 are available.
 
-Use the **\--index-type**, **-i** option on these commands to set the index type
+Use the **\--index-type/-i** option on these commands to set the index type
 to be used.
 
 The default index type is `flex_mem` which will keep all data in memory and
@@ -50,7 +50,7 @@ The `flex_mem` type automatically switches between something similar to
 `sparse_mmap_array` for smaller extracts and `dense_mmap_array` for larger
 extracts or the whole planet file.
 
-If you specify the **\--verbose**, **-v** option, Osmium will display how much
+If you specify the **\--verbose/-v** option, Osmium will display how much
 memory was used for the index.
 
 

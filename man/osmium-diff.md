@@ -31,7 +31,7 @@ humans. It can not be used to create an OSM change file (`.osc`), use
 # OUTPUT FORMATS
 
 The following output formats are supported and can be set with the
-**\--output-format** or **-f** options. Default is the compact format.
+**\--output-format/-f** options. Default is the compact format.
 
 compact
 :   A very compact format. For all objects a line is printed with the type

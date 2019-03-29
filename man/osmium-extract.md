@@ -29,7 +29,7 @@ There are three ways of calling this command:
 The input file is assumed to be ordered in the usual order: nodes first, then
 ways, then relations.
 
-If the **\--with-history** option is used, the command will work correctly for
+If the **\--with-history/-H** option is used, the command will work correctly for
 history files. This currently works for the **complete_ways** strategy only.
 The **simple** or **smart** strategies do not work with history files. A
 history extract will contain every version of all objects with at least one

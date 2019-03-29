@@ -19,16 +19,16 @@ for a description of the filter expression format.
 
 All objects matching the expressions will be read from *OSM-FILE* and written
 to the output. All objects referenced from those objects will also be added
-to the output unless the option **-R**, **\--omit-referenced** is used. This
+to the output unless the option **\--omit-referenced/-R** is used. This
 applies to nodes referenced in ways and members referenced in relations.
 
-If the option **-R**, **\--omit-referenced** is used, the input file is read
+If the option **\--omit-referenced/-R** is used, the input file is read
 only once, otherwise the input file will possibly be read up to three times.
 
 Objects will be written out in the order they are found in the *OSM-FILE*.
 
 The command will only work correctly on history files if the
-**-R**/**\--omit-referenced** option is used.
+**\--omit-referenced/-R** option is used.
 
 
 # OPTIONS
@@ -147,7 +147,7 @@ that have an additional "type=multipolygon" or "type=boundary" tag.
 # MEMORY USAGE
 
 **osmium tags-filter** does all its work on the fly and only keeps tables of
-object IDs it needs in main memory. If the **-R**/**\--omit-referenced** option
+object IDs it needs in main memory. If the **\--omit-referenced/-R** option
 is used, no IDs are kept in memory.
 
 
