@@ -1,9 +1,9 @@
 
 # COMMON OPTIONS
 
--h, --help
+-h, \--help
 :   Show usage help.
 
--v, --verbose
+-v, \--verbose
 :   Set verbose mode. The program will output information about what it is
     doing to STDERR.

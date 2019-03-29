@@ -24,7 +24,7 @@ STDOUT.
 
 # OPTIONS
 
--t, --object-type=TYPE
+-t, \\--object-type=TYPE
 :   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
     By default all types are read. This option can be given multiple times.
 

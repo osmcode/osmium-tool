@@ -7,7 +7,7 @@ osmium-tags-filter - filter objects matching specified keys/tags
 # SYNOPSIS
 
 **osmium tags-filter** \[*OPTIONS*\] *OSM-FILE* *FILTER-EXPRESSION*...\
-**osmium tags-filter** \[*OPTIONS*\] --expressions=*FILE* *OSM-FILE*
+**osmium tags-filter** \[*OPTIONS*\] \--expressions=*FILE* *OSM-FILE*
 
 
 # DESCRIPTION
@@ -19,33 +19,33 @@ for a description of the filter expression format.
 
 All objects matching the expressions will be read from *OSM-FILE* and written
 to the output. All objects referenced from those objects will also be added
-to the output unless the option **-R**, **--omit-referenced** is used. This
+to the output unless the option **-R**, **\--omit-referenced** is used. This
 applies to nodes referenced in ways and members referenced in relations.
 
-If the option **-R**, **--omit-referenced** is used, the input file is read
+If the option **-R**, **\--omit-referenced** is used, the input file is read
 only once, otherwise the input file will possibly be read up to three times.
 
 Objects will be written out in the order they are found in the *OSM-FILE*.
 
 The command will only work correctly on history files if the
-**-R**/**--omit-referenced** option is used.
+**-R**/**\--omit-referenced** option is used.
 
 
 # OPTIONS
 
--e FILE, --expressions=FILE
+-e FILE, \--expressions=FILE
 :   Read expressions from the specified file, one per line. Empty lines are
     ignored. Everything after the comment character (#) is also ignored. See
     the **FILTER EXPRESSIONS** section for further details.
 
--i, --invert-match
+-i, \--invert-match
 :   Invert the sense of matching. Exclude all objects with matching tags.
 
--R, --omit-referenced
+-R, \--omit-referenced
 :   Omit the nodes referenced from matching ways and members referenced from
     matching relations.
 
--t, --remove-tags
+-t, \--remove-tags
 :   Remove tags from objects that are not matching the filter expression but
     are included to complete references (nodes in ways and members of
     relations). If an object is both matching the filter and used as a
@@ -147,7 +147,7 @@ that have an additional "type=multipolygon" or "type=boundary" tag.
 # MEMORY USAGE
 
 **osmium tags-filter** does all its work on the fly and only keeps tables of
-object IDs it needs in main memory. If the **-R**/**--omit-referenced** option
+object IDs it needs in main memory. If the **-R**/**\--omit-referenced** option
 is used, no IDs are kept in memory.
 
 

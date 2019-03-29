@@ -31,7 +31,7 @@ humans. It can not be used to create an OSM change file (`.osc`), use
 # OUTPUT FORMATS
 
 The following output formats are supported and can be set with the
-**--output-format** or **-f** options. Default is the compact format.
+**\--output-format** or **-f** options. Default is the compact format.
 
 compact
 :   A very compact format. For all objects a line is printed with the type
@@ -57,27 +57,27 @@ None of the output formats print the headers of the input files.
 
 # OPTIONS
 
--c, --suppress-common
+-c, \--suppress-common
 :   Do not output objects that are the same in both files.
 
--f, --output-format=FORMAT
+-f, \--output-format=FORMAT
 :   See the **OUTPUT FORMATS** section.
 
--o, --output=FILE
+-o, \--output=FILE
 :   Name of the output file. Default is '-' (STDOUT).
 
--O, --overwrite
+-O, \--overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
--q, --quiet
+-q, \--quiet
 :   No output. Just report when files differ through the return code.
 
--s, --summary
+-s, \--summary
 :   Print count of objects that are only in the left or right files, or the
     same in both or different in both to STDERR.
 
--t, --object-type=TYPE
+-t, \--object-type=TYPE
 :   Read only objects of given type (*node*, *way*, *relation*).
     By default all types are read. This option can be given multiple times.
     This affects the output as well as the return code of the command.

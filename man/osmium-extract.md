@@ -6,9 +6,9 @@ osmium-extract - create geographical extracts from an OSM file
 
 # SYNOPSIS
 
-**osmium extract** --config *CONFIG-FILE* \[*OPTIONS*\] *OSM-FILE*\
-**osmium extract** --bbox *LEFT*,*BOTTOM*,*RIGHT*,*TOP* \[*OPTIONS*\] *OSM-FILE*\
-**osmium extract** --polygon *POLYGON-FILE* \[*OPTIONS*\] *OSM-FILE*
+**osmium extract** \--config *CONFIG-FILE* \[*OPTIONS*\] *OSM-FILE*\
+**osmium extract** \--bbox *LEFT*,*BOTTOM*,*RIGHT*,*TOP* \[*OPTIONS*\] *OSM-FILE*\
+**osmium extract** \--polygon *POLYGON-FILE* \[*OPTIONS*\] *OSM-FILE*
 
 
 # DESCRIPTION
@@ -19,17 +19,17 @@ The region (geographical extent) can be given as a bounding box or as a
 
 There are three ways of calling this command:
 
-* Specify a config file with the --config/-c option. It can define any number
+* Specify a config file with the \--config/-c option. It can define any number
   of regions you want to cut out. See the **CONFIG FILE** section for details.
 
-* Specify a bounding box to cut out with the --bbox/-b option.
+* Specify a bounding box to cut out with the \--bbox/-b option.
 
-* Specify a (multi)polygon to cut out with the --polygon/-p option.
+* Specify a (multi)polygon to cut out with the \--polygon/-p option.
 
 The input file is assumed to be ordered in the usual order: nodes first, then
 ways, then relations.
 
-If the `--with-history` option is used, the command will work correctly for
+If the `\--with-history` option is used, the command will work correctly for
 history files. This currently works for the **complete_ways** strategy only.
 The **simple** or **smart** strategies do not work with history files. A
 history extract will contain every version of all objects with at least one
@@ -43,7 +43,7 @@ almost all cases this will be good enough, but if you want to make really sure
 you got everything, use a small buffer around your region.
 
 By default no **bounds** will be set in the header of the output file. Use
-the --set-bounds option if you need this.
+the \--set-bounds option if you need this.
 
 Note that **osmium extract** will never clip any OSM objects, ie. it will not
 remove node references outside the region from ways or unused relation members
@@ -54,43 +54,43 @@ to merge several extracts without problems.
 
 # OPTIONS
 
--b, --bbox=LONG1,LAT1,LONG2,LAT2
-:   Set the bounding box to cut out. Can not be used with --polygon/-p,
-    --config/-c, or --directory/-d. The coordinates LONG1,LAT1 are from one
+-b, \--bbox=LONG1,LAT1,LONG2,LAT2
+:   Set the bounding box to cut out. Can not be used with \--polygon/-p,
+    \--config/-c, or --directory/-d. The coordinates LONG1,LAT1 are from one
     arbitrary corner, the coordinates LONG2,LAT2 are from the opposite corner.
 
--c, --config=FILE
-:   Set the name of the config file. Can not be used with the --bbox/-b or
-    --polygon/-p option. If this is set, the --output/-o and --output-format/-f
+-c, \--config=FILE
+:   Set the name of the config file. Can not be used with the \--bbox/-b or
+    \--polygon/-p option. If this is set, the --output/-o and --output-format/-f
     options are ignored, because they are set in the config file.
 
--d, --directory=DIRECTORY
+-d, \--directory=DIRECTORY
 :   Output directory. Output file names in the config file are relative to
     this directory. Overwrites the setting of the same name in the config
-    file. This option is ignored when the --bbox/-b or --polygon/-p options
-    are used, set the output directory and name with the --output/-o option
+    file. This option is ignored when the \--bbox/-b or --polygon/-p options
+    are used, set the output directory and name with the \--output/-o option
     in that case.
 
--H, --with-history
+-H, \--with-history
 :   Specify that the input file is a history file. The output file(s) will also
     be history file(s).
 
--p, --polygon=POLYGON_FILE
+-p, \--polygon=POLYGON_FILE
 :   Set the polygon to cut out based on the contents of the file. The file
     has to be a GeoJSON, poly, or OSM file as described in the
     **(MULTI)POLYGON FILE FORMATS** section. It has to have the right suffix
-    to be detected correctly. Can not be used with --bbox/-b, --config/-c,
-    or --directory/-d.
+    to be detected correctly. Can not be used with \--bbox/-b, --config/-c,
+    or \--directory/-d.
 
--s, --strategy=STRATEGY
+-s, \--strategy=STRATEGY
 :   Use the given strategy to extract the region. For possible values and
     details see the **STRATEGIES** section. Default is "complete_ways".
 
--S, --option=OPTION=VALUE
+-S, \--option=OPTION=VALUE
 :   Set a named option for the strategy. If needed you can specify this
     option multiple times to set several options.
 
---set-bounds
+\--set-bounds
 :   Set the bounds field in the header. The bounds are set to the bbox or
     envelope of the polygon specified for the extract. Note that strategies
     other than "simple" can put nodes outside those bounds into the output

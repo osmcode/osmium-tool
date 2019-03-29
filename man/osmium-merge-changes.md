@@ -23,7 +23,7 @@ STDOUT.
 
 # OPTIONS
 
--s, --simplify
+-s, \--simplify
 :   Only write the last version of any object to the output. For an object
     created in one of the change files and removed in a later one, the deleted
     version of the object will still appear because it is the latest version.

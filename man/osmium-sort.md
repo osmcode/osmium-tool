@@ -33,7 +33,7 @@ STDOUT. (Unless the *multipass* strategy is used.)
 
 # OPTIONS
 
--s, --strategy=STRATEGY
+-s, \--strategy=STRATEGY
 :   Sorting strategy. The "simple" strategy reads all input files into memory,
     does the sorting and writes everything out. The "multipass" strategy reads
     the input files in three passes, one for nodes, one for ways, and one for

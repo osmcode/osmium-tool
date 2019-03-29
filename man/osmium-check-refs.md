@@ -35,11 +35,11 @@ This commands reads its input file only once, ie. it can read from STDIN.
 
 # OPTIONS
 
--i, --show-ids
+-i, \--show-ids
 :   Print all missing IDs to STDOUT. If you don't specify this option, only a
     summary is shown.
 
--r, --check-relations
+-r, \--check-relations
 :   Also check referential integrity of relations. Without this option, only
     nodes in ways are checked.
 
@@ -53,7 +53,7 @@ This commands reads its input file only once, ie. it can read from STDIN.
 needs enough main memory to store all temporary data.
 
 Largest memory need will be about 1 bit for each node ID, that's roughly 540 MB
-these days (Summer 2017). With the **-r**, **--check-relations** option memory
+these days (Summer 2017). With the **-r**, **\--check-relations** option memory
 use will be a bit bigger.
 
 

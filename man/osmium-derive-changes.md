@@ -24,7 +24,7 @@ the normal way things work in OSM. If you need to compare all data in OSM
 files, have a look at the **osmium diff** program.
 
 For this command to create a proper change file you have to set the
-**--output** option or **--output-format** option in a way that it will
+**\--output** option or **--output-format** option in a way that it will
 generate an .osc file, typically by using something like '-o out.osc.gz'.
 You can create any other OSM file format, but that is usually not what you
 want. Osmium derive-changes will warn you in this case.
@@ -38,7 +38,7 @@ OSM database, but just moved out of the extract you are looking at. So a real,
 new, "deleted" version was never created. Usually the "deleted" object will get
 the same version number and timestamp as the object in *OSM-FILE1* had, all
 other information will be removed. But you can change this using the
-**--increment-version**, **--keep-details**, and **--update-timestamp**
+**\--increment-version**, **--keep-details**, and **--update-timestamp**
 options. Depending on which software you are using the change files with,
 different settings might be necessary.
 
@@ -49,15 +49,15 @@ STDOUT.
 
 # OPTIONS
 
---increment-version
+\--increment-version
 :   Increment version number of deleted objects.
 
---keep-details
+\--keep-details
 :   Keep details of deleted objects. Usually only id, version, and timestamp
     are kept. If this option is set all attributes, all tags, and all nodes
     or members for ways and relations, respectively, are kept.
 
---update-timestamp
+\--update-timestamp
 :   Update timestamp of deleted objects to the current time. This is the same
     behaviour as Osmosis.
 

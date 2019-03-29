@@ -36,7 +36,7 @@ disadvantages. The default is good enough for most cases, but see the
 Objects with invalid geometries are silently omitted from the output. This is
 the case for ways with less than two nodes or closed ways or relations that
 can't be assembled into a valid (multi)polygon. See the options
---show-errors/-e and --stop-on-error/-E for how to modify this behaviour.
+\--show-errors/-e and --stop-on-error/-E for how to modify this behaviour.
 
 The input file will be read twice (once for the relations, once for nodes and
 ways), so this command can not read its input from STDIN.
@@ -49,52 +49,52 @@ files created with JOSM).
 
 # OPTIONS
 
--c, --config=FILE
+-c, \--config=FILE
 :   Read configuration from specified file.
 
--C, --print-default-config
+-C, \--print-default-config
 :   Print the default config to STDOUT. Useful if you want to change it and
     not write the whole thing manually. If you use this option all other
     options are ignored.
 
--e, --show-errors
+-e, \--show-errors
 :   Output any geometry errors on STDERR. This includes ways with a single
     node or areas that can't be assembled from multipolygon relations. This
     output is not suitable for automated use, there are other tools that can
     create very detailed errors reports that are better for that (see
     https://osmcode.org/osm-area-tools/).
 
--E, --stop-on-error
+-E, \--stop-on-error
 :   Usually geometry errors (due to missing node locations or broken polygons)
     are ignored and the features are omitted from the output. If this option
     is set, any error will immediately stop the program.
 
---geometry-types=TYPES
+\--geometry-types=TYPES
 :   Specify the geometry types that should be written out. Usually all created
     geometries (points, linestrings, and (multi)polygons) are written to the
     output, but you can restrict the types using this option. TYPES is a
     comma-separated list of the types ("point", "linestring", and "polygon").
 
--i, --index-type=TYPE
+-i, \--index-type=TYPE
 :   Set the index type. For details see the **osmium-index-types**(5) man
     page.
 
--I, --show-index-types
+-I, \--show-index-types
 :   Shows a list of available index types. For details see the
     **osmium-index-types**(5) man page. If you use this options all other
     options are ignored.
 
--n, --keep-untagged
+-n, \--keep-untagged
 :   If this is set, features without any tags will be in the exported data.
     By default these features will be omitted from the output. Tags are the
     OSM tags, not attributes (like id, version, uid, ...) without the tags
     removed by the **exclude_tags** or **include_tags** settings.
 
--r, --omit-rs
+-r, \--omit-rs
 :   Do not print the RS (0x1e, record separator) character when using the
     GeoJSON Text Sequence Format. Ignored for other formats.
 
--u, --add-unique-id=TYPE
+-u, \--add-unique-id=TYPE
 :   Add a unique ID to each feature. TYPE can be either *counter* in which
     case the first feature will get ID 1, the next ID 2 and so on. The type
     of object does not matter in this case. Or the TYPE is *type_id* in which
@@ -110,18 +110,18 @@ files created with JOSM).
 
 # OUTPUT OPTIONS
 
--f, --output-format=FORMAT
+-f, \--output-format=FORMAT
 :   The format of the output file. Can be used to set the output file format
     if it can't be autodetected from the output file name. See the OUTPUT
     FORMATS section for a list of formats.
 
---fsync
+\--fsync
 :   Call fsync after writing the output file to force flushing buffers to disk.
 
--o, --output=FILE
+-o, \--output=FILE
 :   Name of the output file. Default is '-' (STDOUT).
 
--O, --overwrite
+-O, \--overwrite
 :   Allow an existing output file to be overwritten. Normally **osmium** will
     refuse to write over an existing file.
 
@@ -252,7 +252,7 @@ is silently dropped. So if there is a tag "@id=foo" and you have set `id` to
 
 Note that the `id` is not necessarily unique. Even the combination `type` and
 `id` is  not unique, because a way may end up in the output file as LineString
-and as (Multi)Polygon. See the `--add-unique-id` option for a unique ID.
+and as (Multi)Polygon. See the `\--add-unique-id` option for a unique ID.
 
 
 # AREA HANDLING
