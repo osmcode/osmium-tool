@@ -198,8 +198,8 @@ bool CommandTagsFilter::matches_node(const osmium::Node& node) const noexcept {
 
 bool CommandTagsFilter::matches_way(const osmium::Way& way) const noexcept {
     return osmium::tags::match_any_of(way.tags(), m_filters(osmium::item_type::way)) ||
-           (way.is_closed() &&
-            way.nodes().size() >= 4 &&
+           (way.nodes().size() >= 4 &&
+            way.is_closed() &&
                osmium::tags::match_any_of(way.tags(), m_area_filters));
 }
 
