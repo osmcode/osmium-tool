@@ -28,7 +28,8 @@ only once, otherwise the input file will possibly be read up to three times.
 Objects will be written out in the order they are found in the *OSM-FILE*.
 
 The command will only work correctly on history files if the
-**\--omit-referenced/-R** option is used.
+**\--omit-referenced/-R** option is used. The command can not be used on
+change files.
 
 
 # OPTIONS
