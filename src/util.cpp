@@ -194,7 +194,7 @@ osmium::Box parse_bbox(const std::string& str, const std::string& option_name) {
     const auto coordinates = osmium::split_string(str, ',');
 
     if (coordinates.size() != 4) {
-        throw argument_error{std::string{"Need exactly four coordinates in "} + option_name + " option."};
+        throw argument_error{"Need exactly four coordinates in " + option_name + " option."};
     }
 
     osmium::Location location1;
@@ -208,6 +208,10 @@ osmium::Box parse_bbox(const std::string& str, const std::string& option_name) {
     osmium::Box box;
     box.extend(location1);
     box.extend(location2);
+
+    if (!box.valid()) {
+        throw argument_error{"Invalid bounding box in " + option_name + " option. Format is LONG1,LAT1,LONG2,LAT2."};
+    }
 
     return box;
 }
