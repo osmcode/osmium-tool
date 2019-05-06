@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "export/export_format_json.hpp"
 #include "export/export_format_pg.hpp"
+#include "export/export_format_spaten.hpp"
 #include "export/export_format_text.hpp"
 #include "export/export_handler.hpp"
 
@@ -366,8 +367,8 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
 
     canonicalize_output_format();
 
-    if (m_output_format != "geojson" && m_output_format != "geojsonseq" && m_output_format != "pg" && m_output_format != "text") {
-        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', 'pg', or 'text'."};
+    if (m_output_format != "geojson" && m_output_format != "geojsonseq" && m_output_format != "pg" && m_output_format != "text" && m_output_format != "spaten") {
+        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', 'pg', 'spaten', or 'text'."};
     }
 
     if (vm.count("overwrite")) {
@@ -501,6 +502,10 @@ static std::unique_ptr<ExportFormat> create_handler(const std::string& output_fo
 
     if (output_format == "text") {
         return std::unique_ptr<ExportFormat>{new ExportFormatText{output_format, output_filename, overwrite, fsync, options}};
+    }
+
+    if (output_format == "spaten") {
+        return std::unique_ptr<ExportFormat>{new ExportFormatSpaten{output_format, output_filename, overwrite, fsync, options}};
     }
 
     throw argument_error{"Unknown output format"};
