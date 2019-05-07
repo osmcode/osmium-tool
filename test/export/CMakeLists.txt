@@ -12,6 +12,7 @@ endfunction()
 
 check_export(geojson    "-f geojson"       input.osm output.geojson)
 check_export(geojsonseq "-f geojsonseq -r" input.osm output.geojsonseq)
+check_export(spaten     "-f spaten"        input.osm output.spaten)
 
 check_export(missing-node "-f geojson"  input-missing-node.osm output-missing-node.geojson)
 
@@ -50,5 +51,9 @@ check_export(c-false-false "-E -f text -c export/config-false-false.json" way.os
 
 check_export(c-null-tag    "-E -f text -c export/config-null-tag.json" way.osm way-null-tag.txt)
 check_export(c-tag-null    "-E -f text -c export/config-tag-null.json" way.osm way-tag-null.txt)
+
+#-----------------------------------------------------------------------------
+
+check_export(spaten-untagged "-f spaten --keep-untagged" input.osm output-untagged.spaten)
 
 #-----------------------------------------------------------------------------
