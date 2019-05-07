@@ -58,9 +58,9 @@ class ExportFormatSpaten : public ExportFormat {
     void reserve_block_header_space();
     void flush_to_output();
     void write_file_header();
-    void write_tags(const osmium::OSMObject& object, protozero::pbf_builder<Feature>& proto_feat);
+    bool write_tags(const osmium::OSMObject& object, protozero::pbf_builder<Feature>& proto_feat);
     void start_feature(Geom gt);
-    void finish_feature();
+    void finish_feature(const osmium::OSMObject& object);
 
 public:
 

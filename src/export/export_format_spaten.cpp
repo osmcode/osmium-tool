@@ -7,7 +7,9 @@
 
 #include <cassert>
 
+
 enum {
+    // spaten block size, should be benchmarked
     initial_buffer_size = 15u * 1024u * 1024u
 };
 
@@ -55,36 +57,38 @@ void ExportFormatSpaten::start_feature(Geom gt) {
 void ExportFormatSpaten::node(const osmium::Node& node) {
     start_feature(gt_node);
     m_spaten_feature.add_string(Feature::optional_string_geom, m_factory.create_point(node));
-    write_tags(node, m_spaten_feature);
-    finish_feature();
+    finish_feature(node);
 }
 
 void ExportFormatSpaten::way(const osmium::Way& way) {
     start_feature(gt_line);
     m_spaten_feature.add_string(Feature::optional_string_geom, m_factory.create_linestring(way));
-    write_tags(way, m_spaten_feature);
-    finish_feature();
+    finish_feature(way);
 }
 
 void ExportFormatSpaten::area(const osmium::Area& area) {
     start_feature(gt_poly);
     m_spaten_feature.add_string(Feature::optional_string_geom, m_factory.create_multipolygon(area));
-    write_tags(area, m_spaten_feature);
-    finish_feature();
+    finish_feature(area);
 }
 
-void ExportFormatSpaten::finish_feature() {
-    m_spaten_block_body.add_message(Body::repeated_Feature_feature, m_feature_buffer);
-    m_feature_buffer.clear();
-    if (m_buffer.size() > flush_buffer_size) {
-        flush_to_output();
+void ExportFormatSpaten::finish_feature(const osmium::OSMObject& object) {
+    if(write_tags(object, m_spaten_feature) || options().keep_untagged) {
+        m_spaten_block_body.add_message(Body::repeated_Feature_feature, m_feature_buffer);
+        if (m_buffer.size() > flush_buffer_size) {
+            flush_to_output();
+        }
     }
+    m_feature_buffer.clear();
 }
 
-void ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::pbf_builder<Feature>& proto_feat) {
+bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::pbf_builder<Feature>& proto_feat) {
     std::string tagbuf;
+    bool has_tags = false;
+
     for (const auto& tag : object.tags()) {
         if (options().tags_filter(tag)) {
+            has_tags = true;
             protozero::pbf_builder<Tag> ptag{tagbuf};
             ptag.add_string(Tag::optional_string_key, tag.key());
             ptag.add_string(Tag::optional_string_value, tag.value());
@@ -95,6 +99,7 @@ void ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::
             tagbuf.clear();
         }
     }
+    return has_tags;
 }
 
 void ExportFormatSpaten::flush_to_output() {
