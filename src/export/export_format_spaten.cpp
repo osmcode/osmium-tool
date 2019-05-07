@@ -19,10 +19,10 @@ enum {
     block_header_size = 8u
 }; 
 
-static const std::string version = std::string(4, '\0');
-static const std::string flags = std::string(2, '\0');
-static const std::string compression = std::string(1, '\0');
-static const std::string message_type = std::string(1, '\0');
+static const std::string version(4, '\0');
+static const std::string flags(2, '\0');
+static const std::string compression(1, '\0');
+static const std::string message_type(1, '\0');
 
 ExportFormatSpaten::ExportFormatSpaten(const std::string& /*output_format*/,
                                const std::string& output_filename,
