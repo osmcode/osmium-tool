@@ -46,35 +46,35 @@ void ExportFormatSpaten::write_file_header() {
 }
 
 void ExportFormatSpaten::reserve_block_header_space() {
-    m_buffer += std::string(block_header_size, '\0');
+    m_buffer.resize(m_buffer.size() + block_header_size);
 }
 
-void ExportFormatSpaten::start_feature(Geom gt) {
-    m_spaten_feature.add_enum(Feature::optional_Geom_geomtype, gt);
-    m_spaten_feature.add_enum(Feature::optional_GeomSerial_geomserial, GeomSerial::wkb);
+void ExportFormatSpaten::start_feature(spaten_pbf::Geom gt) {
+    m_spaten_feature.add_enum(spaten_pbf::Feature::optional_Geom_geomtype, static_cast<uint32_t>(gt));
+    m_spaten_feature.add_enum(spaten_pbf::Feature::optional_GeomSerial_geomserial, static_cast<uint32_t>(spaten_pbf::GeomSerial::wkb));
 }
 
 void ExportFormatSpaten::node(const osmium::Node& node) {
-    start_feature(gt_node);
-    m_spaten_feature.add_string(Feature::optional_string_geom, m_factory.create_point(node));
+    start_feature(spaten_pbf::Geom::gt_node);
+    m_spaten_feature.add_string(spaten_pbf::Feature::optional_string_geom, m_factory.create_point(node));
     finish_feature(node);
 }
 
 void ExportFormatSpaten::way(const osmium::Way& way) {
-    start_feature(gt_line);
-    m_spaten_feature.add_string(Feature::optional_string_geom, m_factory.create_linestring(way));
+    start_feature(spaten_pbf::Geom::gt_line);
+    m_spaten_feature.add_string(spaten_pbf::Feature::optional_string_geom, m_factory.create_linestring(way));
     finish_feature(way);
 }
 
 void ExportFormatSpaten::area(const osmium::Area& area) {
-    start_feature(gt_poly);
-    m_spaten_feature.add_string(Feature::optional_string_geom, m_factory.create_multipolygon(area));
+    start_feature(spaten_pbf::Geom::gt_poly);
+    m_spaten_feature.add_string(spaten_pbf::Feature::optional_string_geom, m_factory.create_multipolygon(area));
     finish_feature(area);
 }
 
 void ExportFormatSpaten::finish_feature(const osmium::OSMObject& object) {
-    if(write_tags(object, m_spaten_feature) || options().keep_untagged) {
-        m_spaten_block_body.add_message(Body::repeated_Feature_feature, m_feature_buffer);
+    if (write_tags(object, m_spaten_feature) || options().keep_untagged) {
+        m_spaten_block_body.add_message(spaten_pbf::Body::repeated_Feature_feature, m_feature_buffer);
         if (m_buffer.size() > flush_buffer_size) {
             flush_to_output();
         }
@@ -82,19 +82,19 @@ void ExportFormatSpaten::finish_feature(const osmium::OSMObject& object) {
     m_feature_buffer.clear();
 }
 
-bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::pbf_builder<Feature>& proto_feat) {
+bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::pbf_builder<spaten_pbf::Feature>& proto_feat) {
     std::string tagbuf;
     bool has_tags = false;
 
     for (const auto& tag : object.tags()) {
         if (options().tags_filter(tag)) {
             has_tags = true;
-            protozero::pbf_builder<Tag> ptag{tagbuf};
-            ptag.add_string(Tag::optional_string_key, tag.key());
-            ptag.add_string(Tag::optional_string_value, tag.value());
-            ptag.add_enum(Tag::optional_ValueType_type, 0);
+            protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
+            ptag.add_string(spaten_pbf::Tag::optional_string_key, tag.key());
+            ptag.add_string(spaten_pbf::Tag::optional_string_value, tag.value());
+            ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, 0);
 
-            proto_feat.add_message(Feature::optional_Tag_tags, tagbuf);
+            proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
 
             tagbuf.clear();
         }
@@ -103,7 +103,7 @@ bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::
 }
 
 void ExportFormatSpaten::flush_to_output() {
-    uint32_t buffer_size = m_buffer.size() - block_header_size;
+    const uint32_t buffer_size = m_buffer.size() - block_header_size;
 
     std::string blockmeta;
     blockmeta.append(reinterpret_cast<const char*>(&buffer_size), sizeof(buffer_size));
