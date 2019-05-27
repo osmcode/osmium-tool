@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include <osmium/fwd.hpp>
 #include <osmium/io/file.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/entity_bits.hpp>
@@ -47,5 +48,6 @@ osmium::TagMatcher get_tag_matcher(const std::string& expression);
 void initialize_tags_filter(osmium::TagsFilter& tags_filter, bool default_result, const std::vector<std::string>& strings);
 osmium::Box parse_bbox(const std::string& str, const std::string& option_name);
 osmium::item_type parse_item_type(const std::string& t);
+const char* object_type_as_string(const osmium::OSMObject& object) noexcept;
 
 #endif // UTIL_HPP

@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "../util.hpp"
 #include "export_format_text.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
@@ -61,15 +62,7 @@ void ExportFormatText::add_attributes(const osmium::OSMObject& object) {
     if (!options().type.empty()) {
         m_buffer.append(options().type);
         m_buffer.append(1, '=');
-        if (object.type() == osmium::item_type::area) {
-            if (static_cast<const osmium::Area&>(object).from_way()) {
-                m_buffer.append("way");
-            } else {
-                m_buffer.append("relation");
-            }
-        } else {
-            m_buffer.append(osmium::item_type_to_name(object.type()));
-        }
+        m_buffer.append(object_type_as_string(object));
         m_buffer.append(1, ',');
     }
 
