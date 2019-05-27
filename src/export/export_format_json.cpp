@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "../util.hpp"
 #include "export_format_json.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
@@ -88,15 +89,7 @@ void ExportFormatJSON::start_feature(const std::string& prefix, osmium::object_i
 void ExportFormatJSON::add_attributes(const osmium::OSMObject& object) {
     if (!options().type.empty()) {
         m_writer.String(options().type);
-        if (object.type() == osmium::item_type::area) {
-            if (static_cast<const osmium::Area&>(object).from_way()) {
-                m_writer.String("way");
-            } else {
-                m_writer.String("relation");
-            }
-        } else {
-            m_writer.String(osmium::item_type_to_name(object.type()));
-        }
+        m_writer.String(object_type_as_string(object));
     }
 
     if (!options().id.empty()) {

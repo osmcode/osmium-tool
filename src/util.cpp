@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "util.hpp"
 
 #include <osmium/io/file.hpp>
+#include <osmium/osm/area.hpp>
 #include <osmium/tags/tags_filter.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/string.hpp>
@@ -230,5 +231,16 @@ osmium::item_type parse_item_type(const std::string& t) {
     }
 
     throw argument_error{std::string{"Unknown default type '"} + t + "' (Allowed are 'node', 'way', and 'relation')."};
+}
+
+const char* object_type_as_string(const osmium::OSMObject& object) noexcept {
+    if (object.type() == osmium::item_type::area) {
+        if (static_cast<const osmium::Area&>(object).from_way()) {
+            return "way";
+        } else {
+            return "relation";
+        }
+    }
+    return osmium::item_type_to_name(object.type());
 }
 
