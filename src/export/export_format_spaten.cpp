@@ -50,8 +50,8 @@ void ExportFormatSpaten::reserve_block_header_space() {
 }
 
 void ExportFormatSpaten::start_feature(spaten_pbf::Geom gt) {
-    m_spaten_feature.add_enum(spaten_pbf::Feature::optional_Geom_geomtype, static_cast<uint32_t>(gt));
-    m_spaten_feature.add_enum(spaten_pbf::Feature::optional_GeomSerial_geomserial, static_cast<uint32_t>(spaten_pbf::GeomSerial::wkb));
+    m_spaten_feature.add_enum(spaten_pbf::Feature::optional_Geom_geomtype, gt);
+    m_spaten_feature.add_enum(spaten_pbf::Feature::optional_GeomSerial_geomserial, spaten_pbf::GeomSerial::wkb);
 }
 
 void ExportFormatSpaten::node(const osmium::Node& node) {

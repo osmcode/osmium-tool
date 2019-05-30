@@ -12,14 +12,20 @@
 #include <string>
 
 namespace spaten_pbf {
-    enum class Geom {
+    enum Geom : uint32_t {
         gt_node = 1,
         gt_line = 2,
         gt_poly = 3
     };
 
-    enum class GeomSerial {
+    enum GeomSerial : uint32_t {
         wkb = 0
+    };
+
+    enum TagValueType : uint32_t {
+        string = 0,
+        uint64 = 1,
+        float64 = 2
     };
 
     enum class Body : protozero::pbf_tag_type {
