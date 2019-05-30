@@ -1,3 +1,4 @@
+#include "../util.hpp"
 #include "export_format_spaten.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
@@ -82,23 +83,103 @@ void ExportFormatSpaten::finish_feature(const osmium::OSMObject& object) {
     m_feature_buffer.clear();
 }
 
-bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::pbf_builder<spaten_pbf::Feature>& proto_feat) {
+void ExportFormatSpaten::add_attributes(const osmium::OSMObject& object, protozero::pbf_builder<spaten_pbf::Feature>& proto_feat) {
     std::string tagbuf;
-    bool has_tags = false;
+    protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
 
-    for (const auto& tag : object.tags()) {
-        if (options().tags_filter(tag)) {
-            has_tags = true;
-            protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
-            ptag.add_string(spaten_pbf::Tag::optional_string_key, tag.key());
-            ptag.add_string(spaten_pbf::Tag::optional_string_value, tag.value());
-            ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, 0);
+    if (!options().type.empty()) {
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().type);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, object_type_as_string(object));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::string);
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    }
 
+    if (!options().id.empty()) {
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().id);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(object.type() == osmium::item_type::area ? osmium::area_id_to_object_id(object.id()) : object.id()));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    }
+
+    if (!options().version.empty()) {
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().version);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(object.version()));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    }
+
+    if (!options().changeset.empty()) {
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().changeset);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(object.changeset()));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    }
+
+    if (!options().uid.empty()) {
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().uid);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(object.uid()));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    }
+
+    if (!options().user.empty()) {
+        protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().user);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, object.user());
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    }
+
+    if (!options().timestamp.empty()) {
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().timestamp);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(object.timestamp().seconds_since_epoch()));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    }
+
+    if (!options().way_nodes.empty() && object.type() == osmium::item_type::way) {
+        for (const auto& nr : static_cast<const osmium::Way&>(object).nodes()) {
+            ptag.add_string(spaten_pbf::Tag::optional_string_key, options().way_nodes);
+            ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(nr.ref()));
+            ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
             proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
-
             tagbuf.clear();
         }
     }
+}
+
+std::string ExportFormatSpaten::uint64_buf(uint64_t v)  {
+    std::string buf;
+    buf += static_cast<char>((v       ) & 0xffu);
+    buf += static_cast<char>((v >>  8u) & 0xffu);
+    buf += static_cast<char>((v >> 16u) & 0xffu);
+    buf += static_cast<char>((v >> 24u) & 0xffu);
+    buf += static_cast<char>((v >> 32u) & 0xffu);
+    buf += static_cast<char>((v >> 40u) & 0xffu);
+    buf += static_cast<char>((v >> 48u) & 0xffu);
+    buf += static_cast<char>((v >> 56u) & 0xffu);
+    return buf;
+}
+
+bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::pbf_builder<spaten_pbf::Feature>& proto_feat) {
+    add_attributes(object, proto_feat);
+
+    std::string tagbuf;
+    const bool has_tags = add_tags(object, [&](const osmium::Tag& tag) {
+        protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, tag.key());
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, tag.value());
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::string);
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
+    });
+
     return has_tags;
 }
 
@@ -106,7 +187,10 @@ void ExportFormatSpaten::flush_to_output() {
     const uint32_t buffer_size = m_buffer.size() - block_header_size;
 
     std::string blockmeta;
-    blockmeta.append(reinterpret_cast<const char*>(&buffer_size), sizeof(buffer_size));
+    blockmeta += static_cast<char>((buffer_size       ) & 0xffu);
+    blockmeta += static_cast<char>((buffer_size >>  8u) & 0xffu);
+    blockmeta += static_cast<char>((buffer_size >> 16u) & 0xffu);
+    blockmeta += static_cast<char>((buffer_size >> 24u) & 0xffu);
     blockmeta.append(flags);
     blockmeta.append(compression);
     blockmeta.append(message_type);
