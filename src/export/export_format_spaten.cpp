@@ -53,6 +53,33 @@ void ExportFormatSpaten::reserve_block_header_space() {
 void ExportFormatSpaten::start_feature(spaten_pbf::Geom gt) {
     m_spaten_feature.add_enum(spaten_pbf::Feature::optional_Geom_geomtype, gt);
     m_spaten_feature.add_enum(spaten_pbf::Feature::optional_GeomSerial_geomserial, spaten_pbf::GeomSerial::wkb);
+
+    if (options().unique_id == unique_id_type::counter) {
+        std::string tagbuf;
+        protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
+
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, "id");
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(m_count));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
+        m_spaten_feature.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+    } else if (options().unique_id == unique_id_type::type_id) {
+        std::string tagbuf;
+        protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
+
+        char prefix = '\0';
+        if (gt == spaten_pbf::Geom::gt_node) {
+            prefix = 'n';
+        } else if (gt == spaten_pbf::Geom::gt_line) {
+            prefix = 'w';
+        } else if (gt == spaten_pbf::Geom::gt_poly) {
+            prefix = 'a';
+        }
+
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, "id");
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, prefix + std::to_string(m_count));
+        ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::string);
+        m_spaten_feature.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+    }
 }
 
 void ExportFormatSpaten::node(const osmium::Node& node) {
@@ -74,6 +101,8 @@ void ExportFormatSpaten::area(const osmium::Area& area) {
 }
 
 void ExportFormatSpaten::finish_feature(const osmium::OSMObject& object) {
+    ++m_count;
+
     if (write_tags(object, m_spaten_feature) || options().keep_untagged) {
         m_spaten_block_body.add_message(spaten_pbf::Body::repeated_Feature_feature, m_feature_buffer);
         if (m_buffer.size() > flush_buffer_size) {
