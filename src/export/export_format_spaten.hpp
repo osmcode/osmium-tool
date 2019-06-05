@@ -69,7 +69,7 @@ class ExportFormatSpaten : public ExportFormat {
     bool write_tags(const osmium::OSMObject& object, protozero::pbf_builder<spaten_pbf::Feature>& proto_feat);
     void add_attributes(const osmium::OSMObject& object, protozero::pbf_builder<spaten_pbf::Feature>& proto_feat);
     std::string uint64_buf(uint64_t v);
-    void start_feature(spaten_pbf::Geom gt);
+    void start_feature(spaten_pbf::Geom gt, osmium::object_id_type id);
     void finish_feature(const osmium::OSMObject& object);
 
 public:

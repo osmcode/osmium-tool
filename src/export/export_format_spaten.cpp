@@ -27,6 +27,8 @@ static const std::string flags(2, '\0');
 static const std::string compression(1, '\0');
 static const std::string message_type(1, '\0');
 
+static const std::string unique_id_field = "@id";
+
 ExportFormatSpaten::ExportFormatSpaten(const std::string& /*output_format*/,
                                const std::string& output_filename,
                                osmium::io::overwrite overwrite,
@@ -50,7 +52,7 @@ void ExportFormatSpaten::reserve_block_header_space() {
     m_buffer.resize(m_buffer.size() + block_header_size);
 }
 
-void ExportFormatSpaten::start_feature(spaten_pbf::Geom gt) {
+void ExportFormatSpaten::start_feature(spaten_pbf::Geom gt, osmium::object_id_type id) {
     m_spaten_feature.add_enum(spaten_pbf::Feature::optional_Geom_geomtype, gt);
     m_spaten_feature.add_enum(spaten_pbf::Feature::optional_GeomSerial_geomserial, spaten_pbf::GeomSerial::wkb);
 
@@ -58,7 +60,7 @@ void ExportFormatSpaten::start_feature(spaten_pbf::Geom gt) {
         std::string tagbuf;
         protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
 
-        ptag.add_string(spaten_pbf::Tag::optional_string_key, "id");
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, unique_id_field);
         ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(m_count));
         ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
         m_spaten_feature.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
@@ -75,27 +77,27 @@ void ExportFormatSpaten::start_feature(spaten_pbf::Geom gt) {
             prefix = 'a';
         }
 
-        ptag.add_string(spaten_pbf::Tag::optional_string_key, "id");
-        ptag.add_string(spaten_pbf::Tag::optional_string_value, prefix + std::to_string(m_count));
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, unique_id_field);
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, prefix + std::to_string(id));
         ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::string);
         m_spaten_feature.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
     }
 }
 
 void ExportFormatSpaten::node(const osmium::Node& node) {
-    start_feature(spaten_pbf::Geom::gt_node);
+    start_feature(spaten_pbf::Geom::gt_node, node.id());
     m_spaten_feature.add_string(spaten_pbf::Feature::optional_string_geom, m_factory.create_point(node));
     finish_feature(node);
 }
 
 void ExportFormatSpaten::way(const osmium::Way& way) {
-    start_feature(spaten_pbf::Geom::gt_line);
+    start_feature(spaten_pbf::Geom::gt_line, way.id());
     m_spaten_feature.add_string(spaten_pbf::Feature::optional_string_geom, m_factory.create_linestring(way));
     finish_feature(way);
 }
 
 void ExportFormatSpaten::area(const osmium::Area& area) {
-    start_feature(spaten_pbf::Geom::gt_poly);
+    start_feature(spaten_pbf::Geom::gt_poly, area.id());
     m_spaten_feature.add_string(spaten_pbf::Feature::optional_string_geom, m_factory.create_multipolygon(area));
     finish_feature(area);
 }
@@ -124,7 +126,7 @@ void ExportFormatSpaten::add_attributes(const osmium::OSMObject& object, protoze
         tagbuf.clear();
     }
 
-    if (!options().id.empty()) {
+    if (!options().id.empty() && options().id != unique_id_field) {
         ptag.add_string(spaten_pbf::Tag::optional_string_key, options().id);
         ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(object.type() == osmium::item_type::area ? osmium::area_id_to_object_id(object.id()) : object.id()));
         ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
@@ -201,6 +203,10 @@ bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::
 
     std::string tagbuf;
     const bool has_tags = add_tags(object, [&](const osmium::Tag& tag) {
+        if (tag.key() == unique_id_field && options().unique_id != unique_id_type::none) {
+            return;
+        }
+
         protozero::pbf_builder<spaten_pbf::Tag> ptag{tagbuf};
         ptag.add_string(spaten_pbf::Tag::optional_string_key, tag.key());
         ptag.add_string(spaten_pbf::Tag::optional_string_value, tag.value());
