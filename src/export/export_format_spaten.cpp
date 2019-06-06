@@ -103,13 +103,12 @@ void ExportFormatSpaten::area(const osmium::Area& area) {
 }
 
 void ExportFormatSpaten::finish_feature(const osmium::OSMObject& object) {
-    ++m_count;
-
     if (write_tags(object, m_spaten_feature) || options().keep_untagged) {
         m_spaten_block_body.add_message(spaten_pbf::Body::repeated_Feature_feature, m_feature_buffer);
         if (m_buffer.size() > flush_buffer_size) {
             flush_to_output();
         }
+        ++m_count;
     }
     m_feature_buffer.clear();
 }
@@ -175,13 +174,14 @@ void ExportFormatSpaten::add_attributes(const osmium::OSMObject& object, protoze
     }
 
     if (!options().way_nodes.empty() && object.type() == osmium::item_type::way) {
+        std::string ways;
+        ptag.add_string(spaten_pbf::Tag::optional_string_key, options().way_nodes);
         for (const auto& nr : static_cast<const osmium::Way&>(object).nodes()) {
-            ptag.add_string(spaten_pbf::Tag::optional_string_key, options().way_nodes);
-            ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(nr.ref()));
-            ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
-            proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
-            tagbuf.clear();
+            ways += std::to_string(nr.ref()) + " ";
         }
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, ways.substr(0, ways.size()-1));
+        proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
+        tagbuf.clear();
     }
 }
 
