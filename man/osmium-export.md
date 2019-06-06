@@ -104,7 +104,7 @@ files created with JOSM).
     created from ways and/or relations, after that there is a unique ID based
     on the original OSM object ID(s). If the input file has negative IDs, this
     can create IDs such as 'w-12'.
-    In spaten exports the ID is written into the @id field. For *counter* the
+    In spaten exports the ID is written into the @fid field. For *counter* the
     value will be an integer, for *type_id* it will be a string.
 
 @MAN_COMMON_OPTIONS@

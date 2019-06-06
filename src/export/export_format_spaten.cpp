@@ -27,7 +27,7 @@ static const std::string flags(2, '\0');
 static const std::string compression(1, '\0');
 static const std::string message_type(1, '\0');
 
-static const std::string unique_id_field = "@id";
+static const std::string unique_id_field = "@fid";
 
 ExportFormatSpaten::ExportFormatSpaten(const std::string& /*output_format*/,
                                const std::string& output_filename,
@@ -126,7 +126,7 @@ void ExportFormatSpaten::add_attributes(const osmium::OSMObject& object, protoze
         tagbuf.clear();
     }
 
-    if (!options().id.empty() && options().id != unique_id_field) {
+    if (!options().id.empty()) {
         ptag.add_string(spaten_pbf::Tag::optional_string_key, options().id);
         ptag.add_string(spaten_pbf::Tag::optional_string_value, uint64_buf(object.type() == osmium::item_type::area ? osmium::area_id_to_object_id(object.id()) : object.id()));
         ptag.add_enum(spaten_pbf::Tag::optional_ValueType_type, spaten_pbf::TagValueType::uint64);
