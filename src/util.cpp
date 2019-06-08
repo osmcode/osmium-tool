@@ -237,9 +237,8 @@ const char* object_type_as_string(const osmium::OSMObject& object) noexcept {
     if (object.type() == osmium::item_type::area) {
         if (static_cast<const osmium::Area&>(object).from_way()) {
             return "way";
-        } else {
-            return "relation";
         }
+        return "relation";
     }
     return osmium::item_type_to_name(object.type());
 }
