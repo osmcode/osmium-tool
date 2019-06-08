@@ -23,12 +23,12 @@ enum {
     block_header_size = 8u
 };
 
-static const std::string version(4, '\0');
-static const std::string flags(2, '\0');
-static const std::string compression(1, '\0');
-static const std::string message_type(1, '\0');
+static const char version[4] = {};
+static const char flags[2] = {};
+static const char compression = '\0';
+static const char message_type = '\0';
 
-static const std::string unique_id_field{"@fid"};
+static const char* unique_id_field = "@fid";
 
 static std::string uint64_buf(uint64_t v)  {
     std::string buf(8, '\0');
@@ -58,7 +58,7 @@ ExportFormatSpaten::ExportFormatSpaten(const std::string& /*output_format*/,
 
 void ExportFormatSpaten::write_file_header() {
     std::string fh{"SPAT"};
-    fh.append(version);
+    fh.append(std::begin(version), std::end(version));
     osmium::io::detail::reliable_write(m_fd, fh.data(), fh.size());
 }
 
@@ -231,9 +231,9 @@ void ExportFormatSpaten::flush_to_output() {
     blockmeta[1] = static_cast<char>((buffer_size >>  8u) & 0xffu);
     blockmeta[2] = static_cast<char>((buffer_size >> 16u) & 0xffu);
     blockmeta[3] = static_cast<char>((buffer_size >> 24u) & 0xffu);
-    blockmeta.append(flags);
-    blockmeta.append(compression);
-    blockmeta.append(message_type);
+    blockmeta.append(std::begin(flags), std::end(flags));
+    blockmeta += compression;
+    blockmeta += message_type;
     assert(blockmeta.size() == block_header_size);
     m_buffer.replace(0, blockmeta.size(), blockmeta);
 
