@@ -12,6 +12,7 @@
 #include <string>
 
 namespace spaten_pbf {
+
     enum Geom : uint32_t {
         gt_node = 1,
         gt_line = 2,
@@ -51,7 +52,8 @@ namespace spaten_pbf {
         optional_string_value = 2,
         optional_ValueType_type = 3
     };
-}
+
+} // namespace spaten_pbf
 
 class ExportFormatSpaten : public ExportFormat {
 
@@ -75,10 +77,10 @@ class ExportFormatSpaten : public ExportFormat {
 public:
 
     ExportFormatSpaten(const std::string& output_format,
-                   const std::string& output_filename,
-                   osmium::io::overwrite overwrite,
-                   osmium::io::fsync fsync,
-                   const options_type& options);
+                       const std::string& output_filename,
+                       osmium::io::overwrite overwrite,
+                       osmium::io::fsync fsync,
+                       const options_type& options);
 
     ~ExportFormatSpaten() override {
         try {

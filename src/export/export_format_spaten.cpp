@@ -1,3 +1,4 @@
+
 #include "../util.hpp"
 #include "export_format_spaten.hpp"
 
@@ -20,20 +21,20 @@ enum {
 
 enum {
     block_header_size = 8u
-}; 
+};
 
 static const std::string version(4, '\0');
 static const std::string flags(2, '\0');
 static const std::string compression(1, '\0');
 static const std::string message_type(1, '\0');
 
-static const std::string unique_id_field = "@fid";
+static const std::string unique_id_field{"@fid"};
 
 ExportFormatSpaten::ExportFormatSpaten(const std::string& /*output_format*/,
-                               const std::string& output_filename,
-                               osmium::io::overwrite overwrite,
-                               osmium::io::fsync fsync,
-                               const options_type& options) :
+                                       const std::string& output_filename,
+                                       osmium::io::overwrite overwrite,
+                                       osmium::io::fsync fsync,
+                                       const options_type& options) :
     ExportFormat(options),
     m_fd(osmium::io::detail::open_for_writing(output_filename, overwrite)),
     m_fsync(fsync) {
@@ -247,3 +248,4 @@ void ExportFormatSpaten::close() {
         m_fd = -1;
     }
 }
+
