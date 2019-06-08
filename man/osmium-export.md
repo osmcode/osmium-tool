@@ -104,6 +104,8 @@ files created with JOSM).
     created from ways and/or relations, after that there is a unique ID based
     on the original OSM object ID(s). If the input file has negative IDs, this
     can create IDs such as 'w-12'.
+    In spaten exports the ID is written into the @fid field. For *counter* the
+    value will be an integer, for *type_id* it will be a string.
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
@@ -296,6 +298,7 @@ The following output formats are supported:
   for id and attributes. You have to create the table manually, then use the
   PostgreSQL COPY command to import the data. Enable verbose output to see
   the SQL commands needed to create the table and load the data.
+* `spaten`: Spaten, a binary format that is suitable for large data sets.
 * `text` (alias: `txt`): A simple text format with the geometry in WKT format
   followed by the comma-delimited tags. This is mainly intended for debugging
   at the moment. THE FORMAT MIGHT CHANGE WITHOUT NOTICE!
@@ -343,4 +346,4 @@ Use a config file and export into GeoJSON Text Sequence format:
 * [RFC7946](https://tools.ietf.org/html/rfc7946)
 * [RFC8142](https://tools.ietf.org/html/rfc8142)
 * [Line delimited JSON](https://en.wikipedia.org/wiki/JSON_Streaming#Line_delimited_JSON)
-
+* [Spaten Geo Format](https://thomas.skowron.eu/spaten/)

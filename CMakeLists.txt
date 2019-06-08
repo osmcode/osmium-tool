@@ -234,6 +234,7 @@ set(OSMIUM_SOURCE_FILES
     command_help.cpp
     export/export_format_json.cpp
     export/export_format_pg.cpp
+    export/export_format_spaten.cpp
     export/export_format_text.cpp
     export/export_handler.cpp
     extract/extract_bbox.cpp
