@@ -30,6 +30,19 @@ static const std::string message_type(1, '\0');
 
 static const std::string unique_id_field{"@fid"};
 
+static std::string uint64_buf(uint64_t v)  {
+    std::string buf(8, '\0');
+    buf[0] = static_cast<char>((v       ) & 0xffu);
+    buf[1] = static_cast<char>((v >>  8u) & 0xffu);
+    buf[2] = static_cast<char>((v >> 16u) & 0xffu);
+    buf[3] = static_cast<char>((v >> 24u) & 0xffu);
+    buf[4] = static_cast<char>((v >> 32u) & 0xffu);
+    buf[5] = static_cast<char>((v >> 40u) & 0xffu);
+    buf[6] = static_cast<char>((v >> 48u) & 0xffu);
+    buf[7] = static_cast<char>((v >> 56u) & 0xffu);
+    return buf;
+}
+
 ExportFormatSpaten::ExportFormatSpaten(const std::string& /*output_format*/,
                                        const std::string& output_filename,
                                        osmium::io::overwrite overwrite,
@@ -176,27 +189,18 @@ void ExportFormatSpaten::add_attributes(const osmium::OSMObject& object, protoze
 
     if (!options().way_nodes.empty() && object.type() == osmium::item_type::way) {
         std::string ways;
+
         ptag.add_string(spaten_pbf::Tag::optional_string_key, options().way_nodes);
         for (const auto& nr : static_cast<const osmium::Way&>(object).nodes()) {
-            ways += std::to_string(nr.ref()) + " ";
+            ways += std::to_string(nr.ref());
+            ways += ' ';
         }
-        ptag.add_string(spaten_pbf::Tag::optional_string_value, ways.substr(0, ways.size()-1));
+        ways.resize(ways.size() - 1);
+
+        ptag.add_string(spaten_pbf::Tag::optional_string_value, ways);
         proto_feat.add_message(spaten_pbf::Feature::optional_Tag_tags, tagbuf);
         tagbuf.clear();
     }
-}
-
-std::string ExportFormatSpaten::uint64_buf(uint64_t v)  {
-    std::string buf;
-    buf += static_cast<char>((v       ) & 0xffu);
-    buf += static_cast<char>((v >>  8u) & 0xffu);
-    buf += static_cast<char>((v >> 16u) & 0xffu);
-    buf += static_cast<char>((v >> 24u) & 0xffu);
-    buf += static_cast<char>((v >> 32u) & 0xffu);
-    buf += static_cast<char>((v >> 40u) & 0xffu);
-    buf += static_cast<char>((v >> 48u) & 0xffu);
-    buf += static_cast<char>((v >> 56u) & 0xffu);
-    return buf;
 }
 
 bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::pbf_builder<spaten_pbf::Feature>& proto_feat) {
@@ -222,11 +226,11 @@ bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::
 void ExportFormatSpaten::flush_to_output() {
     const uint32_t buffer_size = m_buffer.size() - block_header_size;
 
-    std::string blockmeta;
-    blockmeta += static_cast<char>((buffer_size       ) & 0xffu);
-    blockmeta += static_cast<char>((buffer_size >>  8u) & 0xffu);
-    blockmeta += static_cast<char>((buffer_size >> 16u) & 0xffu);
-    blockmeta += static_cast<char>((buffer_size >> 24u) & 0xffu);
+    std::string blockmeta(4, '\0');
+    blockmeta[0] = static_cast<char>((buffer_size       ) & 0xffu);
+    blockmeta[1] = static_cast<char>((buffer_size >>  8u) & 0xffu);
+    blockmeta[2] = static_cast<char>((buffer_size >> 16u) & 0xffu);
+    blockmeta[3] = static_cast<char>((buffer_size >> 24u) & 0xffu);
     blockmeta.append(flags);
     blockmeta.append(compression);
     blockmeta.append(message_type);
