@@ -12,15 +12,15 @@
 
 enum {
     // spaten block size, should be benchmarked
-    initial_buffer_size = 15u * 1024u * 1024u
+    initial_buffer_size = 15U * 1024U * 1024U
 };
 
 enum {
-    flush_buffer_size = 15u * 900u * 1024u
+    flush_buffer_size = 15U * 900U * 1024U
 };
 
 enum {
-    block_header_size = 8u
+    block_header_size = 8U
 };
 
 static const char version[4] = {};
@@ -32,14 +32,14 @@ static const char* unique_id_field = "@fid";
 
 static std::string uint64_buf(uint64_t v)  {
     std::string buf(8, '\0');
-    buf[0] = static_cast<char>((v       ) & 0xffu);
-    buf[1] = static_cast<char>((v >>  8u) & 0xffu);
-    buf[2] = static_cast<char>((v >> 16u) & 0xffu);
-    buf[3] = static_cast<char>((v >> 24u) & 0xffu);
-    buf[4] = static_cast<char>((v >> 32u) & 0xffu);
-    buf[5] = static_cast<char>((v >> 40u) & 0xffu);
-    buf[6] = static_cast<char>((v >> 48u) & 0xffu);
-    buf[7] = static_cast<char>((v >> 56u) & 0xffu);
+    buf[0] = static_cast<char>((v       ) & 0xffU);
+    buf[1] = static_cast<char>((v >>  8U) & 0xffU);
+    buf[2] = static_cast<char>((v >> 16U) & 0xffU);
+    buf[3] = static_cast<char>((v >> 24U) & 0xffU);
+    buf[4] = static_cast<char>((v >> 32U) & 0xffU);
+    buf[5] = static_cast<char>((v >> 40U) & 0xffU);
+    buf[6] = static_cast<char>((v >> 48U) & 0xffU);
+    buf[7] = static_cast<char>((v >> 56U) & 0xffU);
     return buf;
 }
 
@@ -227,10 +227,10 @@ void ExportFormatSpaten::flush_to_output() {
     const uint32_t buffer_size = m_buffer.size() - block_header_size;
 
     std::string blockmeta(4, '\0');
-    blockmeta[0] = static_cast<char>((buffer_size       ) & 0xffu);
-    blockmeta[1] = static_cast<char>((buffer_size >>  8u) & 0xffu);
-    blockmeta[2] = static_cast<char>((buffer_size >> 16u) & 0xffu);
-    blockmeta[3] = static_cast<char>((buffer_size >> 24u) & 0xffu);
+    blockmeta[0] = static_cast<char>((buffer_size       ) & 0xffU);
+    blockmeta[1] = static_cast<char>((buffer_size >>  8U) & 0xffU);
+    blockmeta[2] = static_cast<char>((buffer_size >> 16U) & 0xffU);
+    blockmeta[3] = static_cast<char>((buffer_size >> 24U) & 0xffU);
     blockmeta.append(std::begin(flags), std::end(flags));
     blockmeta += compression;
     blockmeta += message_type;

@@ -36,11 +36,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 enum {
-    initial_buffer_size = 1024u * 1024u
+    initial_buffer_size = 1024U * 1024U
 };
 
 enum {
-    flush_buffer_size = 800u * 1024u
+    flush_buffer_size = 800U * 1024U
 };
 
 ExportFormatPg::ExportFormatPg(const std::string& /*output_format*/,
