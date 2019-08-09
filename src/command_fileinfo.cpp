@@ -180,8 +180,6 @@ struct InfoHandler : public osmium::handler::Handler {
 
 class Output {
 
-protected:
-
     bool m_calculate_crc = false;
 
 public:
@@ -195,6 +193,10 @@ public:
 
     Output(Output&&) noexcept = delete;
     Output& operator=(Output&&) noexcept = delete;
+
+    bool calculate_crc() const noexcept {
+        return m_calculate_crc;
+    }
 
     void set_crc(bool with_crc) noexcept {
         m_calculate_crc = with_crc;
@@ -269,7 +271,7 @@ public:
             std::cout << "unknown (because objects in file are unordered)\n";
         }
 
-        if (m_calculate_crc) {
+        if (calculate_crc()) {
             std::cout << "  CRC32: " << std::hex << info_handler.crc32().checksum() << std::dec << "\n";
         } else {
             std::cout << "  CRC32: not calculated (use --crc/-c to enable)\n";
@@ -414,7 +416,7 @@ public:
             m_writer.Bool(info_handler.multiple_versions);
         }
 
-        if (m_calculate_crc) {
+        if (calculate_crc()) {
             m_writer.String("crc32");
             std::stringstream ss;
             ss << std::hex << info_handler.crc32().checksum() << std::dec;
