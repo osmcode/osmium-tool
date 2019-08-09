@@ -1,5 +1,5 @@
 ---
-Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion'
+Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-modernize-avoid-c-arrays,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
@@ -13,6 +13,16 @@ Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-owning
 #  hicpp-invalid-access-moved
 #    Generates too many false positives. A bug report has been sent:
 #    https://bugs.llvm.org/show_bug.cgi?id=36516
+#
+#  cppcoreguidelines-avoid-c-arrays
+#    Alias for modernize-avoid-c-arrays.
+#
+#  cppcoreguidelines-avoid-magic-numbers
+#    Generally good advice, but there are too many places where this is
+#    useful, for instance in tests.
+#
+#  cppcoreguidelines-macro-usage
+#    There are cases where we actually need macros.
 #
 #  cppcoreguidelines-owning-memory
 #    Don't want to add dependency on gsl library.
@@ -36,11 +46,18 @@ Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-owning
 #  google-runtime-references
 #    This is just a matter of preference.
 #
+#  hicpp-avoid-c-arrays
+#    Alias for modernize-avoid-c-arrays.
+#
 #  hicpp-no-array-decay
 #    Alias for cppcoreguidelines-pro-bounds-array-to-pointer-decay.
 #
 #  hicpp-vararg
 #    Too strict, sometimes calling vararg functions is necessary.
+#
+#  modernize-avoid-c-arrays
+#    Makes sense for some array, but especially for char arrays using
+#    std::array isn't a good solution.
 #
 #  modernize-make-unique
 #    This is a C++11 program and C++ doesn't have std::make_unique.
