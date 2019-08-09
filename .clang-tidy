@@ -1,5 +1,5 @@
 ---
-Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-modernize-avoid-c-arrays,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion'
+Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-non-private-member-variables-in-classes,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-misc-non-private-member-variables-in-classes,-modernize-avoid-c-arrays,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion,-readability-magic-numbers'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
@@ -23,6 +23,9 @@ Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-
 #
 #  cppcoreguidelines-macro-usage
 #    There are cases where we actually need macros.
+#
+#  cppcoreguidelines-non-private-member-variables-in-classes
+#    Alias for misc-non-private-member-variables-in-classes
 #
 #  cppcoreguidelines-owning-memory
 #    Don't want to add dependency on gsl library.
@@ -55,6 +58,11 @@ Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-
 #  hicpp-vararg
 #    Too strict, sometimes calling vararg functions is necessary.
 #
+#  misc-non-private-member-variables-in-classes
+#    Reports this also for structs, which doesn't make any sense. There is
+#    an option "IgnoreClassesWithAllMemberVariablesBeingPublic" which should
+#    disable this, but it didn't work for me.
+#
 #  modernize-avoid-c-arrays
 #    Makes sense for some array, but especially for char arrays using
 #    std::array isn't a good solution.
@@ -67,6 +75,9 @@ Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-
 #
 #  readability-implicit-bool-conversion
 #    I don't think this makes the code more readable.
+#
+#  readability-magic-numbers
+#    Alias for cppcoreguidelines-avoid-magic-numbers.
 #
 #WarningsAsErrors: '*'
 ...
