@@ -104,7 +104,7 @@ public:
     // The command line usage synopsis of the command.
     virtual const char* synopsis() const noexcept = 0;
 
-    po::options_description add_common_options(bool with_progress = true);
+    static po::options_description add_common_options(bool with_progress = true);
     void setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
     void setup_progress(const boost::program_options::variables_map& vm);
     void setup_object_type_nwrc(const boost::program_options::variables_map& vm);
@@ -143,7 +143,7 @@ public:
 
     void setup_input_file(const boost::program_options::variables_map& vm);
 
-    po::options_description add_single_input_options();
+    static po::options_description add_single_input_options();
 
     void show_single_input_arguments(osmium::VerboseOutput& vout);
 
@@ -165,7 +165,7 @@ public:
 
     void setup_input_files(const boost::program_options::variables_map& vm);
 
-    po::options_description add_multiple_inputs_options();
+    static po::options_description add_multiple_inputs_options();
 
     void show_multiple_inputs_arguments(osmium::VerboseOutput& vout);
 
@@ -198,7 +198,7 @@ public:
     void check_output_file();
     void setup_output_file(const po::variables_map& vm);
 
-    po::options_description add_output_options();
+    static po::options_description add_output_options();
 
     void show_output_arguments(osmium::VerboseOutput& vout);
 
