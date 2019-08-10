@@ -828,11 +828,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         if (m_get_value.substr(0, 5) == "data." && !m_extended) {
             throw argument_error{"You need to set --extended/-e for any 'data.*' variables to be available."};
         }
-        if (m_get_value == "data.crc32") {
-            m_calculate_crc = true;
-        } else {
-            m_calculate_crc = false;
-        }
+        m_calculate_crc = (m_get_value == "data.crc32");
     }
 
     if (vm.count("get") && vm.count("json")) {
