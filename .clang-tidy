@@ -1,5 +1,5 @@
 ---
-Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-non-private-member-variables-in-classes,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-misc-non-private-member-variables-in-classes,-modernize-avoid-c-arrays,-modernize-make-unique,-readability-implicit-bool-cast,-readability-implicit-bool-conversion,-readability-magic-numbers'
+Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-non-private-member-variables-in-classes,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-misc-non-private-member-variables-in-classes,-modernize-avoid-c-arrays,-modernize-make-unique,-modernize-use-trailing-return-type,-readability-implicit-bool-cast,-readability-implicit-bool-conversion,-readability-magic-numbers'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
@@ -69,6 +69,9 @@ Checks: '*,-android-cloexec-*,-bugprone-use-after-move,-cppcoreguidelines-avoid-
 #
 #  modernize-make-unique
 #    This is a C++11 program and C++ doesn't have std::make_unique.
+#
+#  modernize-use-trailing-return-type
+#    I am not quite that modern.
 #
 #  readability-implicit-bool-cast
 #    Old name for readability-implicit-bool-conversion.
