@@ -224,7 +224,8 @@ bool ExportFormatSpaten::write_tags(const osmium::OSMObject& object, protozero::
 }
 
 void ExportFormatSpaten::flush_to_output() {
-    const uint32_t buffer_size = m_buffer.size() - block_header_size;
+    // static_cast okay. We flush the buffer long before it becomes to big.
+    const auto buffer_size = static_cast<uint32_t>(m_buffer.size() - block_header_size);
 
     std::string blockmeta(4, '\0');
     blockmeta[0] = static_cast<char>((buffer_size       ) & 0xffU);
