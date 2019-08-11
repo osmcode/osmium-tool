@@ -260,7 +260,7 @@ static bool is_existing_directory(const char* name) {
     if (::_stati64(name, &s) != 0) {
         return false;
     }
-    return s.st_mode & _S_IFDIR;
+    return (s.st_mode & _S_IFDIR) != 0;
 #else
     // Unix implementation
     struct stat s; // NOLINT clang-tidy
