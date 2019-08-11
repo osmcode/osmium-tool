@@ -8,9 +8,20 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+* Support for new [Spaten](https://thomas.skowron.eu/spaten/) export format.
+
 ### Changed
 
+* Better checking of coordinates in extract boundary polygons/bboxes.
+* Compile with NDEBUG in RelWithDebInfo mode.
+* Various code cleanups based on problems found with clang-tidy.
+
 ### Fixed
+
+* Only check if way is closed after check that it contains nodes.
+* `get_start_id()` is not `noexcept`.
+* Man pages correctly show options starting with double dash and other small
+  man page fixes.
 
 
 ## [1.10.0] - 2018-12-10
