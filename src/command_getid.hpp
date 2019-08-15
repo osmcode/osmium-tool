@@ -40,12 +40,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandGetId : public Command, public with_single_osm_input, public with_osm_output {
 
+    osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_matching_ids;
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
 
     osmium::item_type m_default_item_type = osmium::item_type::node;
 
     bool m_add_referenced_objects = false;
     bool m_work_with_history = false;
+    bool m_remove_tags = false;
     bool m_verbose_ids = false;
 
     osmium::osm_entity_bits::type get_needed_types() const;

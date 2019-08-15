@@ -94,6 +94,12 @@ This command will not work with negative IDs.
     and include them in the output. This only works correctly on non-history
     files unless the `-H` option is also used.
 
+-t, \--remove-tags
+:   Remove tags from objects that are not explicitly requested but are only
+    included to complete references (nodes in ways and members of relations).
+    If an object is both requested and used as a reference it will keep its
+    tags. You also need **\--add-referenced/-r** for this to make sense.
+
 \--verbose-ids
 :   Also print all requested and missing IDs. This is usually disabled, because
     the lists can get quite long. (This option implies **\--verbose**.)

@@ -8,6 +8,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+* New option `--remove-tags`/`-t` to `getid` command. When used the tags of
+  all objects are removed that are not explicitly requested but are only
+  included to complete references.
 * Support for new [Spaten](https://thomas.skowron.eu/spaten/) export format.
 
 ### Changed

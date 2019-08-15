@@ -61,6 +61,7 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     ("history", "Deprecated, use --with-history instead")
     ("with-history,H", "Make it work with history files")
     ("add-referenced,r", "Recursively add referenced objects")
+    ("remove-tags,t", "Remove tags from objects not explicitly requested")
     ("verbose-ids", "Print all requested and missing IDs")
     ;
 
@@ -113,6 +114,13 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         m_default_item_type = parse_item_type(vm["default-type"].as<std::string>());
     }
 
+    if (vm.count("remove-tags")) {
+        m_remove_tags = true;
+        if (!m_add_referenced_objects) {
+            std::cerr << "Warning! Without -r/--add-referenced use of -t/--remove-tags isn't doing anything.\n";
+        }
+    }
+
     if (vm.count("verbose-ids")) {
         m_vout.verbose(true);
         m_verbose_ids = true;
@@ -158,6 +166,8 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
         throw argument_error{"Please specify IDs to look for on command line or with option --id-file/-i or --id-osm-file/-I."};
     }
 
+    m_matching_ids = m_ids;
+
     return true;
 }
 
@@ -167,6 +177,9 @@ void CommandGetId::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
+    if (m_add_referenced_objects) {
+        m_vout << "    remove tags of referenced objects: " << yes_no(m_remove_tags);
+    }
     m_vout << "    work with history files: " << yes_no(m_work_with_history);
     m_vout << "    default object type: " << osmium::item_type_to_name(m_default_item_type) << "\n";
     if (m_verbose_ids) {
@@ -338,10 +351,18 @@ bool CommandGetId::run() {
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
-        for (const auto& object : buffer.select<osmium::OSMObject>()) {
-            if (m_ids(object.type()).get(object.positive_id())) {
+        for (auto& object : buffer.select<osmium::OSMObject>()) {
+            if (m_matching_ids(object.type()).get(object.positive_id())) {
                 if (!m_work_with_history) {
                     m_ids(object.type()).unset(object.positive_id());
+                }
+                writer(object);
+            } else if (m_ids(object.type()).get(object.positive_id())) {
+                if (!m_work_with_history) {
+                    m_ids(object.type()).unset(object.positive_id());
+                }
+                if (m_remove_tags) {
+                    object.remove_tags();
                 }
                 writer(object);
             }
