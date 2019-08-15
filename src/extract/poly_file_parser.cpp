@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-OSMIUM_NORETURN void PolyFileParser::error(const std::string& message) {
+[[noreturn]] void PolyFileParser::error(const std::string& message) {
     throw poly_error{std::string{"In file '"} + m_file_name + "' on line " + std::to_string(m_line + 1) + ":\n" + message};
 }
 

@@ -25,7 +25,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/builder/osm_object_builder.hpp>
 #include <osmium/memory/buffer.hpp>
-#include <osmium/util/compatibility.hpp>
 
 #include <memory>
 #include <string>
@@ -63,7 +62,7 @@ class PolyFileParser {
         return m_data[m_line];
     }
 
-    OSMIUM_NORETURN void error(const std::string& message);
+    [[noreturn]] void error(const std::string& message);
 
 public:
 

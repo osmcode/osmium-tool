@@ -158,7 +158,7 @@ std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memo
     return buffer.commit();
 }
 
-OSMIUM_NORETURN void GeoJSONFileParser::error(const std::string& message) {
+[[noreturn]] void GeoJSONFileParser::error(const std::string& message) {
     throw geojson_error{std::string{"In file '"} + m_file_name + "':\n" + message};
 }
 
