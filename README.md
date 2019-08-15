@@ -7,8 +7,7 @@ the Osmium library.
 Official web site: https://osmcode.org/osmium-tool/
 
 [![Travis Build Status](https://secure.travis-ci.org/osmcode/osmium-tool.svg)](https://travis-ci.org/osmcode/osmium-tool)
-[![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/jr7sjyedg2lbt14e/branch/master?svg=true)](https://ci.appveyor.com/project/lonvia/osmium-tool/branch/master)
-
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/k9v6et0o4baekrmi/branch/master?svg=true)](https://ci.appveyor.com/project/lonvia/osmium-tool/branch/master)
 
 
 ## Prerequisites
