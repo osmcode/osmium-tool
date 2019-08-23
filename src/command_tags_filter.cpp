@@ -341,7 +341,7 @@ bool CommandTagsFilter::run() {
     osmium::io::Reader reader{m_input_file, get_needed_types()};
 
     m_vout << "Opening output file...\n";
-    osmium::io::Header header = reader.header();
+    osmium::io::Header header{reader.header()};
     setup_header(header);
 
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
