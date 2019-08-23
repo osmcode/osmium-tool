@@ -89,7 +89,12 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
 
     if (vm.count("index-type")) {
         m_index_type_name = vm["index-type"].as<std::string>();
-        if (!map_factory.has_map_type(m_index_type_name)) {
+        std::string type{m_index_type_name};
+        const auto pos = type.find(',');
+        if (pos != std::string::npos) {
+            type.resize(pos);
+        }
+        if (!map_factory.has_map_type(type)) {
             throw argument_error{std::string{"Unknown index type '"} + m_index_type_name + "'. Use --show-index-types or -I to get a list."};
         }
     }
