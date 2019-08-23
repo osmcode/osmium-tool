@@ -212,3 +212,16 @@ void with_osm_output::setup_header(osmium::io::Header& header) const {
     }
 }
 
+void with_osm_output::setup_header(osmium::io::Header& header, const osmium::io::Header& input_header) const {
+    header.set("generator", m_generator);
+    for (const auto& h : m_output_headers) {
+        if (!h.empty() && h.back() == '!') {
+            std::string hc{h};
+            hc.resize(h.size() - 1);
+            header.set(hc, input_header.get(hc));
+        } else {
+            header.set(h);
+        }
+    }
+}
+

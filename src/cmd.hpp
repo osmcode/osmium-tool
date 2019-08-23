@@ -208,6 +208,8 @@ public:
 
     void setup_header(osmium::io::Header& header) const;
 
+    void setup_header(osmium::io::Header& header, const osmium::io::Header& input_header) const;
+
     osmium::io::overwrite output_overwrite() const {
         return m_output_overwrite;
     }

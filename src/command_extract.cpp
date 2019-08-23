@@ -588,7 +588,14 @@ bool CommandExtract::run() {
     m_strategy->show_arguments(m_vout);
 
     osmium::io::Header header;
-    setup_header(header);
+    if (m_input_file.filename().empty()) {
+        setup_header(header);
+    } else {
+        osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::nothing};
+        osmium::io::Header input_header{reader.header()};
+        setup_header(header, input_header);
+        reader.close();
+    }
 
     for (const auto& extract : m_extracts) {
         osmium::io::Header file_header{header};
