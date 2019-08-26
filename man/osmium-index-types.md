@@ -32,6 +32,11 @@ minimize memory use, but performance will suffer. In this case use
 `dense_file_array` if you are working with a full planet or a really large
 extract.
 
+When using the file-based index types (`*_file_array`), add the filename you
+want to use for the index after a comma to the index types like so:
+
+`... -i dense_file_array,index.dat ...`
+
 
 # MEMORY USE
 
