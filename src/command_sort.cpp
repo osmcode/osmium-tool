@@ -141,6 +141,7 @@ bool CommandSort::run_single_pass() {
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
     setup_header(header);
+    header.set("sorting", "Type_then_ID");
     if (bounding_box) {
         header.add_box(bounding_box);
     }

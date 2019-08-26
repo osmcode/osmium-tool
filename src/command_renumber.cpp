@@ -379,6 +379,7 @@ bool CommandRenumber::run() {
     osmium::io::Header header = reader.header();
     setup_header(header);
     header.set("xml_josm_upload", "false");
+    header.set("sorting", "Type_then_ID");
 
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 

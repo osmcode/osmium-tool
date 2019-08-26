@@ -592,6 +592,7 @@ bool CommandExtract::run() {
 
     for (const auto& extract : m_extracts) {
         osmium::io::Header file_header{header};
+        file_header.set("sorting", "Type_then_ID");
         if (m_with_history) {
             file_header.set_has_multiple_object_versions(true);
         }
