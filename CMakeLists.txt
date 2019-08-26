@@ -209,6 +209,7 @@ SET(OSMIUM_COMMANDS
     cat
     changeset-filter
     check-refs
+    create-locations-index
     derive-changes
     diff
     export
@@ -218,6 +219,7 @@ SET(OSMIUM_COMMANDS
     getparents
     merge
     merge-changes
+    query-locations-index
     renumber
     show
     sort

@@ -6,6 +6,7 @@
 #include "command_cat.hpp"
 #include "command_changeset_filter.hpp"
 #include "command_check_refs.hpp"
+#include "command_create_locations_index.hpp"
 #include "command_derive_changes.hpp"
 #include "command_diff.hpp"
 #include "command_export.hpp"
@@ -16,6 +17,7 @@
 #include "command_help.hpp"
 #include "command_merge.hpp"
 #include "command_merge_changes.hpp"
+#include "command_query_locations_index.hpp"
 #include "command_renumber.hpp"
 #include "command_show.hpp"
 #include "command_sort.hpp"
@@ -41,6 +43,10 @@ void register_commands(CommandFactory& cmd_factory) {
 
     cmd_factory.register_command("check-refs", "Check referential integrity of an OSM file", [&]() {
         return new CommandCheckRefs{cmd_factory};
+    });
+
+    cmd_factory.register_command("create-locations-index", "Create node locations index on disk", [&]() {
+        return new CommandCreateLocationsIndex{cmd_factory};
     });
 
     cmd_factory.register_command("derive-changes", "Create OSM change files from two OSM data files", [&]() {
@@ -80,6 +86,10 @@ void register_commands(CommandFactory& cmd_factory) {
     });
     cmd_factory.register_command("merge", "Merge several sorted OSM files into one", [&]() {
         return new CommandMerge{cmd_factory};
+    });
+
+    cmd_factory.register_command("query-locations-index", "Query node locations index on disk", [&]() {
+        return new CommandQueryLocationsIndex{cmd_factory};
     });
 
     cmd_factory.register_command("renumber", "Renumber IDs in OSM file", [&]() {
