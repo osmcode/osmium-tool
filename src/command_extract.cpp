@@ -71,186 +71,182 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # include <unistd.h>
 #endif
 
-namespace {
-
-    osmium::Box parse_bbox(const rapidjson::Value& value) {
-        if (value.IsArray()) {
-            if (value.Size() != 4) {
-                throw config_error{"'bbox' must be an array with exactly four elements."};
-            }
-
-            if (!value[0].IsNumber() || !value[1].IsNumber() || !value[2].IsNumber() || !value[3].IsNumber()) {
-                throw config_error{"'bbox' array elements must be numbers."};
-            }
-
-            const auto value0 = value[0].GetDouble();
-            const auto value1 = value[1].GetDouble();
-            const auto value2 = value[2].GetDouble();
-            const auto value3 = value[3].GetDouble();
-
-            if (value0 < -180.0 || value0 > 180.0) {
-                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value0) + "."};
-            }
-
-            if (value1 < -90.0 || value1 > 90.0) {
-                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value1) + "."};
-            }
-
-            if (value2 < -180.0 || value2 > 180.0) {
-                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value2) + "."};
-            }
-
-            if (value3 < -90.0 || value3 > 90.0) {
-                throw config_error{"Invalid coordinate in bbox: " + std::to_string(value3) + "."};
-            }
-
-            const osmium::Location location1{value0, value1};
-            const osmium::Location location2{value2, value3};
-
-            osmium::Box box;
-            box.extend(location1);
-            box.extend(location2);
-
-            return box;
+static osmium::Box parse_bbox(const rapidjson::Value& value) {
+    if (value.IsArray()) {
+        if (value.Size() != 4) {
+            throw config_error{"'bbox' must be an array with exactly four elements."};
         }
 
-        if (value.IsObject()) {
-            const auto left   = value.FindMember("left");
-            const auto right  = value.FindMember("right");
-            const auto top    = value.FindMember("top");
-            const auto bottom = value.FindMember("bottom");
-
-            if (left != value.MemberEnd() && right  != value.MemberEnd() &&
-                top  != value.MemberEnd() && bottom != value.MemberEnd()) {
-                if (left->value.IsNumber() && right->value.IsNumber() &&
-                    top->value.IsNumber()  && bottom->value.IsNumber()) {
-
-                    const auto left_value = left->value.GetDouble();
-                    const auto bottom_value = bottom->value.GetDouble();
-                    const auto right_value = right->value.GetDouble();
-                    const auto top_value = top->value.GetDouble();
-
-                    if (left_value < -180.0 || left_value > 180.0) {
-                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(left_value) + "."};
-                    }
-
-                    if (right_value < -180.0 || right_value > 180.0) {
-                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(right_value) + "."};
-                    }
-
-                    if (top_value < -90.0 || top_value > 90.0) {
-                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(top_value) + "."};
-                    }
-
-                    if (bottom_value < -90.0 || bottom_value > 90.0) {
-                        throw config_error{"Invalid coordinate in bbox: " + std::to_string(bottom_value) + "."};
-                    }
-
-                    const osmium::Location bottom_left{left_value, bottom_value};
-                    const osmium::Location top_right{right_value, top_value};
-
-                    if (bottom_left.x() < top_right.x() &&
-                        bottom_left.y() < top_right.y()) {
-                        return osmium::Box{bottom_left, top_right};
-                    }
-
-                    throw config_error{"Need 'left' < 'right' and 'bottom' < 'top' in 'bbox' object."};
-                }
-
-                throw config_error{"Members in 'bbox' object must be numbers."};
-            }
-
-            throw config_error{"Need 'left', 'right', 'top', and 'bottom' members in 'bbox' object."};
+        if (!value[0].IsNumber() || !value[1].IsNumber() || !value[2].IsNumber() || !value[3].IsNumber()) {
+            throw config_error{"'bbox' array elements must be numbers."};
         }
 
-        throw config_error{"'bbox' member is not an array or object."};
+        const auto value0 = value[0].GetDouble();
+        const auto value1 = value[1].GetDouble();
+        const auto value2 = value[2].GetDouble();
+        const auto value3 = value[3].GetDouble();
+
+        if (value0 < -180.0 || value0 > 180.0) {
+            throw config_error{"Invalid coordinate in bbox: " + std::to_string(value0) + "."};
+        }
+
+        if (value1 < -90.0 || value1 > 90.0) {
+            throw config_error{"Invalid coordinate in bbox: " + std::to_string(value1) + "."};
+        }
+
+        if (value2 < -180.0 || value2 > 180.0) {
+            throw config_error{"Invalid coordinate in bbox: " + std::to_string(value2) + "."};
+        }
+
+        if (value3 < -90.0 || value3 > 90.0) {
+            throw config_error{"Invalid coordinate in bbox: " + std::to_string(value3) + "."};
+        }
+
+        const osmium::Location location1{value0, value1};
+        const osmium::Location location2{value2, value3};
+
+        osmium::Box box;
+        box.extend(location1);
+        box.extend(location2);
+
+        return box;
     }
 
-    std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer& buffer) {
-        if (file_name.empty()) {
-            throw config_error{"Missing 'file_name' in '(multi)polygon' object."};
-        }
+    if (value.IsObject()) {
+        const auto left   = value.FindMember("left");
+        const auto right  = value.FindMember("right");
+        const auto top    = value.FindMember("top");
+        const auto bottom = value.FindMember("bottom");
 
-        if (file_name[0] != '/') {
-            // relative file name
-            file_name = directory + file_name;
-        }
+        if (left != value.MemberEnd() && right  != value.MemberEnd() &&
+            top  != value.MemberEnd() && bottom != value.MemberEnd()) {
+            if (left->value.IsNumber() && right->value.IsNumber() &&
+                top->value.IsNumber()  && bottom->value.IsNumber()) {
 
-        // If the file type is not set, try to deduce it from the file name
-        // suffix.
-        if (file_type.empty()) {
-            std::string suffix{get_filename_suffix(file_name)};
-            if (suffix == "poly") {
-                file_type = "poly";
-            } else if (suffix == "json" || suffix == "geojson") {
-                file_type = "geojson";
-            } else {
-                osmium::io::File osmfile{"", suffix};
-                if (osmfile.format() != osmium::io::file_format::unknown) {
-                    file_type = "osm";
+                const auto left_value = left->value.GetDouble();
+                const auto bottom_value = bottom->value.GetDouble();
+                const auto right_value = right->value.GetDouble();
+                const auto top_value = top->value.GetDouble();
+
+                if (left_value < -180.0 || left_value > 180.0) {
+                    throw config_error{"Invalid coordinate in bbox: " + std::to_string(left_value) + "."};
                 }
+
+                if (right_value < -180.0 || right_value > 180.0) {
+                    throw config_error{"Invalid coordinate in bbox: " + std::to_string(right_value) + "."};
+                }
+
+                if (top_value < -90.0 || top_value > 90.0) {
+                    throw config_error{"Invalid coordinate in bbox: " + std::to_string(top_value) + "."};
+                }
+
+                if (bottom_value < -90.0 || bottom_value > 90.0) {
+                    throw config_error{"Invalid coordinate in bbox: " + std::to_string(bottom_value) + "."};
+                }
+
+                const osmium::Location bottom_left{left_value, bottom_value};
+                const osmium::Location top_right{right_value, top_value};
+
+                if (bottom_left.x() < top_right.x() &&
+                    bottom_left.y() < top_right.y()) {
+                    return osmium::Box{bottom_left, top_right};
+                }
+
+                throw config_error{"Need 'left' < 'right' and 'bottom' < 'top' in 'bbox' object."};
             }
+
+            throw config_error{"Members in 'bbox' object must be numbers."};
         }
 
-        if (file_type == "osm") {
-            try {
-                OSMFileParser parser{buffer, file_name};
-                return parser();
-            } catch (const std::system_error& e) {
-                throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
-            } catch (const osmium::io_error& e) {
-                throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
-            } catch (const osmium::out_of_order_error& e) {
-                throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
+        throw config_error{"Need 'left', 'right', 'top', and 'bottom' members in 'bbox' object."};
+    }
+
+    throw config_error{"'bbox' member is not an array or object."};
+}
+
+static std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer& buffer) {
+    if (file_name.empty()) {
+        throw config_error{"Missing 'file_name' in '(multi)polygon' object."};
+    }
+
+    if (file_name[0] != '/') {
+        // relative file name
+        file_name = directory + file_name;
+    }
+
+    // If the file type is not set, try to deduce it from the file name
+    // suffix.
+    if (file_type.empty()) {
+        std::string suffix{get_filename_suffix(file_name)};
+        if (suffix == "poly") {
+            file_type = "poly";
+        } else if (suffix == "json" || suffix == "geojson") {
+            file_type = "geojson";
+        } else {
+            osmium::io::File osmfile{"", suffix};
+            if (osmfile.format() != osmium::io::file_format::unknown) {
+                file_type = "osm";
             }
-        } else if (file_type == "geojson") {
-            GeoJSONFileParser parser{buffer, file_name};
-            try {
-                return parser();
-            } catch (const config_error& e) {
-                throw geojson_error{e.what()};
-            }
-        } else if (file_type == "poly") {
-            PolyFileParser parser{buffer, file_name};
+        }
+    }
+
+    if (file_type == "osm") {
+        try {
+            OSMFileParser parser{buffer, file_name};
             return parser();
-        } else if (file_type.empty()) {
-            throw config_error{"Could not autodetect file type in '(multi)polygon' object. Add a 'file_type'."};
+        } catch (const std::system_error& e) {
+            throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
+        } catch (const osmium::io_error& e) {
+            throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
+        } catch (const osmium::out_of_order_error& e) {
+            throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
         }
-
-        throw config_error{std::string{"Unknown file type: '"} + file_type + "' in '(multi)polygon.file_type'"};
+    } else if (file_type == "geojson") {
+        GeoJSONFileParser parser{buffer, file_name};
+        try {
+            return parser();
+        } catch (const config_error& e) {
+            throw geojson_error{e.what()};
+        }
+    } else if (file_type == "poly") {
+        PolyFileParser parser{buffer, file_name};
+        return parser();
+    } else if (file_type.empty()) {
+        throw config_error{"Could not autodetect file type in '(multi)polygon' object. Add a 'file_type'."};
     }
 
-    std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
-        const std::string file_name{get_value_as_string(value, "file_name")};
-        const std::string file_type{get_value_as_string(value, "file_type")};
-        return parse_multipolygon_object(directory, file_name, file_type, buffer);
+    throw config_error{std::string{"Unknown file type: '"} + file_type + "' in '(multi)polygon.file_type'"};
+}
+
+static std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+    const std::string file_name{get_value_as_string(value, "file_name")};
+    const std::string file_type{get_value_as_string(value, "file_type")};
+    return parse_multipolygon_object(directory, file_name, file_type, buffer);
+}
+
+static std::size_t parse_polygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+    if (value.IsArray()) {
+        return parse_polygon_array(value, buffer);
     }
 
-    std::size_t parse_polygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
-        if (value.IsArray()) {
-            return parse_polygon_array(value, buffer);
-        }
-
-        if (value.IsObject()) {
-            return parse_multipolygon_object(directory, value, buffer);
-        }
-
-        throw config_error{"Polygon must be an object or array."};
+    if (value.IsObject()) {
+        return parse_multipolygon_object(directory, value, buffer);
     }
 
-    std::size_t parse_multipolygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
-        if (value.IsArray()) {
-            return parse_multipolygon_array(value, buffer);
-        }
+    throw config_error{"Polygon must be an object or array."};
+}
 
-        if (value.IsObject()) {
-            return parse_multipolygon_object(directory, value, buffer);
-        }
-
-        throw config_error{"Multipolygon must be an object or array."};
+std::size_t parse_multipolygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+    if (value.IsArray()) {
+        return parse_multipolygon_array(value, buffer);
     }
 
-} // anonymous namespace
+    if (value.IsObject()) {
+        return parse_multipolygon_object(directory, value, buffer);
+    }
+
+    throw config_error{"Multipolygon must be an object or array."};
+}
 
 static bool is_existing_directory(const char* name) {
 #ifdef _MSC_VER
