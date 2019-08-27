@@ -34,6 +34,7 @@ class CommandQueryLocationsIndex : public Command {
 
     std::string m_index_file_name;
     osmium::object_id_type m_id = 0;
+    bool m_dump = false;
 
 public:
 

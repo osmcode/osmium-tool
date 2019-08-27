@@ -7,6 +7,7 @@ osmium-query-locations-index - query node locations index
 # SYNOPSIS
 
 **osmium query-locations-index** -i INDEX-FILE \[*OPTIONS*\] *NODE-ID*
+**osmium query-locations-index** -i INDEX-FILE \[*OPTIONS*\] \--dump
 
 
 # DESCRIPTION
@@ -23,6 +24,10 @@ This command will not work with negative node IDs.
 
 
 # OPTIONS
+
+--dump
+:   Dump all node locations to STDOUT. One line per node, first the ID, then
+    a space character and then the location.
 
 -i, \--index-file=FILENAME
 :   The name of the index file.

@@ -42,6 +42,7 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("index-file,i", po::value<std::string>(), "Index file name (required)")
+    ("dump", "Dump all locations to STDOUT")
     ;
 
     po::options_description opts_common{add_common_options(false)};
@@ -72,10 +73,19 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
         throw argument_error{"Missing --index-file,-i option."};
     }
 
+    if (vm.count("dump")) {
+        m_dump = true;
+    }
+
     if (vm.count("node-id")) {
+        if (m_dump) {
+            throw argument_error{"Either use --dump or use node ID, not both."};
+        }
         const auto id = vm["node-id"].as<std::string>();
         const auto r = osmium::string_to_object_id(id.c_str(), osmium::osm_entity_bits::node, osmium::item_type::node);
         m_id = static_cast<osmium::unsigned_object_id_type>(r.second);
+    } else if (!m_dump) {
+        throw argument_error{"Missing node ID on command line."};
     }
 
     return true;
@@ -94,8 +104,16 @@ bool CommandQueryLocationsIndex::run() {
 
     osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};
 
-    const auto location = location_index.get(m_id);
-    std::cout << location << "\n";
+    if (m_dump) {
+        for (std::size_t i = 0; i < location_index.size(); ++i) {
+            if (location_index.get_noexcept(i).valid()) {
+                std::cout << i << ' ' << location_index.get(i) << '\n';
+            }
+        }
+    } else {
+        const auto location = location_index.get(m_id);
+        std::cout << location << '\n';
+    }
 
     m_vout << "Done.\n";
 
