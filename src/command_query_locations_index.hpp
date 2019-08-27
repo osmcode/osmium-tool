@@ -30,7 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandQueryLocationsIndex : public Command {
+class CommandQueryLocationsIndex : public Command, public with_osm_output {
 
     std::string m_index_file_name;
     osmium::object_id_type m_id = 0;

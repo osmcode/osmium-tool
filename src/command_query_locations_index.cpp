@@ -24,7 +24,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 #include "util.hpp"
 
+#include <osmium/builder/osm_object_builder.hpp>
 #include <osmium/index/map/dense_file_array.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/memory/buffer.hpp>
 #include <osmium/osm/location.hpp>
 #include <osmium/osm/types.hpp>
 #include <osmium/osm/types_from_string.hpp>
@@ -46,6 +49,7 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
     ;
 
     po::options_description opts_common{add_common_options(false)};
+    po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -53,7 +57,7 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
     ;
 
     po::options_description desc;
-    desc.add(opts_cmd).add(opts_common);
+    desc.add(opts_cmd).add(opts_common).add(opts_output);
 
     po::options_description parsed_options;
     parsed_options.add(desc).add(hidden);
@@ -66,6 +70,7 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
     po::notify(vm);
 
     setup_common(vm, desc);
+    init_output_file(vm);
 
     if (vm.count("index-file")) {
         m_index_file_name = vm["index-file"].as<std::string>();
@@ -75,6 +80,16 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
 
     if (vm.count("dump")) {
         m_dump = true;
+        if ((m_output_filename.empty() || m_output_filename == "-") && m_output_format.empty()) {
+            m_output_format = "opl,add_metadata=none";
+        }
+        if (m_output_format.empty()) {
+            m_output_file = osmium::io::File{m_output_filename};
+            m_output_file.set("add_metadata", "none");
+        } else {
+            m_output_file = osmium::io::File{m_output_filename, m_output_format};
+        }
+        m_output_file.check();
     }
 
     if (vm.count("node-id")) {
@@ -92,6 +107,7 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
 }
 
 void CommandQueryLocationsIndex::show_arguments() {
+    show_output_arguments(m_vout);
     m_vout << "  other options:\n";
     m_vout << "    index file: " << m_index_file_name << '\n';
 }
@@ -105,12 +121,32 @@ bool CommandQueryLocationsIndex::run() {
     osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};
 
     if (m_dump) {
+        const std::size_t max_buffer_size = 11 * 1024 * 1024;
+        osmium::memory::Buffer buffer{max_buffer_size};
+
+        m_vout << "Opening output file...\n";
+        osmium::io::Header header{};
+        setup_header(header);
+        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+
+        m_vout << "Dumping index as OSM file...\n";
         for (std::size_t i = 0; i < location_index.size(); ++i) {
             if (location_index.get_noexcept(i).valid()) {
-                std::cout << i << ' ' << location_index.get(i) << '\n';
+                osmium::builder::NodeBuilder builder{buffer};
+                builder.set_id(static_cast<osmium::object_id_type>(i));
+                builder.set_location(location_index.get_noexcept(i));
+            }
+            buffer.commit();
+            if (buffer.committed() > 10 * 1024 * 1024) {
+                writer(std::move(buffer));
+                buffer = osmium::memory::Buffer{max_buffer_size};
             }
         }
+        if (buffer.committed() > 0) {
+            writer(std::move(buffer));
+        }
     } else {
+        m_vout << "Looking up location in index...\n";
         const auto location = location_index.get(m_id);
         std::cout << location << '\n';
     }
