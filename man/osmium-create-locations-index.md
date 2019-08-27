@@ -69,7 +69,12 @@ can read from STDIN.
 
 Create node locations index from planet:
 
-    osmium create-locations-index -i index.dat planet.osm.pbf
+    osmium create-locations-index -i locations.idx planet.osm.pbf
+
+Set a node location in the index using an input file in OPL format:
+
+    echo "n123 x-80.6042 y28.6083" | \
+        osmium create-locations-index -i locations.idx -F opl --update
 
 
 # SEE ALSO
