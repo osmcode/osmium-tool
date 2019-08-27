@@ -100,7 +100,7 @@ bool CommandCreateLocationsIndex::run() {
     osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};
 
     m_vout << "Reading input file '" << m_input_file.filename() << "'\n";
-    osmium::io::Reader reader{m_input_file};
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::node};
 
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
     while (const auto buffer = reader.read()) {
