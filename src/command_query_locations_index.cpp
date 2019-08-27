@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/index/map/dense_file_array.hpp>
 #include <osmium/osm/location.hpp>
 #include <osmium/osm/types.hpp>
+#include <osmium/osm/types_from_string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
@@ -47,7 +48,7 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
 
     po::options_description hidden;
     hidden.add_options()
-    ("node-id", po::value<osmium::object_id_type>(), "Node ID")
+    ("node-id", po::value<std::string>(), "Node ID")
     ;
 
     po::options_description desc;
@@ -72,7 +73,9 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
     }
 
     if (vm.count("node-id")) {
-        m_id = vm["node-id"].as<osmium::object_id_type>();
+        const auto id = vm["node-id"].as<std::string>();
+        const auto r = osmium::string_to_object_id(id.c_str(), osmium::osm_entity_bits::node, osmium::item_type::node);
+        m_id = static_cast<osmium::unsigned_object_id_type>(r.second);
     }
 
     return true;

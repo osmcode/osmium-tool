@@ -19,6 +19,8 @@ The index file format is compatible to the one created by
 "osmium add-location-to-ways -i dense_file_array,INDEX-FILE" and to the
 flatnode store created by osm2pgsql.
 
+This command will not work with negative node IDs.
+
 
 # OPTIONS
 
