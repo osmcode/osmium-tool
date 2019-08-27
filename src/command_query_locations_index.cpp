@@ -97,9 +97,9 @@ void CommandQueryLocationsIndex::show_arguments() {
 }
 
 bool CommandQueryLocationsIndex::run() {
-    const int fd = ::open(m_index_file_name.c_str(), O_CREAT | O_RDWR, 0644); // NOLINT(hicpp-signed-bitwise)
+    const int fd = ::open(m_index_file_name.c_str(), O_RDWR);
     if (fd == -1) {
-        throw std::runtime_error{std::string{"can't open file '"} + "filename" + "': " + std::strerror(errno)};
+        throw std::system_error{errno, std::system_category(), std::string("Can not open index file '") + m_index_file_name + "'"};
     }
 
     osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};
