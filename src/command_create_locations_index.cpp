@@ -48,6 +48,7 @@ bool CommandCreateLocationsIndex::setup(const std::vector<std::string>& argument
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("index-file,i", po::value<std::string>(), "Index file name (required)")
+    ("update,u", "Update existing index file")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -81,6 +82,10 @@ bool CommandCreateLocationsIndex::setup(const std::vector<std::string>& argument
         throw argument_error{"Missing --index-file,-i option."};
     }
 
+    if (vm.count("update")) {
+        m_update = true;
+    }
+
     return true;
 }
 
@@ -89,12 +94,26 @@ void CommandCreateLocationsIndex::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    index file: " << m_index_file_name << '\n';
+    m_vout << "    allow update of existing index file: " << yes_no(m_update);
 }
 
 bool CommandCreateLocationsIndex::run() {
-    const int fd = ::open(m_index_file_name.c_str(), O_CREAT | O_RDWR, 0644); // NOLINT(hicpp-signed-bitwise)
+    int flags = O_RDWR | O_CREAT; // NOLINT(hicpp-signed-bitwise)
+
+    if (!m_update) {
+        flags |= O_EXCL; // NOLINT(hicpp-signed-bitwise)
+    }
+
+#ifdef _WIN32
+    flags |= O_BINARY; // NOLINT(hicpp-signed-bitwise)
+#endif
+
+    const int fd = ::open(m_index_file_name.c_str(), flags, 0666);
     if (fd == -1) {
-        throw std::runtime_error{std::string{"can't open file '"} + "filename" + "': " + std::strerror(errno)};
+        if (errno == EEXIST) {
+            throw argument_error{"Index file exists and you haven't specified --update/-u."};
+        }
+        throw std::system_error{errno, std::system_category(), std::string("Can not open index file '") + m_index_file_name + "'"};
     }
 
     osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};

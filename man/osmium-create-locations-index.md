@@ -1,7 +1,7 @@
 
 # NAME
 
-osmium-create-locations-index - create locations index from OSM file
+osmium-create-locations-index - create or update locations index from OSM file
 
 
 # SYNOPSIS
@@ -12,16 +12,23 @@ osmium-create-locations-index - create locations index from OSM file
 # DESCRIPTION
 
 Create an index of all node locations from the OSM-FILE in the file INDEX-FILE.
-This index will need about 8 * highest-node-id bytes on disk. For a current
-planet file this is more than 50 GBytes.
 
-If the INDEX-FILE exists, it will be updated.
+If the INDEX-FILE exists, it will not be touched unless the **\--update/-u**
+option is used.
+
+Regardless of the size of the input file, this index will need about 8 *
+highest-node-id bytes on disk. For a current planet file this is more than 50
+GBytes.
 
 The index file format is compatible to the one created by
 "osmium add-location-to-ways -i dense_file_array,INDEX-FILE" and to the
 flatnode store created by osm2pgsql.
 
-This command will not work on full history files.
+When the input file is a full history file or a change file, the last location
+encountered in the file for any ID ends up in the index. Usually this will be
+the newest location (from the node with the highest version).
+
+This command will not work with negative node IDs.
 
 This commands reads its input file only once, so it can be streamed, ie. it
 can read from STDIN.
@@ -31,6 +38,9 @@ can read from STDIN.
 
 -i, \--index-file=FILENAME
 :   The name of the index file.
+
+-u, \--update
+:   Allow updating of existing file.
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@

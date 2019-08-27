@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 class CommandCreateLocationsIndex : public Command, public with_single_osm_input {
 
     std::string m_index_file_name;
+    bool m_update = false;
 
 public:
 
