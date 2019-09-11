@@ -11,13 +11,29 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 * New option `--remove-tags`/`-t` to `getid` command. When used the tags of
   all objects are removed that are not explicitly requested but are only
   included to complete references.
+* Add `create-locations-index` and `query-locations-index` commands. These
+  are used to create, update, query and dump node location indexes on disk.
+  These indexes store the location of nodes, typically to add them to ways
+  and relations later. It is the same format used by osm2pgsql (they call
+  it "flat node store") and by the `add-locations-to-ways` command.
 * Support for new [Spaten](https://thomas.skowron.eu/spaten/) export format.
+* Add special syntax for `--output-header` to copy header from input.
+  Sometimes it is useful to copy header fields from the input to the
+  output, for instance the `osmosis_replication_timestamp` field. This
+  can now be done for some commands (currently only `extract`) by
+  using the special syntax `--output-header=OPTION!`, i.e. using an
+  exclamation mark instead of setting a value.
 
 ### Changed
 
 * Better checking of coordinates in extract boundary polygons/bboxes.
 * Compile with NDEBUG in RelWithDebInfo mode.
 * Various code cleanups based on problems found with clang-tidy.
+* Updated Catch to version 1.12.2.
+* Mark PBF output of extract, renumber, and sort commands as sorted. Uses the
+  new header option `sorting` of the libosmium library which is not in a
+  released version yet. This sets the `Sort.Type_then_ID` header property
+  in the PBF file.
 
 ### Fixed
 
@@ -25,6 +41,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 * `get_start_id()` is not `noexcept`.
 * Man pages correctly show options starting with double dash and other small
   man page fixes.
+* Allow file-based location index types (`dense_file_array` and
+  `sparse_file_array`) that need a file name. Using them was not possible
+  because of an overzealous check that didn't recognize the file name.
 
 
 ## [1.10.0] - 2018-12-10
