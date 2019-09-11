@@ -178,7 +178,7 @@ void CommandGetId::show_arguments() {
     m_vout << "  other options:\n";
     m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
     if (m_add_referenced_objects) {
-        m_vout << "    remove tags of referenced objects: " << yes_no(m_remove_tags);
+        m_vout << "    remove tags on non-matching objects: " << yes_no(m_remove_tags);
     }
     m_vout << "    work with history files: " << yes_no(m_work_with_history);
     m_vout << "    default object type: " << osmium::item_type_to_name(m_default_item_type) << "\n";

@@ -154,6 +154,9 @@ void CommandTagsFilter::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
+    if (m_add_referenced_objects) {
+        m_vout << "    remove tags on non-matching objects: " << yes_no(m_remove_tags);
+    }
     m_vout << "  looking for tags...\n";
     m_vout << "    on nodes: "     << yes_no(!m_filters(osmium::item_type::node).empty());
     m_vout << "    on ways: "      << yes_no(!m_filters(osmium::item_type::way).empty() || !m_area_filters.empty());
