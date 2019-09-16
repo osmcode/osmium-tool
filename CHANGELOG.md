@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.11.0] - 2019-09-16
+
+### Added
+
 * New option `--remove-tags`/`-t` to `getid` command. When used the tags of
   all objects are removed that are not explicitly requested but are only
   included to complete references.
@@ -508,7 +517,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.10.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/osmcode/osmium-tool/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/osmcode/osmium-tool/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/osmcode/osmium-tool/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/osmcode/osmium-tool/compare/v1.8.0...v1.9.0
