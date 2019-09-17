@@ -99,7 +99,7 @@ The following variables are available:
     data.bbox - BOX
         (in JSON as nested ARRAY with coordinates)
     data.timestamp.first - STRING with TIMESTAMP
-    data.timestamp.last - STRING wih TIMESTAMP
+    data.timestamp.last - STRING with TIMESTAMP
     data.objects_ordered - BOOL (yes|no)
     data.multiple_versions - STRING (yes|no|unknown)
         (in JSON as BOOL and missing if "unknown")
