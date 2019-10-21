@@ -335,21 +335,25 @@ void CommandTagsFilter::find_referenced_objects() {
 }
 
 bool CommandTagsFilter::run() {
+    m_vout << "Opening input file to get header...\n";
+    osmium::io::Reader reader_only_for_header{m_input_file, osmium::osm_entity_bits::nothing};
+
+    m_vout << "Opening output file...\n";
+    osmium::io::Header header{reader_only_for_header.header()};
+    setup_header(header);
+    reader_only_for_header.close();
+
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+
     if (m_add_referenced_objects) {
         find_referenced_objects();
     }
 
     m_vout << "Opening input file...\n";
-    ++m_count_passes;
     osmium::io::Reader reader{m_input_file, get_needed_types()};
 
-    m_vout << "Opening output file...\n";
-    osmium::io::Header header{reader.header()};
-    setup_header(header);
-
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
-
     m_vout << "Copying matching objects to output file...\n";
+    ++m_count_passes;
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
