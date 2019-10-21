@@ -154,11 +154,6 @@ matrix:
     # OSX Clang Builds
 
     - os: osx
-      osx_image: xcode8.3
-      compiler: xcode8-clang-dev
-      env: CXX='clang++' BUILD_TYPE='Dev'
-
-    - os: osx
       osx_image: xcode9.4
       compiler: xcode9-clang-dev
       env: CXX='clang++' BUILD_TYPE='Dev'
