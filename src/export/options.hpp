@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <osmium/tags/tags_filter.hpp>
+#include <osmium/util/options.hpp>
 
 #include <string>
 
@@ -45,6 +46,8 @@ struct options_type {
     std::string way_nodes;
 
     unique_id_type unique_id = unique_id_type::none;
+
+    osmium::Options format_options;
 
     bool keep_untagged = false;
     bool print_record_separator = true;

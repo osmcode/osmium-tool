@@ -107,6 +107,13 @@ files created with JOSM).
     In spaten exports the ID is written into the @fid field. For *counter* the
     value will be an integer, for *type_id* it will be a string.
 
+-x, \--format-option=OPTION(=VALUE)
+:   Set an output format option. The options available depend on the output
+    format. See the **OUTPUT FORMAT OPTIONS** section for available options.
+    If the VALUE is not set, the OPTION will be set to "true". If needed
+    you can specify this option multiple times to set several options. Options
+    set on the command line overwrite options set in the config file.
+
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
@@ -136,6 +143,10 @@ the following optional names:
 
 * `attributes`: An object specifying which attributes of OSM objects to export.
    See the ATTRIBUTES section.
+* `format_options`: An object specifying output format options. The options
+   available depend on the output format. See the **OUTPUT FORMAT OPTIONS**
+   section for available options. These options can also be set using the
+   command line option **\--format-option/-x**.
 * `linear_tags`: An expression specifying tags that should be treated
    as linear tags. See below for details and also look at the AREA HANDLING
    section.
@@ -302,6 +313,11 @@ The following output formats are supported:
 * `text` (alias: `txt`): A simple text format with the geometry in WKT format
   followed by the comma-delimited tags. This is mainly intended for debugging
   at the moment. THE FORMAT MIGHT CHANGE WITHOUT NOTICE!
+
+
+# OUTPUT FORMAT OPTIONS
+
+No output format options yet.
 
 
 # DIAGNOSTICS

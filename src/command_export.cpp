@@ -90,6 +90,38 @@ void CommandExport::parse_attributes(const rapidjson::Value& attributes) {
     m_options.way_nodes = get_attr_string(attributes, "way_nodes");
 }
 
+void CommandExport::parse_format_options(const rapidjson::Value& options) {
+    if (!options.IsObject()) {
+        throw config_error{"'format_options' member must be an object."};
+    }
+    for (const auto& kv : options.GetObject()) {
+        const auto type = kv.value.GetType();
+        const char* key = kv.name.GetString();
+        switch (type) {
+            case rapidjson::kNullType:
+                m_options.format_options.set(key, false);
+                break;
+            case rapidjson::kTrueType:
+                m_options.format_options.set(key, true);
+                break;
+            case rapidjson::kFalseType:
+                m_options.format_options.set(key, false);
+                break;
+            case rapidjson::kObjectType:
+                throw config_error{"Option value for key '" + std::string(key) + "' can not be of type object."};
+            case rapidjson::kArrayType:
+                throw config_error{"Option value for key '" + std::string(key) + "' can not be an array."};
+                break;
+            case rapidjson::kStringType:
+                m_options.format_options.set(key, kv.value.GetString());
+                break;
+            case rapidjson::kNumberType:
+                m_options.format_options.set(key, std::to_string(kv.value.GetInt64()));
+                break;
+        }
+    }
+}
+
 static Ruleset parse_tags_ruleset(const rapidjson::Value& object, const char* key) {
     Ruleset ruleset;
 
@@ -182,6 +214,11 @@ void CommandExport::parse_config_file() {
         parse_attributes(json_attr->value);
     }
 
+    const auto json_opts = doc.FindMember("format_options");
+    if (json_opts != doc.MemberEnd()) {
+        parse_format_options(json_opts->value);
+    }
+
     m_linear_ruleset = parse_tags_ruleset(doc, "linear_tags");
     m_area_ruleset   = parse_tags_ruleset(doc, "area_tags");
 
@@ -224,6 +261,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     opts_cmd.add_options()
     ("add-unique-id,u", po::value<std::string>(), "Add unique id to each feature ('counter' or 'type_id')")
     ("config,c", po::value<std::string>(), "Config file")
+    ("format-option,x", po::value<std::vector<std::string>>(), "Output format options")
     ("fsync", "Call fsync after writing file")
     ("geometry-types", po::value<std::string>(), "Geometry types that should be written (default: 'point,linestring,polygon')")
     ("index-type,i", po::value<std::string>()->default_value(default_index_type), "Index type to use")
@@ -270,6 +308,8 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         "uid":       false,
         "user":      false,
         "way_nodes": false
+    },
+    "format_options": {
     },
     "linear_tags":  true,
     "area_tags":    true,
@@ -375,6 +415,12 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         m_output_overwrite = osmium::io::overwrite::allow;
     }
 
+    if (vm.count("format-option")) {
+        for (const auto& str : vm["format-option"].as<std::vector<std::string>>()) {
+            m_options.format_options.set(str);
+        }
+    }
+
     if (vm.count("omit-rs")) {
         m_options.print_record_separator = false;
         if (m_output_format != "geojsonseq") {
@@ -467,6 +513,13 @@ void CommandExport::show_arguments() {
     m_vout << "    uid:       " << (m_options.uid.empty()       ? "(omitted)" : m_options.uid)       << '\n';
     m_vout << "    user:      " << (m_options.user.empty()      ? "(omitted)" : m_options.user)      << '\n';
     m_vout << "    way_nodes: " << (m_options.way_nodes.empty() ? "(omitted)" : m_options.way_nodes) << '\n';
+
+    if (m_options.format_options.size() > 0) {
+        m_vout << "  output format options:\n";
+        for (const auto& option : m_options.format_options) {
+            m_vout << "    " << option.first << " = " << option.second << '\n';
+        }
+    }
 
     m_vout << "  linear tags: ";
     print_ruleset(m_vout, m_linear_ruleset);
