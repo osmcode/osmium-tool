@@ -63,7 +63,7 @@ class CommandExport : public Command, public with_single_osm_input {
     bool m_stop_on_error = false;
 
     void canonicalize_output_format();
-    void parse_options(const rapidjson::Value& attributes);
+    void parse_attributes(const rapidjson::Value& attributes);
     void parse_config_file();
 
 public:

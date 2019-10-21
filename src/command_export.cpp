@@ -75,7 +75,7 @@ static std::string get_attr_string(const rapidjson::Value& object, const char* k
     return "";
 }
 
-void CommandExport::parse_options(const rapidjson::Value& attributes) {
+void CommandExport::parse_attributes(const rapidjson::Value& attributes) {
     if (!attributes.IsObject()) {
         throw config_error{"'attributes' member must be an object."};
     }
@@ -179,7 +179,7 @@ void CommandExport::parse_config_file() {
 
     const auto json_attr = doc.FindMember("attributes");
     if (json_attr != doc.MemberEnd()) {
-        parse_options(json_attr->value);
+        parse_attributes(json_attr->value);
     }
 
     m_linear_ruleset = parse_tags_ruleset(doc, "linear_tags");
