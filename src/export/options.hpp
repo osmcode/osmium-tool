@@ -50,7 +50,6 @@ struct options_type {
     osmium::Options format_options;
 
     bool keep_untagged = false;
-    bool print_record_separator = true;
 };
 
 struct geometry_types {

@@ -332,6 +332,36 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     setup_progress(vm);
     setup_input_file(vm);
 
+    if (vm.count("output")) {
+        m_output_filename = vm["output"].as<std::string>();
+
+        const auto pos = m_output_filename.rfind('.');
+        if (pos != std::string::npos) {
+            m_output_format = m_output_filename.substr(pos + 1);
+        }
+    } else {
+        m_output_filename = "-";
+    }
+
+    if (vm.count("output-format")) {
+        m_output_format = vm["output-format"].as<std::string>();
+    }
+
+    canonicalize_output_format();
+
+    if (m_output_format != "geojson" &&
+        m_output_format != "geojsonseq" &&
+        m_output_format != "pg" &&
+        m_output_format != "text" &&
+        m_output_format != "spaten") {
+        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', 'pg', 'spaten', or 'text'."};
+    }
+
+    // Set defaults for output format options depending on output format
+    if (m_output_format == "geojsonseq") {
+        m_options.format_options.set("print_record_separator", true);
+    }
+
     if (vm.count("config")) {
         m_config_file_name = vm["config"].as<std::string>();
 
@@ -390,27 +420,6 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         m_options.keep_untagged = true;
     }
 
-    if (vm.count("output")) {
-        m_output_filename = vm["output"].as<std::string>();
-
-        const auto pos = m_output_filename.rfind('.');
-        if (pos != std::string::npos) {
-            m_output_format = m_output_filename.substr(pos + 1);
-        }
-    } else {
-        m_output_filename = "-";
-    }
-
-    if (vm.count("output-format")) {
-        m_output_format = vm["output-format"].as<std::string>();
-    }
-
-    canonicalize_output_format();
-
-    if (m_output_format != "geojson" && m_output_format != "geojsonseq" && m_output_format != "pg" && m_output_format != "text" && m_output_format != "spaten") {
-        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', 'pg', 'spaten', or 'text'."};
-    }
-
     if (vm.count("overwrite")) {
         m_output_overwrite = osmium::io::overwrite::allow;
     }
@@ -422,7 +431,8 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     }
 
     if (vm.count("omit-rs")) {
-        m_options.print_record_separator = false;
+        m_options.format_options.set("print_record_separator", false);
+        warning("The --omit-rs/-r option is deprecated. Please use '-x print_record_separator=false' instead.\n");
         if (m_output_format != "geojsonseq") {
             warning("The --omit-rs/-r option only works for GeoJSON Text Sequence (geojsonseq) format. Ignored.\n");
         }
@@ -496,12 +506,7 @@ void CommandExport::show_arguments() {
 
     m_vout << "  output options:\n";
     m_vout << "    file name: " << m_output_filename << '\n';
-
-    if (m_output_format == "geojsonseq") {
-        m_vout << "    file format: geojsonseq (with" << (m_options.print_record_separator ? " RS)\n" : "out RS)\n");
-    } else {
-        m_vout << "    file format: " << m_output_format << '\n';
-    }
+    m_vout << "    file format: " << m_output_format << '\n';
     m_vout << "    overwrite: " << yes_no(m_output_overwrite == osmium::io::overwrite::allow);
     m_vout << "    fsync: " << yes_no(m_fsync == osmium::io::fsync::yes);
     m_vout << "  attributes:\n";

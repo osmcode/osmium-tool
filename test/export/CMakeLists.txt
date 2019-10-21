@@ -11,7 +11,7 @@ function(check_export _name _options _input _output)
 endfunction()
 
 check_export(geojson    "-f geojson"       input.osm output.geojson)
-check_export(geojsonseq "-f geojsonseq -r" input.osm output.geojsonseq)
+check_export(geojsonseq "-f geojsonseq -x print_record_separator=false" input.osm output.geojsonseq)
 check_export(spaten     "-f spaten"        input.osm output.spaten)
 
 check_export(missing-node "-f geojson"  input-missing-node.osm output-missing-node.geojson)
