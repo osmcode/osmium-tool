@@ -50,7 +50,7 @@ addons_shortcuts:
       packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc', 'g++-6', 'gcc-6']
   addons_gcc7: &gcc7
     apt:
-      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'libbz2-dev', 'pandoc']
+      packages: ['libboost-all-dev', 'libboost-program-options-dev', 'pandoc']
 
 #-----------------------------------------------------------------------------
 
@@ -148,13 +148,6 @@ matrix:
       compiler: linux-gcc7-release
       addons: *gcc7
       env: CC='gcc-7' CXX='g++-7' BUILD_TYPE='Release'
-      dist: bionic
-
-    - os: linux
-      arch: arm64
-      compiler: linux-gcc7-dev
-      addons: *gcc7
-      env: CC='gcc-7' CXX='g++-7' BUILD_TYPE='Dev'
       dist: bionic
 
 
