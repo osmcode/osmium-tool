@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "../exception.hpp"
 #include "../util.hpp"
 #include "export_format_pg.hpp"
 
@@ -52,6 +53,15 @@ ExportFormatPg::ExportFormatPg(const std::string& /*output_format*/,
     m_fd(osmium::io::detail::open_for_writing(output_filename, overwrite)),
     m_fsync(fsync) {
     m_buffer.reserve(initial_buffer_size);
+
+    const auto tt = options.format_options.get("tags_type");
+    if (tt == "hstore") {
+        m_tags_type = tags_output_format::hstore;
+    } else if (tt == "json" || tt == "jsonb") {
+        m_tags_type = tags_output_format::json;
+    } else {
+        throw config_error{"Unknown value for tags_format option: '" + tt + "'."};
+    }
 }
 
 void ExportFormatPg::flush_to_output() {
@@ -154,7 +164,7 @@ void ExportFormatPg::add_attributes(const osmium::OSMObject& object) {
     }
 }
 
-bool ExportFormatPg::add_tags(const osmium::OSMObject& object) {
+bool ExportFormatPg::add_tags_json(const osmium::OSMObject& object) {
     bool has_tags = false;
 
     rapidjson::StringBuffer stream;
@@ -173,6 +183,55 @@ bool ExportFormatPg::add_tags(const osmium::OSMObject& object) {
     append_pg_escaped(stream.GetString(), stream.GetSize());
 
     return has_tags;
+}
+
+static void add_escape_hstore(std::string& out, const char* str) {
+    out += "\"";
+
+    while (*str) {
+        if (*str == '"') {
+            out += "\\\"";
+        } else if (*str == '\\') {
+            out += "\\\\";
+        } else {
+            out += *str;
+        }
+        ++str;
+    }
+
+    out += "\"";
+}
+
+bool ExportFormatPg::add_tags_hstore(const osmium::OSMObject& object) {
+    if (object.tags().empty()) {
+        return false;
+    }
+
+    bool has_tags = false;
+
+    std::string data;
+
+    for (const auto& tag : object.tags()) {
+        if (options().tags_filter(tag)) {
+            has_tags = true;
+            add_escape_hstore(data, tag.key());
+            data += "=>";
+            add_escape_hstore(data, tag.value());
+            data += ',';
+        }
+    }
+
+    if (has_tags) {
+        data.resize(data.size() - 1);
+        append_pg_escaped(data.c_str());
+    }
+
+    return has_tags;
+}
+
+bool ExportFormatPg::add_tags(const osmium::OSMObject& object) {
+    return m_tags_type == tags_output_format::json ? add_tags_json(object)
+                                                   : add_tags_hstore(object);
 }
 
 void ExportFormatPg::finish_feature(const osmium::OSMObject& object) {
@@ -223,7 +282,11 @@ void ExportFormatPg::close() {
 
 void ExportFormatPg::debug_output(osmium::VerboseOutput& out, const std::string& filename) {
     out << '\n';
+
     out << "Create table with something like this:\n";
+    if (m_tags_type == tags_output_format::hstore) {
+        out << "CREATE EXTENSION IF NOT EXISTS hstore;\n";
+    }
     out << "CREATE TABLE osmdata (\n";
 
     if (options().unique_id == unique_id_type::counter) {
@@ -266,7 +329,14 @@ void ExportFormatPg::debug_output(osmium::VerboseOutput& out, const std::string&
         out << "    way_nodes BIGINT[],\n";
     }
 
-    out << "    tags      JSONB -- or JSON, or TEXT\n";
+    switch (m_tags_type) {
+        case tags_output_format::json:
+            out << "    tags      JSONB -- or JSON, or TEXT\n";
+            break;
+        case tags_output_format::hstore:
+            out << "    tags      hstore\n";
+            break;
+    }
     out << ");\n";
     out << "Then load data with something like this:\n";
     out << "\\copy osmdata FROM '" << filename << "'\n";

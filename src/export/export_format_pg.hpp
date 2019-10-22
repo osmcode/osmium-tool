@@ -33,16 +33,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class ExportFormatPg : public ExportFormat {
 
+    enum tags_output_format {
+        json,
+        hstore
+    };
+
     osmium::geom::WKBFactory<> m_factory{osmium::geom::wkb_type::ewkb, osmium::geom::out_type::hex};
     std::string m_buffer;
     std::size_t m_commit_size = 0;
     int m_fd;
     osmium::io::fsync m_fsync;
 
+    tags_output_format m_tags_type = tags_output_format::json;
+
     void flush_to_output();
 
     void start_feature(char type, osmium::object_id_type id);
     void add_attributes(const osmium::OSMObject& object);
+    bool add_tags_json(const osmium::OSMObject& object);
+    bool add_tags_hstore(const osmium::OSMObject& object);
     bool add_tags(const osmium::OSMObject& object);
     void finish_feature(const osmium::OSMObject& object);
     void append_pg_escaped(const char* str, std::size_t size);

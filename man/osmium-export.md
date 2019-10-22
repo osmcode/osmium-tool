@@ -321,6 +321,8 @@ The following output formats are supported:
 * `print_record_separator` (default: `true`). Set to `false` to not print the
   RS (0x1e, record separator) character when using the GeoJSON Text Sequence
   Format. Ignored for other formats.
+* `tags_format` (default: `jsonb`). Set to `hstore` to use HSTORE format
+  instead of JSON/JSONB when using the Pg Format. Ignored in other formats.
 
 
 # DIAGNOSTICS

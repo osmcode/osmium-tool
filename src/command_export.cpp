@@ -361,6 +361,9 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     if (m_output_format == "geojsonseq") {
         m_options.format_options.set("print_record_separator", true);
     }
+    if (m_output_format == "pg") {
+        m_options.format_options.set("tags_type", "json");
+    }
 
     if (vm.count("config")) {
         m_config_file_name = vm["config"].as<std::string>();
@@ -570,6 +573,11 @@ static std::unique_ptr<ExportFormat> create_handler(const std::string& output_fo
 }
 
 bool CommandExport::run() {
+    auto handler = create_handler(m_output_format, m_output_filename, m_output_overwrite, m_fsync, m_options);
+    if (m_vout.verbose()) {
+        handler->debug_output(m_vout, m_output_filename);
+    }
+
     osmium::area::Assembler::config_type assembler_config;
     osmium::area::MultipolygonManager<osmium::area::Assembler> mp_manager{assembler_config};
 
@@ -578,14 +586,8 @@ bool CommandExport::run() {
     m_vout << "First pass done.\n";
 
     m_vout << "Second pass (of two) through input file...\n";
-
     m_linear_ruleset.init_filter();
     m_area_ruleset.init_filter();
-
-    auto handler = create_handler(m_output_format, m_output_filename, m_output_overwrite, m_fsync, m_options);
-    if (m_vout.verbose()) {
-        handler->debug_output(m_vout, m_output_filename);
-    }
 
     ExportHandler export_handler{std::move(handler), m_linear_ruleset, m_area_ruleset, m_geometry_types, m_show_errors, m_stop_on_error};
     osmium::handler::CheckOrder check_order_handler;
