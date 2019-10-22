@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "../exception.hpp"
 #include "../util.hpp"
 #include "export_format_json.hpp"
 
@@ -51,6 +52,13 @@ ExportFormatJSON::ExportFormatJSON(const std::string& output_format,
         add_to_stream(m_stream, "{\"type\":\"FeatureCollection\",\"features\":[\n");
     }
     m_committed_size = m_stream.GetSize();
+
+    if (output_format == "geojsonseq") {
+        const auto prs = options.format_options.get("print_record_separator");
+        if (prs != "true" && prs != "false") {
+            throw config_error{"Unknown value for print_record_separator option: '" + prs + "'."};
+        }
+    }
 }
 
 void ExportFormatJSON::flush_to_output() {
