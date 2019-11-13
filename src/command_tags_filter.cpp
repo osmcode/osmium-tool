@@ -306,10 +306,10 @@ void CommandTagsFilter::find_nodes_in_ways() {
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::way};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& way : buffer.select<osmium::Way>()) {
-            if (m_referenced_ids(osmium::item_type::way).get(way.positive_id())) {
-                add_nodes(way);
-            } else if (matches_way(way) != m_invert_match) {
+            if (matches_way(way) != m_invert_match) {
                 m_matching_ids(osmium::item_type::way).set(way.positive_id());
+                add_nodes(way);
+            } else if (m_referenced_ids(osmium::item_type::way).get(way.positive_id())) {
                 add_nodes(way);
             }
         }
