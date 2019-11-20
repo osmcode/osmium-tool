@@ -13,6 +13,30 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 
+## [1.11.1] - 2019-11-20
+
+### Added
+
+* Introduce a generic facility for setting output format options. They can
+  be set on the command line (`--format-option`/`-x`) or in the
+  `format_options` section in the config file. Settings can be any
+  OPTION=VALUE type string. There are two new settings: For the geojsonseq
+  format, the option `print_record_separator=false` replaces the command
+  line option `--omit-rs`/`-r` which is now deprecated. The `tags_format`
+  option for the Pg output format allows using the `hstore` type for tags
+  instead of `json(b)`.
+
+### Changed
+
+* Open output file earlier in tags-filter command, so we see it immediately
+  in case this fails.
+
+### Fixed
+
+* When tags-filter is used with `--remove-tags`, matching ways got their
+  tags removed if they are also referenced from relations. This was clearly
+  wrong.
+
 ## [1.11.0] - 2019-09-16
 
 ### Added
@@ -517,7 +541,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.11.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.11.1...HEAD
+[1.11.1]: https://github.com/osmcode/osmium-tool/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/osmcode/osmium-tool/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/osmcode/osmium-tool/compare/v1.9.1...v1.10.0
 [1.9.1]: https://github.com/osmcode/osmium-tool/compare/v1.9.0...v1.9.1
