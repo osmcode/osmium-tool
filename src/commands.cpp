@@ -21,6 +21,7 @@
 #include "command_renumber.hpp"
 #include "command_show.hpp"
 #include "command_sort.hpp"
+#include "command_tags_count.hpp"
 #include "command_tags_filter.hpp"
 #include "command_time_filter.hpp"
 
@@ -102,6 +103,10 @@ void register_commands(CommandFactory& cmd_factory) {
 
     cmd_factory.register_command("sort", "Sort OSM data files", [&]() {
         return new CommandSort{cmd_factory};
+    });
+
+    cmd_factory.register_command("tags-count", "Count OSM tags", [&]() {
+        return new CommandTagsCount{cmd_factory};
     });
 
     cmd_factory.register_command("tags-filter", "Filter OSM data based on tags", [&]() {

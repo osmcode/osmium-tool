@@ -165,9 +165,12 @@ osmium::StringMatcher get_string_matcher(std::string string) {
     return osmium::StringMatcher::substring{s};
 }
 
-osmium::TagMatcher get_tag_matcher(const std::string& expression) {
+osmium::TagMatcher get_tag_matcher(const std::string& expression, bool *has_value_matcher) {
     const auto op_pos = expression.find('=');
     if (op_pos == std::string::npos) {
+        if (has_value_matcher) {
+            *has_value_matcher = false;
+        }
         return osmium::TagMatcher{get_string_matcher(expression)};
     }
 
@@ -180,6 +183,9 @@ osmium::TagMatcher get_tag_matcher(const std::string& expression) {
         invert = true;
     }
 
+    if (has_value_matcher) {
+        *has_value_matcher = true;
+    }
     return osmium::TagMatcher{get_string_matcher(key), get_string_matcher(value), invert};
 }
 

@@ -44,7 +44,7 @@ osmium::osm_entity_bits::type get_types(const std::string& str);
 std::pair<osmium::osm_entity_bits::type, std::string> get_filter_expression(const std::string& str);
 void strip_whitespace(std::string& string);
 osmium::StringMatcher get_string_matcher(std::string string);
-osmium::TagMatcher get_tag_matcher(const std::string& expression);
+osmium::TagMatcher get_tag_matcher(const std::string& expression, bool *has_value_matcher = nullptr);
 void initialize_tags_filter(osmium::TagsFilter& tags_filter, bool default_result, const std::vector<std::string>& strings);
 osmium::Box parse_bbox(const std::string& str, const std::string& option_name);
 osmium::item_type parse_item_type(const std::string& t);

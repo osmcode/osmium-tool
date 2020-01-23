@@ -223,6 +223,7 @@ SET(OSMIUM_COMMANDS
     renumber
     show
     sort
+    tags-count
     tags-filter
     time-filter
 )
