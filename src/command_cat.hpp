@@ -25,10 +25,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp" // IWYU pragma: export
 
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/util/progress_bar.hpp>
+
 #include <string>
 #include <vector>
 
 class CommandCat : public Command, public with_multiple_osm_inputs, public with_osm_output {
+
+    enum clean_options : uint8_t {
+        clean_version   = 0x01,
+        clean_changeset = 0x02,
+        clean_timestamp = 0x04,
+        clean_uid       = 0x08,
+        clean_user      = 0x10
+    };
+
+    uint8_t m_clean_attrs = 0;
+
+    void copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer);
 
 public:
 

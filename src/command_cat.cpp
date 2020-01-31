@@ -21,14 +21,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_cat.hpp"
+#include "exception.hpp"
 #include "util.hpp"
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
 #include <osmium/memory/buffer.hpp>
-#include <osmium/util/progress_bar.hpp>
+#include <osmium/osm/object.hpp>
+#include <osmium/osm/types.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
@@ -41,6 +41,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
+    ("clean,c", po::value<std::vector<std::string>>(), "Clean attribute (version, changeset, timestamp, uid, user)")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -71,6 +72,24 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     setup_input_files(vm);
     setup_output_file(vm);
 
+    if (vm.count("clean")) {
+        for (const auto& c : vm["clean"].as<std::vector<std::string>>()) {
+            if (c == "version") {
+                m_clean_attrs |= clean_options::clean_version;
+            } else if (c == "changeset") {
+                m_clean_attrs |= clean_options::clean_changeset;
+            } else if (c == "timestamp") {
+                m_clean_attrs |= clean_options::clean_timestamp;
+            } else if (c == "uid") {
+                m_clean_attrs |= clean_options::clean_uid;
+            } else if (c == "user") {
+                m_clean_attrs |= clean_options::clean_user;
+            } else {
+                throw argument_error{"Unknown attribute on -c/--clean option: '" + c +"'"};
+            }
+        }
+    }
+
     return true;
 }
 
@@ -80,6 +99,59 @@ void CommandCat::show_arguments() {
 
     m_vout << "  other options:\n";
     show_object_types(m_vout);
+
+    std::string clean_names;
+    if (m_clean_attrs & clean_options::clean_version) {
+        clean_names += "version,";
+    }
+    if (m_clean_attrs & clean_options::clean_changeset) {
+        clean_names += "changeset,";
+    }
+    if (m_clean_attrs & clean_options::clean_timestamp) {
+        clean_names += "timestamp,";
+    }
+    if (m_clean_attrs & clean_options::clean_uid) {
+        clean_names += "uid,";
+    }
+    if (m_clean_attrs & clean_options::clean_user) {
+        clean_names += "user,";
+    }
+
+    if (clean_names.empty()) {
+        clean_names = "(none)";
+    } else {
+        clean_names.resize(clean_names.size() - 1);
+    }
+
+    m_vout << "    attributes to clean: " << clean_names << '\n';
+}
+
+void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) {
+    while (osmium::memory::Buffer buffer = reader.read()) {
+        progress_bar.update(reader.offset());
+
+        if (m_clean_attrs) {
+            for (auto& object : buffer.select<osmium::OSMObject>()) {
+                if (m_clean_attrs & clean_options::clean_version) {
+                    object.set_version(static_cast<osmium::object_version_type>(0));
+                }
+                if (m_clean_attrs & clean_options::clean_changeset) {
+                    object.set_changeset(static_cast<osmium::changeset_id_type>(0));
+                }
+                if (m_clean_attrs & clean_options::clean_timestamp) {
+                    object.set_timestamp(osmium::Timestamp{});
+                }
+                if (m_clean_attrs & clean_options::clean_uid) {
+                    object.set_uid(static_cast<osmium::user_id_type>(0));
+                }
+                if (m_clean_attrs & clean_options::clean_user) {
+                    object.clear_user();
+                }
+            }
+        }
+
+        writer(std::move(buffer));
+    }
 }
 
 bool CommandCat::run() {
@@ -91,12 +163,8 @@ bool CommandCat::run() {
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
         osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
-        while (osmium::memory::Buffer buffer = reader.read()) {
-            progress_bar.update(reader.offset());
-            writer(std::move(buffer));
-        }
+        copy(progress_bar, reader, writer);
         progress_bar.done();
-
         writer.close();
         reader.close();
     } else { // multiple input files
@@ -109,10 +177,7 @@ bool CommandCat::run() {
             progress_bar.remove();
             m_vout << "Copying input file '" << input_file.filename() << "'\n";
             osmium::io::Reader reader{input_file, osm_entity_bits()};
-            while (osmium::memory::Buffer buffer = reader.read()) {
-                progress_bar.update(reader.offset());
-                writer(std::move(buffer));
-            }
+            copy(progress_bar, reader, writer);
             progress_bar.file_done(reader.file_size());
             reader.close();
         }

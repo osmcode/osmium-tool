@@ -24,6 +24,13 @@ STDOUT.
 
 # OPTIONS
 
+-c, \--clean=ATTR
+:   Clean the attribute (*version*, *timestamp*, *changeset*, *uid*, *user*),
+    from the data before writing it out again. The attribute will be set to 0
+    (the user will be set to the empty string). This option can be given
+    multiple times. Depending on the output format these attributes might
+    show up as 0 or not show up at all.
+
 -t, \--object-type=TYPE
 :   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
     By default all types are read. This option can be given multiple times.
@@ -66,6 +73,10 @@ Concatenate all change files in the 'changes' directory into one:
 Copy nodes and ways from source to destination file:
 
     osmium cat -o dest.osm.pbf source.osm.pbf -t node -t way
+
+Remove changeset, uid, and user from a file to protect personal data:
+
+    osmium cat -c changeset -c uid -c user -o cleaned.osm.pbf data.osm.pbf
 
 
 # SEE ALSO
