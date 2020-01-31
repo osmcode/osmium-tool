@@ -121,8 +121,8 @@ Renumber a PBF file and output to a compressed XML file:
 
     osmium renumber -o ch.osm.bz2 germany.osm.pbf
 
-Renumbering the about 3 GB Germany PBF file currently (spring 2019) takes less
-than three minutes and needs about 7 GB RAM.
+Renumbering the about 3.3 GB Germany PBF file currently (February 2020) takes
+about three minutes and needs about 7 GB RAM.
 
 Renumber a PBF file starting the node IDs at 1 (and counting upwards), the
 way IDs at 100 and the relation IDs at -200 (and counting downwards.
