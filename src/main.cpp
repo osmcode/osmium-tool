@@ -3,7 +3,7 @@
 Osmium -- OpenStreetMap data manipulation command line tool
 https://osmcode.org/osmium-tool/
 
-Copyright (C) 2013-2019  Jochen Topf <jochen@topf.org>
+Copyright (C) 2013-2020  Jochen Topf <jochen@topf.org>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     if (command == "version") {
         std::cout << get_osmium_long_version() << '\n'
                   << get_libosmium_version() << '\n'
-                  << "Copyright (C) 2013-2019  Jochen Topf <jochen@topf.org>\n"
+                  << "Copyright (C) 2013-2020  Jochen Topf <jochen@topf.org>\n"
                   << "License: GNU GENERAL PUBLIC LICENSE Version 3 <https://gnu.org/licenses/gpl.html>.\n"
                   << "This is free software: you are free to change and redistribute it.\n"
                   << "There is NO WARRANTY, to the extent permitted by law.\n";
