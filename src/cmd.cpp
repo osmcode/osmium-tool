@@ -23,7 +23,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cmd.hpp"
 #include "exception.hpp"
 
+#include <osmium/index/map.hpp>
 #include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/types.hpp>
 #include <osmium/util/memory.hpp>
 #include <osmium/util/verbose_output.hpp>
 
@@ -150,3 +152,17 @@ void Command::show_memory_used() {
     }
 }
 
+std::string check_index_type(const std::string& index_type_name) {
+    std::string type{index_type_name};
+    const auto pos = type.find(',');
+    if (pos != std::string::npos) {
+        type.resize(pos);
+    }
+
+    const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
+    if (!map_factory.has_map_type(type)) {
+        throw argument_error{"Unknown index type '" + index_type_name + "'. Use --show-index-types or -I to get a list."};
+    }
+
+    return index_type_name;
+}

@@ -47,7 +47,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments) {
-    const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
     std::string default_index_type{"flex_mem"};
 
     po::options_description opts_cmd{"COMMAND OPTIONS"};
@@ -81,6 +80,7 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     po::notify(vm);
 
     if (vm.count("show-index-types")) {
+        const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
         for (const auto& map_type : map_factory.map_types()) {
             std::cout << map_type << '\n';
         }
@@ -88,15 +88,7 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     }
 
     if (vm.count("index-type")) {
-        m_index_type_name = vm["index-type"].as<std::string>();
-        std::string type{m_index_type_name};
-        const auto pos = type.find(',');
-        if (pos != std::string::npos) {
-            type.resize(pos);
-        }
-        if (!map_factory.has_map_type(type)) {
-            throw argument_error{std::string{"Unknown index type '"} + m_index_type_name + "'. Use --show-index-types or -I to get a list."};
-        }
+        m_index_type_name = check_index_type(vm["index-type"].as<std::string>());
     }
 
     setup_common(vm, desc);

@@ -252,5 +252,6 @@ public:
 }; // class CommandFactory
 
 void register_commands(CommandFactory& cmd_factory);
+std::string check_index_type(const std::string& index_type_name);
 
 #endif // CMD_HPP
