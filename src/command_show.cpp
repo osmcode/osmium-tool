@@ -204,10 +204,10 @@ bool CommandShow::run() {
 #ifndef _MSC_VER
         const int fd = execute_pager(m_pager, m_color_output);
 
-        ::close(1); // close stdout
         if (::dup2(fd, 1) < 0) { // put end of pipe as stdout
             throw std::system_error{errno, std::system_category(), "Could not run pager: dup2() call failed"};
         }
+        ::close(fd);
 
         osmium::io::File file{"-", m_output_format};
         osmium::io::Writer writer{file, header};
@@ -221,8 +221,8 @@ bool CommandShow::run() {
             }
         }
 
-        close(fd);
         writer.close();
+        ::close(1); // close stdout to signal EOF to pager
 
         int status = 0;
         const int pid = ::wait(&status);
