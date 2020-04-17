@@ -8,10 +8,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+* New `osmium tags-count` command.
+* New `--clean` option to `osmium cat` command to clean attributes.
+
 ### Changed
 
 ### Fixed
 
+* Allow index types with file name in export command.
 
 ## [1.11.1] - 2019-11-20
 
