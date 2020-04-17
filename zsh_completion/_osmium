@@ -112,6 +112,8 @@ _osmium-cat() {
         ${(f)"$(_osmium-output-options)"} \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
         '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
+        '*-c[clean attributes]:attribute type:_osmium_attr_type'\
+        '*--clean[clean attributes]:attribute type:_osmium_attr_type'\
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]'
 }
@@ -449,6 +451,15 @@ _osmium_entity_type() {
         'way' \
         'relation' \
         'changeset'
+}
+
+_osmium_attr_type() {
+    _values 'attribute type' \
+        'version' \
+        'timestamp' \
+        'changeset' \
+        'uid' \
+        'user'
 }
 
 _export_file_formats() {
