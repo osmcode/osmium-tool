@@ -19,6 +19,7 @@ set(OSMIUM_INSTALL_FILES
     share/man/man1/osmium-renumber.1
     share/man/man1/osmium-show.1
     share/man/man1/osmium-sort.1
+    share/man/man1/osmium-tags-count.1
     share/man/man1/osmium-tags-filter.1
     share/man/man1/osmium-time-filter.1
     share/man/man1/osmium.1
