@@ -8,10 +8,16 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.12.0] - 2020-04-21
+
+### Added
+
 * New `osmium tags-count` command.
 * New `--clean` option to `osmium cat` command to clean attributes.
-
-### Changed
 
 ### Fixed
 
@@ -545,7 +551,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.11.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/osmcode/osmium-tool/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/osmcode/osmium-tool/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/osmcode/osmium-tool/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/osmcode/osmium-tool/compare/v1.9.1...v1.10.0
