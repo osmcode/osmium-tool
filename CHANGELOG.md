@@ -10,10 +10,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+### Fixed
+
+## [1.12.1] - 2020-06-27
+
+### Changed
+
 * Require libosmium 2.15.6 which has an important fix related
   to multipolygons assembly (needed for "osmium export").
 
-### Fixed
 
 ## [1.12.0] - 2020-04-21
 
