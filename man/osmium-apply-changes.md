@@ -16,8 +16,13 @@ Merges the content of all OSM change files and applies those changes to the OSM
 data or history file.
 
 Objects in the data or history file must be sorted by type, ID, and version.
+
 Objects in change files need not be sorted, so it doesn't matter in what order
-the change files are given or in what order they contain the data.
+the change files are given or in what order they contain the data. (If you are
+using change files of extracts this is not necessarily true and you must
+specify the change files on the command line in the correct order from oldest
+to newest. This is because change files from extracts can contain multiple
+different object versions with the same version and timestamp!)
 
 Changes can be applied to normal OSM data files or OSM history files with this
 command. File formats will be autodetected from the file name suffixes, see

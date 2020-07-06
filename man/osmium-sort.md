@@ -23,7 +23,8 @@ way -1, way -2, ..., way 1, way 2, ...,
 relation -1, relation -2, ..., relation 1, relation 2, ...
 
 If there are several objects of the same type and with the same ID they are
-ordered by ascending version.
+ordered by ascending version. If there are several objects of the same type and
+with the same ID and version the sort order is unspecified.
 
 This command works with normal OSM data files, history files, and change files.
 

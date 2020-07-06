@@ -12,9 +12,14 @@ osmium-merge-changes - merge several OSM change files into one
 # DESCRIPTION
 
 Merges the content of all change files given on the command line into one large
-change file. Objects are sorted by type, ID, version, and timestamp so it
-doesn't matter in what order the change files are given or in what order they
-contain the data.
+change file.
+
+Objects are sorted by type, ID, version, and timestamp so it doesn't matter in
+what order the change files are given or in what order they contain the data.
+(If you are using change files of extracts this is not necessarily true and you
+must specify the change files on the command line in the correct order from
+oldest to newest. This is because change files from extracts can contain
+multiple different object versions with the same version and timestamp!)
 
 This commands reads its input file(s) only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
