@@ -59,6 +59,13 @@ This commands reads its input file only once, ie. it can read from STDIN.
 
 # OPTIONS
 
+-c, \--crc
+:   Calculate the CRC32. This is the default if you use the JSON output format.
+
+\--no-crc
+:   Do not calculate the CRC32. This is the default unless you use the JSON
+    output format.
+
 -e, \--extended
 :   Read the complete file and show additional information. The default
     is to read only the header of the file.
