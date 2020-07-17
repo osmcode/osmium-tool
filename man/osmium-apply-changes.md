@@ -6,7 +6,7 @@ osmium-apply-changes - apply OSM change file(s) to OSM data file
 
 # SYNOPSIS
 
-**osmium apply-changes** \[*OPTIONS*\] *OSM-DATA-FILE* *OSM-CHANGE-FILE*...
+**osmium apply-changes** \[*OPTIONS*\] *OSM-DATA-FILE* *OSM-CHANGE-FILE*...\
 **osmium apply-changes** \[*OPTIONS*\] *OSM-HISTORY-FILE* *OSM-CHANGE-FILE*...
 
 

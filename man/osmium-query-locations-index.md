@@ -6,7 +6,7 @@ osmium-query-locations-index - query node locations index
 
 # SYNOPSIS
 
-**osmium query-locations-index** -i INDEX-FILE \[*OPTIONS*\] *NODE-ID*
+**osmium query-locations-index** -i INDEX-FILE \[*OPTIONS*\] *NODE-ID*\
 **osmium query-locations-index** -i INDEX-FILE \[*OPTIONS*\] \--dump
 
 
