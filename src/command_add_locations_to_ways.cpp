@@ -51,7 +51,8 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
 
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
-    ("index-type,i", po::value<std::string>()->default_value(default_index_type), "Index type to use")
+    ("index-type,i", po::value<std::string>()->default_value(default_index_type), "Index type for positive IDs")
+    ("index-type-neg", po::value<std::string>()->default_value(default_index_type), "Index type for negative IDs")
     ("show-index-types,I", "Show available index types")
     ("keep-untagged-nodes,n", "Keep untagged nodes")
     ("ignore-missing-nodes", "Ignore missing nodes")
@@ -88,7 +89,11 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     }
 
     if (vm.count("index-type")) {
-        m_index_type_name = check_index_type(vm["index-type"].as<std::string>());
+        m_index_type_name_pos = check_index_type(vm["index-type"].as<std::string>());
+    }
+
+    if (vm.count("index-type-neg")) {
+        m_index_type_name_neg = check_index_type(vm["index-type-neg"].as<std::string>());
     }
 
     setup_common(vm, desc);
@@ -112,7 +117,8 @@ void CommandAddLocationsToWays::show_arguments() {
     show_output_arguments(m_vout);
 
     m_vout << "  other options:\n";
-    m_vout << "    index type: " << m_index_type_name << '\n';
+    m_vout << "    index type (for positive ids): " << m_index_type_name_pos << '\n';
+    m_vout << "    index type (for negative ids): " << m_index_type_name_neg << '\n';
     m_vout << "    keep untagged nodes: " << yes_no(m_keep_untagged_nodes);
     m_vout << '\n';
 }
@@ -136,8 +142,9 @@ void CommandAddLocationsToWays::copy_data(osmium::ProgressBar& progress_bar, osm
 
 bool CommandAddLocationsToWays::run() {
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
-    auto location_index = map_factory.create_map(m_index_type_name);
-    location_handler_type location_handler{*location_index};
+    auto location_index_pos = map_factory.create_map(m_index_type_name_pos);
+    auto location_index_neg = map_factory.create_map(m_index_type_name_neg);
+    location_handler_type location_handler{*location_index_pos, *location_index_neg};
 
     if (m_ignore_missing_nodes) {
         location_handler.ignore_errors();
@@ -178,7 +185,8 @@ bool CommandAddLocationsToWays::run() {
         writer.close();
     }
 
-    m_vout << "About " << (location_index->used_memory() / (1024 * 1024)) << " MBytes used for node location index (in main memory or on disk).\n";
+    const auto mem = location_index_pos->used_memory() + location_index_neg->used_memory();
+    m_vout << "About " << (mem / (1024 * 1024)) << " MBytes used for node location index (in main memory or on disk).\n";
     show_memory_used();
     m_vout << "Done.\n";
 

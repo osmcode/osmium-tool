@@ -79,8 +79,9 @@ _osmium-add-locations-to-ways() {
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
-        '(--index-type -I --show-index-types)-i[set index type]:index types:_osmium_index_types' \
-        '(-i -I --show-index-types)--index-type[set index type]:index types:_osmium_index_types' \
+        '(--index-type -I --show-index-types)-i[index type for positive IDs]:index types:_osmium_index_types' \
+        '(-i -I --show-index-types)--index-type[index type for positive IDs]:index types:_osmium_index_types' \
+        '(-I --show-index-types)--index-type-neg[index type for negative IDs]:index types:_osmium_index_types' \
         '(--show-index-types -i --index-type -n --keep-untagged-nodes)-I[show available index types]' \
         '(-I -i --index-type -n --keep-untagged-nodes)--show-index-types[show available index types]' \
         '(--keep-untagged-nodes -I --show-index-types)-n[keep untagged nodes in output]' \

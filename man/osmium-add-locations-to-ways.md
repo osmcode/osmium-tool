@@ -41,6 +41,10 @@ command can be updated with the **apply-changes** command using the
 
 This command will not work on full history files.
 
+The command will work with negative IDs. The index types for positive IDs
+and negative IDs are set separately with the **\--index-type/-i** and
+**\--index-type-neg** options, respectively.
+
 This commands reads its input file(s) only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
 STDOUT.
@@ -49,8 +53,12 @@ STDOUT.
 # OPTIONS
 
 -i, \--index-type=TYPE
-:   Set the index type. For details see the **osmium-index-types**(5) man
-    page.
+:   Set the index type for positive IDs. For details see the
+    **osmium-index-types**(5) man page.
+
+\--index-type-neg=TYPE
+:   Set the index type for negative IDs. For details see the
+    **osmium-index-types**(5) man page.
 
 -I, \--show-index-types
 :   Shows a list of available index types. For details see the
