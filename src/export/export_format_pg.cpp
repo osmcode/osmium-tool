@@ -318,7 +318,7 @@ void ExportFormatPg::debug_output(osmium::VerboseOutput& out, const std::string&
     }
 
     if (!options().user.empty()) {
-        out << "    user      TEXT,\n";
+        out << "    \"user\"      TEXT,\n";
     }
 
     if (!options().timestamp.empty()) {
