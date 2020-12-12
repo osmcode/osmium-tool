@@ -227,7 +227,7 @@ static void print_missing_ids(const char* type, const osmium::index::IdSetDense<
         return;
     }
     std::cerr << "Missing " << type << " IDs:";
-    for (const auto& id : set) {
+    for (const auto id : set) {
         std::cerr << ' ' << id;
     }
     std::cerr << '\n';
