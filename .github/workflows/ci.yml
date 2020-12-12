@@ -1,0 +1,204 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  ubuntu16-clang6-dev:
+    runs-on: ubuntu-16.04
+    env:
+      CC: clang-6.0
+      CXX: clang++-6.0
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu16-clang8-dev:
+    runs-on: ubuntu-16.04
+    env:
+      CC: clang-8
+      CXX: clang++-8
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu16-clang9-dev:
+    runs-on: ubuntu-16.04
+    env:
+      CC: clang-9
+      CXX: clang++-9
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu18-clang9-dev:
+    runs-on: ubuntu-18.04
+    env:
+      CC: clang-9
+      CXX: clang++-9
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu20-clang10-dev:
+    runs-on: ubuntu-20.04
+    env:
+      CC: clang-10
+      CXX: clang++-10
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+#  Disabled, because it is triggered by several issues in the rapidjson library
+#  ubuntu20-clang10-debug-san:
+#    runs-on: ubuntu-20.04
+#    env:
+#      CC: clang-10
+#      CXX: clang++-10
+#      BUILD_TYPE: Debug
+#      CXXFLAGS: -fsanitize=address,undefined,integer -fno-sanitize-recover=all -fno-omit-frame-pointer
+#      LDFLAGS: -fsanitize=address,undefined,integer
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          submodules: true
+#      - uses: ./.github/actions/install-ubuntu
+#      - uses: ./.github/actions/build
+#      - uses: ./.github/actions/ctest
+
+  ubuntu20-clang10-release:
+    runs-on: ubuntu-20.04
+    env:
+      CC: clang-10
+      CXX: clang++-10
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu16-gcc5-dev:
+    runs-on: ubuntu-16.04
+    env:
+      CC: gcc-5
+      CXX: g++-5
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu18-gcc7-dev:
+    runs-on: ubuntu-18.04
+    env:
+      CC: gcc-7
+      CXX: g++-7
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu20-gcc9-dev:
+    runs-on: ubuntu-20.04
+    env:
+      CC: gcc-9
+      CXX: g++-9
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  ubuntu20-gcc10-release:
+    runs-on: ubuntu-20.04
+    env:
+      CC: gcc-10
+      CXX: g++-10
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  macos10-dev:
+    runs-on: macos-10.15
+    env:
+      CC: clang
+      CXX: clang++
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-macos
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  macos11-dev:
+    runs-on: macos-11.0
+    env:
+      CC: clang
+      CXX: clang++
+      BUILD_TYPE: Dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-macos
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+
+  macos11-release:
+    runs-on: macos-11.0
+    env:
+      CC: clang
+      CXX: clang++
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: ./.github/actions/install-macos
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
+

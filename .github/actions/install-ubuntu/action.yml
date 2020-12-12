@@ -1,0 +1,20 @@
+name: Install Prerequisites on Ubuntu
+
+runs:
+  using: composite
+
+  steps:
+    - name: Install packages
+      run: |
+        sudo apt-get update -q
+        sudo apt-get install -yq \
+            libboost-all-dev \
+            libboost-program-options-dev \
+            pandoc
+      shell: bash
+    - name: Install from git
+      run: |
+        git clone --quiet --depth 1 https://github.com/osmcode/libosmium.git ../libosmium
+        git clone --quiet --depth 1 https://github.com/mapbox/protozero.git ../protozero
+      shell: bash
+

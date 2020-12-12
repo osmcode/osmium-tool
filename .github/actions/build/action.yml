@@ -1,0 +1,21 @@
+name: Build
+
+runs:
+    using: composite
+
+    steps:
+      - name: Create build directory
+        run: mkdir build
+        shell: bash
+
+      - name: Configure
+        run: |
+          cmake -LA .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+        shell: bash
+        working-directory: build
+
+      - name: Build
+        run: make VERBOSE=1
+        shell: bash
+        working-directory: build
+
