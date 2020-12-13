@@ -11,8 +11,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -25,8 +23,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -39,8 +35,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -53,8 +47,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -67,8 +59,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -84,8 +74,6 @@ jobs:
 #      LDFLAGS: -fsanitize=address,undefined,integer
 #    steps:
 #      - uses: actions/checkout@v2
-#        with:
-#          submodules: true
 #      - uses: ./.github/actions/install-ubuntu
 #      - uses: ./.github/actions/build
 #      - uses: ./.github/actions/ctest
@@ -98,8 +86,6 @@ jobs:
       BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -112,8 +98,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -126,8 +110,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -140,8 +122,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -154,8 +134,6 @@ jobs:
       BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -168,8 +146,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-macos
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -182,8 +158,6 @@ jobs:
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-macos
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
@@ -196,8 +170,6 @@ jobs:
       BUILD_TYPE: Release
     steps:
       - uses: actions/checkout@v2
-        with:
-          submodules: true
       - uses: ./.github/actions/install-macos
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
