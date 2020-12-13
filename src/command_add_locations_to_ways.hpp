@@ -44,7 +44,7 @@ class CommandAddLocationsToWays : public Command, public with_multiple_osm_input
     bool m_keep_untagged_nodes = false;
     bool m_ignore_missing_nodes = false;
 
-    void copy_data(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler);
+    void copy_data(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler) const;
 
 public:
 

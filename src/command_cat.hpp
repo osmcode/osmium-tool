@@ -44,7 +44,7 @@ class CommandCat : public Command, public with_multiple_osm_inputs, public with_
 
     uint8_t m_clean_attrs = 0;
 
-    void copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer);
+    void copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const;
 
 public:
 

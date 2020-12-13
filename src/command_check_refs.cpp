@@ -131,31 +131,31 @@ public:
         m_check_relations(check_relations) {
     }
 
-    uint64_t node_count() const {
+    uint64_t node_count() const noexcept {
         return m_node_count;
     }
 
-    uint64_t way_count() const {
+    uint64_t way_count() const noexcept {
         return m_way_count;
     }
 
-    uint64_t relation_count() const {
+    uint64_t relation_count() const noexcept {
         return m_relation_count;
     }
 
-    uint64_t missing_nodes_in_ways() const {
+    uint64_t missing_nodes_in_ways() const noexcept {
         return m_missing_nodes_in_ways;
     }
 
-    uint64_t missing_nodes_in_relations() const {
+    uint64_t missing_nodes_in_relations() const noexcept {
         return m_missing_nodes_in_relations;
     }
 
-    uint64_t missing_ways_in_relations() const {
+    uint64_t missing_ways_in_relations() const noexcept {
         return m_missing_ways_in_relations;
     }
 
-    uint64_t missing_relations_in_relations() const {
+    uint64_t missing_relations_in_relations() const noexcept {
         return m_relation_refs.size();
     }
 
@@ -170,7 +170,7 @@ public:
         );
     }
 
-    bool no_errors() {
+    bool no_errors() const noexcept {
         return missing_nodes_in_ways()          == 0 &&
                missing_nodes_in_relations()     == 0 &&
                missing_ways_in_relations()      == 0 &&

@@ -126,7 +126,7 @@ void CommandCat::show_arguments() {
     m_vout << "    attributes to clean: " << clean_names << '\n';
 }
 
-void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) {
+void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const {
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
 

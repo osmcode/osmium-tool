@@ -56,7 +56,7 @@ ExportFormatSpaten::ExportFormatSpaten(const std::string& /*output_format*/,
     m_buffer.reserve(initial_buffer_size);
 }
 
-void ExportFormatSpaten::write_file_header() {
+void ExportFormatSpaten::write_file_header() const {
     std::string fh{"SPAT"};
     fh.append(std::begin(version), std::end(version));
     osmium::io::detail::reliable_write(m_fd, fh.data(), fh.size());

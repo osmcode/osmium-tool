@@ -519,7 +519,7 @@ void CommandExport::show_arguments() {
     m_vout << "    user:      " << (m_options.user.empty()      ? "(omitted)" : m_options.user)      << '\n';
     m_vout << "    way_nodes: " << (m_options.way_nodes.empty() ? "(omitted)" : m_options.way_nodes) << '\n';
 
-    if (m_options.format_options.size() > 0) {
+    if (!m_options.format_options.empty()) {
         m_vout << "  output format options:\n";
         for (const auto& option : m_options.format_options) {
             m_vout << "    " << option.first << " = " << option.second << '\n';

@@ -33,7 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <functional>
 
 void CommandTagsCount::add_matcher(const std::string& expression) {
-    bool has_value_matcher;
+    bool has_value_matcher = false;
     auto matcher = get_tag_matcher(expression, &has_value_matcher);
     if (has_value_matcher) {
         m_tags_filter.add_rule(true, std::move(matcher));

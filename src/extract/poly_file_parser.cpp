@@ -88,8 +88,8 @@ void PolyFileParser::parse_ring() {
         }
 
         std::istringstream sstr{line()};
-        double lon;
-        double lat;
+        double lon = NAN;
+        double lat = NAN;
         if (!(sstr >> lon >> lat)) {
             error("Expected coordinates or 'END' to end the ring.");
         }
