@@ -14,22 +14,11 @@ void add_nodes(const osmium::Way& way, ids_type& ids) {
     }
 }
 
-static void add_members(const osmium::Relation& relation, ids_type& ids) {
-    for (const auto& member : relation.members()) {
-        ids(member.type()).set(member.positive_ref());
-    }
-}
-
 void read_id_osm_file(const std::string& file_name, ids_type& ids) {
     osmium::io::Reader reader{file_name, osmium::osm_entity_bits::object};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& object : buffer.select<osmium::OSMObject>()) {
             ids(object.type()).set(object.positive_id());
-            if (object.type() == osmium::item_type::way) {
-                add_nodes(static_cast<const osmium::Way&>(object), ids);
-            } else if (object.type() == osmium::item_type::relation) {
-                add_members(static_cast<const osmium::Relation&>(object), ids);
-            }
         }
     }
     reader.close();
