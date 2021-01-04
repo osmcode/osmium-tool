@@ -34,6 +34,7 @@
 #      gdal       - include if you want to use any of the OGR functions
 #      proj       - include if you want to use any of the Proj.4 functions
 #      sparsehash - include if you use the sparsehash index
+#      lz4        - include support for LZ4 compression of PBF files
 #
 #    You can check for success with something like this:
 #
@@ -116,14 +117,22 @@ if(Osmium_USE_PBF)
     find_package(Threads)
     find_package(Protozero 1.6.3)
 
+    if(Osmium_USE_LZ4)
+        find_path(LZ4_INCLUDE_DIR NAMES lz4.h REQUIRED)
+        find_library(LZ4_LIBRARY NAMES lz4 REQUIRED)
+        add_definitions(-DOSMIUM_WITH_LZ4)
+    endif()
+
     list(APPEND OSMIUM_EXTRA_FIND_VARS ZLIB_FOUND Threads_FOUND PROTOZERO_INCLUDE_DIR)
     if(ZLIB_FOUND AND Threads_FOUND AND PROTOZERO_FOUND)
         list(APPEND OSMIUM_PBF_LIBRARIES
             ${ZLIB_LIBRARIES}
+            ${LZ4_LIBRARY}
             ${CMAKE_THREAD_LIBS_INIT}
         )
         list(APPEND OSMIUM_INCLUDE_DIRS
             ${ZLIB_INCLUDE_DIR}
+            ${LZ4_INCLUDE_DIR}
             ${PROTOZERO_INCLUDE_DIR}
         )
     else()
