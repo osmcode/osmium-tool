@@ -155,17 +155,21 @@ void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& rea
 }
 
 bool CommandCat::run() {
+    std::size_t file_size = 0;
+
     if (m_input_files.size() == 1) { // single input file
-        m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";
         osmium::io::Reader reader{m_input_files[0], osm_entity_bits()};
         osmium::io::Header header{reader.header()};
+        m_vout << "Copying input file '" << m_input_files[0].filename()
+               << "' (" << reader.file_size() << " bytes)\n";
+
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
         osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
         copy(progress_bar, reader, writer);
         progress_bar.done();
-        writer.close();
+        file_size = writer.close();
         reader.close();
     } else { // multiple input files
         osmium::io::Header header;
@@ -175,14 +179,19 @@ bool CommandCat::run() {
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {
             progress_bar.remove();
-            m_vout << "Copying input file '" << input_file.filename() << "'\n";
             osmium::io::Reader reader{input_file, osm_entity_bits()};
+            m_vout << "Copying input file '" << input_file.filename()
+                   << "' (" << reader.file_size() << " bytes)\n";
             copy(progress_bar, reader, writer);
             progress_bar.file_done(reader.file_size());
             reader.close();
         }
-        writer.close();
+        file_size = writer.close();
         progress_bar.done();
+    }
+
+    if (file_size > 0) {
+        m_vout << "Wrote " << file_size << " bytes.\n";
     }
 
     show_memory_used();
