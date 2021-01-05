@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/geom/factory.hpp>
 #include <osmium/handler/check_order.hpp>
+#include <osmium/io/pbf.hpp>
 #include <osmium/osm/location.hpp>
 
 #include <boost/program_options/errors.hpp>
@@ -89,7 +90,13 @@ int main(int argc, char *argv[]) {
     if (command == "version") {
         std::cout << get_osmium_long_version() << '\n'
                   << get_libosmium_version() << '\n'
-                  << "Copyright (C) 2013-2021  Jochen Topf <jochen@topf.org>\n"
+                  << "Supported PBF compression types:";
+
+        for (const auto& type : osmium::io::supported_pbf_compression_types()) {
+            std::cout << " " << type;
+        }
+
+        std::cout << "\n\nCopyright (C) 2013-2021  Jochen Topf <jochen@topf.org>\n"
                   << "License: GNU GENERAL PUBLIC LICENSE Version 3 <https://gnu.org/licenses/gpl.html>.\n"
                   << "This is free software: you are free to change and redistribute it.\n"
                   << "There is NO WARRANTY, to the extent permitted by law.\n";
