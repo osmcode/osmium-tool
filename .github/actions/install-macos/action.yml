@@ -6,7 +6,7 @@ runs:
   steps:
     - name: Install homebrew packages
       run: |
-        brew install boost
+        brew install boost lz4
       shell: bash
     - name: Install from git
       run: |

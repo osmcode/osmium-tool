@@ -10,6 +10,7 @@ runs:
         sudo apt-get install -yq \
             libboost-all-dev \
             libboost-program-options-dev \
+            liblz4-dev
             pandoc
       shell: bash
     - name: Install from git
