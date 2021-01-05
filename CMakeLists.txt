@@ -44,8 +44,20 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Boost 1.55.0 REQUIRED COMPONENTS program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-find_package(Osmium 2.15.6 REQUIRED COMPONENTS io lz4)
+find_package(Osmium 2.15.6 REQUIRED COMPONENTS io)
 include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
+
+find_path(LZ4_INCLUDE_DIR NAMES lz4.h)
+find_library(LZ4_LIBRARY NAMES lz4)
+
+if(LZ4_INCLUDE_DIR AND LZ4_LIBRARY)
+    message(STATUS "lz4 library found, compiling with it")
+    add_definitions(-DOSMIUM_WITH_LZ4)
+    include_directories(SYSTEM ${LZ4_INCLUDE_DIR})
+    list(APPEND OSMIUM_PBF_LIBRARIES ${LZ4_LIBRARY})
+else()
+    message(WARNING "lz4 library not found, compiling without it")
+endif()
 
 
 #-----------------------------------------------------------------------------
