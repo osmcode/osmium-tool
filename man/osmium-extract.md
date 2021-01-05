@@ -125,9 +125,12 @@ a region defined in a "bbox", "polygon" or "multipolygon" name. An optional
 "description" can be added, it will not be used by the program but can help
 with documenting the file contents. You can add an optional "output_format"
 if the format can not be detected from the "output" file name. Run "osmium
-help file-formats" to get a description of allowed formats. The optional
-"output_header" allows you to set additional OSM file header settings such
-as the "generator".
+help file-formats" to get a description of allowed formats.
+
+The optional "output_header" allows you to set additional OSM file header
+settings such as the "generator". If you set the value of a file header setting
+to `null`, the output header will be set to the same header from the input
+file.
 
     "extracts": [
         {
@@ -144,7 +147,8 @@ as the "generator".
         {
             "output": "munich.osm.pbf",
             "output_header": {
-                "generator": "MyExtractor/1.0"
+                "generator": "MyExtractor/1.0",
+                "osmosis_replication_timestamp": null
             },
             "description": "optional description",
             "multipolygon": ...

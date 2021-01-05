@@ -212,9 +212,8 @@ void with_osm_output::setup_header(osmium::io::Header& header) const {
     }
 }
 
-void with_osm_output::setup_header(osmium::io::Header& header, const osmium::io::Header& input_header) const {
-    header.set("generator", m_generator);
-    for (const auto& h : m_output_headers) {
+void init_header(osmium::io::Header& header, const osmium::io::Header& input_header, const std::vector<std::string>& options) {
+    for (const auto& h : options) {
         if (!h.empty() && h.back() == '!') {
             std::string hc{h};
             hc.resize(h.size() - 1);
@@ -223,5 +222,10 @@ void with_osm_output::setup_header(osmium::io::Header& header, const osmium::io:
             header.set(h);
         }
     }
+}
+
+void with_osm_output::setup_header(osmium::io::Header& header, const osmium::io::Header& input_header) const {
+    header.set("generator", m_generator);
+    init_header(header, input_header, m_output_headers);
 }
 

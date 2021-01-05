@@ -175,6 +175,8 @@ public:
 
 }; // class with_multiple_osm_inputs
 
+void init_header(osmium::io::Header& header, const osmium::io::Header& input_header, const std::vector<std::string>& options);
+
 class with_osm_output {
 
 protected:

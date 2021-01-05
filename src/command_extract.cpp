@@ -358,10 +358,14 @@ void CommandExtract::parse_config_file() {
                 }
                 for (auto it = value.MemberBegin(); it != value.MemberEnd(); ++it) {
                     const auto& member_value = it->value;
-                    if (!member_value.IsString()) {
-                        throw config_error{"Values in 'output_header' object must be strings."};
+                    if (member_value.IsNull()) {
+                        extract.add_header_option(it->name.GetString());
+                    } else {
+                        if (!member_value.IsString()) {
+                            throw config_error{"Values in 'output_header' object must be strings or null."};
+                        }
+                        extract.add_header_option(it->name.GetString(), member_value.GetString());
                     }
-                    extract.add_header_option(it->name.GetString(), member_value.GetString());
                 }
             }
         } catch (const config_error& e) {
@@ -551,7 +555,7 @@ void CommandExtract::show_extracts() {
                 } else {
                     m_vout << "                  ";
                 }
-                m_vout << opt.first << ": " << opt.second << '\n';
+                m_vout << opt << '\n';
             }
         }
         m_vout << "     Envelope:    " << e->envelope_as_text() << '\n';
@@ -584,11 +588,12 @@ bool CommandExtract::run() {
     m_strategy->show_arguments(m_vout);
 
     osmium::io::Header header;
+    osmium::io::Header input_header;
     if (m_input_file.filename().empty()) {
         setup_header(header);
     } else {
         osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::nothing};
-        osmium::io::Header input_header{reader.header()};
+        input_header = reader.header();
         setup_header(header, input_header);
         reader.close();
     }
@@ -602,9 +607,7 @@ bool CommandExtract::run() {
         if (m_set_bounds) {
             file_header.add_box(extract->envelope());
         }
-        for (const auto& p : extract->header_options()) {
-            file_header.set(p.first, p.second);
-        }
+        init_header(file_header, input_header, extract->header_options());
         extract->open_file(file_header, m_output_overwrite, m_fsync);
     }
 
