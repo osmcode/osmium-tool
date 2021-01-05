@@ -154,6 +154,7 @@ void CommandTagsFilter::show_arguments() {
 
     m_vout << "  other options:\n";
     m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
+    m_vout << "    invert match: " << yes_no(m_invert_match);
     if (m_add_referenced_objects) {
         m_vout << "    remove tags on non-matching objects: " << yes_no(m_remove_tags);
     }
