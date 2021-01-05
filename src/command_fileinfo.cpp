@@ -292,9 +292,6 @@ public:
         std::cout << "  Largest way ID: "       << get_largest(info_handler.largest_way_id())       << "\n";
         std::cout << "  Largest relation ID: "  << get_largest(info_handler.largest_relation_id())  << "\n";
 
-        std::cout << "  All objects have following metadata attributes: " << info_handler.metadata_all_objects  << "\n";
-        std::cout << "  Some objects have following metadata attributes: " << info_handler.metadata_some_objects  << "\n";
-
         const auto num_objects = info_handler.changesets + info_handler.nodes + info_handler.ways + info_handler.relations;
         std::cout << "  Number of buffers: " << info_handler.buffers_count;
         if (num_objects != 0) {
@@ -314,6 +311,10 @@ public:
         } else {
             std::cout << "  Sum of buffer capacities: 0 (0 GB)\n";
         }
+
+        std::cout << "Metadata:\n";
+        std::cout << "  All objects have following metadata attributes: " << info_handler.metadata_all_objects  << "\n";
+        std::cout << "  Some objects have following metadata attributes: " << info_handler.metadata_some_objects  << "\n";
     }
 
 }; // class HumanReadableOutput

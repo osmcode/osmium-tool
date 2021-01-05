@@ -30,8 +30,9 @@ Data:
   Largest node ID: 4
   Largest way ID: -3
   Largest relation ID: 0
-  All objects have following metadata attributes: all
-  Some objects have following metadata attributes: all
   Number of buffers: 1 (avg 5 objects per buffer)
   Sum of buffer sizes: 224 (0 GB)
   Sum of buffer capacities: 1048576 (0.001 GB, 0% full)
+Metadata:
+  All objects have following metadata attributes: all
+  Some objects have following metadata attributes: all
