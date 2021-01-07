@@ -1,10 +1,16 @@
 ---
-Checks: '*,-android-cloexec-*,-bugprone-branch-clone,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-non-private-member-variables-in-classes,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-misc-non-private-member-variables-in-classes,-modernize-avoid-c-arrays,-modernize-make-unique,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-implicit-bool-cast,-readability-implicit-bool-conversion,-readability-magic-numbers'
+Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-non-private-member-variables-in-classes,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-llvmlibc-*,-misc-no-recursion,-misc-non-private-member-variables-in-classes,-modernize-avoid-c-arrays,-modernize-make-unique,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-implicit-bool-cast,-readability-implicit-bool-conversion,-readability-magic-numbers'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
 #
 #  Disabled checks:
+#
+#  abseil-*
+#    We are not using abseil.
+#
+#  altera-*
+#    Doesn't apply.
 #
 #  android-cloexec-*
 #    O_CLOEXEC isn't available on Windows making this non-portable.
@@ -61,6 +67,12 @@ Checks: '*,-android-cloexec-*,-bugprone-branch-clone,-bugprone-use-after-move,-c
 #
 #  hicpp-vararg
 #    Too strict, sometimes calling vararg functions is necessary.
+#
+#  llvmlibc-*
+#    Not applicable.
+#
+#  misc-no-recursion
+#    Nothing wrong about recursion.
 #
 #  misc-non-private-member-variables-in-classes
 #    Reports this also for structs, which doesn't make any sense. There is
