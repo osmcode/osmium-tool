@@ -28,7 +28,7 @@ static const char flags[2] = {};
 static const char compression = '\0';
 static const char message_type = '\0';
 
-static const char* unique_id_field = "@fid";
+static const char* const unique_id_field = "@fid";
 
 static std::string uint64_buf(uint64_t v)  {
     std::string buf(8, '\0');
