@@ -34,6 +34,8 @@ set(AUTHOR "Jochen Topf <jochen@topf.org>")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+option(WITH_LZ4 "Build with lz4 support for PBF files" ON)
+
 
 #-----------------------------------------------------------------------------
 #
@@ -44,18 +46,23 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Boost 1.55.0 REQUIRED COMPONENTS program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-find_package(Osmium 2.15.6 REQUIRED COMPONENTS io)
+find_package(Osmium 2.16.0 REQUIRED COMPONENTS io)
 include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
 
+
+if(WITH_LZ4)
 find_package(LZ4)
 
-if(LZ4_FOUND)
-    message(STATUS "lz4 library found, compiling with it")
-    add_definitions(-DOSMIUM_WITH_LZ4)
-    include_directories(SYSTEM ${LZ4_INCLUDE_DIRS})
-    list(APPEND OSMIUM_LIBRARIES ${LZ4_LIBRARIES})
+    if(LZ4_FOUND)
+        message(STATUS "lz4 library found, compiling with it")
+        add_definitions(-DOSMIUM_WITH_LZ4)
+        include_directories(SYSTEM ${LZ4_INCLUDE_DIRS})
+        list(APPEND OSMIUM_LIBRARIES ${LZ4_LIBRARIES})
+    else()
+        message(WARNING "lz4 library not found, compiling without it")
+    endif()
 else()
-    message(WARNING "lz4 library not found, compiling without it")
+    message(STATUS "Building without lz4 support: Set WITH_LZ4=ON to change this")
 endif()
 
 

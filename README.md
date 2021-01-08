@@ -17,7 +17,7 @@ later are known to work. It also works on modern Visual Studio C++ compilers.
 
 You also need the following libraries:
 
-    Libosmium (>= 2.15.6)
+    Libosmium (>= 2.16.0)
         https://osmcode.org/libosmium
         Debian/Ubuntu: libosmium2-dev
         Fedora/CentOS: libosmium-devel
@@ -50,6 +50,12 @@ You also need the following libraries:
         Debian/Ubuntu: zlib1g-dev
         Fedora/CentOS: zlib-devel
         openSUSE: zlib-devel
+
+    LZ4 (optional)
+        https://lz4.github.io/lz4/
+        Debian/Ubuntu: liblz4-dev
+
+        Only needed for LZ4 PBF compression.
 
     Expat
         https://libexpat.github.io/
