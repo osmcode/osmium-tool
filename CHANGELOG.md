@@ -8,9 +8,34 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Add support for negative IDs in add-locations-to-ways command.
+- Show setting of `-i`, `--invert-match` option on tags-filter command.
+- Show bytes read and written in verbose mode in `osmium cat` output.
+
 ### Changed
 
+- Now depends on libosmium 2.16.0 or greater.
+- Has support for PBF lz4 compression which is enabled by default if the
+  library is found. Disable by setting CMake option `WITH_LZ4` to `OFF`.
+- An OSM file header can now be set based on the input file header in extract
+  command from the config file. Set the header to the special `null` value
+  for this.
+- The `fileinfo` command now shows a **Metadata** section as described in the
+  man page.
+
 ### Fixed
+
+- When using the `-I`, `--id-osm-file` option in the `tags-filter` command,
+  not only the objects in the specified file were marked but also the nodes
+  referenced from ways and the members referenced from relations. This had
+  two results: a) When not using `-r`, `--add-referenced`: too many objects
+  ended up in the resulting file. b) When using `-t`, `--remove-tags`: tags
+  from those member objects were not removed.
+- When change files have been created from extracts it is possible that they
+  contain objects with the same type, id, version, and timestamp. In that case
+  we still want to get the last object available. This is now done correctly.
+- Various man page fixes.
+
 
 ## [1.12.1] - 2020-06-27
 
