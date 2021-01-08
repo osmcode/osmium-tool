@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.13.0] - 2021-01-08
+
+### Added
+
 - Add support for negative IDs in add-locations-to-ways command.
 - Show setting of `-i`, `--invert-match` option on tags-filter command.
 - Show bytes read and written in verbose mode in `osmium cat` output.
@@ -584,7 +593,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.12.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.13.0...HEAD
+[1.13.0]: https://github.com/osmcode/osmium-tool/compare/v1.12.1...v1.13.0
+[1.12.1]: https://github.com/osmcode/osmium-tool/compare/v1.12.0...v1.12.1
 [1.12.0]: https://github.com/osmcode/osmium-tool/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/osmcode/osmium-tool/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/osmcode/osmium-tool/compare/v1.10.0...v1.11.0
