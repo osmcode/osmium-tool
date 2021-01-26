@@ -480,7 +480,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
             warning("Ignoring --output-format/-f option.\n");
         }
         m_config_file_name = vm["config"].as<std::string>();
-        auto slash = m_config_file_name.find_last_of('/');
+        const auto slash = m_config_file_name.find_last_of('/');
         if (slash != std::string::npos) {
             m_config_directory = m_config_file_name;
             m_config_directory.resize(slash + 1);
@@ -492,6 +492,9 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
             warning("Ignoring --directory/-d option.\n");
         }
         check_output_file();
+        if (m_with_history) {
+            m_output_file.set_has_multiple_object_versions(true);
+        }
         m_extracts.emplace_back(new ExtractBBox{m_output_file, "", parse_bbox(vm["bbox"].as<std::string>(), "--box/-b")});
     }
 
@@ -500,6 +503,9 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
             warning("Ignoring --directory/-d option.\n");
         }
         check_output_file();
+        if (m_with_history) {
+            m_output_file.set_has_multiple_object_versions(true);
+        }
         m_extracts.emplace_back(new ExtractPolygon{m_output_file, "", m_buffer, parse_multipolygon_object("./", vm["polygon"].as<std::string>(), "", m_buffer)});
     }
 
