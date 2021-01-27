@@ -161,13 +161,13 @@ namespace strategy_complete_ways_with_history {
             throw osmium::io_error{"Can not read from STDIN when using 'complete_ways' strategy."};
         }
 
-        vout << "Running 'complete_ways' strategy in two passes...\n";
+        vout << "Running 'complete_ways' strategy on history file in two passes...\n";
         const std::size_t file_size = osmium::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size * 2, display_progress};
 
         vout << "First pass (of two)...\n";
         Pass1 pass1{*this};
-        pass1.run(progress_bar, input_file, osmium::io::read_meta::no);
+        pass1.run(progress_bar, input_file);
         progress_bar.file_done(file_size);
         pass1.add_extra_nodes();
 
