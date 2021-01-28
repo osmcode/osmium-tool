@@ -21,6 +21,8 @@ This commands reads its input file(s) only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
 STDOUT.
 
+Usually this is not the right command to merge two or more typical OSM files,
+see **osmium merge** for that.
 
 # OPTIONS
 
@@ -81,6 +83,6 @@ Remove changeset, uid, and user from a file to protect personal data:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-merge**(1)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 
