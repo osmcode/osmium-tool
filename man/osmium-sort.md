@@ -40,7 +40,7 @@ STDOUT. (Unless the *multipass* strategy is used.)
     the input files in three passes, one for nodes, one for ways, and one for
     relations. After reading all objects of each type, they are sorted and
     written out. This is a bit slower than the "simple" strategy, but uses
-    less memory. The "multi" strategy doesn't work when reading from STDIN.
+    less memory. The "multipass" strategy doesn't work when reading from STDIN.
     Default: "simple".
 
 
