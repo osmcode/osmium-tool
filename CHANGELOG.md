@@ -10,7 +10,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Update `osmium-file-formats` man page to include newer file format options.
+
 ### Fixed
+
+- The `extract` command did not work correctly on history files. Sometimes
+  deleted objects were not detected as such and the resulting file was not
+  a correct history file.
+- Open input file only once in `tags-filter` command if `-R`,
+  `--omit-referenced` is used. This way it works when reading from STDIN.
 
 
 ## [1.13.0] - 2021-01-08
