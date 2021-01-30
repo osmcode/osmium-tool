@@ -335,24 +335,7 @@ void CommandTagsFilter::find_referenced_objects() {
     m_vout << "Done following references.\n";
 }
 
-bool CommandTagsFilter::run() {
-    m_vout << "Opening input file to get header...\n";
-    osmium::io::Reader reader_only_for_header{m_input_file, osmium::osm_entity_bits::nothing};
-
-    m_vout << "Opening output file...\n";
-    osmium::io::Header header{reader_only_for_header.header()};
-    setup_header(header);
-    reader_only_for_header.close();
-
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
-
-    if (m_add_referenced_objects) {
-        find_referenced_objects();
-    }
-
-    m_vout << "Opening input file...\n";
-    osmium::io::Reader reader{m_input_file, get_needed_types()};
-
+void CommandTagsFilter::copy_matching_objects(osmium::io::Reader& reader, osmium::io::Writer& writer) {
     m_vout << "Copying matching objects to output file...\n";
     ++m_count_passes;
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
@@ -372,6 +355,27 @@ bool CommandTagsFilter::run() {
         }
     }
     progress_bar.done();
+}
+
+bool CommandTagsFilter::run() {
+    m_vout << "Opening input file to get header...\n";
+    osmium::io::Reader reader_only_for_header{m_input_file, osmium::osm_entity_bits::nothing};
+
+    m_vout << "Opening output file...\n";
+    osmium::io::Header header{reader_only_for_header.header()};
+    setup_header(header);
+    reader_only_for_header.close();
+
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+
+    if (m_add_referenced_objects) {
+        find_referenced_objects();
+    }
+
+    m_vout << "Opening input file...\n";
+    osmium::io::Reader reader{m_input_file, get_needed_types()};
+
+    copy_matching_objects(reader, writer);
 
     m_vout << "Closing output file...\n";
     writer.close();

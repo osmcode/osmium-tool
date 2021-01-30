@@ -29,6 +29,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/index/id_set.hpp>
 #include <osmium/index/nwr_array.hpp>
 #include <osmium/index/relations_map.hpp>
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
@@ -70,6 +72,8 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
     void add_filter(osmium::osm_entity_bits::type entities, const osmium::TagMatcher& matcher);
     void parse_and_add_expression(const std::string& expression);
     void read_expressions_file(const std::string& file_name);
+
+    void copy_matching_objects(osmium::io::Reader& reader, osmium::io::Writer& writer);
 
 public:
 
