@@ -355,37 +355,48 @@ void CommandTagsFilter::copy_matching_objects(osmium::io::Reader& reader, osmium
         }
     }
     progress_bar.done();
-}
-
-bool CommandTagsFilter::run() {
-    m_vout << "Opening input file to get header...\n";
-    osmium::io::Reader reader_only_for_header{m_input_file, osmium::osm_entity_bits::nothing};
-
-    m_vout << "Opening output file...\n";
-    osmium::io::Header header{reader_only_for_header.header()};
-    setup_header(header);
-    reader_only_for_header.close();
-
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
-
-    if (m_add_referenced_objects) {
-        find_referenced_objects();
-    }
-
-    m_vout << "Opening input file...\n";
-    osmium::io::Reader reader{m_input_file, get_needed_types()};
-
-    copy_matching_objects(reader, writer);
 
     m_vout << "Closing output file...\n";
     writer.close();
 
     m_vout << "Closing input file...\n";
     reader.close();
+}
+
+bool CommandTagsFilter::run() {
+    if (m_add_referenced_objects) {
+        m_vout << "Opening input file to get header...\n";
+        osmium::io::Reader reader_only_for_header{m_input_file, osmium::osm_entity_bits::nothing};
+
+        m_vout << "Opening output file...\n";
+        osmium::io::Header header{reader_only_for_header.header()};
+        setup_header(header);
+        reader_only_for_header.close();
+
+        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+
+        find_referenced_objects();
+
+        m_vout << "Opening input file...\n";
+        osmium::io::Reader reader{m_input_file, get_needed_types()};
+
+        copy_matching_objects(reader, writer);
+    } else {
+        m_vout << "Opening input file...\n";
+        osmium::io::Reader reader{m_input_file, get_needed_types()};
+
+        m_vout << "Opening output file...\n";
+        osmium::io::Header header{reader.header()};
+        setup_header(header);
+
+        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+
+        copy_matching_objects(reader, writer);
+    }
 
     show_memory_used();
 
-    m_vout << "Needed " << m_count_passes << " passes through the input file.\n";
+    m_vout << "Needed " << m_count_passes << " pass(es) through the input file.\n";
     m_vout << "Done.\n";
 
     return true;
