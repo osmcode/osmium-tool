@@ -8,9 +8,9 @@ osmium-file-formats - OSM file formats known to Osmium
 OSM uses three types of files for its main data:
 
 **Data files**
-:   These are the most common files containing the OSM data at a specific point
-    in time. This can either be a planet file containing *all* OSM data or some
-    kind of extract. At most one version of every object (node, way, or
+:   These are the most common files. They contain the OSM data from a specific
+    point in time. This can either be a planet file containing *all* OSM data
+    or some kind of extract. At most one version of every object (node, way, or
     relation) is contained in this file. Deleted objects are *not* in this
     file. The usual suffix used is `.osm`.
 
@@ -26,8 +26,8 @@ OSM uses three types of files for its main data:
 **Change files**
 :   Sometimes called *diff files* or *replication diffs* these files
     contain the changes between one state of the OSM database and another
-    state. Change files can contains several versions of an object.
-    The usual suffix used is `.osc`.
+    state. Change files can contains several versions of an object and also
+    deleted objects. The usual suffix used is `.osc`.
 
 All these files have in common that they contain OSM objects (nodes, ways, and
 relations). History files and change files can contain several versions of the
@@ -78,13 +78,31 @@ The following options can be added when writing OSM files:
 `pbf_dense_nodes`=`true`/`false` (*default: true*)
 :   Enable/disable DenseNodes format for PBF files.
 
-`pbf_compression`=`true`/`false` (*default: true*)
-:   Enable/disable compression in PBF files. Disabling this will make writing
-    files a bit faster, but the resulting files are 2 to 3 times bigger.
+`pbf_compression`=`none`/`zlib`/`lz4` (*default: zlib*)
+:   Set compression type in PBF files. `zlib` (or `true`) is the default and
+    almost all files use this. `none` (or `false`) disables compression which
+    will make writing files a bit faster, but the resulting files are 2 to 3
+    times bigger. The `lz4` compression is not quite as good as `zlib` but much
+    faster to compress and decompress, it is currently not supported by most
+    OSM file readers.
 
-`add_metadata`=`true`/`false` (*default: true*)
+`pbf_compression_level`=...
+:   Set compression level for PBF. Available values and default depend on the
+    compression type used, see the OSM File Formats Manual for details.
+
+`add_metadata`=`true`/`false`/... (*default: true*)
 :   Enable/disable writing of object metadata such as changeset id, username,
-    etc. Disabling this will make files a bit smaller.
+    etc. Disabling this will make files a bit smaller. This can also be set
+    to other values, see the OSM File Formats Manual for details.
+
+`locations_on_ways`=`true`/`false` (*default: false*)
+:   Add node locations to way nodes. (PBF, XML, OPL only.)
+
+`use_color`=`true`/`false` (*default: false*)
+:   Output with ANSI colors. (DEBUG format only.)
+
+`add_crc32`=`true`/`false` (*default: false*)
+:   Add CRC32 checksum to all objects. (DEBUG format only.)
 
 
 # EXAMPLES
