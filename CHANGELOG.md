@@ -10,6 +10,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+### Fixed
+
+
+## [1.13.1] - 2021-02-01
+
+### Changed
+
 - Update `osmium-file-formats` man page to include newer file format options.
 
 ### Fixed
@@ -601,7 +608,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.13.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.13.1...HEAD
+[1.13.1]: https://github.com/osmcode/osmium-tool/compare/v1.13.0...v1.13.1
 [1.13.0]: https://github.com/osmcode/osmium-tool/compare/v1.12.1...v1.13.0
 [1.12.1]: https://github.com/osmcode/osmium-tool/compare/v1.12.0...v1.12.1
 [1.12.0]: https://github.com/osmcode/osmium-tool/compare/v1.11.1...v1.12.0
