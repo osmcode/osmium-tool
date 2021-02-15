@@ -152,7 +152,11 @@ void Command::show_memory_used() {
     }
 }
 
-std::string check_index_type(const std::string& index_type_name) {
+std::string check_index_type(const std::string& index_type_name, bool allow_none) {
+    if (allow_none && index_type_name == "none") {
+        return index_type_name;
+    }
+
     std::string type{index_type_name};
     const auto pos = type.find(',');
     if (pos != std::string::npos) {

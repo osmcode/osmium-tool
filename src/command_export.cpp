@@ -413,7 +413,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     }
 
     if (vm.count("index-type")) {
-        m_index_type_name = check_index_type(vm["index-type"].as<std::string>());
+        m_index_type_name = check_index_type(vm["index-type"].as<std::string>(), true);
     }
 
     if (vm.count("keep-untagged")) {
