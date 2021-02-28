@@ -42,6 +42,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     opts_cmd.add_options()
     ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
     ("clean,c", po::value<std::vector<std::string>>(), "Clean attribute (version, changeset, timestamp, uid, user)")
+    ("buffer-data", "Buffer all data in memory before writing it out")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -90,6 +91,10 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
         }
     }
 
+    if (vm.count("buffer-data")) {
+        m_buffer_data = true;
+    }
+
     return true;
 }
 
@@ -126,31 +131,63 @@ void CommandCat::show_arguments() {
     m_vout << "    attributes to clean: " << clean_names << '\n';
 }
 
+void CommandCat::clean_buffer(osmium::memory::Buffer& buffer) const {
+    for (auto& object : buffer.select<osmium::OSMObject>()) {
+        if (m_clean_attrs & clean_options::clean_version) {
+            object.set_version(static_cast<osmium::object_version_type>(0));
+        }
+        if (m_clean_attrs & clean_options::clean_changeset) {
+            object.set_changeset(static_cast<osmium::changeset_id_type>(0));
+        }
+        if (m_clean_attrs & clean_options::clean_timestamp) {
+            object.set_timestamp(osmium::Timestamp{});
+        }
+        if (m_clean_attrs & clean_options::clean_uid) {
+            object.set_uid(static_cast<osmium::user_id_type>(0));
+        }
+        if (m_clean_attrs & clean_options::clean_user) {
+            object.clear_user();
+        }
+    }
+}
+
 void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const {
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
 
         if (m_clean_attrs) {
-            for (auto& object : buffer.select<osmium::OSMObject>()) {
-                if (m_clean_attrs & clean_options::clean_version) {
-                    object.set_version(static_cast<osmium::object_version_type>(0));
-                }
-                if (m_clean_attrs & clean_options::clean_changeset) {
-                    object.set_changeset(static_cast<osmium::changeset_id_type>(0));
-                }
-                if (m_clean_attrs & clean_options::clean_timestamp) {
-                    object.set_timestamp(osmium::Timestamp{});
-                }
-                if (m_clean_attrs & clean_options::clean_uid) {
-                    object.set_uid(static_cast<osmium::user_id_type>(0));
-                }
-                if (m_clean_attrs & clean_options::clean_user) {
-                    object.clear_user();
-                }
-            }
+            clean_buffer(buffer);
         }
 
         writer(std::move(buffer));
+    }
+}
+
+std::size_t CommandCat::read_buffers(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, std::vector<osmium::memory::Buffer>& buffers) {
+    std::size_t size = 0;
+
+    while (osmium::memory::Buffer buffer = reader.read()) {
+        progress_bar.update(reader.offset());
+
+        if (m_clean_attrs) {
+            clean_buffer(buffer);
+        }
+
+        size += buffer.committed();
+
+        buffers.emplace_back(std::move(buffer));
+    }
+
+    return size;
+}
+
+void CommandCat::write_buffers(osmium::ProgressBar& progress_bar, std::vector<osmium::memory::Buffer>& buffers, osmium::io::Writer& writer) {
+    std::size_t size = 0;
+
+    for (auto&& buffer : buffers) {
+        size += buffer.committed();
+        writer(std::move(buffer));
+        progress_bar.update(size);
     }
 }
 
@@ -166,9 +203,23 @@ bool CommandCat::run() {
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
-        osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
-        copy(progress_bar, reader, writer);
-        progress_bar.done();
+        if (m_buffer_data) {
+            m_vout << "Reading data...\n";
+            std::vector<osmium::memory::Buffer> buffers;
+            osmium::ProgressBar progress_bar_reader{reader.file_size(), display_progress()};
+            std::size_t size = read_buffers(progress_bar_reader, reader, buffers);
+            progress_bar_reader.done();
+            m_vout << "All data read.\n";
+            show_memory_used();
+            m_vout << "Writing data...\n";
+            osmium::ProgressBar progress_bar_writer{size, display_progress()};
+            write_buffers(progress_bar_writer, buffers, writer);
+            progress_bar_writer.done();
+        } else {
+            osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
+            copy(progress_bar, reader, writer);
+            progress_bar.done();
+        }
         file_size = writer.close();
         reader.close();
     } else { // multiple input files
@@ -176,18 +227,41 @@ bool CommandCat::run() {
         setup_header(header);
         osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
-        osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
-        for (const auto& input_file : m_input_files) {
-            progress_bar.remove();
-            osmium::io::Reader reader{input_file, osm_entity_bits()};
-            m_vout << "Copying input file '" << input_file.filename()
-                   << "' (" << reader.file_size() << " bytes)\n";
-            copy(progress_bar, reader, writer);
-            progress_bar.file_done(reader.file_size());
-            reader.close();
+        if (m_buffer_data) {
+            std::vector<osmium::memory::Buffer> buffers;
+            std::size_t size = 0;
+            osmium::ProgressBar progress_bar_reader{file_size_sum(m_input_files), display_progress()};
+            for (const auto& input_file : m_input_files) {
+                progress_bar_reader.remove();
+                osmium::io::Reader reader{input_file, osm_entity_bits()};
+                m_vout << "Reading input file '" << input_file.filename()
+                    << "' (" << reader.file_size() << " bytes)\n";
+                size += read_buffers(progress_bar_reader, reader, buffers);
+                progress_bar_reader.file_done(reader.file_size());
+                reader.close();
+            }
+            progress_bar_reader.done();
+            m_vout << "All data read.\n";
+            show_memory_used();
+            m_vout << "Writing data...\n";
+            osmium::ProgressBar progress_bar_writer{size, display_progress()};
+            write_buffers(progress_bar_writer, buffers, writer);
+            file_size = writer.close();
+            progress_bar_writer.done();
+        } else {
+            osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
+            for (const auto& input_file : m_input_files) {
+                progress_bar.remove();
+                osmium::io::Reader reader{input_file, osm_entity_bits()};
+                m_vout << "Copying input file '" << input_file.filename()
+                    << "' (" << reader.file_size() << " bytes)\n";
+                copy(progress_bar, reader, writer);
+                progress_bar.file_done(reader.file_size());
+                reader.close();
+            }
+            file_size = writer.close();
+            progress_bar.done();
         }
-        file_size = writer.close();
-        progress_bar.done();
     }
 
     if (file_size > 0) {

@@ -44,7 +44,15 @@ class CommandCat : public Command, public with_multiple_osm_inputs, public with_
 
     uint8_t m_clean_attrs = 0;
 
+    bool m_buffer_data = false;
+
+    void clean_buffer(osmium::memory::Buffer& buffer) const;
+
     void copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const;
+
+    std::size_t read_buffers(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, std::vector<osmium::memory::Buffer>& buffers);
+
+    void write_buffers(osmium::ProgressBar& progress_bar, std::vector<osmium::memory::Buffer>& buffers, osmium::io::Writer &writer);
 
 public:
 

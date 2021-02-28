@@ -37,6 +37,11 @@ see **osmium merge** for that.
 :   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
     By default all types are read. This option can be given multiple times.
 
+--buffer-data
+:   Read all input files into memory and only then write out all the data.
+    This will need a lot of memory and is usually slower than a normal copy.
+    Used for timing the reading and writing phase separately.
+
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
