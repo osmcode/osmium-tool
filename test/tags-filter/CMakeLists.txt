@@ -12,6 +12,7 @@ endfunction()
 
 check_tags_filter(node        ""      input.osm n/amenity output-amenity.osm)
 check_tags_filter(node-R      "-R"    input.osm n/amenity output-amenity.osm)
+check_tags_filter(node-a      "-a"    input.osm n/amenity output-amenity.osm)
 
 check_tags_filter(highway-R   "-R"    input.osm w/highway output-highway-R.osm)
 check_tags_filter(note-R      "-R"    input.osm note output-note-R.osm)
@@ -19,8 +20,15 @@ check_tags_filter(note-R      "-R"    input.osm note output-note-R.osm)
 check_tags_filter(note-iR     "-i -R" input.osm note output-note-iR.osm)
 
 check_tags_filter(highway     ""      input.osm w/highway output-highway.osm)
+check_tags_filter(highway-a   "-a"    input.osm w/highway output-highway.osm)
 
 check_tags_filter(highway-i   "-i"    input.osm w/highway output-highway-i.osm)
+check_tags_filter(highway-ai  "-i -a" input.osm w/highway output-highway-i.osm)
+
+check_tags_filter(highway-wnote   ""      input.osm w/highway w/note output-highway.osm)
+check_tags_filter(highway-note    ""      input.osm w/highway note output-highway.osm)
+check_tags_filter(highway-wnote-a "-a"    input.osm w/highway w/note output-highway-note.osm)
+check_tags_filter(highway-note-aR "-a -R" input.osm w/highway note output-note-R.osm)
 
 check_tags_filter(highway-n-i "-i"    input-nodes.osm w/highway output-nodes-highway-i.osm)
 

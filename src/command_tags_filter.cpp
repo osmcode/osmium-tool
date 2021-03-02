@@ -90,6 +90,7 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
     ("invert-match,i", "Invert the sense of matching, exclude objects with matching tags")
     ("omit-referenced,R", "Omit referenced objects")
     ("remove-tags,t", "Remove tags from non-matching objects")
+    ("and,a", "Treat space-separated filters as AND, not OR")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -135,6 +136,10 @@ bool CommandTagsFilter::setup(const std::vector<std::string>& arguments) {
         m_remove_tags = true;
     }
 
+    if (vm.count("and")) {
+        m_all_filters = true;
+    }
+
     if (vm.count("expression-list")) {
         for (const auto& e : vm["expression-list"].as<std::vector<std::string>>()) {
             parse_and_add_expression(e);
@@ -155,6 +160,7 @@ void CommandTagsFilter::show_arguments() {
     m_vout << "  other options:\n";
     m_vout << "    add referenced objects: " << yes_no(m_add_referenced_objects);
     m_vout << "    invert match: " << yes_no(m_invert_match);
+    m_vout << "    all filters: " << yes_no(m_all_filters);
     if (m_add_referenced_objects) {
         m_vout << "    remove tags on non-matching objects: " << yes_no(m_remove_tags);
     }
@@ -197,14 +203,25 @@ void CommandTagsFilter::add_members(const osmium::Relation& relation) {
 }
 
 bool CommandTagsFilter::matches_node(const osmium::Node& node) const noexcept {
-    return osmium::tags::match_any_of(node.tags(), m_filters(osmium::item_type::node));
+    if (m_all_filters) {
+        return m_filters(osmium::item_type::node).match_all(node.tags());
+    } else {
+        return osmium::tags::match_any_of(node.tags(), m_filters(osmium::item_type::node));
+    }
 }
 
 bool CommandTagsFilter::matches_way(const osmium::Way& way) const noexcept {
-    return osmium::tags::match_any_of(way.tags(), m_filters(osmium::item_type::way)) ||
-           (way.nodes().size() >= 4 &&
-            way.is_closed() &&
-               osmium::tags::match_any_of(way.tags(), m_area_filters));
+    if (m_all_filters) {
+        return m_filters(osmium::item_type::way).match_all(way.tags()) ||
+               (way.nodes().size() >= 4 &&
+                way.is_closed() &&
+                   m_area_filters.match_all(way.tags()));
+    } else {
+        return osmium::tags::match_any_of(way.tags(), m_filters(osmium::item_type::way)) ||
+               (way.nodes().size() >= 4 &&
+                way.is_closed() &&
+                   osmium::tags::match_any_of(way.tags(), m_area_filters));
+    }
 }
 
 static bool is_multipolygon(const osmium::Relation& relation) noexcept {
@@ -217,9 +234,15 @@ static bool is_multipolygon(const osmium::Relation& relation) noexcept {
 }
 
 bool CommandTagsFilter::matches_relation(const osmium::Relation& relation) const noexcept {
-    return osmium::tags::match_any_of(relation.tags(), m_filters(osmium::item_type::relation)) ||
-           (is_multipolygon(relation) &&
-               osmium::tags::match_any_of(relation.tags(), m_area_filters));
+    if (m_all_filters) {
+        return m_filters(osmium::item_type::relation).match_all(relation.tags()) ||
+               (is_multipolygon(relation) &&
+                   m_area_filters.match_all(relation.tags()));
+    } else {
+        return osmium::tags::match_any_of(relation.tags(), m_filters(osmium::item_type::relation)) ||
+               (is_multipolygon(relation) &&
+                   osmium::tags::match_any_of(relation.tags(), m_area_filters));
+    }
 }
 
 bool CommandTagsFilter::matches_object(const osmium::OSMObject& object) const noexcept {
