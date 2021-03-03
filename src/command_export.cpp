@@ -272,6 +272,7 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     ("show-errors,e", "Output any geometry errors on STDOUT")
     ("stop-on-error,E", "Stop on the first error encountered")
     ("show-index-types,I", "Show available index types")
+    ("attributes,a", po::value<std::string>(), "Comma-separated list of attributes to add to the output (default: none)")
     ("omit-rs,r", "Do not print RS (record separator) character when using JSON Text Sequences")
     ;
 
@@ -409,6 +410,31 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
         }
         if (m_geometry_types.empty()) {
             throw argument_error{"No geometry types in --geometry-types option."};
+        }
+    }
+
+    if (vm.count("attributes")) {
+        const auto attrs = osmium::split_string(vm["attributes"].as<std::string>(), ',');
+        for (const auto& attr : attrs) {
+            if (attr == "type") {
+                m_options.type = "@type";
+            } else if (attr == "id") {
+                m_options.id = "@id";
+            } else if (attr == "version") {
+                m_options.version = "@version";
+            } else if (attr == "changeset") {
+                m_options.changeset = "@changeset";
+            } else if (attr == "timestamp") {
+                m_options.timestamp = "@timestamp";
+            } else if (attr == "uid") {
+                m_options.uid = "@uid";
+            } else if (attr == "user") {
+                m_options.user = "@user";
+            } else if (attr == "way_nodes") {
+                m_options.way_nodes = "@way_nodes";
+            } else {
+                throw argument_error{"Unknown attribute in --attributes option: " + attr + "."};
+            }
         }
     }
 
