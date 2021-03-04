@@ -26,6 +26,8 @@ set_tests_properties(export-error-area PROPERTIES WILL_FAIL true)
 
 #-----------------------------------------------------------------------------
 
+check_export(attributes  "-E -f text -a id" way.osm way-all.txt)
+
 check_export(c-empty-empty-n "-E -f text --keep-untagged -c export/config-empty-empty.json" way.osm way-all-n.txt)
 set_tests_properties(export-c-empty-empty-n PROPERTIES ENVIRONMENT osmium_cmake_stderr=ignore)
 check_export(c-empty-empty   "-E -f text                 -c export/config-empty-empty.json" way.osm way-all.txt)
