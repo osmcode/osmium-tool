@@ -202,8 +202,8 @@ _osmium-export() {
         '(-o)--output[output file name]:output OSM file:_files -g "*.json *.geojson *.jsonseq *.geojsonseq"' \
         '(--overwrite)-O[allow overwriting of existing output file]' \
         '(-O)--overwrite[allow overwriting of existing output file]' \
-        '(--output-format)-f[format of output file]:file format:_export_file_formats' \
-        '(-f)--output-format[format of output file]:file format:_export_file_formats' \
+        '(--output-format)-f[format of output file]:file format:_osmium_export_file_formats' \
+        '(-f)--output-format[format of output file]:file format:_osmium_export_file_formats' \
         '(--config)-c[config file]:config file:_files -f "*.json"' \
         '(-c)--config[config file]:config file:_files -f "*.json"' \
         '(--show-errors)-e[output errors to stderr]' \
@@ -220,8 +220,8 @@ _osmium-export() {
         '(-n)--keep-untagged[keep untagged features]' \
         '(--omit-rs)-r[omit record separator when using geojsonseq format]' \
         '(-r)--omit-rs[omit record separator when using geojsonseq format]' \
-        '(--add-unique-id)-u[add unique id]:unique id format:_export_id_type' \
-        '(-u)--add-unique-id[add unique id]:unique id format:_export_id_type' \
+        '(--add-unique-id)-u[add unique id]:unique id format:_osmium_export_id_type' \
+        '(-u)--add-unique-id[add unique id]:unique id format:_osmium_export_id_type' \
         '(--attributes)-a[add attributes]:attributes:_osmium_export_attrs' \
         '(-a)--attributes[add attributes]:attributes:_osmium_export_attrs' \
         '(--progress)--no-progress[disable progress bar]' \
@@ -379,8 +379,8 @@ _osmium-tags-count() {
         '(-m)--min-count[min count]:count' \
         '(--max-count)-M[max count]:count' \
         '(-M)--max-count[max count]:count' \
-        '(--sort)-s[sort order]:sort order:_sort_order' \
-        '(-s)--sort[sort order]:sort order:_sort_order' \
+        '(--sort)-s[sort order]:sort order:_osmium_sort_order' \
+        '(-s)--sort[sort order]:sort order:_osmium_sort_order' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]' \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
@@ -501,7 +501,7 @@ _osmium_export_attrs() {
         'way_nodes'
 }
 
-_export_file_formats() {
+_osmium_export_file_formats() {
     _values 'export file formats' \
         'json[GeoJSON format]' \
         'geojson[GeoJSON format]' \
@@ -509,7 +509,7 @@ _export_file_formats() {
         'geojsonseq[GeoJSON Text Sequence format]'
 }
 
-_export_id_type() {
+_osmium_export_id_type() {
     _values 'export unique id type' \
         'counter' \
         'type_id'
@@ -522,7 +522,7 @@ _osmium_extract_strategy() {
         'smart'
 }
 
-_sort_order() {
+_osmium_sort_order() {
     _values 'sort order' \
         'count-asc' \
         'count-desc' \
