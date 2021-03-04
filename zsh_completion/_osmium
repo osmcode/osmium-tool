@@ -115,6 +115,7 @@ _osmium-cat() {
         '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
         '*-c[clean attributes]:attribute type:_osmium_attr_type'\
         '*--clean[clean attributes]:attribute type:_osmium_attr_type'\
+        '--buffer-data[buffer data in memory]'\
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]'
 }
@@ -221,6 +222,8 @@ _osmium-export() {
         '(-r)--omit-rs[omit record separator when using geojsonseq format]' \
         '(--add-unique-id)-u[add unique id]:unique id format:_export_id_type' \
         '(-u)--add-unique-id[add unique id]:unique id format:_export_id_type' \
+        '(--attributes)-a[add attributes]:attributes:_osmium_export_attrs' \
+        '(-a)--attributes[add attributes]:attributes:_osmium_export_attrs' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]'
 }
@@ -484,6 +487,18 @@ _osmium_attr_type() {
         'changeset' \
         'uid' \
         'user'
+}
+
+_osmium_export_attrs() {
+    _values 'export attributes' \
+        'type' \
+        'id' \
+        'version' \
+        'timestamp' \
+        'changeset' \
+        'uid' \
+        'user' \
+        'way_nodes'
 }
 
 _export_file_formats() {
