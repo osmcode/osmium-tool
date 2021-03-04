@@ -76,6 +76,11 @@ files created with JOSM).
     output, but you can restrict the types using this option. TYPES is a
     comma-separated list of the types ("point", "linestring", and "polygon").
 
+-a, \--attributes=ATTRS
+:   In addition to tags, also export attributes specified in this comma-separated
+    list. By default, none are exported. See the **ATTRIBUTES** section below
+    for the known attributes list and an explanation.
+
 -i, \--index-type=TYPE
 :   Set the index type. For details see the **osmium-index-types**(5) man
     page.
@@ -259,6 +264,10 @@ each attribute you are interested in, the value can be either `false` (do not
 output this attribute), `true` (output this attribute with the attribute name
 prefixed by the `@` sign) or any string, in which case the string will be used
 as the attribute name.
+
+Another option is to specify attributes list in a comma-separated string
+for the **\--attributes/-a** command-line option. This way you cannot
+control column names, but also you won't have to create a config file.
 
 Depending on your choice of values for the `attributes` objects, attributes
 can have the same name as tag keys. If this is the case, the conflicting tag
