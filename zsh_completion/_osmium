@@ -402,6 +402,8 @@ _osmium-tags-filter() {
         '(-e)--expressions[read filter expressions from file]:filter expressions file:_files' \
         '(--invert-match)-i[invert the sense of matching, exclude objects with matching tags]' \
         '(-i)--invert-match[invert the sense of matching, exclude objects with matching tags]' \
+        '(--and)-a[Treat space-separated filters as AND, not OR]' \
+        '(-a)--and[Treat space-separated filters as AND, not OR]' \
         '(--omit-referenced)-R[omit referenced objects]' \
         '(-R)--omit-referenced[omit referenced objects]' \
         '(--progress)--no-progress[disable progress bar]' \
