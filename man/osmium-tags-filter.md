@@ -42,6 +42,10 @@ change files.
 -i, \--invert-match
 :   Invert the sense of matching. Exclude all objects with matching tags.
 
+-a, \--and
+:   Reqire objects of each type to match all the filter expressions for that
+    type simultaneously.
+
 -R, \--omit-referenced
 :   Omit the nodes referenced from matching ways and members referenced from
     matching relations.
@@ -130,6 +134,11 @@ turned into a (multi)polygon. This is the case for all closed ways (where the
 first and last node are the same) with 4 or more nodes and for all relations
 that have an additional "type=multipolygon" or "type=boundary" tag.
 
+By default, objects that match any of the expressions are written to the output.
+That is, **n/shop n/amenity** would match nodes with either tag. Use the
+**-a/\--and** to require matching all of the expressions. For example,
+the same expressions would match only nodes with both tags present at once.
+
 
 # DIAGNOSTICS
 
@@ -167,6 +176,15 @@ Get all nodes and ways with a `highway` tag and all relations tagged with
 
     osmium tags-filter -o filtered.osm.pbf planet.osm.pbf \
         nw/highway r/type=restriction
+
+Get all named roads:
+
+    osmium tags-filter -a -o roads.osm.pbf berlin.osm.pbf w/highway w/name
+
+Get all addressed buildings except `building=yes`:
+
+    osmium tags-filter -a -o building.osm.pbf berlin.osm.pbf \
+        a/addr:housenumber a/building!=yes
 
 
 # SEE ALSO
