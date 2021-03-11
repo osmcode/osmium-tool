@@ -135,9 +135,11 @@ first and last node are the same) with 4 or more nodes and for all relations
 that have an additional "type=multipolygon" or "type=boundary" tag.
 
 By default, objects that match any of the expressions are written to the output.
-That is, **n/shop n/amenity** would match nodes with either tag. Use the
+That is, "n/shop n/amenity" would match nodes with either tag. Use the
 **-a/\--and** to require matching all of the expressions. For example,
 the same expressions would match only nodes with both tags present at once.
+Note that each type is matched separately: "highway w/name" would match all
+objects with a `highway` tag, but for ways it would require a non-empty name.
 
 
 # DIAGNOSTICS
