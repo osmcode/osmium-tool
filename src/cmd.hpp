@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
+#include <algorithm>
 #include <functional>
 #include <map>
 #include <memory>
@@ -151,6 +152,11 @@ public:
         return m_input_file;
     }
 
+    /// Is the input file STDIN?
+    bool any_input_is_stdin() const noexcept {
+        return m_input_file.filename().empty();
+    }
+
 }; // class with_single_osm_input
 
 class with_multiple_osm_inputs {
@@ -171,6 +177,14 @@ public:
 
     const std::vector<osmium::io::File>& input_files() const {
         return m_input_files;
+    }
+
+    /// Is any of the input files STDIN?
+    bool any_input_is_stdin() const noexcept {
+        return std::any_of(m_input_files.cbegin(), m_input_files.cend(),
+            [](const osmium::io::File& file) {
+                return file.filename().empty();
+            });
     }
 
 }; // class with_multiple_osm_inputs
