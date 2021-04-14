@@ -39,6 +39,7 @@ std::string get_filename_suffix(const std::string& file_name);
 const char* yes_no(bool choice) noexcept;
 void warning(const char* text);
 void warning(const std::string& text);
+std::size_t file_size(const osmium::io::File& file);
 std::size_t file_size_sum(const std::vector<osmium::io::File>& files);
 osmium::osm_entity_bits::type get_types(const std::string& str);
 std::pair<osmium::osm_entity_bits::type, std::string> get_filter_expression(const std::string& str);

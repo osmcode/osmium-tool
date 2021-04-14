@@ -67,11 +67,18 @@ void warning(const std::string& text) {
     std::cerr << "WARNING: " << text;
 }
 
+std::size_t file_size(const osmium::io::File& file) {
+    if (file.filename().empty()) {
+        return 0;
+    }
+    return osmium::file_size(file.filename());
+}
+
 std::size_t file_size_sum(const std::vector<osmium::io::File>& files) {
     std::size_t sum = 0;
 
     for (const auto& file : files) {
-        sum += osmium::file_size(file.filename());
+        sum += file_size(file);
     }
 
     return sum;

@@ -172,8 +172,7 @@ bool CommandMerge::run() {
         m_vout << "Merging 2 input files to output file...\n";
 
         // The larger file should be first so the progress bar will work better
-        if (osmium::file_size(m_input_files[0].filename()) <
-            osmium::file_size(m_input_files[1].filename())) {
+        if (file_size(m_input_files[0]) < file_size(m_input_files[1])) {
             using std::swap;
             swap(m_input_files[0], m_input_files[1]);
         }
