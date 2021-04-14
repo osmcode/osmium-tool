@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandApplyChanges : public Command, public with_single_osm_input, public with_osm_output {
+class CommandApplyChanges : public CommandWithSingleOSMInput, public with_osm_output {
 
     std::vector<std::string> m_change_filenames;
 
@@ -41,7 +41,7 @@ class CommandApplyChanges : public Command, public with_single_osm_input, public
 public:
 
     explicit CommandApplyChanges(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

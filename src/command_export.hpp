@@ -36,7 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandExport : public Command, public with_single_osm_input {
+class CommandExport : public CommandWithSingleOSMInput {
 
     using index_type = osmium::index::map::Map<osmium::unsigned_object_id_type, osmium::Location>;
     using location_handler_type = osmium::handler::NodeLocationsForWays<index_type, index_type>;
@@ -70,7 +70,7 @@ class CommandExport : public Command, public with_single_osm_input {
 public:
 
     explicit CommandExport(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

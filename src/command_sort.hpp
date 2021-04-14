@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandSort : public Command, public with_multiple_osm_inputs, public with_osm_output {
+class CommandSort : public CommandWithMultipleOSMInputs, public with_osm_output {
 
     std::vector<std::string> m_filenames;
     std::string m_strategy{"simple"};
@@ -36,7 +36,7 @@ class CommandSort : public Command, public with_multiple_osm_inputs, public with
 public:
 
     explicit CommandSort(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithMultipleOSMInputs(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

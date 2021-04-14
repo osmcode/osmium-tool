@@ -118,7 +118,7 @@ public:
         return m_osm_entity_bits;
     }
 
-    bool display_progress() const {
+    bool display_progress_internal() const {
         switch (m_display_progress) {
             case display_progress_type::on_tty:
                 return osmium::isatty(1) && osmium::isatty(2); // if STDOUT and STDERR are a TTY
@@ -188,6 +188,34 @@ public:
     }
 
 }; // class with_multiple_osm_inputs
+
+class CommandWithSingleOSMInput : public Command, public with_single_osm_input {
+
+public:
+
+    explicit CommandWithSingleOSMInput(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
+
+    bool display_progress() const {
+        return display_progress_internal() && !any_input_is_stdin();
+    }
+
+}; // class CommandWithSingleOSMInput
+
+class CommandWithMultipleOSMInputs : public Command, public with_multiple_osm_inputs {
+
+public:
+
+    explicit CommandWithMultipleOSMInputs(const CommandFactory& command_factory) :
+        Command(command_factory) {
+    }
+
+    bool display_progress() const {
+        return display_progress_internal() && !any_input_is_stdin();
+    }
+
+}; // class CommandWithMultipleOSMInputs
 
 void init_header(osmium::io::Header& header, const osmium::io::Header& input_header, const std::vector<std::string>& options);
 

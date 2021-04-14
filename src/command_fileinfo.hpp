@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandFileinfo : public Command, public with_single_osm_input {
+class CommandFileinfo : public CommandWithSingleOSMInput {
 
     std::string m_get_value;
     bool m_extended = false;
@@ -38,7 +38,7 @@ class CommandFileinfo : public Command, public with_single_osm_input {
 public:
 
     explicit CommandFileinfo(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

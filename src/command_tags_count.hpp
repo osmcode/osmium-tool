@@ -127,7 +127,7 @@ namespace std {
 using sort_func_type =
     std::function<bool(const element_type&, const element_type&)>;
 
-class CommandTagsCount : public Command, public with_single_osm_input, public with_osm_output {
+class CommandTagsCount : public CommandWithSingleOSMInput, public with_osm_output {
 
     osmium::TagsFilter m_keys_filter;
     osmium::TagsFilter m_tags_filter;
@@ -147,7 +147,7 @@ class CommandTagsCount : public Command, public with_single_osm_input, public wi
 public:
 
     explicit CommandTagsCount(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

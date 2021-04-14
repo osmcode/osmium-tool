@@ -37,7 +37,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 using index_type = osmium::index::map::Map<osmium::unsigned_object_id_type, osmium::Location>;
 using location_handler_type = osmium::handler::NodeLocationsForWays<index_type, index_type>;
 
-class CommandAddLocationsToWays : public Command, public with_multiple_osm_inputs, public with_osm_output {
+class CommandAddLocationsToWays : public CommandWithMultipleOSMInputs, public with_osm_output {
 
     std::string m_index_type_name_pos;
     std::string m_index_type_name_neg;
@@ -49,7 +49,7 @@ class CommandAddLocationsToWays : public Command, public with_multiple_osm_input
 public:
 
     explicit CommandAddLocationsToWays(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithMultipleOSMInputs(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

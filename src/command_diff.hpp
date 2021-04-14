@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandDiff : public Command, public with_multiple_osm_inputs, public with_osm_output {
+class CommandDiff : public CommandWithMultipleOSMInputs, public with_osm_output {
 
     std::string m_output_action;
     bool m_show_summary = false;
@@ -37,7 +37,7 @@ class CommandDiff : public Command, public with_multiple_osm_inputs, public with
 public:
 
     explicit CommandDiff(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithMultipleOSMInputs(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

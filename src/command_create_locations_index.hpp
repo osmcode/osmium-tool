@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandCreateLocationsIndex : public Command, public with_single_osm_input {
+class CommandCreateLocationsIndex : public CommandWithSingleOSMInput {
 
     std::string m_index_file_name;
     bool m_update = false;
@@ -36,7 +36,7 @@ class CommandCreateLocationsIndex : public Command, public with_single_osm_input
 public:
 
     explicit CommandCreateLocationsIndex(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

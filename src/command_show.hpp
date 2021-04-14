@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandShow : public Command, public with_single_osm_input {
+class CommandShow : public CommandWithSingleOSMInput {
 
     std::string m_output_format{"debug,color=true"};
     std::string m_pager;
@@ -39,7 +39,7 @@ class CommandShow : public Command, public with_single_osm_input {
 public:
 
     explicit CommandShow(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

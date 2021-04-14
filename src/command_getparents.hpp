@@ -38,7 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandGetParents : public Command, public with_single_osm_input, public with_osm_output {
+class CommandGetParents : public CommandWithSingleOSMInput, public with_osm_output {
 
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
 
@@ -55,7 +55,7 @@ class CommandGetParents : public Command, public with_single_osm_input, public w
 public:
 
     explicit CommandGetParents(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

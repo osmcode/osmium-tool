@@ -39,7 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandTagsFilter : public Command, public with_single_osm_input, public with_osm_output {
+class CommandTagsFilter : public CommandWithSingleOSMInput, public with_osm_output {
 
     osmium::nwr_array<osmium::TagsFilter> m_filters;
     osmium::TagsFilter m_area_filters;
@@ -78,7 +78,7 @@ class CommandTagsFilter : public Command, public with_single_osm_input, public w
 public:
 
     explicit CommandTagsFilter(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

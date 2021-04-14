@@ -28,12 +28,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandMerge : public Command, public with_multiple_osm_inputs, public with_osm_output {
+class CommandMerge : public CommandWithMultipleOSMInputs, public with_osm_output {
 
 public:
 
     explicit CommandMerge(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithMultipleOSMInputs(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

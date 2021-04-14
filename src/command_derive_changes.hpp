@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandDeriveChanges : public Command, public with_multiple_osm_inputs, public with_osm_output {
+class CommandDeriveChanges : public CommandWithMultipleOSMInputs, public with_osm_output {
 
     osmium::memory::Buffer m_buffer{128};
 
@@ -43,7 +43,7 @@ class CommandDeriveChanges : public Command, public with_multiple_osm_inputs, pu
 public:
 
     explicit CommandDeriveChanges(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithMultipleOSMInputs(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

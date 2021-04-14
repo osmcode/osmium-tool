@@ -30,7 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandTimeFilter : public Command, public with_single_osm_input, public with_osm_output {
+class CommandTimeFilter : public CommandWithSingleOSMInput, public with_osm_output {
 
     osmium::Timestamp m_from;
     osmium::Timestamp m_to;
@@ -38,7 +38,7 @@ class CommandTimeFilter : public Command, public with_single_osm_input, public w
 public:
 
     explicit CommandTimeFilter(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

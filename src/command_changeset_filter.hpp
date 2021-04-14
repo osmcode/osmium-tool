@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandChangesetFilter : public Command, public with_single_osm_input, public with_osm_output {
+class CommandChangesetFilter : public CommandWithSingleOSMInput, public with_osm_output {
 
     std::string m_user;
     osmium::Box m_box;
@@ -50,7 +50,7 @@ class CommandChangesetFilter : public Command, public with_single_osm_input, pub
 public:
 
     explicit CommandChangesetFilter(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

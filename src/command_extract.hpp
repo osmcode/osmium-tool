@@ -35,7 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandExtract : public Command, public with_single_osm_input, public with_osm_output {
+class CommandExtract : public CommandWithSingleOSMInput, public with_osm_output {
 
     static const std::size_t initial_buffer_size = 10 * 1024;
 
@@ -60,7 +60,7 @@ class CommandExtract : public Command, public with_single_osm_input, public with
 public:
 
     explicit CommandExtract(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

@@ -99,7 +99,7 @@ public:
 
 }; // class id_map
 
-class CommandRenumber : public Command, public with_single_osm_input, public with_osm_output {
+class CommandRenumber : public CommandWithSingleOSMInput, public with_osm_output {
 
     std::string m_index_directory;
 
@@ -125,7 +125,7 @@ class CommandRenumber : public Command, public with_single_osm_input, public wit
 public:
 
     explicit CommandRenumber(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

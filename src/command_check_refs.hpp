@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandCheckRefs : public Command, public with_single_osm_input {
+class CommandCheckRefs : public CommandWithSingleOSMInput {
 
     bool m_show_ids = false;
     bool m_check_relations = false;
@@ -36,7 +36,7 @@ class CommandCheckRefs : public Command, public with_single_osm_input {
 public:
 
     explicit CommandCheckRefs(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithSingleOSMInput(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;

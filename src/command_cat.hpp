@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class CommandCat : public Command, public with_multiple_osm_inputs, public with_osm_output {
+class CommandCat : public CommandWithMultipleOSMInputs, public with_osm_output {
 
     enum clean_options : uint8_t {
         clean_version   = 0x01,
@@ -57,7 +57,7 @@ class CommandCat : public Command, public with_multiple_osm_inputs, public with_
 public:
 
     explicit CommandCat(const CommandFactory& command_factory) :
-        Command(command_factory) {
+        CommandWithMultipleOSMInputs(command_factory) {
     }
 
     bool setup(const std::vector<std::string>& arguments) override final;
