@@ -260,6 +260,8 @@ bool CommandTagsFilter::find_relations_in_relations() {
                         m_referenced_ids(osmium::item_type::node).set(member.positive_ref());
                     } else if (member.type() == osmium::item_type::way) {
                         m_referenced_ids(osmium::item_type::way).set(member.positive_ref());
+                    } else if (member.type() == osmium::item_type::relation) {
+                        m_referenced_ids(osmium::item_type::relation).set(member.positive_ref());
                     }
                 }
             }
