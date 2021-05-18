@@ -177,12 +177,12 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
     // If the file type is not set, try to deduce it from the file name
     // suffix.
     if (file_type.empty()) {
-        std::string suffix{get_filename_suffix(file_name)};
-        if (suffix == "poly") {
+        if (ends_with(file_name, ".poly")) {
             file_type = "poly";
-        } else if (suffix == "json" || suffix == "geojson") {
+        } else if (ends_with(file_name, ".json") || ends_with(file_name, ".geojson")) {
             file_type = "geojson";
         } else {
+            std::string suffix{get_filename_suffix(file_name)};
             osmium::io::File osmfile{"", suffix};
             if (osmfile.format() != osmium::io::file_format::unknown) {
                 file_type = "osm";

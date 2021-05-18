@@ -256,3 +256,12 @@ const char* object_type_as_string(const osmium::OSMObject& object) noexcept {
     return osmium::item_type_to_name(object.type());
 }
 
+bool ends_with(const std::string& str, const std::string& suffix) {
+    if (suffix.size() > str.size()) {
+        return false;
+    }
+
+    return std::strcmp(str.c_str() + (str.size() - suffix.size()),
+                       suffix.c_str()) == 0;
+}
+

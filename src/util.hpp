@@ -50,5 +50,6 @@ void initialize_tags_filter(osmium::TagsFilter& tags_filter, bool default_result
 osmium::Box parse_bbox(const std::string& str, const std::string& option_name);
 osmium::item_type parse_item_type(const std::string& t);
 const char* object_type_as_string(const osmium::OSMObject& object) noexcept;
+bool ends_with(const std::string& str, const std::string& suffix);
 
 #endif // UTIL_HPP

@@ -119,3 +119,19 @@ TEST_CASE("get_tag_matcher") {
     REQUIRE_FALSE(test_tag_matcher("addr:*", "addr", "Berlin"));
 }
 
+TEST_CASE("ends_with") {
+    REQUIRE_FALSE(ends_with("foo", "bar"));
+    REQUIRE_FALSE(ends_with("", "bar"));
+    REQUIRE_FALSE(ends_with("foox", "foo"));
+
+    REQUIRE(ends_with("", ""));
+    REQUIRE(ends_with("abc", "abc"));
+    REQUIRE(ends_with("abc", "bc"));
+    REQUIRE(ends_with("abc", "c"));
+    REQUIRE(ends_with("abc", ""));
+
+    REQUIRE(ends_with("file.json", ".json"));
+    REQUIRE(ends_with("some.file.json", ".json"));
+    REQUIRE(ends_with("file.osm.bz2", ".bz2"));
+    REQUIRE(ends_with("file.osm.bz2", ".osm.bz2"));
+}
