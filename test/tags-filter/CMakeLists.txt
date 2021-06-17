@@ -30,4 +30,11 @@ check_tags_filter(highway-t   "-t"    input.osm w/highway output-highway-t.osm)
 check_tags_filter(highway-it  "-i -t" input.osm w/highway output-highway-it.osm)
 check_tags_filter(note-rel-t  "-t"    input.osm r/note output-note-rel-t.osm)
 
+
+check_tags_filter(site-1     ""   input-site.osm r/site=1 output-site-1.osm)
+check_tags_filter(site-2     ""   input-site.osm r/site=2 output-site-2.osm)
+check_tags_filter(site-R     "-R" input-site.osm r/site=2 output-site-R.osm)
+check_tags_filter(site-R-all "-R" input-site.osm r/site output-site-R-all.osm)
+check_tags_filter(site-t     "-t" input-site.osm r/site output-site-t.osm)
+
 #-----------------------------------------------------------------------------

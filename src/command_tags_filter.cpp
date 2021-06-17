@@ -272,7 +272,7 @@ bool CommandTagsFilter::find_relations_in_relations() {
     }
 
     const auto rel_in_rel = stash.build_parent_to_member_index();
-    for (const osmium::unsigned_object_id_type id : m_referenced_ids(osmium::item_type::relation)) {
+    for (const osmium::unsigned_object_id_type id : m_matching_ids(osmium::item_type::relation)) {
         mark_rel_ids(rel_in_rel, id);
     }
 
