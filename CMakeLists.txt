@@ -36,6 +36,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(WITH_LZ4 "Build with lz4 support for PBF files" ON)
 
+option(BUILD_TESTING "Build the tests" ON)
+
 
 #-----------------------------------------------------------------------------
 #
@@ -285,8 +287,10 @@ add_subdirectory(src)
 #
 #-----------------------------------------------------------------------------
 
-enable_testing()
-add_subdirectory(test)
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(test)
+endif()
 
 #-----------------------------------------------------------------------------
 #
