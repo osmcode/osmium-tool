@@ -18,11 +18,9 @@ command line or in an expressions file. See the **FILTER EXPRESSIONS** section
 for a description of the filter expression format.
 
 All objects matching the expressions will be read from *OSM-FILE* and written
-to the output. All objects directly referenced from those objects will also be
-added to the output unless the option **\--omit-referenced/-R** is used. This
-applies to nodes referenced in ways and members referenced in relations. In
-addition nodes referenced from way members of matching relations are also
-added to the output.
+to the output. All objects referenced from those objects will also be added
+to the output unless the option **\--omit-referenced/-R** is used. This
+applies to nodes referenced in ways and members referenced in relations.
 
 If the option **\--omit-referenced/-R** is used, the input file is read
 only once, otherwise the input file will possibly be read up to three times.
