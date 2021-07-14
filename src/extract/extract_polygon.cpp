@@ -139,7 +139,7 @@ bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
             const int64_t tx = int64_t(location.x())        - int64_t(segment.second().x());
             const int64_t ty = int64_t(location.y())        - int64_t(segment.second().y());
 
-            const bool comp = tx * ay < ax * ty;
+            const bool comp = tx * ay <= ax * ty;
 
             if ((ay > 0) == comp) {
                 inside = !inside;
