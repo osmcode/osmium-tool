@@ -18,6 +18,7 @@
 #include "command_merge.hpp"
 #include "command_merge_changes.hpp"
 #include "command_query_locations_index.hpp"
+#include "command_removeid.hpp"
 #include "command_renumber.hpp"
 #include "command_show.hpp"
 #include "command_sort.hpp"
@@ -91,6 +92,10 @@ void register_commands(CommandFactory& cmd_factory) {
 
     cmd_factory.register_command("query-locations-index", "Query node locations index on disk", [&]() {
         return new CommandQueryLocationsIndex{cmd_factory};
+    });
+
+    cmd_factory.register_command("removeid", "Remove objects from OSM file by ID", [&]() {
+        return new CommandRemoveId{cmd_factory};
     });
 
     cmd_factory.register_command("renumber", "Renumber IDs in OSM file", [&]() {

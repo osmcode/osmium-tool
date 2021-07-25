@@ -74,6 +74,9 @@ merge
 merge-changes
 :   merge several OSM change files into one
 
+removeid
+:   remove OSM objects with specified IDs
+
 renumber
 :   renumber object IDs
 

@@ -240,6 +240,7 @@ SET(OSMIUM_COMMANDS
     merge
     merge-changes
     query-locations-index
+    removeid
     renumber
     show
     sort
