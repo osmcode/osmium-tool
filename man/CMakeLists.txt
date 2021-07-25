@@ -72,6 +72,7 @@ if(PANDOC)
     add_man_page(1 osmium-time-filter)
     add_man_page(5 osmium-file-formats)
     add_man_page(5 osmium-index-types)
+    add_man_page(5 osmium-output-headers)
 
     add_custom_target(man ALL DEPENDS ${ALL_MAN_PAGES})
 else()

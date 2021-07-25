@@ -140,6 +140,6 @@ then rewrite a change file, too:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-sort**(1)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-output-headers**(5), **osmium-sort**(1)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

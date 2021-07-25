@@ -69,8 +69,9 @@ bool CommandHelp::run() {
         }
 
         std::cout << "\nTOPICS:\n"
-                     "  file-formats           File formats supported by Osmium\n"
-                     "  index-types            Index types for storing node locations\n";
+                     "  file-formats            File formats supported by Osmium\n"
+                     "  index-types             Index types for storing node locations\n"
+                     "  output-headers          Header options that can be set on output files\n";
 
         std::cout << "\nUse 'osmium COMMAND -h' for short usage information.\n"
                      "Use 'osmium help COMMAND' for detailed information on a specific command.\n"
@@ -91,6 +92,11 @@ bool CommandHelp::run() {
 
     if (m_topic == "index-types") {
         show_help("index-types", "");
+        return true;
+    }
+
+    if (m_topic == "output-headers") {
+        show_help("output-headers", "");
         return true;
     }
 

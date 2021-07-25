@@ -391,6 +391,7 @@ Extract the city of Munich using a bounding box:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-getid**(1), **osmium-merge**(1)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-output-headers**(5),
+  **osmium-getid**(1), **osmium-merge**(1)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

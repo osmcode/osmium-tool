@@ -140,6 +140,7 @@ Output nodes 17 and 1234, way 42, and relation 111 to STDOUT in OPL format:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-getparents**(1), **osmium-removeid**(1), **osmium-file-formats**(5)
+* **osmium**(1), **osmium-getparents**(1), **osmium-removeid**(1),
+  **osmium-file-formats**(5), **osmium-output-headers**(5)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

@@ -114,6 +114,7 @@ Apply changes in `362.osc.gz` to planet file and write result to `new.osm.pbf`:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-merge-changes**(1), **osmium-derive-changes**(1)
+* **osmium**(1), **osmium-merge-changes**(1), **osmium-derive-changes**(1),
+  **osmium-file-formats**(5), **osmium-output-headers**(5)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

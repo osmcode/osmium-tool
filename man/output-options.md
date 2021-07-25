@@ -23,7 +23,7 @@
 
 \--output-header=OPTION=VALUE
 :   Add output header option. This command line option can be used multiple
-    times for different OPTIONs. See the *libosmium manual* for a list of
-    available header options. For some commands you can use the special format
-    "OPTION!" (ie. an exclamation mark after the OPTION and no value set) to
-    set the value to the same as in the input file.
+    times for different OPTIONs. See the *osmium-output-headers(5)* man page
+    for a list of available header options. For some commands you can use the
+    special format "OPTION!" (ie. an exclamation mark after the OPTION and no
+    value set) to set the value to the same as in the input file.

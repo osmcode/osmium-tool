@@ -147,6 +147,8 @@ killer" to find out more about this.
   **osmium-sort**(1),
   **osmium-tags-filter**(1),
   **osmium-time-filter**(1),
-  **osmium-file-formats**(5)
+  **osmium-file-formats**(5),
+  **osmium-index-types**(5),
+  **osmium-output-headers**(5)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 
