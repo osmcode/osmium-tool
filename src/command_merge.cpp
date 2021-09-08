@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_merge.hpp"
+#include "exception.hpp"
 #include "util.hpp"
 
 #include <osmium/io/file.hpp>
@@ -47,6 +48,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 bool CommandMerge::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
+    opts_cmd.add_options()
+    ("with-history,H", "Do not warn about input files with multiple object versions")
+    ;
 
     po::options_description opts_common{add_common_options()};
     po::options_description opts_input{add_multiple_inputs_options()};
@@ -75,6 +79,10 @@ bool CommandMerge::setup(const std::vector<std::string>& arguments) {
     setup_input_files(vm);
     setup_output_file(vm);
 
+    if (vm.count("with-history")) {
+        m_with_history = true;
+    }
+
     return true;
 }
 
@@ -89,31 +97,81 @@ namespace {
 
         using it_type = osmium::io::InputIterator<osmium::io::Reader, osmium::OSMObject>;
 
-        std::unique_ptr<osmium::io::Reader> reader;
-        it_type iterator;
+        std::unique_ptr<osmium::io::Reader> m_reader;
+        std::string m_name;
+        it_type m_iterator;
+
+        osmium::item_type m_last_type = osmium::item_type::node;
+        osmium::object_id_type m_last_id = 0;
+        osmium::object_version_type m_last_version = 0;
+
+        bool m_warning;
 
     public:
 
-        explicit DataSource(const osmium::io::File& file) :
-            reader(new osmium::io::Reader{file}),
-            iterator(*reader) {
+        explicit DataSource(const osmium::io::File& file, bool with_history) :
+            m_reader(new osmium::io::Reader{file}),
+            m_name(file.filename()),
+            m_iterator(*m_reader),
+            m_warning(!with_history) {
+            if (m_iterator != it_type{}) {
+                m_last_type = m_iterator->type();
+                m_last_id = m_iterator->id();
+                m_last_version = m_iterator->version();
+            }
         }
 
         bool empty() const noexcept {
-            return iterator == it_type{};
+            return m_iterator == it_type{};
         }
 
-        bool next() noexcept {
-            ++iterator;
-            return iterator != it_type{};
+        bool next() {
+            ++m_iterator;
+
+            if (m_iterator == it_type{}) { // reached end of file
+                return false;
+            }
+
+            if (m_iterator->type() < m_last_type) {
+                throw std::runtime_error{"Objects in input file '" + m_name + "' out of order (must be nodes, then ways, then relations)."};
+            } else if (m_iterator->type() > m_last_type) {
+                m_last_type = m_iterator->type();
+                m_last_id = m_iterator->id();
+                m_last_version = m_iterator->version();
+                return true;
+            }
+
+            if (m_iterator->id() < m_last_id) {
+                throw std::runtime_error{"Objects in input file '" + m_name + "' out of order (smaller ids must come first)."};
+            } else if (m_iterator->id() > m_last_id) {
+                m_last_id = m_iterator->id();
+                m_last_version = m_iterator->version();
+                return true;
+            }
+
+            if (m_iterator->version() < m_last_version) {
+                throw std::runtime_error{"Objects in input file '" + m_name + "' out of order (smaller version must come first)."};
+            } else if (m_iterator->version() == m_last_version) {
+                throw std::runtime_error{"Two objects in input file '" + m_name + "' with same version."};
+            }
+
+            if (m_warning) {
+                std::cerr << "Warning: Multiple objects with same id in input file '" + m_name + "'!\n";
+                std::cerr << "If you are reading history files, this is to be expected. Use --with-history to disable warning.\n";
+                m_warning = false;
+            }
+
+            m_last_version = m_iterator->version();
+
+            return true;
         }
 
         const osmium::OSMObject* get() noexcept {
-            return &*iterator;
+            return &*m_iterator;
         }
 
         std::size_t offset() const noexcept {
-            return reader->offset();
+            return m_reader->offset();
         }
 
     }; // DataSource
@@ -167,27 +225,7 @@ bool CommandMerge::run() {
         while (osmium::memory::Buffer buffer = reader.read()) {
             writer(std::move(buffer));
         }
-    } else if (m_input_files.size() == 2) {
-        // Use simpler code when there are exactly two files to merge
-        m_vout << "Merging 2 input files to output file...\n";
-
-        // The larger file should be first so the progress bar will work better
-        if (file_size(m_input_files[0]) < file_size(m_input_files[1])) {
-            using std::swap;
-            swap(m_input_files[0], m_input_files[1]);
-        }
-
-        osmium::io::ReaderWithProgressBar reader1(display_progress(), m_input_files[0], osmium::osm_entity_bits::object);
-        osmium::io::Reader reader2(m_input_files[1], osmium::osm_entity_bits::object);
-        auto in1 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader1);
-        auto in2 = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader2);
-        auto out = osmium::io::make_output_iterator(writer);
-
-        std::set_union(in1.cbegin(), in1.cend(),
-                       in2.cbegin(), in2.cend(),
-                       out);
     } else {
-        // Three or more files to merge
         m_vout << "Merging " << m_input_files.size() << " input files to output file...\n";
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         std::vector<DataSource> data_sources;
@@ -197,7 +235,7 @@ bool CommandMerge::run() {
 
         int index = 0;
         for (const osmium::io::File& file : m_input_files) {
-            data_sources.emplace_back(file);
+            data_sources.emplace_back(file, m_with_history);
 
             if (!data_sources.back().empty()) {
                 queue.emplace(data_sources.back().get(), index);

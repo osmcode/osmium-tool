@@ -35,11 +35,17 @@ This commands reads its input file(s) only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
 STDOUT.
 
+# OPTIONS
+
+-H, \--with-history
+:   Do not warn when there are multiple versions of the same object in the
+    input files.
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@
 @MAN_INPUT_OPTIONS@
 @MAN_OUTPUT_OPTIONS@
+
 
 # DIAGNOSTICS
 

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" upload="false" generator="testdata">
+  <node id="10" version="1" timestamp="2015-01-01T01:00:01Z" uid="1" user="test" changeset="1" lat="1" lon="1"/>
+  <node id="10" version="3" timestamp="2015-01-01T01:00:03Z" uid="1" user="test" changeset="3" lat="1" lon="3"/>
+  <node id="10" version="3" timestamp="2015-01-01T01:00:03Z" uid="1" user="test" changeset="3" lat="1" lon="3"/>
+</osm>

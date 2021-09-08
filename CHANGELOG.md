@@ -22,6 +22,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- The `osmium merge` command now checks that the input files are ordered
+  correctly and warns or stops if this is not the case.
+
 ### Fixed
 
 - Fixed relation member recursion in tags-filter so that objects referenced

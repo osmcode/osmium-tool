@@ -30,6 +30,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandMerge : public CommandWithMultipleOSMInputs, public with_osm_output {
 
+    bool m_with_history = false;
+
 public:
 
     explicit CommandMerge(const CommandFactory& command_factory) :
