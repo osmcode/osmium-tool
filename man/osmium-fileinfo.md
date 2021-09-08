@@ -96,6 +96,7 @@ The following variables are available:
     file.format - STRING: XML|PBF
     file.compression - STRING: none|bzip2|gzip
     file.size - INTEGER (always 0 when reading from STDIN)
+    header.boxes - STRING (could be multiline)
     header.with_history - BOOL (yes|no)
     header.option.generator - STRING
     header.option.version - STRING

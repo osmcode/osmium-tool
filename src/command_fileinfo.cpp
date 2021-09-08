@@ -544,6 +544,12 @@ public:
     }
 
     void header(const osmium::io::Header& header) final {
+        if (m_get_value == "header.boxes") {
+            for (const auto& box : header.boxes()) {
+                std::cout << box << "\n";
+            }
+        }
+
         if (m_get_value == "header.with_history") {
             std::cout << yes_no(header.has_multiple_object_versions());
             return;
@@ -770,6 +776,7 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
         "file.format",
         "file.compression",
         "file.size",
+        "header.boxes",
         "header.with_history",
         "header.option.generator",
         "header.option.osmosis_replication_base_url",
