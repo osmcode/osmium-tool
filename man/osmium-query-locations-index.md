@@ -29,7 +29,7 @@ overwrite this.
 
 # OPTIONS
 
---dump
+\--dump
 :   Dump all node locations to an OSM file. Use the **\--output/-o** and
     **\--output-format/-f** options to set the file format to be used.
     Default is STDOUT and the OPL format, respectively.
