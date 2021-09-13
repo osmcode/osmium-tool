@@ -279,7 +279,7 @@ void CommandExtract::set_directory(const std::string& directory) {
 
 void CommandExtract::parse_config_file() {
     std::ifstream config_file{m_config_file_name};
-    rapidjson::IStreamWrapper stream_wrapper{config_file};
+    rapidjson::IStreamWrapper stream_wrapper{(m_config_file_name == "-")? std::cin : config_file};
 
     rapidjson::Document doc;
     if (doc.ParseStream<(rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag)>(stream_wrapper).HasParseError()) {
