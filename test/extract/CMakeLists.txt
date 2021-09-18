@@ -14,6 +14,10 @@ function(check_extract_cfg _name _input _output _opts)
     check_output(extract cfg_${_name} "extract --generator=test extract/${_input} ${_opts} -c ${CMAKE_CURRENT_SOURCE_DIR}/config.json" "extract/${_output}")
 endfunction()
 
+function(check_extract_opl _name _input _output _opts)
+    check_output(extract ${_name} "extract --generator=test -f opl extract/${_input} ${_opts}" "extract/${_output}")
+endfunction()
+
 
 #-----------------------------------------------------------------------------
 
@@ -26,5 +30,18 @@ check_extract(smart_nonmp   input1.osm output-smart-nonmp.osm "-s smart -S types
 
 check_extract_cfg(simple    input1.osm output-simple.osm "-s simple --output-header=xml_josm_upload=false")
 
+#-----------------------------------------------------------------------------
+
+check_extract_opl(antimeridian-east-bbox antimeridian.opl output-antimeridian-east.opl "--bbox=160,60,180,80")
+check_extract_opl(antimeridian-west-bbox antimeridian.opl output-antimeridian-west.opl "--bbox=-180,60,-160,80")
+check_extract_opl(antimeridian-east-poly antimeridian.opl output-antimeridian-east.opl "--polygon=extract/polygon-russia-east.geojson")
+check_extract_opl(antimeridian-west-poly antimeridian.opl output-antimeridian-west.opl "--polygon=extract/polygon-russia-west.geojson")
+check_extract_opl(antimeridian-both-poly antimeridian.opl output-antimeridian-both.opl "--polygon=extract/polygon-russia-all.geojson")
+check_extract_opl(antimeridian-reverse-poly antimeridian.opl output-antimeridian-both.opl "--polygon=extract/polygon-russia-reverse.geojson")
+
+check_extract_opl(antimeridian-alaska-east-json w42394837.osm w42394837.opl "--polygon=extract/polygon-us-alaska.geojson")
+check_extract_opl(antimeridian-alaska-west-json w46113981.osm w46113981.opl "--polygon=extract/polygon-us-alaska.geojson")
+check_extract_opl(antimeridian-alaska-east-poly w42394837.osm w42394837.opl "--polygon=extract/polygon-us-alaska.poly")
+check_extract_opl(antimeridian-alaska-west-poly w46113981.osm w46113981.opl "--polygon=extract/polygon-us-alaska.poly")
 
 #-----------------------------------------------------------------------------

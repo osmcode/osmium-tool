@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="CGImap 0.8.5 (2227060 spike-06.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node id="529267768" visible="true" version="4" changeset="18157685" timestamp="2013-10-03T09:27:25Z" user="Verdy_p" uid="90780" lat="51.7940888" lon="180.0000000"/>
+ <node id="529268301" visible="true" version="4" changeset="18109681" timestamp="2013-09-30T12:42:56Z" user="Verdy_p" uid="90780" lat="52.1384488" lon="180.0000000"/>
+ <node id="2477601610" visible="true" version="2" changeset="18157685" timestamp="2013-10-03T09:27:24Z" user="Verdy_p" uid="90780" lat="51.8434451" lon="180.0000000"/>
+ <node id="2477601612" visible="true" version="2" changeset="18157685" timestamp="2013-10-03T09:27:24Z" user="Verdy_p" uid="90780" lat="51.8927474" lon="180.0000000"/>
+ <node id="2477601614" visible="true" version="2" changeset="18157685" timestamp="2013-10-03T09:27:24Z" user="Verdy_p" uid="90780" lat="51.9419957" lon="180.0000000"/>
+ <node id="2477601616" visible="true" version="2" changeset="18157685" timestamp="2013-10-03T09:27:24Z" user="Verdy_p" uid="90780" lat="51.9911899" lon="180.0000000"/>
+ <node id="2477601618" visible="true" version="2" changeset="18157685" timestamp="2013-10-03T09:27:24Z" user="Verdy_p" uid="90780" lat="52.0403302" lon="180.0000000"/>
+ <node id="2477601621" visible="true" version="2" changeset="18157685" timestamp="2013-10-03T09:27:24Z" user="Verdy_p" uid="90780" lat="52.0894164" lon="180.0000000"/>
+ <way id="42394837" visible="true" version="7" changeset="74735267" timestamp="2019-09-20T21:14:03Z" user="Василь Бойчук" uid="8407767">
+  <nd ref="529267768"/>
+  <nd ref="2477601610"/>
+  <nd ref="2477601612"/>
+  <nd ref="2477601614"/>
+  <nd ref="2477601616"/>
+  <nd ref="2477601618"/>
+  <nd ref="2477601621"/>
+  <nd ref="529268301"/>
+  <tag k="closure_segment" v="yes"/>
+  <tag k="maritime" v="yes"/>
+  <tag k="name" v="Antimeridian (180° East)"/>
+  <tag k="note" v="segment closing the nautical border in 2 polygons left and right of the 180th meridian"/>
+ </way>
+</osm>
