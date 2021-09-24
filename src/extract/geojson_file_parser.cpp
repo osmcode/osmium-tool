@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../exception.hpp"
 #include "geojson_file_parser.hpp"
+#include "geometry_util.hpp"
 
 #include <osmium/builder/osm_object_builder.hpp>
 #include <osmium/geom/coordinates.hpp>
@@ -32,6 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <rapidjson/error/en.h>
 #include <rapidjson/istreamwrapper.h>
 
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <string>
@@ -97,7 +99,10 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
     }
 
     {
-        const auto outer_ring = parse_ring(array[0]);
+        auto outer_ring = parse_ring(array[0]);
+        if (!is_ccw(outer_ring)) {
+            std::reverse(outer_ring.begin(), outer_ring.end());
+        }
         osmium::builder::OuterRingBuilder ring_builder{builder};
         for (const auto& c : outer_ring) {
             osmium::Location loc{c.x, c.y};
@@ -113,7 +118,10 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
     }
 
     for (unsigned int i = 1; i < array.Size(); ++i) {
-        const auto inner_ring = parse_ring(array[i]);
+        auto inner_ring = parse_ring(array[i]);
+        if (is_ccw(inner_ring)) {
+            std::reverse(inner_ring.begin(), inner_ring.end());
+        }
         osmium::builder::InnerRingBuilder ring_builder{builder};
         for (const auto& c : inner_ring) {
             osmium::Location loc{c.x, c.y};

@@ -21,12 +21,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "../exception.hpp"
+#include "geometry_util.hpp"
 #include "poly_file_parser.hpp"
 
 #include <osmium/geom/coordinates.hpp>
 #include <osmium/memory/buffer.hpp>
 #include <osmium/util/string.hpp>
 
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -57,7 +59,7 @@ PolyFileParser::PolyFileParser(osmium::memory::Buffer& buffer, const std::string
 }
 
 void PolyFileParser::parse_ring() {
-    bool inner_ring = line()[0] == '!';
+    const bool is_inner_ring = line()[0] == '!';
     ++m_line;
 
     std::vector<osmium::Location> coordinates;
@@ -71,12 +73,18 @@ void PolyFileParser::parse_ring() {
                 coordinates.push_back(coordinates.front());
             }
 
-            if (inner_ring) {
+            if (is_inner_ring) {
+                if (is_ccw(coordinates)) {
+                    std::reverse(coordinates.begin(), coordinates.end());
+                }
                 osmium::builder::InnerRingBuilder ring_builder{*m_builder};
                 for (const auto& location : coordinates) {
                     ring_builder.add_node_ref(0, location);
                 }
             } else {
+                if (!is_ccw(coordinates)) {
+                    std::reverse(coordinates.begin(), coordinates.end());
+                }
                 osmium::builder::OuterRingBuilder ring_builder{*m_builder};
                 for (const auto& location : coordinates) {
                     ring_builder.add_node_ref(0, location);

@@ -265,6 +265,7 @@ set(OSMIUM_SOURCE_FILES
     extract/extract.cpp
     extract/extract_polygon.cpp
     extract/geojson_file_parser.cpp
+    extract/geometry_util.cpp
     extract/osm_file_parser.cpp
     extract/poly_file_parser.cpp
     extract/strategy_complete_ways.cpp

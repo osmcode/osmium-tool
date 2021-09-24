@@ -2,6 +2,7 @@
 #include "test.hpp" // IWYU pragma: keep
 
 #include "exception.hpp"
+#include "geometry_util.hpp"
 #include "geojson_file_parser.hpp"
 #include "osm_file_parser.hpp"
 #include "poly_file_parser.hpp"
@@ -240,5 +241,19 @@ TEST_CASE("Parse GeoJSON files") {
         REQUIRE_THROWS_AS(parser(), const geojson_error&);
     }
 
+}
+
+TEST_CASE("Ring orientation (clockwise)") {
+    using oc = osmium::geom::Coordinates;
+    std::vector<oc> c = {oc{0,0}, oc{0,1}, oc{1,1}, oc{1,0}, oc{0,0}};
+    REQUIRE(calculate_double_area(c) == Approx(-2.0));
+    REQUIRE_FALSE(is_ccw(c));
+}
+
+TEST_CASE("Ring orientation (counter-clockwise)") {
+    using oc = osmium::geom::Coordinates;
+    std::vector<oc> c = {oc{0,0}, oc{1,0}, oc{1,1}, oc{0,1}, oc{0,0}};
+    REQUIRE(calculate_double_area(c) == Approx(2.0));
+    REQUIRE(is_ccw(c));
 }
 
