@@ -2,8 +2,8 @@
 #include "test.hpp" // IWYU pragma: keep
 
 #include "exception.hpp"
-#include "geometry_util.hpp"
 #include "geojson_file_parser.hpp"
+#include "geometry_util.hpp"
 #include "osm_file_parser.hpp"
 #include "poly_file_parser.hpp"
 
