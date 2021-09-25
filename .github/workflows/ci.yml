@@ -3,42 +3,6 @@ name: CI
 on: [ push, pull_request ]
 
 jobs:
-  ubuntu16-clang6-dev:
-    runs-on: ubuntu-16.04
-    env:
-      CC: clang-6.0
-      CXX: clang++-6.0
-      BUILD_TYPE: Dev
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  ubuntu16-clang8-dev:
-    runs-on: ubuntu-16.04
-    env:
-      CC: clang-8
-      CXX: clang++-8
-      BUILD_TYPE: Dev
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  ubuntu16-clang9-dev:
-    runs-on: ubuntu-16.04
-    env:
-      CC: clang-9
-      CXX: clang++-9
-      BUILD_TYPE: Dev
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
   ubuntu18-clang9-dev:
     runs-on: ubuntu-18.04
     env:
@@ -84,18 +48,6 @@ jobs:
       CC: clang-10
       CXX: clang++-10
       BUILD_TYPE: Release
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  ubuntu16-gcc5-dev:
-    runs-on: ubuntu-16.04
-    env:
-      CC: gcc-5
-      CXX: g++-5
-      BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/install-ubuntu
