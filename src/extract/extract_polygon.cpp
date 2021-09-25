@@ -35,14 +35,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 static void add_ring(std::vector<osmium::Segment>& segments, const osmium::NodeRefList& ring) {
-    auto it = ring.begin();
-    const auto end = ring.end();
+    const auto *it = ring.begin();
+    const auto *const end = ring.end();
 
     if (it == end) {
         throw config_error{"Ring without any points."};
     }
 
-    auto prev_it = it++;
+    const auto *prev_it = it++;
     while (it != end) {
         segments.emplace_back(prev_it->location(), it->location());
         prev_it = it++;
