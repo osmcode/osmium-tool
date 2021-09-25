@@ -27,13 +27,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <vector>
 
-double calculate_double_area(const std::vector<osmium::geom::Coordinates>& coordinates) noexcept;
+double calculate_double_area(const std::vector<osmium::geom::Coordinates>& coordinates);
 
-double calculate_double_area(const std::vector<osmium::Location>& coordinates) noexcept;
+double calculate_double_area(const std::vector<osmium::Location>& coordinates);
 
 /// Is the ring defined by the coordinates counter-clockwise?
 template <typename T>
-bool is_ccw(T &coordinates) noexcept {
+bool is_ccw(T &coordinates) {
     return calculate_double_area(coordinates) > 0;
 }
 

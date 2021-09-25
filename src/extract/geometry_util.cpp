@@ -1,7 +1,7 @@
 
 #include "geometry_util.hpp"
 
-double calculate_double_area(const std::vector<osmium::Location>& coordinates) noexcept {
+double calculate_double_area(const std::vector<osmium::Location>& coordinates) {
     assert(coordinates.size() > 1);
 
     double total = 0.0;
@@ -16,7 +16,7 @@ double calculate_double_area(const std::vector<osmium::Location>& coordinates) n
     return total;
 }
 
-double calculate_double_area(const std::vector<osmium::geom::Coordinates>& coordinates) noexcept {
+double calculate_double_area(const std::vector<osmium::geom::Coordinates>& coordinates) {
     assert(coordinates.size() > 1);
 
     double total = 0.0;
