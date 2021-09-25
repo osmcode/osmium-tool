@@ -134,7 +134,8 @@ namespace {
 
             if (m_iterator->type() < m_last_type) {
                 throw std::runtime_error{"Objects in input file '" + m_name + "' out of order (must be nodes, then ways, then relations)."};
-            } else if (m_iterator->type() > m_last_type) {
+            }
+            if (m_iterator->type() > m_last_type) {
                 m_last_type = m_iterator->type();
                 m_last_id = m_iterator->id();
                 m_last_version = m_iterator->version();
@@ -143,7 +144,8 @@ namespace {
 
             if (m_iterator->id() < m_last_id) {
                 throw std::runtime_error{"Objects in input file '" + m_name + "' out of order (smaller ids must come first)."};
-            } else if (m_iterator->id() > m_last_id) {
+            }
+            if (m_iterator->id() > m_last_id) {
                 m_last_id = m_iterator->id();
                 m_last_version = m_iterator->version();
                 return true;
@@ -151,7 +153,8 @@ namespace {
 
             if (m_iterator->version() < m_last_version) {
                 throw std::runtime_error{"Objects in input file '" + m_name + "' out of order (smaller version must come first)."};
-            } else if (m_iterator->version() == m_last_version) {
+            }
+            if (m_iterator->version() == m_last_version) {
                 throw std::runtime_error{"Two objects in input file '" + m_name + "' with same version."};
             }
 
