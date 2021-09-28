@@ -29,12 +29,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - Fixed relation member recursion in tags-filter so that objects referenced
   from matching relations are also in the output.
-- Fix point-in-polygon-check in extract command which. More nodes directly on
-  the boundary should now be inside the polygon. This fixes a problem with
-  extracts on the antimeridian.
+- Fix point-in-polygon-check in extract command. More nodes directly on the
+  boundary should now be inside the polygon. This fixes a problem with extracts
+  on the antimeridian.
 - When an output file name for the extract command contains multiple dots (.),
   the file type could not always be deduced correctly. This improves detection
-  for json and poly files.
+  for .json and .poly files.
 - Do not show progress when any of the inputs is stdin. Because we don't know
   how large the input file is we can't display a reliable progress indicator.
 - Allow `none` index type on `osmium export`.
