@@ -191,20 +191,34 @@ void CommandCat::write_buffers(osmium::ProgressBar& progress_bar, std::vector<os
     }
 }
 
+static void report_filename(osmium::VerboseOutput& vout, const osmium::io::File& file, const osmium::io::Reader& reader) {
+    const auto size = reader.file_size();
+    const auto name = file.filename();
+
+    if (size == 0) {
+        if (name.empty()) {
+            vout << "Reading from stdin...\n";
+        } else {
+            vout << "Reading input file '" << name << "'...\n";
+        }
+    } else {
+        vout << "Reading input file '" << name << "' (" << size << " bytes)...\n";
+    }
+}
+
 bool CommandCat::run() {
     std::size_t file_size = 0;
 
     if (m_input_files.size() == 1) { // single input file
         osmium::io::Reader reader{m_input_files[0], osm_entity_bits()};
         osmium::io::Header header{reader.header()};
-        m_vout << "Copying input file '" << m_input_files[0].filename()
-               << "' (" << reader.file_size() << " bytes)\n";
+
+        report_filename(m_vout, m_input_files[0], reader);
 
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
 
         if (m_buffer_data) {
-            m_vout << "Reading data...\n";
             std::vector<osmium::memory::Buffer> buffers;
             osmium::ProgressBar progress_bar_reader{reader.file_size(), display_progress()};
             std::size_t size = read_buffers(progress_bar_reader, reader, buffers);
@@ -234,8 +248,7 @@ bool CommandCat::run() {
             for (const auto& input_file : m_input_files) {
                 progress_bar_reader.remove();
                 osmium::io::Reader reader{input_file, osm_entity_bits()};
-                m_vout << "Reading input file '" << input_file.filename()
-                    << "' (" << reader.file_size() << " bytes)\n";
+                report_filename(m_vout, input_file, reader);
                 size += read_buffers(progress_bar_reader, reader, buffers);
                 progress_bar_reader.file_done(reader.file_size());
                 reader.close();
@@ -253,8 +266,7 @@ bool CommandCat::run() {
             for (const auto& input_file : m_input_files) {
                 progress_bar.remove();
                 osmium::io::Reader reader{input_file, osm_entity_bits()};
-                m_vout << "Copying input file '" << input_file.filename()
-                    << "' (" << reader.file_size() << " bytes)\n";
+                report_filename(m_vout, input_file, reader);
                 copy(progress_bar, reader, writer);
                 progress_bar.file_done(reader.file_size());
                 reader.close();

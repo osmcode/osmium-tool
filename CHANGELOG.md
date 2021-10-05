@@ -24,6 +24,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - The `osmium merge` command now checks that the input files are ordered
   correctly and warns or stops if this is not the case.
+- Improved messages about files read in verbose mode for `osmium cat`.
 
 ### Fixed
 
