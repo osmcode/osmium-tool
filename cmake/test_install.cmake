@@ -16,6 +16,7 @@ set(OSMIUM_INSTALL_FILES
     share/man/man1/osmium-merge-changes.1
     share/man/man1/osmium-merge.1
     share/man/man1/osmium-query-locations-index.1
+    share/man/man1/osmium-removeid.1
     share/man/man1/osmium-renumber.1
     share/man/man1/osmium-show.1
     share/man/man1/osmium-sort.1
@@ -25,6 +26,7 @@ set(OSMIUM_INSTALL_FILES
     share/man/man1/osmium.1
     share/man/man5/osmium-file-formats.5
     share/man/man5/osmium-index-types.5
+    share/man/man5/osmium-output-headers.5
     bin/osmium
 )
 
