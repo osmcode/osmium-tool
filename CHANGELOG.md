@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.13.2] - 2021-10-05
+
+### Added
+
 - New `osmium removeid` command to remove all objects with the specified IDs
   from an OSM file. (This is, in a way, the opposite of the `osmium getid`
   command.)
@@ -636,7 +645,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.13.1...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.13.2...HEAD
+[1.13.2]: https://github.com/osmcode/osmium-tool/compare/v1.13.1...v1.13.2
 [1.13.1]: https://github.com/osmcode/osmium-tool/compare/v1.13.0...v1.13.1
 [1.13.0]: https://github.com/osmcode/osmium-tool/compare/v1.12.1...v1.13.0
 [1.12.1]: https://github.com/osmcode/osmium-tool/compare/v1.12.0...v1.12.1
