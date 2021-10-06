@@ -34,7 +34,7 @@ the input file. See the individual command man pages for where this is allowed.
 
 `sorting`
 :   Set the **Sort.Type_then_ID** property in the PBF header if set to
-    **Type_then_ID**. Other values are currently not suppored. (PBF files only).
+    **Type_then_ID**. Other values are currently not supported. (PBF files only).
     Note that this only sets the header option, it does not actually sort the
     file! Use **osmium sort** for that.
 
