@@ -193,7 +193,7 @@ void CommandCat::write_buffers(osmium::ProgressBar& progress_bar, std::vector<os
 
 static void report_filename(osmium::VerboseOutput& vout, const osmium::io::File& file, const osmium::io::Reader& reader) {
     const auto size = reader.file_size();
-    const auto name = file.filename();
+    const auto& name = file.filename();
 
     if (size == 0) {
         if (name.empty()) {
