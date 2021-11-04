@@ -3,3 +3,6 @@
 *.opl -crlf
 *.osh -crlf
 *-result.txt -crlf
+test/export/*.geojson -crlf
+test/export/*.geojsonseq -crlf
+test/export/*.txt -crlf
