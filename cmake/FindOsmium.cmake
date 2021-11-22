@@ -33,7 +33,7 @@
 #      geos       - include if you want to use any of the GEOS functions
 #      gdal       - include if you want to use any of the OGR functions
 #      proj       - include if you want to use any of the Proj.4 functions
-#      sparsehash - include if you use the sparsehash index
+#      sparsehash - include if you use the sparsehash index (deprecated!)
 #      lz4        - include support for LZ4 compression of PBF files
 #
 #    You can check for success with something like this:
@@ -224,6 +224,7 @@ endif()
 #----------------------------------------------------------------------
 # Component 'sparsehash'
 if(Osmium_USE_SPARSEHASH)
+    message(WARNING "Osmium: Use of Google SparseHash is deprecated. Please switch to a different index type.")
     find_path(SPARSEHASH_INCLUDE_DIR google/sparsetable)
 
     list(APPEND OSMIUM_EXTRA_FIND_VARS SPARSEHASH_INCLUDE_DIR)
