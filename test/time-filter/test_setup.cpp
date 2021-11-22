@@ -8,7 +8,7 @@ TEST_CASE("time-filter") {
     CommandTimeFilter cmd{factory};
 
     SECTION("no parameters") {
-        REQUIRE_THROWS_AS(cmd.setup({}), const argument_error&);
+        REQUIRE_THROWS_AS(cmd.setup({}), argument_error);
     }
 
 }

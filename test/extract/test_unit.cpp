@@ -18,27 +18,27 @@ TEST_CASE("Parse poly files") {
 
     SECTION("Empty file") {
         PolyFileParser parser{buffer, "test/extract/empty.poly"};
-        REQUIRE_THROWS_AS(parser(), const poly_error&);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("One line file") {
         PolyFileParser parser{buffer, "test/extract/one-line.poly"};
-        REQUIRE_THROWS_AS(parser(), const poly_error&);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("Two line file") {
         PolyFileParser parser{buffer, "test/extract/two-line.poly"};
-        REQUIRE_THROWS_AS(parser(), const poly_error&);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("Missing END ring") {
         PolyFileParser parser{buffer, "test/extract/missing-end-ring.poly"};
-        REQUIRE_THROWS_AS(parser(), const poly_error&);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("Missing END polygon") {
         PolyFileParser parser{buffer, "test/extract/missing-end-polygon.poly"};
-        REQUIRE_THROWS_AS(parser(), const poly_error&);
+        REQUIRE_THROWS_AS(parser(), poly_error);
     }
 
     SECTION("File with one polygon with one outer ring") {
@@ -223,22 +223,22 @@ TEST_CASE("Parse GeoJSON files") {
 
     SECTION("Invalid GeoJSON file") {
         GeoJSONFileParser parser{buffer, "test/extract/invalid.geojson"};
-        REQUIRE_THROWS_AS(parser(), const geojson_error&);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
     SECTION("Invalid GeoJSON file: Root not an object") {
         GeoJSONFileParser parser{buffer, "test/extract/invalid-root.geojson"};
-        REQUIRE_THROWS_AS(parser(), const geojson_error&);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
     SECTION("Invalid GeoJSON file: Empty root object") {
         GeoJSONFileParser parser{buffer, "test/extract/empty-root.geojson"};
-        REQUIRE_THROWS_AS(parser(), const geojson_error&);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
     SECTION("Invalid GeoJSON file: Wrong geometry type") {
         GeoJSONFileParser parser{buffer, "test/extract/wrong-geometry-type.geojson"};
-        REQUIRE_THROWS_AS(parser(), const geojson_error&);
+        REQUIRE_THROWS_AS(parser(), geojson_error);
     }
 
 }
