@@ -3,88 +3,177 @@ name: CI
 on: [ push, pull_request ]
 
 jobs:
-  ubuntu18-clang9-dev:
-    runs-on: ubuntu-18.04
-    env:
-      CC: clang-9
-      CXX: clang++-9
-      BUILD_TYPE: Dev
+  linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [Ubuntu-18, Ubuntu-20, Ubuntu-21, Debian-9, Debian-10, Debian-11, Debian-Testing, Debian-Experimental, Fedora-34]
+        build_type: [Dev]
+        cpp_compiler: [g++]
+        cpp_version: [c++11]
+        include:
+          - name: Ubuntu-18
+            # Uses gcc 7.5.0, clang 6.0.0, cmake 3.10.2
+            image: "ubuntu:18.04"
+            ubuntu: 18
+            installer: apt
+          - name: Ubuntu-20
+            # Uses gcc 9.3.0, clang 10.0.0, cmake 3.16.3
+            image: "ubuntu:20.04"
+            ubuntu: 20
+            installer: apt
+          - name: Ubuntu-21
+            # Uses gcc 10.3.0, clang, 12.0.0, cmake 3.18.4
+            image: "ubuntu:21.04"
+            ubuntu: 21
+            installer: apt
+          - name: Debian-9
+            # Uses gcc 6.3.0, clang 3.8.1, cmake 3.7.2
+            image: "debian:stretch"
+            installer: apt
+          - name: Debian-10
+            # Uses gcc 8.3.0, clang 7.0.1, cmake 3.13.4
+            image: "debian:buster"
+            installer: apt
+          - name: Debian-11
+            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+            image: "debian:bullseye"
+            installer: apt
+          - name: Debian-11
+            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+            image: "debian:bullseye"
+            installer: apt
+            cpp_version: c++17
+          - name: Debian-11
+            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+            image: "debian:bullseye"
+            installer: apt
+            cpp_version: c++20
+          - name: Debian-11
+            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+            image: "debian:bullseye"
+            installer: apt
+            c_compiler: clang
+            cpp_compiler: clang++
+            cpp_version: c++17
+          - name: Debian-11
+            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+            image: "debian:bullseye"
+            installer: apt
+            c_compiler: clang
+            cpp_compiler: clang++
+            cpp_version: c++20
+          - name: Debian-11
+            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+            image: "debian:bullseye"
+            installer: apt
+            build_type: RelWithDebInfo
+          - name: Debian-11
+            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+            image: "debian:bullseye"
+            installer: apt
+            c_compiler: clang
+            cpp_compiler: clang++
+          - name: Debian-Testing
+            # Uses gcc 10.3.0, clang 11.1.0, cmake 3.21.3
+            image: "debian:testing"
+            installer: apt
+            CXXFLAGS: -Wno-stringop-overread
+          - name: Debian-Testing
+            # Uses gcc 10.3.0, clang 11.1.0, cmake 3.21.3
+            image: "debian:testing"
+            installer: apt
+            c_compiler: clang
+            cpp_compiler: clang++
+          - name: Debian-Experimental
+            # Uses gcc 11, clang 14, cmake 3.21.3
+            image: "debian:experimental"
+            installer: apt
+            CXXFLAGS: -Wno-stringop-overread
+          - name: Debian-Experimental
+            # Uses gcc 11, clang 14, cmake 3.21.3
+            image: "debian:experimental"
+            installer: apt
+            c_compiler: clang-14
+            cpp_compiler: clang++-14
+          - name: Fedora-34
+            # Uses gcc 11.2.1, clang 12.0.1, cmake 3.20.5
+            image: "fedora:34"
+            installer: dnf
+            CXXFLAGS: -Wno-stringop-overread
+          - name: Fedora-35
+            # Uses gcc 11.2.1, clang 12.0.1, cmake 3.20.5
+            image: "fedora:35"
+            installer: dnf
+            CXXFLAGS: -Wno-stringop-overread
+    container:
+      image: ${{ matrix.image }}
+      env:
+        LANG: en_US.UTF-8
+        BUILD_TYPE: ${{ matrix.build_type }}
+        CXXFLAGS: ${{ matrix.CXXFLAGS }}
+        LDFLAGS: ${{ matrix.LDFLAGS }}
+        CC: ${{ matrix.c_compiler }}
+        CXX: ${{ matrix.cpp_compiler }}
+        CPP_VERSION: ${{ matrix.cpp_version }}
+        APT_LISTCHANGES_FRONTEND: none
+        DEBIAN_FRONTEND: noninteractive
     steps:
+      - name: Prepare container (apt)
+        run: |
+          apt-get update -qq
+          apt-get install -y clang \
+            cmake \
+            g++ \
+            git \
+            libboost-dev \
+            libboost-program-options-dev \
+            libbz2-dev \
+            libexpat1-dev \
+            liblz4-dev \
+            make \
+            pandoc \
+            zlib1g-dev
+        shell: bash
+        if: matrix.installer == 'apt'
+      - name: Install compiler
+        shell: bash
+        run: apt-get install -y clang-14
+        if: matrix.cpp_compiler == 'clang++-14'
+      - name: Prepare container (dnf)
+        run: |
+          dnf install --quiet --assumeyes \
+              boost-devel \
+              bzip2-devel \
+              cmake \
+              expat-devel \
+              gcc-c++ \
+              git \
+              lz4-devel \
+              make \
+              pandoc \
+              zlib-devel
+        shell: bash
+        if: matrix.installer == 'dnf'
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
 
-  ubuntu20-clang10-dev:
+  ubuntu-latest:
     runs-on: ubuntu-20.04
     env:
-      CC: clang-10
-      CXX: clang++-10
+      CC: clang-13
+      CXX: clang++-13
       BUILD_TYPE: Dev
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-#  Disabled, because it is triggered by several issues in the rapidjson library
-#  ubuntu20-clang10-debug-san:
-#    runs-on: ubuntu-20.04
-#    env:
-#      CC: clang-10
-#      CXX: clang++-10
-#      BUILD_TYPE: Debug
-#      CXXFLAGS: -fsanitize=address,undefined,integer -fno-sanitize-recover=all -fno-omit-frame-pointer
-#      LDFLAGS: -fsanitize=address,undefined,integer
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: ./.github/actions/install-ubuntu
-#      - uses: ./.github/actions/build
-#      - uses: ./.github/actions/ctest
-
-  ubuntu20-clang10-release:
-    runs-on: ubuntu-20.04
-    env:
-      CC: clang-10
-      CXX: clang++-10
-      BUILD_TYPE: Release
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  ubuntu18-gcc7-dev:
-    runs-on: ubuntu-18.04
-    env:
-      CC: gcc-7
-      CXX: g++-7
-      BUILD_TYPE: Dev
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  ubuntu20-gcc9-dev:
-    runs-on: ubuntu-20.04
-    env:
-      CC: gcc-9
-      CXX: g++-9
-      BUILD_TYPE: Dev
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-ubuntu
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  ubuntu20-gcc10-release:
-    runs-on: ubuntu-20.04
-    env:
-      CC: gcc-10
-      CXX: g++-10
-      BUILD_TYPE: Release
-    steps:
+      - name: Install new clang
+        run: |
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
+        shell: bash
       - uses: actions/checkout@v2
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/build
