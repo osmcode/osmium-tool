@@ -66,6 +66,13 @@ to merge several extracts without problems.
     **\--output-format/-f** options are ignored, because they are set in the
     config file.
 
+\--clean=ATTR
+:   Clean the attribute (*version*, *timestamp*, *changeset*, *uid*, *user*),
+    from the data before writing it out again. The attribute will be set to 0
+    (the user will be set to the empty string). This option can be given
+    multiple times. Depending on the output format these attributes might
+    show up as 0 or not show up at all.
+
 -d, \--directory=DIRECTORY
 :   Output directory. Output file names in the config file are relative to
     this directory. Overwrites the setting of the same name in the config

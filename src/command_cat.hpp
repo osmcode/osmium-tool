@@ -34,19 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandCat : public CommandWithMultipleOSMInputs, public with_osm_output {
 
-    enum clean_options : uint8_t {
-        clean_version   = 0x01,
-        clean_changeset = 0x02,
-        clean_timestamp = 0x04,
-        clean_uid       = 0x08,
-        clean_user      = 0x10
-    };
-
-    uint8_t m_clean_attrs = 0;
-
     bool m_buffer_data = false;
-
-    void clean_buffer(osmium::memory::Buffer& buffer) const;
 
     void copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const;
 

@@ -23,6 +23,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "option_clean.hpp"
+
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
@@ -65,6 +67,8 @@ protected:
 
     const CommandFactory& m_command_factory;
     osmium::VerboseOutput m_vout{false};
+
+    OptionClean m_clean;
 
 public:
 

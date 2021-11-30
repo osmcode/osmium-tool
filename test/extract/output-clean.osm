@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" generator="test">
+  <node id="10" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1" lat="0" lon="1"/>
+  <node id="11" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1" lat="1" lon="1"/>
+  <node id="12" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1" lat="2" lon="1"/>
+  <node id="13" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1" lat="3" lon="2"/>
+  <way id="20" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1">
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <tag k="foo" v="bar"/>
+  </way>
+  <relation id="31" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1">
+    <member type="node" ref="10" role=""/>
+  </relation>
+  <relation id="33" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1">
+    <member type="way" ref="20" role=""/>
+  </relation>
+  <relation id="34" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1">
+    <member type="way" ref="20" role=""/>
+    <member type="way" ref="21" role=""/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+  <relation id="35" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1">
+    <member type="relation" ref="31" role=""/>
+  </relation>
+  <relation id="36" timestamp="2015-01-01T01:00:00Z" user="test" changeset="1">
+    <member type="relation" ref="35" role=""/>
+  </relation>
+</osm>

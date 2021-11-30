@@ -73,23 +73,7 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     setup_input_files(vm);
     setup_output_file(vm);
 
-    if (vm.count("clean")) {
-        for (const auto& c : vm["clean"].as<std::vector<std::string>>()) {
-            if (c == "version") {
-                m_clean_attrs |= clean_options::clean_version;
-            } else if (c == "changeset") {
-                m_clean_attrs |= clean_options::clean_changeset;
-            } else if (c == "timestamp") {
-                m_clean_attrs |= clean_options::clean_timestamp;
-            } else if (c == "uid") {
-                m_clean_attrs |= clean_options::clean_uid;
-            } else if (c == "user") {
-                m_clean_attrs |= clean_options::clean_user;
-            } else {
-                throw argument_error{"Unknown attribute on -c/--clean option: '" + c +"'"};
-            }
-        }
-    }
+    m_clean.setup(vm);
 
     if (vm.count("buffer-data")) {
         m_buffer_data = true;
@@ -104,60 +88,14 @@ void CommandCat::show_arguments() {
 
     m_vout << "  other options:\n";
     show_object_types(m_vout);
-
-    std::string clean_names;
-    if (m_clean_attrs & clean_options::clean_version) {
-        clean_names += "version,";
-    }
-    if (m_clean_attrs & clean_options::clean_changeset) {
-        clean_names += "changeset,";
-    }
-    if (m_clean_attrs & clean_options::clean_timestamp) {
-        clean_names += "timestamp,";
-    }
-    if (m_clean_attrs & clean_options::clean_uid) {
-        clean_names += "uid,";
-    }
-    if (m_clean_attrs & clean_options::clean_user) {
-        clean_names += "user,";
-    }
-
-    if (clean_names.empty()) {
-        clean_names = "(none)";
-    } else {
-        clean_names.resize(clean_names.size() - 1);
-    }
-
-    m_vout << "    attributes to clean: " << clean_names << '\n';
-}
-
-void CommandCat::clean_buffer(osmium::memory::Buffer& buffer) const {
-    for (auto& object : buffer.select<osmium::OSMObject>()) {
-        if (m_clean_attrs & clean_options::clean_version) {
-            object.set_version(static_cast<osmium::object_version_type>(0));
-        }
-        if (m_clean_attrs & clean_options::clean_changeset) {
-            object.set_changeset(static_cast<osmium::changeset_id_type>(0));
-        }
-        if (m_clean_attrs & clean_options::clean_timestamp) {
-            object.set_timestamp(osmium::Timestamp{});
-        }
-        if (m_clean_attrs & clean_options::clean_uid) {
-            object.set_uid(static_cast<osmium::user_id_type>(0));
-        }
-        if (m_clean_attrs & clean_options::clean_user) {
-            object.clear_user();
-        }
-    }
+    m_vout << "    attributes to clean: " << m_clean.to_string() << '\n';
 }
 
 void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const {
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
 
-        if (m_clean_attrs) {
-            clean_buffer(buffer);
-        }
+        m_clean.apply_to(buffer);
 
         writer(std::move(buffer));
     }
@@ -169,9 +107,7 @@ std::size_t CommandCat::read_buffers(osmium::ProgressBar& progress_bar, osmium::
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
 
-        if (m_clean_attrs) {
-            clean_buffer(buffer);
-        }
+        m_clean.apply_to(buffer);
 
         size += buffer.committed();
 

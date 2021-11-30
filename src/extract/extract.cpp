@@ -27,18 +27,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include <string>
 
-void Extract::open_file(const osmium::io::Header& header, osmium::io::overwrite output_overwrite, osmium::io::fsync sync) {
+void Extract::open_file(const osmium::io::Header& header, osmium::io::overwrite output_overwrite, osmium::io::fsync sync, OptionClean const *clean) {
+    m_clean = clean;
     m_writer.reset(new osmium::io::Writer{m_output_file, header, output_overwrite, sync});
 }
 
 void Extract::close_file() {
     if (m_writer) {
+        if (m_buffer.committed() > 0) {
+            m_clean->apply_to(m_buffer);
+            (*m_writer)(std::move(m_buffer));
+        }
         m_writer->close();
     }
 }
 
 void Extract::write(const osmium::memory::Item& item) {
-    (*m_writer)(item);
+    if (m_buffer.capacity() - m_buffer.committed() < item.padded_size()) {
+        m_clean->apply_to(m_buffer);
+        (*m_writer)(std::move(m_buffer));
+        m_buffer = osmium::memory::Buffer{buffer_size, osmium::memory::Buffer::auto_grow::no};
+    }
+    m_buffer.push_back(item);
 }
 
 std::string Extract::envelope_as_text() const {

@@ -432,6 +432,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     ("strategy,s", po::value<std::string>()->default_value("complete_ways"), "Use named extract strategy")
     ("with-history,H", "Input file and output files are history files")
     ("set-bounds", "Sets bounds (bounding box) in header")
+    ("clean", po::value<std::vector<std::string>>(), "Clean attribute (version, changeset, timestamp, uid, user)")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -460,6 +461,8 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     setup_progress(vm);
     setup_input_file(vm);
     init_output_file(vm);
+
+    m_clean.setup(vm);
 
     if (vm.count("config") + vm.count("bbox") + vm.count("polygon") > 1) {
         throw argument_error{"Can only use one of --config/-c, --bbox/-b, or --polygon/-p."};
@@ -537,6 +540,7 @@ void CommandExtract::show_arguments() {
     m_vout << "  other options:\n";
     m_vout << "    config file: " << m_config_file_name << '\n';
     m_vout << "    output directory: " << m_output_directory << '\n';
+    m_vout << "    attributes to clean: " << m_clean.to_string() << '\n';
 
     m_vout << '\n';
 }
@@ -614,7 +618,7 @@ bool CommandExtract::run() {
             file_header.add_box(extract->envelope());
         }
         init_header(file_header, input_header, extract->header_options());
-        extract->open_file(file_header, m_output_overwrite, m_fsync);
+        extract->open_file(file_header, m_output_overwrite, m_fsync, &m_clean);
     }
 
     m_strategy->run(m_vout, display_progress(), m_input_file);

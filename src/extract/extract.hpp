@@ -23,6 +23,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "../option_clean.hpp"
+
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer.hpp>
@@ -38,11 +40,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class Extract {
 
+    static constexpr const std::size_t buffer_size = 10UL * 1024UL * 1024UL;
+
     osmium::io::File m_output_file;
     std::string m_description;
     std::vector<std::string> m_header_options;
     osmium::Box m_envelope;
+    osmium::memory::Buffer m_buffer{buffer_size, osmium::memory::Buffer::auto_grow::no};
     std::unique_ptr<osmium::io::Writer> m_writer;
+    const OptionClean *m_clean = nullptr;
 
 public:
 
@@ -87,7 +93,7 @@ public:
         return *m_writer;
     }
 
-    void open_file(const osmium::io::Header& header, osmium::io::overwrite output_overwrite, osmium::io::fsync sync);
+    void open_file(const osmium::io::Header& header, osmium::io::overwrite output_overwrite, osmium::io::fsync sync, OptionClean const *clean);
 
     void close_file();
 

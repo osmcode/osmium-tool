@@ -256,6 +256,7 @@ set(OSMIUM_SOURCE_FILES
     io.cpp
     util.cpp
     command_help.cpp
+    option_clean.cpp
     export/export_format_json.cpp
     export/export_format_pg.cpp
     export/export_format_spaten.cpp

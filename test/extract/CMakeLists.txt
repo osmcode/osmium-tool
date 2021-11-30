@@ -21,6 +21,8 @@ endfunction()
 
 #-----------------------------------------------------------------------------
 
+check_extract(clean         input1.osm output-clean.osm "--clean version --clean uid")
+
 check_extract(simple        input1.osm output-simple.osm "-s simple --output-header=xml_josm_upload!")
 check_extract(complete_ways input1.osm output-complete-ways.osm "-s complete_ways")
 check_extract(smart_default input1.osm output-smart.osm "-s smart")
