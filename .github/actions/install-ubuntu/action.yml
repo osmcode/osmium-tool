@@ -14,9 +14,3 @@ runs:
             pandoc
         if [ "$CC" = clang-13 ]; then sudo apt-get install -yq --no-install-suggests --no-install-recommends clang-13; fi
       shell: bash
-    - name: Install from git
-      run: |
-        git clone --quiet --depth 1 https://github.com/osmcode/libosmium.git ../libosmium
-        git clone --quiet --depth 1 https://github.com/mapbox/protozero.git ../protozero
-      shell: bash
-

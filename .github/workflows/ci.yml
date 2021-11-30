@@ -5,126 +5,75 @@ on: [ push, pull_request ]
 jobs:
   linux:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        name: [Ubuntu-18, Ubuntu-20, Ubuntu-21, Debian-9, Debian-10, Debian-11, Debian-Testing, Debian-Experimental, Fedora-34]
+        image:
+          - "ubuntu:18.04"        # gcc  7.5.0, clang  6.0.0, cmake 3.10.2
+          - "ubuntu:20.04"        # gcc  9.3.0, clang 10.0.0, cmake 3.16.3
+          - "ubuntu:21.04"        # gcc 10.3.0, clang 12.0.0, cmake 3.18.4
+          - "debian:stretch"      # gcc  6.3.0, clang  3.8.1, cmake 3.7.2
+          - "debian:buster"       # gcc  8.3.0, clang  7.0.1, cmake 3.13.4
+          - "debian:bullseye"     # gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+          - "debian:testing"      # gcc 10.3.0, clang 11.1.0, cmake 3.21.3
+          - "debian:experimental" # gcc 11.0.0, clang 14.0.0, cmake 3.21.3
+          - "fedora:34"           # gcc 11.2.1, clang 12.0.1, cmake 3.20.5
+          - "fedora:35"           # gcc 11.2.1, clang 13.0.0, cmake 3.22.0
         build_type: [Dev]
         cpp_compiler: [g++]
         cpp_version: [c++11]
         include:
-          - name: Ubuntu-18
-            # Uses gcc 7.5.0, clang 6.0.0, cmake 3.10.2
-            image: "ubuntu:18.04"
-            ubuntu: 18
-            installer: apt
-          - name: Ubuntu-20
-            # Uses gcc 9.3.0, clang 10.0.0, cmake 3.16.3
-            image: "ubuntu:20.04"
-            ubuntu: 20
-            installer: apt
-          - name: Ubuntu-21
-            # Uses gcc 10.3.0, clang, 12.0.0, cmake 3.18.4
-            image: "ubuntu:21.04"
-            ubuntu: 21
-            installer: apt
-          - name: Debian-9
-            # Uses gcc 6.3.0, clang 3.8.1, cmake 3.7.2
-            image: "debian:stretch"
-            installer: apt
-          - name: Debian-10
-            # Uses gcc 8.3.0, clang 7.0.1, cmake 3.13.4
-            image: "debian:buster"
-            installer: apt
-          - name: Debian-11
-            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-            image: "debian:bullseye"
-            installer: apt
-          - name: Debian-11
-            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-            image: "debian:bullseye"
-            installer: apt
+          - image: "debian:bullseye"
             cpp_version: c++17
-          - name: Debian-11
-            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-            image: "debian:bullseye"
-            installer: apt
+          - image: "debian:bullseye"
             cpp_version: c++20
-          - name: Debian-11
-            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-            image: "debian:bullseye"
-            installer: apt
+          - image: "debian:bullseye"
             c_compiler: clang
             cpp_compiler: clang++
             cpp_version: c++17
-          - name: Debian-11
-            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-            image: "debian:bullseye"
-            installer: apt
+          - image: "debian:bullseye"
             c_compiler: clang
             cpp_compiler: clang++
             cpp_version: c++20
-          - name: Debian-11
-            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-            image: "debian:bullseye"
-            installer: apt
+          - image: "debian:bullseye"
             build_type: RelWithDebInfo
-          - name: Debian-11
-            # Uses gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-            image: "debian:bullseye"
-            installer: apt
+          - image: "debian:bullseye"
             c_compiler: clang
             cpp_compiler: clang++
-          - name: Debian-Testing
-            # Uses gcc 10.3.0, clang 11.1.0, cmake 3.21.3
-            image: "debian:testing"
-            installer: apt
+          - image: "debian:testing"
             CXXFLAGS: -Wno-stringop-overread
-          - name: Debian-Testing
-            # Uses gcc 10.3.0, clang 11.1.0, cmake 3.21.3
-            image: "debian:testing"
-            installer: apt
+          - image: "debian:testing"
             c_compiler: clang
             cpp_compiler: clang++
-          - name: Debian-Experimental
-            # Uses gcc 11, clang 14, cmake 3.21.3
-            image: "debian:experimental"
-            installer: apt
+          - image: "debian:experimental"
             CXXFLAGS: -Wno-stringop-overread
-          - name: Debian-Experimental
-            # Uses gcc 11, clang 14, cmake 3.21.3
-            image: "debian:experimental"
-            installer: apt
+          - image: "debian:experimental"
             c_compiler: clang-14
             cpp_compiler: clang++-14
-          - name: Fedora-34
-            # Uses gcc 11.2.1, clang 12.0.1, cmake 3.20.5
-            image: "fedora:34"
-            installer: dnf
+          - image: "fedora:34"
             CXXFLAGS: -Wno-stringop-overread
-          - name: Fedora-35
-            # Uses gcc 11.2.1, clang 12.0.1, cmake 3.20.5
-            image: "fedora:35"
-            installer: dnf
+          - image: "fedora:35"
             CXXFLAGS: -Wno-stringop-overread
     container:
       image: ${{ matrix.image }}
       env:
-        LANG: en_US.UTF-8
         BUILD_TYPE: ${{ matrix.build_type }}
-        CXXFLAGS: ${{ matrix.CXXFLAGS }}
-        LDFLAGS: ${{ matrix.LDFLAGS }}
         CC: ${{ matrix.c_compiler }}
         CXX: ${{ matrix.cpp_compiler }}
+        CXXFLAGS: ${{ matrix.CXXFLAGS }}
+        LDFLAGS: ${{ matrix.LDFLAGS }}
         CPP_VERSION: ${{ matrix.cpp_version }}
         APT_LISTCHANGES_FRONTEND: none
         DEBIAN_FRONTEND: noninteractive
     steps:
       - name: Prepare container (apt)
+        shell: bash
+        if: startsWith(matrix.image, 'debian:') || startsWith(matrix.image, 'ubuntu:')
         run: |
           apt-get update -qq
-          apt-get install -y clang \
+          apt-get install -y \
+            clang \
             cmake \
             g++ \
             git \
@@ -136,29 +85,28 @@ jobs:
             make \
             pandoc \
             zlib1g-dev
-        shell: bash
-        if: matrix.installer == 'apt'
       - name: Install compiler
         shell: bash
-        run: apt-get install -y clang-14
         if: matrix.cpp_compiler == 'clang++-14'
+        run: apt-get install -y --no-install-suggests --no-install-recommends clang-14
       - name: Prepare container (dnf)
+        shell: bash
+        if: startsWith(matrix.image, 'fedora:')
         run: |
           dnf install --quiet --assumeyes \
-              boost-devel \
-              bzip2-devel \
-              cmake \
-              expat-devel \
-              gcc-c++ \
-              git \
-              lz4-devel \
-              make \
-              pandoc \
-              zlib-devel
-        shell: bash
-        if: matrix.installer == 'dnf'
+            boost-devel \
+            bzip2-devel \
+            cmake \
+            expat-devel \
+            gcc-c++ \
+            git \
+            lz4-devel \
+            make \
+            pandoc \
+            zlib-devel
       - uses: actions/checkout@v2
       - uses: ./.github/actions/install-from-git
+      - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
 
@@ -176,62 +124,61 @@ jobs:
         shell: bash
       - uses: actions/checkout@v2
       - uses: ./.github/actions/install-ubuntu
+      - uses: ./.github/actions/install-from-git
+      - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
 
-  macos10-dev:
-    runs-on: macos-10.15
+  macos:
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - "macos-10.15"
+          - "macos-11.0"
+        build_type: [Dev]
+        include:
+          - os: "macos-11.0"
+            build_type: Release
+    runs-on: ${{ matrix.os }}
     env:
       CC: clang
       CXX: clang++
-      BUILD_TYPE: Dev
+      BUILD_TYPE: ${{ matrix.build_type }}
     steps:
+      - run: brew install boost
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-macos
+      - uses: ./.github/actions/install-from-git
+      - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
 
-  macos11-dev:
-    runs-on: macos-11.0
-    env:
-      CC: clang
-      CXX: clang++
-      BUILD_TYPE: Dev
+  windows:
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-2019
+          - windows-2022
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-macos
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  macos11-release:
-    runs-on: macos-11.0
-    env:
-      CC: clang
-      CXX: clang++
-      BUILD_TYPE: Release
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-macos
-      - uses: ./.github/actions/build
-      - uses: ./.github/actions/ctest
-
-  windows-2019:
-    runs-on: windows-2019
-    steps:
+      - run: |
+          vcpkg install \
+            boost-iterator:x64-windows \
+            boost-program-options:x64-windows \
+            boost-variant:x64-windows \
+            bzip2:x64-windows \
+            expat:x64-windows \
+            lz4:x64-windows \
+            zlib:x64-windows
+        shell: bash
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - uses: ./.github/actions/install-windows
-      - uses: ./.github/actions/build-windows
-      - uses: ./.github/actions/ctest-windows
-
-  windows-2022:
-    runs-on: windows-2022
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - uses: ./.github/actions/install-windows
+      - uses: ./.github/actions/install-from-git
+      - uses: ./.github/actions/cmake-windows
       - uses: ./.github/actions/build-windows
       - uses: ./.github/actions/ctest-windows
 

@@ -2,18 +2,7 @@ name: Build on Windows
 
 runs:
     using: composite
-
     steps:
-      - name: Create build directory
-        run: mkdir build
-        shell: bash
-
-      - name: Configure
-        run: |
-          cmake -LA .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DOsmium_DEBUG=TRUE -DPROTOZERO_INCLUDE_DIR=${GITHUB_WORKSPACE}/../protozero/include
-        shell: bash
-        working-directory: build
-
       - name: Build
         run: cmake --build . --config Release --verbose
         shell: bash
