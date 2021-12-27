@@ -69,10 +69,22 @@ public:
 
 
 class ExtractStrategy {
+    template <typename X, typename Y>
+    static void set(const X& property, const Y& value) {
+        const_cast<X&>(property) = value;
+    }
 
 public:
 
-    ExtractStrategy(osmium::osm_entity_bits::type m_read_which_entities, OptionClean m_clean) : m_read_which_entities(m_read_which_entities), m_clean(m_clean) {}
+    ExtractStrategy() : m_read_which_entities(osmium::osm_entity_bits::all), m_clean() {}
+
+    void set_option(osmium::osm_entity_bits::type value) {
+        set(m_read_which_entities, value);
+    }
+
+    void set_option(OptionClean value) {
+        set(m_clean, value);
+    }
 
     virtual ~ExtractStrategy() = default;
 

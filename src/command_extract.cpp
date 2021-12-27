@@ -401,21 +401,21 @@ std::unique_ptr<ExtractStrategy> CommandExtract::make_strategy(const std::string
         if (m_with_history) {
             throw argument_error{"The 'simple' strategy is not supported for history files."};
         }
-        return std::unique_ptr<ExtractStrategy>(new strategy_simple::Strategy{osm_entity_bits(), m_clean, m_extracts, m_options});
+        return std::unique_ptr<ExtractStrategy>(new strategy_simple::Strategy{m_extracts, m_options});
     }
 
     if (name == "complete_ways") {
         if (m_with_history) {
-            return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways_with_history::Strategy{osm_entity_bits(), m_clean, m_extracts, m_options});
+            return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways_with_history::Strategy{m_extracts, m_options});
         }
-        return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways::Strategy{osm_entity_bits(), m_clean, m_extracts, m_options});
+        return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways::Strategy{m_extracts, m_options});
     }
 
     if (name == "smart") {
         if (m_with_history) {
             throw argument_error{"The 'smart' strategy is not supported for history files."};
         }
-        return std::unique_ptr<ExtractStrategy>(new strategy_smart::Strategy{osm_entity_bits(), m_clean, m_extracts, m_options});
+        return std::unique_ptr<ExtractStrategy>(new strategy_smart::Strategy{m_extracts, m_options});
     }
 
     throw argument_error{std::string{"Unknown extract strategy: '"} + name + "'."};
@@ -598,6 +598,8 @@ bool CommandExtract::run() {
     show_extracts();
 
     m_strategy = make_strategy(m_strategy_name);
+    m_strategy->set_option(osm_entity_bits());
+    m_strategy->set_option(m_clean);
     m_strategy->show_arguments(m_vout);
 
     osmium::io::Header header;

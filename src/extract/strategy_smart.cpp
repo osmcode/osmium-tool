@@ -55,7 +55,7 @@ namespace strategy_smart {
         });
     }
 
-    Strategy::Strategy(osmium::osm_entity_bits::type m_read_which_entities, OptionClean m_clean, const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options) : ExtractStrategy(m_read_which_entities, m_clean) {
+    Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options) {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);

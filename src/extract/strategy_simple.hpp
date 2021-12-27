@@ -24,7 +24,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "strategy.hpp"
-#include "../option_clean.hpp"
 
 #include <osmium/index/id_set.hpp>
 
@@ -48,7 +47,7 @@ namespace strategy_simple {
 
     public:
 
-        explicit Strategy(osmium::osm_entity_bits::type m_read_which_entities, OptionClean m_clean, const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/);
+        explicit Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/);
 
         const char* name() const noexcept override final;
 
