@@ -71,7 +71,7 @@ class ExtractStrategy {
 
 public:
 
-    ExtractStrategy() = default;
+    ExtractStrategy(osmium::osm_entity_bits::type m_read_which_entities) : m_read_which_entities(m_read_which_entities) {}
 
     virtual ~ExtractStrategy() = default;
 
@@ -81,6 +81,8 @@ public:
     }
 
     virtual void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) = 0;
+
+    const osmium::osm_entity_bits::type m_read_which_entities;
 
 }; // class ExtractStrategy
 
@@ -161,8 +163,8 @@ public:
     }
 
     template <typename... Args>
-    void run(osmium::ProgressBar& progress_bar, Args ...args) {
-        osmium::io::Reader reader{std::forward<Args>(args)...};
+    void run(osmium::ProgressBar& progress_bar, const osmium::io::File& input_file, Args ...args) {
+        osmium::io::Reader reader{input_file, m_strategy.m_read_which_entities, std::forward<Args>(args)...};
         run_impl(progress_bar, reader);
         reader.close();
     }

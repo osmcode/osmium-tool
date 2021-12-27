@@ -52,7 +52,7 @@ namespace strategy_complete_ways {
 
     public:
 
-        explicit Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/);
+        explicit Strategy(osmium::osm_entity_bits::type m_read_which_entities, const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/);
 
         const char* name() const noexcept override final;
 
