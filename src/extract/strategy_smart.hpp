@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "strategy.hpp"
+#include "../option_clean.hpp"
 
 #include <osmium/index/id_set.hpp>
 #include <osmium/index/relations_map.hpp>
@@ -63,7 +64,7 @@ namespace strategy_smart {
 
     public:
 
-        explicit Strategy(osmium::osm_entity_bits::type m_read_which_entities, const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options);
+        explicit Strategy(osmium::osm_entity_bits::type m_read_which_entities, OptionClean m_clean, const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options);
 
         const char* name() const noexcept override final;
 

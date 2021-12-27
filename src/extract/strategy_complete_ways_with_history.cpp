@@ -36,7 +36,7 @@ namespace strategy_complete_ways_with_history {
         });
     }
 
-    Strategy::Strategy(osmium::osm_entity_bits::type m_read_which_entities, const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/) : ExtractStrategy(m_read_which_entities) {
+    Strategy::Strategy(osmium::osm_entity_bits::type m_read_which_entities, OptionClean m_clean, const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/) : ExtractStrategy(m_read_which_entities, m_clean) {
         m_extracts.reserve(extracts.size());
         for (const auto& extract : extracts) {
             m_extracts.emplace_back(*extract);

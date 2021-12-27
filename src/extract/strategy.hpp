@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "extract.hpp"
+#include "../option_clean.hpp"
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/reader.hpp>
@@ -71,7 +72,7 @@ class ExtractStrategy {
 
 public:
 
-    ExtractStrategy(osmium::osm_entity_bits::type m_read_which_entities) : m_read_which_entities(m_read_which_entities) {}
+    ExtractStrategy(osmium::osm_entity_bits::type m_read_which_entities, OptionClean m_clean) : m_read_which_entities(m_read_which_entities), m_clean(m_clean) {}
 
     virtual ~ExtractStrategy() = default;
 
@@ -84,6 +85,8 @@ public:
 
     const osmium::osm_entity_bits::type m_read_which_entities;
 
+    const OptionClean m_clean;
+
 }; // class ExtractStrategy
 
 
@@ -95,6 +98,9 @@ class Pass {
     void run_impl(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader) {
         while (osmium::memory::Buffer buffer = reader.read()) {
             progress_bar.update(reader.offset());
+
+            m_strategy.m_clean.apply_to(buffer);
+
             for (const auto& object : buffer) {
                 switch (object.type()) {
                     case osmium::item_type::node:
