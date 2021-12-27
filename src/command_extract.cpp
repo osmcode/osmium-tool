@@ -432,6 +432,8 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     ("strategy,s", po::value<std::string>()->default_value("complete_ways"), "Use named extract strategy")
     ("with-history,H", "Input file and output files are history files")
     ("set-bounds", "Sets bounds (bounding box) in header")
+    ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
+    ("clean", po::value<std::vector<std::string>>(), "Clean attribute (version, changeset, timestamp, uid, user)")
     ;
 
     po::options_description opts_common{add_common_options()};
@@ -458,8 +460,11 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
 
     setup_common(vm, desc);
     setup_progress(vm);
+    setup_object_type_nwrc(vm);
     setup_input_file(vm);
     init_output_file(vm);
+
+    m_clean.setup(vm);
 
     if (vm.count("config") + vm.count("bbox") + vm.count("polygon") > 1) {
         throw argument_error{"Can only use one of --config/-c, --bbox/-b, or --polygon/-p."};
@@ -537,6 +542,8 @@ void CommandExtract::show_arguments() {
     m_vout << "  other options:\n";
     m_vout << "    config file: " << m_config_file_name << '\n';
     m_vout << "    output directory: " << m_output_directory << '\n';
+    show_object_types(m_vout);
+    m_vout << "    attributes to clean: " << m_clean.to_string() << '\n';
 
     m_vout << '\n';
 }

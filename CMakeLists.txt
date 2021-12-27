@@ -249,8 +249,13 @@ SET(OSMIUM_COMMANDS
     time-filter
 )
 
+SET(OSMIUM_OPTIONS
+    clean
+)
+
 set(OSMIUM_SOURCE_FILES
     cmd.cpp
+    cmd.hpp
     cmd_factory.cpp
     id_file.cpp
     io.cpp
@@ -277,6 +282,13 @@ set(OSMIUM_SOURCE_FILES
 foreach(_command ${OSMIUM_COMMANDS})
     string(REPLACE "-" "_" _ucmd ${_command})
     list(APPEND OSMIUM_SOURCE_FILES "command_${_ucmd}.cpp")
+    list(APPEND OSMIUM_SOURCE_FILES "command_${_ucmd}.hpp")
+endforeach()
+
+foreach(_option ${OSMIUM_OPTIONS})
+    string(REPLACE "-" "_" _uopt ${_option})
+    list(APPEND OSMIUM_SOURCE_FILES "option_${_uopt}.cpp")
+    list(APPEND OSMIUM_SOURCE_FILES "option_${_uopt}.hpp")
 endforeach()
 
 add_subdirectory(man)
