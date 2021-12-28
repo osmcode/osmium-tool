@@ -68,7 +68,9 @@ set(_osmium_include_path
 find_path(OSMIUM_INCLUDE_DIR osmium/version.hpp
     PATH_SUFFIXES include
     PATHS ${_osmium_include_path}
+    NO_DEFAULT_PATH
 )
+find_path(OSMIUM_INCLUDE_DIR osmium/version.hpp)
 
 # Check libosmium version number
 if(Osmium_FIND_VERSION)
