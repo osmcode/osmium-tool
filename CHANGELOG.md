@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- New `--clean` option to `osmium extract` command to clean attributes.
+
 ### Changed
 
 ### Fixed
