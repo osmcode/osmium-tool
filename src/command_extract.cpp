@@ -432,7 +432,6 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     ("strategy,s", po::value<std::string>()->default_value("complete_ways"), "Use named extract strategy")
     ("with-history,H", "Input file and output files are history files")
     ("set-bounds", "Sets bounds (bounding box) in header")
-    ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
     ("clean", po::value<std::vector<std::string>>(), "Clean attribute (version, changeset, timestamp, uid, user)")
     ;
 
@@ -542,7 +541,6 @@ void CommandExtract::show_arguments() {
     m_vout << "  other options:\n";
     m_vout << "    config file: " << m_config_file_name << '\n';
     m_vout << "    output directory: " << m_output_directory << '\n';
-    show_object_types(m_vout);
     m_vout << "    attributes to clean: " << m_clean.to_string() << '\n';
 
     m_vout << '\n';
@@ -598,7 +596,6 @@ bool CommandExtract::run() {
     show_extracts();
 
     m_strategy = make_strategy(m_strategy_name);
-    m_strategy->set_option(osm_entity_bits());
     m_strategy->set_option(m_clean);
     m_strategy->show_arguments(m_vout);
 

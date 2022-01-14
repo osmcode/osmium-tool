@@ -105,10 +105,6 @@ to merge several extracts without problems.
     other than "simple" can put nodes outside those bounds into the output
     file.
 
--t, \--object-type=TYPE
-:   Read only objects of given type (*node*, *way*, *relation*, *changeset*).
-    By default all types are read. This option can be given multiple times.
-
 
 @MAN_COMMON_OPTIONS@
 @MAN_INPUT_OPTIONS@

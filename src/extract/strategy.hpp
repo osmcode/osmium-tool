@@ -78,10 +78,6 @@ public:
 
     ExtractStrategy() : m_read_which_entities(osmium::osm_entity_bits::all), m_clean() {}
 
-    void set_option(osmium::osm_entity_bits::type value) {
-        set(m_read_which_entities, value);
-    }
-
     void set_option(OptionClean value) {
         set(m_clean, value);
     }
@@ -94,8 +90,6 @@ public:
     }
 
     virtual void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) = 0;
-
-    const osmium::osm_entity_bits::type m_read_which_entities;
 
     const OptionClean m_clean;
 
@@ -181,8 +175,8 @@ public:
     }
 
     template <typename... Args>
-    void run(osmium::ProgressBar& progress_bar, const osmium::io::File& input_file, Args ...args) {
-        osmium::io::Reader reader{input_file, m_strategy.m_read_which_entities, std::forward<Args>(args)...};
+    void run(osmium::ProgressBar& progress_bar, Args ...args) {
+        osmium::io::Reader reader{std::forward<Args>(args)...};
         run_impl(progress_bar, reader);
         reader.close();
     }
