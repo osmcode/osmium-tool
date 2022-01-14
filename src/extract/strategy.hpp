@@ -76,7 +76,7 @@ class ExtractStrategy {
 
 public:
 
-    ExtractStrategy() : m_read_which_entities(osmium::osm_entity_bits::all), m_clean() {}
+    ExtractStrategy() : m_clean() {}
 
     void set_option(OptionClean value) {
         set(m_clean, value);
