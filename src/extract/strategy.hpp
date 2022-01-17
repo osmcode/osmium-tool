@@ -69,17 +69,18 @@ public:
 
 
 class ExtractStrategy {
-    template <typename X, typename Y>
-    static void set(const X& property, const Y& value) {
-        const_cast<X&>(property) = value;
-    }
+    const OptionClean m_clean;
 
 public:
 
     ExtractStrategy() : m_clean() {}
 
     void set_option(OptionClean value) {
-        set(m_clean, value);
+        m_clean = value;
+    }
+
+    inline void clean(osmium::memory::Buffer& buffer) const {
+        m_clean.apply_to(buffer);
     }
 
     virtual ~ExtractStrategy() = default;
@@ -90,8 +91,6 @@ public:
     }
 
     virtual void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) = 0;
-
-    const OptionClean m_clean;
 
 }; // class ExtractStrategy
 
@@ -105,7 +104,7 @@ class Pass {
         while (osmium::memory::Buffer buffer = reader.read()) {
             progress_bar.update(reader.offset());
 
-            m_strategy.m_clean.apply_to(buffer);
+            m_strategy.clean(buffer);
 
             for (const auto& object : buffer) {
                 switch (object.type()) {
