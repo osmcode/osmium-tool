@@ -102,7 +102,7 @@ namespace strategy_simple {
 
     }; // class Pass1
 
-    void Strategy::run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
+    void Strategy::run(osmium::VerboseOutput& vout, bool display_progress, const ExtractFile& input_file) {
         vout << "Running 'simple' strategy in one pass...\n";
         const std::size_t file_size = input_file.filename().empty() ? 0 : osmium::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size, display_progress};

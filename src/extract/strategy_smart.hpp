@@ -69,7 +69,7 @@ namespace strategy_smart {
 
         void show_arguments(osmium::VerboseOutput& vout) override final;
 
-        void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) override final;
+        void run(osmium::VerboseOutput& vout, bool display_progress, const ExtractFile& input_file) override final;
 
     }; // class Strategy
 

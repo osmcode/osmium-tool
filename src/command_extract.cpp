@@ -595,7 +595,6 @@ bool CommandExtract::run() {
     show_extracts();
 
     m_strategy = make_strategy(m_strategy_name);
-    m_strategy->set_option(m_clean);
     m_strategy->show_arguments(m_vout);
 
     osmium::io::Header header;
@@ -622,7 +621,7 @@ bool CommandExtract::run() {
         extract->open_file(file_header, m_output_overwrite, m_fsync);
     }
 
-    m_strategy->run(m_vout, display_progress(), m_input_file);
+    m_strategy->run(m_vout, display_progress(), ExtractFile(m_input_file, m_clean));
 
     for (const auto& extract : m_extracts) {
         extract->close_file();

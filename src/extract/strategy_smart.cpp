@@ -259,7 +259,7 @@ namespace strategy_smart {
 
     }; // class Pass3
 
-    void Strategy::run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) {
+    void Strategy::run(osmium::VerboseOutput& vout, bool display_progress, const ExtractFile& input_file) {
         if (input_file.filename().empty()) {
             throw osmium::io_error{"Can not read from STDIN when using 'smart' strategy."};
         }

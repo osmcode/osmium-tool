@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "extract.hpp"
-#include "../option_clean.hpp"
+#include "io.hpp"
 
 #include <osmium/io/file.hpp>
 #include <osmium/io/reader.hpp>
@@ -69,19 +69,9 @@ public:
 
 
 class ExtractStrategy {
-    OptionClean m_clean;
-
 public:
 
-    ExtractStrategy() : m_clean() {}
-
-    void set_option(OptionClean value) {
-        m_clean = value;
-    }
-
-    inline void clean(osmium::memory::Buffer& buffer) const {
-        m_clean.apply_to(buffer);
-    }
+    ExtractStrategy() = default;
 
     virtual ~ExtractStrategy() = default;
 
@@ -90,7 +80,7 @@ public:
     virtual void show_arguments(osmium::VerboseOutput& /*vout*/) {
     }
 
-    virtual void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) = 0;
+    virtual void run(osmium::VerboseOutput& vout, bool display_progress, const ExtractFile& input_file) = 0;
 
 }; // class ExtractStrategy
 
@@ -100,11 +90,9 @@ class Pass {
 
     TStrategy& m_strategy;
 
-    void run_impl(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader) {
+    void run_impl(osmium::ProgressBar& progress_bar, ExtractReader& reader) {
         while (osmium::memory::Buffer buffer = reader.read()) {
             progress_bar.update(reader.offset());
-
-            m_strategy.clean(buffer);
 
             for (const auto& object : buffer) {
                 switch (object.type()) {
@@ -175,7 +163,7 @@ public:
 
     template <typename... Args>
     void run(osmium::ProgressBar& progress_bar, Args ...args) {
-        osmium::io::Reader reader{std::forward<Args>(args)...};
+        ExtractReader reader{std::forward<Args>(args)...};
         run_impl(progress_bar, reader);
         reader.close();
     }

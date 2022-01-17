@@ -56,7 +56,7 @@ namespace strategy_complete_ways {
 
         const char* name() const noexcept override final;
 
-        void run(osmium::VerboseOutput& vout, bool display_progress, const osmium::io::File& input_file) override final;
+        void run(osmium::VerboseOutput& vout, bool display_progress, const ExtractFile& input_file) override final;
 
     }; // class Strategy
 
