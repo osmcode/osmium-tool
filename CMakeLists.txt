@@ -249,10 +249,6 @@ SET(OSMIUM_COMMANDS
     time-filter
 )
 
-SET(OSMIUM_OPTIONS
-    clean
-)
-
 set(OSMIUM_SOURCE_FILES
     cmd.cpp
     cmd_factory.cpp
@@ -260,6 +256,7 @@ set(OSMIUM_SOURCE_FILES
     io.cpp
     util.cpp
     command_help.cpp
+    option_clean.cpp
     export/export_format_json.cpp
     export/export_format_pg.cpp
     export/export_format_spaten.cpp
@@ -281,11 +278,6 @@ set(OSMIUM_SOURCE_FILES
 foreach(_command ${OSMIUM_COMMANDS})
     string(REPLACE "-" "_" _ucmd ${_command})
     list(APPEND OSMIUM_SOURCE_FILES "command_${_ucmd}.cpp")
-endforeach()
-
-foreach(_option ${OSMIUM_OPTIONS})
-    string(REPLACE "-" "_" _uopt ${_option})
-    list(APPEND OSMIUM_SOURCE_FILES "option_${_uopt}.cpp")
 endforeach()
 
 add_subdirectory(man)
