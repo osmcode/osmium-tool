@@ -69,7 +69,7 @@ public:
 
 
 class ExtractStrategy {
-    const OptionClean m_clean;
+    OptionClean m_clean;
 
 public:
 
