@@ -335,6 +335,9 @@ Strategy **smart**
     have nodes in the region are reference-complete. Other relations are not
     reference-complete.
 
+For the **complete_ways** strategy you can set the option "-S relations=false"
+in which case no relations will be written to the output file.
+
 For the **smart** strategy you can change the types of relations that should be
 reference-complete. Instead of just relations tagged "type=multipolygon", you
 can either get all relations (use "-S types=any") or give a list of types to

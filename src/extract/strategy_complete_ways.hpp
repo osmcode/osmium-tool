@@ -49,10 +49,11 @@ namespace strategy_complete_ways {
 
         using extract_data = ExtractData<Data>;
         std::vector<extract_data> m_extracts;
+        osmium::osm_entity_bits::type m_read_types = osmium::osm_entity_bits::nwr;
 
     public:
 
-        explicit Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/);
+        explicit Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options);
 
         const char* name() const noexcept override final;
 

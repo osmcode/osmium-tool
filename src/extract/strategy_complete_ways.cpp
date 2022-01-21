@@ -44,7 +44,13 @@ namespace strategy_complete_ways {
         }
 
         for (const auto& option : options) {
-            warning(std::string{"Ignoring unknown option '"} + option.first + "' for 'complete_ways' strategy.\n");
+            if (option.first != "relations") {
+                warning(std::string{"Ignoring unknown option '"} + option.first + "' for 'complete_ways' strategy.\n");
+            }
+        }
+
+        if (options.is_false("relations")) {
+            m_read_types = osmium::osm_entity_bits::node | osmium::osm_entity_bits::way;
         }
     }
 
@@ -161,21 +167,23 @@ namespace strategy_complete_ways {
 
         vout << "First pass (of two)...\n";
         Pass1 pass1{*this};
-        pass1.run(progress_bar, input_file, osmium::io::read_meta::no);
+        pass1.run(progress_bar, input_file, osmium::io::read_meta::no, m_read_types);
         progress_bar.file_done(file_size);
 
-        // recursively get parents of all relations that are in an extract
-        const auto relations_map = pass1.relations_map_stash().build_member_to_parent_index();
-        for (auto& e : m_extracts) {
-            for (osmium::unsigned_object_id_type id : e.relation_ids) {
-                e.add_relation_parents(id, relations_map);
+        if (m_read_types & osmium::osm_entity_bits::relation) {
+            // recursively get parents of all relations that are in an extract
+            const auto relations_map = pass1.relations_map_stash().build_member_to_parent_index();
+            for (auto& e : m_extracts) {
+                for (osmium::unsigned_object_id_type id : e.relation_ids) {
+                    e.add_relation_parents(id, relations_map);
+                }
             }
         }
 
         progress_bar.remove();
         vout << "Second pass (of two)...\n";
         Pass2 pass2{*this};
-        pass2.run(progress_bar, input_file);
+        pass2.run(progress_bar, input_file, m_read_types);
 
         progress_bar.done();
     }
