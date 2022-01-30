@@ -602,6 +602,7 @@ bool CommandExport::run() {
     }
 
     osmium::area::Assembler::config_type assembler_config;
+    assembler_config.create_empty_areas = false;
     osmium::area::MultipolygonManager<osmium::area::Assembler> mp_manager{assembler_config};
 
     m_vout << "First pass (of two) through input file (reading relations)...\n";
