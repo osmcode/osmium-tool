@@ -78,7 +78,7 @@ if(CPPCHECK)
     # cpp doesn't find system includes for some reason, suppress that report
     set(CPPCHECK_OPTIONS ${CPPCHECK_OPTIONS} --suppress=missingIncludeSystem)
 
-    add_custom_target(cppcheck ${CPPCHECK} --std=c++11 ${CPPCHECK_OPTIONS} ${CMAKE_SOURCE_DIR}/src/*pp)
+    add_custom_target(cppcheck ${CPPCHECK} --std=c++14 ${CPPCHECK_OPTIONS} ${CMAKE_SOURCE_DIR}/src/*pp)
 else()
     message(STATUS "Looking for cppcheck - not found")
     message(STATUS "  Build target 'cppcheck' will not be available")
@@ -104,12 +104,12 @@ endif()
 
 #-----------------------------------------------------------------------------
 #
-#  Decide which C++ version to use (Minimum/default: C++11).
+#  Decide which C++ version to use (Minimum/default: C++14).
 #
 #-----------------------------------------------------------------------------
 if(NOT MSVC)
     if(NOT USE_CPP_VERSION)
-        set(USE_CPP_VERSION c++11)
+        set(USE_CPP_VERSION c++14)
     endif()
     message(STATUS "Use C++ version: ${USE_CPP_VERSION}")
     add_compile_options(-std=${USE_CPP_VERSION})

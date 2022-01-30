@@ -22,7 +22,7 @@ flags = [
 '-Wno-unused-parameter',
 '-Wno-unused-variable',
 
-'-std=c++11',
+'-std=c++14',
 
 # '-x' and 'c++' also required
 # use 'c' for C projects

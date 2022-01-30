@@ -22,7 +22,7 @@ jobs:
           - "fedora:35"           # gcc 11.2.1, clang 13.0.0, cmake 3.22.0
         build_type: [Dev]
         cpp_compiler: [g++]
-        cpp_version: [c++11]
+        cpp_version: [c++14]
         include:
           - image: "debian:bullseye"
             cpp_version: c++17

@@ -12,8 +12,7 @@ Official web site: https://osmcode.org/osmium-tool/
 
 ## Prerequisites
 
-You need a C++11 compliant compiler. GCC 4.8 and later as well as clang 3.6 and
-later are known to work. It also works on modern Visual Studio C++ compilers.
+You need a C++14 compliant compiler.
 
 You also need the following libraries:
 

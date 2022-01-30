@@ -578,19 +578,19 @@ static std::unique_ptr<ExportFormat> create_handler(const std::string& output_fo
                                                     osmium::io::fsync fsync,
                                                     const options_type& options) {
     if (output_format == "geojson" || output_format == "geojsonseq") {
-        return std::unique_ptr<ExportFormat>{new ExportFormatJSON{output_format, output_filename, overwrite, fsync, options}};
+        return std::make_unique<ExportFormatJSON>(output_format, output_filename, overwrite, fsync, options);
     }
 
     if (output_format == "pg") {
-        return std::unique_ptr<ExportFormat>{new ExportFormatPg{output_format, output_filename, overwrite, fsync, options}};
+        return std::make_unique<ExportFormatPg>(output_format, output_filename, overwrite, fsync, options);
     }
 
     if (output_format == "text") {
-        return std::unique_ptr<ExportFormat>{new ExportFormatText{output_format, output_filename, overwrite, fsync, options}};
+        return std::make_unique<ExportFormatText>(output_format, output_filename, overwrite, fsync, options);
     }
 
     if (output_format == "spaten") {
-        return std::unique_ptr<ExportFormat>{new ExportFormatSpaten{output_format, output_filename, overwrite, fsync, options}};
+        return std::make_unique<ExportFormatSpaten>(output_format, output_filename, overwrite, fsync, options);
     }
 
     throw argument_error{"Unknown output format"};
