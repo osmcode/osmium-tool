@@ -41,8 +41,8 @@ if(PANDOC)
         -s
         -t man
         --template ${CMAKE_CURRENT_SOURCE_DIR}/manpage.template
-        --variable "description=osmium/${OSMIUM_VERSION}"
-        --variable "version=${OSMIUM_VERSION}"
+        --variable "description=osmium/${PROJECT_VERSION}"
+        --variable "version=${PROJECT_VERSION}"
         --variable "author=${AUTHOR}"
     )
 

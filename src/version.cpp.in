@@ -2,11 +2,11 @@
 #include <osmium/version.hpp>
 
 const char* get_osmium_version() noexcept {
-    return "@OSMIUM_VERSION@";
+    return "@PROJECT_VERSION@";
 }
 
 const char* get_osmium_long_version() noexcept {
-    return "osmium version @OSMIUM_VERSION@@VERSION_FROM_GIT@";
+    return "osmium version @PROJECT_VERSION@@VERSION_FROM_GIT@";
 }
 
 const char* get_libosmium_version() noexcept {

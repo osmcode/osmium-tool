@@ -6,7 +6,10 @@
 #
 #-----------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5.0)
+
+project(osmium VERSION 1.13.2 LANGUAGES CXX C)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 
@@ -21,14 +24,6 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev"
     CACHE STRING
     "List of available configuration types"
     FORCE)
-
-project(osmium)
-
-set(OSMIUM_VERSION_MAJOR 1)
-set(OSMIUM_VERSION_MINOR 13)
-set(OSMIUM_VERSION_PATCH 2)
-
-set(OSMIUM_VERSION ${OSMIUM_VERSION_MAJOR}.${OSMIUM_VERSION_MINOR}.${OSMIUM_VERSION_PATCH})
 
 set(AUTHOR "Jochen Topf <jochen@topf.org>")
 
@@ -53,7 +48,7 @@ include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
 
 
 if(WITH_LZ4)
-find_package(LZ4)
+    find_package(LZ4)
 
     if(LZ4_FOUND)
         message(STATUS "lz4 library found, compiling with it")
@@ -117,10 +112,7 @@ if(NOT MSVC)
         set(USE_CPP_VERSION c++11)
     endif()
     message(STATUS "Use C++ version: ${USE_CPP_VERSION}")
-    # following only available from cmake 2.8.12:
-    #   add_compile_options(-std=${USE_CPP_VERSION})
-    # so using this instead:
-    add_definitions(-std=${USE_CPP_VERSION})
+    add_compile_options(-std=${USE_CPP_VERSION})
 endif()
 
 
@@ -301,7 +293,7 @@ endif()
 #
 #-----------------------------------------------------------------------------
 message(STATUS "Looking for clang-tidy")
-find_program(CLANG_TIDY NAMES clang-tidy clang-tidy-12 clang-tidy-11 clang-tidy-10 clang-tidy-9 clang-tidy-8)
+find_program(CLANG_TIDY NAMES clang-tidy clang-tidy-14 clang-tidy-13 clang-tidy-12 clang-tidy-11)
 
 if(CLANG_TIDY)
     message(STATUS "Looking for clang-tidy - found ${CLANG_TIDY}")
