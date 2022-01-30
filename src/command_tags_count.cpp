@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_tags_count.hpp"
+
 #include "exception.hpp"
 #include "util.hpp"
 
@@ -103,7 +104,6 @@ bool CommandTagsCount::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("expressions,e", po::value<std::string>(), "Read tag expressions from file")
-//    ("output-format,f", po::value<std::string>(), "Format of output file")
     ("min-count,m", po::value<counter_type>(), "Min count shown (default: 0)")
     ("max-count,M", po::value<counter_type>(), "Max count shown (default: none)")
     ("output,o", po::value<std::string>(), "Output file (default: stdout)")
@@ -143,10 +143,6 @@ bool CommandTagsCount::setup(const std::vector<std::string>& arguments) {
     if (vm.count("output")) {
         m_output_filename = vm["output"].as<std::string>();
     }
-
-/*    if (vm.count("output-format")) {
-        m_output_format = vm["output-format"].as<std::string>();
-    }*/
 
     if (vm.count("overwrite")) {
         m_output_overwrite = osmium::io::overwrite::allow;
@@ -191,7 +187,6 @@ void CommandTagsCount::show_arguments() {
 
     m_vout << "  output options:\n";
     m_vout << "    file name: " << m_output_filename << '\n';
-//    m_vout << "    file format: " << m_output_format << '\n';
     m_vout << "    overwrite: " << yes_no(m_output_overwrite == osmium::io::overwrite::allow);
     m_vout << "  other options:\n";
     m_vout << "    sort order: " << m_sort_order << '\n';
