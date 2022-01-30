@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_extract.hpp"
+
 #include "exception.hpp"
 
 #include "extract/extract_bbox.hpp"

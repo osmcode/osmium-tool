@@ -48,7 +48,7 @@ protected:
 public:
 
     const options_type& options() const noexcept {
-         return m_options;
+        return m_options;
     }
 
     std::uint64_t count() const noexcept {
@@ -113,6 +113,5 @@ public:
     }
 
 }; // class ExportFormat
-
 
 #endif // EXPORT_EXPORT_FORMAT_HPP

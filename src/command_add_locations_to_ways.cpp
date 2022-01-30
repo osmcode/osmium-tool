@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_add_locations_to_ways.hpp"
+
 #include "exception.hpp"
 #include "util.hpp"
 
@@ -157,7 +158,7 @@ bool CommandAddLocationsToWays::run() {
         osmium::io::Reader reader{m_input_files[0]};
         osmium::io::Header header{reader.header()};
         setup_header(header);
-        osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
         osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
         copy_data(progress_bar, reader, writer, location_handler);
@@ -174,7 +175,7 @@ bool CommandAddLocationsToWays::run() {
         for (const auto& input_file : m_input_files) {
             progress_bar.remove();
             m_vout << "Copying input file '" << input_file.filename() << "'\n";
-            osmium::io::Reader reader(input_file);
+            osmium::io::Reader reader{input_file};
 
             copy_data(progress_bar, reader, writer, location_handler);
 

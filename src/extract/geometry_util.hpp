@@ -33,7 +33,7 @@ double calculate_double_area(const std::vector<osmium::Location>& coordinates);
 
 /// Is the ring defined by the coordinates counter-clockwise?
 template <typename T>
-bool is_ccw(T &coordinates) {
+bool is_ccw(T& coordinates) {
     return calculate_double_area(coordinates) > 0;
 }
 

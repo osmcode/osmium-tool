@@ -84,7 +84,7 @@ public:
     ~ExportFormatSpaten() override {
         try {
             close();
-        } catch(...) {
+        } catch (...) {
         }
     }
 

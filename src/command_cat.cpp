@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_cat.hpp"
+
 #include "exception.hpp"
 #include "util.hpp"
 
@@ -91,7 +92,7 @@ void CommandCat::show_arguments() {
     m_vout << "    attributes to clean: " << m_clean.to_string() << '\n';
 }
 
-void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const {
+void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer) const {
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
 

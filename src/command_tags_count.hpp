@@ -53,7 +53,7 @@ public:
         m_value += tag.value();
     }
 
-    key_or_tag(const char *key) :
+    key_or_tag(const char* key) :
         m_value(key) {
     }
 
@@ -115,7 +115,7 @@ struct element_type {
 
 namespace std {
 
-    template<>
+    template <>
     struct hash<key_or_tag> {
         std::size_t operator()(const key_or_tag& s) const noexcept {
             return std::hash<std::string>{}(s.get());
@@ -166,6 +166,5 @@ public:
     }
 
 }; // class CommandTagsCount
-
 
 #endif // COMMAND_TAGS_COUNT_HPP

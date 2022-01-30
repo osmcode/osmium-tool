@@ -49,7 +49,7 @@ enum return_code : int {
     fatal = 2
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
 #ifdef _WIN32
     _setmode(1, _O_BINARY);
 #endif

@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_check_refs.hpp"
+
 #include "util.hpp"
 
 #include <osmium/handler.hpp>

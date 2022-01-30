@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_getid.hpp"
+
 #include "exception.hpp"
 #include "id_file.hpp"
 #include "util.hpp"

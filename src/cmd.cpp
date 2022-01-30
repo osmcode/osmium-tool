@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "cmd.hpp"
+
 #include "exception.hpp"
 
 #include <osmium/index/map.hpp>

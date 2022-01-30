@@ -20,8 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include "exception.hpp"
 #include "util.hpp"
+
+#include "exception.hpp"
 
 #include <osmium/io/file.hpp>
 #include <osmium/osm/area.hpp>
@@ -172,7 +173,7 @@ osmium::StringMatcher get_string_matcher(std::string string) {
     return osmium::StringMatcher::substring{s};
 }
 
-osmium::TagMatcher get_tag_matcher(const std::string& expression, bool *has_value_matcher) {
+osmium::TagMatcher get_tag_matcher(const std::string& expression, bool* has_value_matcher) {
     const auto op_pos = expression.find('=');
     if (op_pos == std::string::npos) {
         if (has_value_matcher) {

@@ -48,7 +48,7 @@ class Extract {
     osmium::Box m_envelope;
     osmium::memory::Buffer m_buffer{buffer_size, osmium::memory::Buffer::auto_grow::no};
     std::unique_ptr<osmium::io::Writer> m_writer;
-    const OptionClean *m_clean = nullptr;
+    const OptionClean* m_clean = nullptr;
 
 public:
 
@@ -93,7 +93,7 @@ public:
         return *m_writer;
     }
 
-    void open_file(const osmium::io::Header& header, osmium::io::overwrite output_overwrite, osmium::io::fsync sync, OptionClean const *clean);
+    void open_file(const osmium::io::Header& header, osmium::io::overwrite output_overwrite, osmium::io::fsync sync, OptionClean const* clean);
 
     void close_file();
 

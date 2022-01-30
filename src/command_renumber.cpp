@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_renumber.hpp"
+
 #include "exception.hpp"
 
 #include <osmium/io/detail/read_write.hpp>

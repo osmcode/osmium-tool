@@ -161,7 +161,7 @@ public:
     }
 
     template <typename... Args>
-    void run(osmium::ProgressBar& progress_bar, Args ...args) {
+    void run(osmium::ProgressBar& progress_bar, Args... args) {
         osmium::io::Reader reader{std::forward<Args>(args)...};
         run_impl(progress_bar, reader);
         reader.close();

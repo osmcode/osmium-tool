@@ -186,9 +186,9 @@ public:
     /// Is any of the input files STDIN?
     bool any_input_is_stdin() const noexcept {
         return std::any_of(m_input_files.cbegin(), m_input_files.cend(),
-            [](const osmium::io::File& file) {
-                return file.filename().empty();
-            });
+                           [](const osmium::io::File& file) {
+                               return file.filename().empty();
+                           });
     }
 
 }; // class with_multiple_osm_inputs

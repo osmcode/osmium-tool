@@ -20,8 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include "../util.hpp"
 #include "export_format_text.hpp"
+
+#include "../util.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/detail/string_util.hpp>

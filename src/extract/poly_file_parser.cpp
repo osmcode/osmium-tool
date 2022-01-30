@@ -20,9 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "poly_file_parser.hpp"
+
 #include "../exception.hpp"
 #include "geometry_util.hpp"
-#include "poly_file_parser.hpp"
 
 #include <osmium/geom/coordinates.hpp>
 #include <osmium/memory/buffer.hpp>

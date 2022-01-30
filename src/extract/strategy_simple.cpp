@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "strategy_simple.hpp"
+
 #include "../util.hpp"
 
 #include <osmium/handler/check_order.hpp>

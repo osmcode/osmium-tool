@@ -1,5 +1,6 @@
 
 #include "id_file.hpp"
+
 #include "util.hpp"
 
 #include <osmium/io/reader.hpp>

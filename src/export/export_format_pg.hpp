@@ -67,7 +67,7 @@ public:
     ~ExportFormatPg() override {
         try {
             close();
-        } catch(...) {
+        } catch (...) {
         }
     }
 

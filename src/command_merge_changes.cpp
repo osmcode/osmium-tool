@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_merge_changes.hpp"
+
 #include "util.hpp"
 
 #include <osmium/io/file.hpp>

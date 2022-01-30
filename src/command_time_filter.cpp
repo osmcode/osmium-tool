@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_time_filter.hpp"
+
 #include "exception.hpp"
 #include "util.hpp"
 
@@ -146,17 +147,17 @@ bool CommandTimeFilter::run() {
             diff_begin,
             diff_end,
             out,
-            [this](const osmium::DiffObject& d){
+            [this](const osmium::DiffObject& d) {
                 return d.is_visible_at(m_from);
-        });
+            });
     } else {
         std::copy_if(
             diff_begin,
             diff_end,
             out,
-            [this](const osmium::DiffObject& d){
+            [this](const osmium::DiffObject& d) {
                 return d.is_between(m_from, m_to);
-        });
+            });
     }
 
     m_vout << "Closing output file...\n";

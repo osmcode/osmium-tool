@@ -20,9 +20,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+#include "export_format_pg.hpp"
+
 #include "../exception.hpp"
 #include "../util.hpp"
-#include "export_format_pg.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/detail/string_util.hpp>

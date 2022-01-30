@@ -44,14 +44,14 @@ namespace strategy_complete_ways_with_history {
 
     class Strategy : public ExtractStrategy {
 
-        template<typename S, typename T> friend class ::Pass;
+        template <typename S, typename T>
+        friend class ::Pass;
         friend class Pass1;
 
         using extract_data = ExtractData<Data>;
         std::vector<extract_data> m_extracts;
 
     public:
-
         explicit Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& /*options*/);
 
         const char* name() const noexcept override final;

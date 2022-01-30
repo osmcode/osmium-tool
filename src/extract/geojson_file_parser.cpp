@@ -20,8 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include "../exception.hpp"
 #include "geojson_file_parser.hpp"
+
+#include "../exception.hpp"
 #include "geometry_util.hpp"
 
 #include <osmium/builder/osm_object_builder.hpp>
@@ -268,4 +269,3 @@ std::size_t GeoJSONFileParser::operator()() {
 
     error("Expected 'type' value to be 'Feature'.");
 }
-

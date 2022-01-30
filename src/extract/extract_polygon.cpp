@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "extract_polygon.hpp"
+
 #include "../exception.hpp"
 
 #include <osmium/geom/wkt.hpp>
@@ -35,14 +36,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 static void add_ring(std::vector<osmium::Segment>& segments, const osmium::NodeRefList& ring) {
-    const auto *it = ring.begin();
-    const auto *const end = ring.end();
+    const auto* it = ring.begin();
+    const auto* const end = ring.end();
 
     if (it == end) {
         throw config_error{"Ring without any points."};
     }
 
-    const auto *prev_it = it++;
+    const auto* prev_it = it++;
     while (it != end) {
         segments.emplace_back(prev_it->location(), it->location());
         prev_it = it++;
@@ -85,7 +86,7 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
     // put segments into the bands they overlap
     for (const auto& segment : segments) {
         const std::pair<int32_t, int32_t> mm = std::minmax(segment.first().y(), segment.second().y());
-        const uint32_t band_min = (mm.first  - y_min()) / m_dy;
+        const uint32_t band_min = (mm.first - y_min()) / m_dy;
         const uint32_t band_max = std::min(num_bands, ((mm.second - y_min()) / m_dy) + 1);
 
         for (auto band = band_min; band < band_max; ++band) {

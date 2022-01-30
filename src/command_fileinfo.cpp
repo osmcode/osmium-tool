@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_fileinfo.hpp"
+
 #include "exception.hpp"
 #include "util.hpp"
 
@@ -303,7 +304,7 @@ public:
         const auto buffers_size = static_cast<double>(info_handler.buffers_size / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
         std::cout << "  Sum of buffer sizes: " << info_handler.buffers_size << " (" << buffers_size << " GB)\n";
 
-        const auto buffers_capacity= static_cast<double>(info_handler.buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
+        const auto buffers_capacity = static_cast<double>(info_handler.buffers_capacity / (1000 * 1000)) / 1000; // NOLINT(bugprone-integer-division)
 
         if (info_handler.buffers_capacity != 0) {
             const auto fill_factor = std::round(100 * static_cast<double>(info_handler.buffers_size) / static_cast<double>(info_handler.buffers_capacity));

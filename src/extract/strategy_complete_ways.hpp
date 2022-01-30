@@ -44,7 +44,8 @@ namespace strategy_complete_ways {
 
     class Strategy : public ExtractStrategy {
 
-        template<typename S, typename T> friend class ::Pass;
+        template <typename S, typename T>
+        friend class ::Pass;
         friend class Pass1;
 
         using extract_data = ExtractData<Data>;

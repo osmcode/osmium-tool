@@ -48,7 +48,8 @@ namespace strategy_smart {
 
     class Strategy : public ExtractStrategy {
 
-        template<typename S, typename T> friend class ::Pass;
+        template <typename S, typename T>
+        friend class ::Pass;
         friend class Pass1;
 
         using extract_data = ExtractData<Data>;

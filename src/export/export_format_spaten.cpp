@@ -1,6 +1,7 @@
 
-#include "../util.hpp"
 #include "export_format_spaten.hpp"
+
+#include "../util.hpp"
 
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/detail/string_util.hpp>
@@ -8,7 +9,6 @@
 #include <protozero/pbf_builder.hpp>
 
 #include <cassert>
-
 
 enum {
     // spaten block size, should be benchmarked
@@ -30,7 +30,7 @@ static const char message_type = '\0';
 
 static const char* const unique_id_field = "@fid";
 
-static std::string uint64_buf(uint64_t v)  {
+static std::string uint64_buf(uint64_t v) {
     std::string buf(8, '\0');
     buf[0] = static_cast<char>((v       ) & 0xffU);
     buf[1] = static_cast<char>((v >>  8U) & 0xffU);

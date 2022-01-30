@@ -36,14 +36,13 @@ class CommandCat : public CommandWithMultipleOSMInputs, public with_osm_output {
 
     bool m_buffer_data = false;
 
-    void copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer &writer) const;
+    void copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer) const;
 
     std::size_t read_buffers(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, std::vector<osmium::memory::Buffer>& buffers);
 
-    void write_buffers(osmium::ProgressBar& progress_bar, std::vector<osmium::memory::Buffer>& buffers, osmium::io::Writer &writer);
+    void write_buffers(osmium::ProgressBar& progress_bar, std::vector<osmium::memory::Buffer>& buffers, osmium::io::Writer& writer);
 
 public:
-
     explicit CommandCat(const CommandFactory& command_factory) :
         CommandWithMultipleOSMInputs(command_factory) {
     }
@@ -63,6 +62,5 @@ public:
     }
 
 }; // class CommandCat
-
 
 #endif // COMMAND_CAT_HPP

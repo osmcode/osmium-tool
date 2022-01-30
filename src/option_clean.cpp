@@ -20,8 +20,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-#include "exception.hpp"
 #include "option_clean.hpp"
+
+#include "exception.hpp"
 
 #include <osmium/osm/object.hpp>
 #include <osmium/osm/types.hpp>
@@ -40,7 +41,7 @@ void OptionClean::setup(const boost::program_options::variables_map& vm) {
             } else if (c == "user") {
                 m_clean_attrs |= clean_options::clean_user;
             } else {
-                throw argument_error{"Unknown attribute on --clean option: '" + c +"'"};
+                throw argument_error{"Unknown attribute on --clean option: '" + c + "'"};
             }
         }
     }

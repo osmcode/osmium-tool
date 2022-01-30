@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "command_apply_changes.hpp"
+
 #include "exception.hpp"
 #include "util.hpp"
 
