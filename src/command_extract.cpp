@@ -341,11 +341,11 @@ void CommandExtract::parse_config_file() {
             }
 
             if (json_bbox != e.MemberEnd()) {
-                m_extracts.emplace_back(new ExtractBBox{output_file, description, parse_bbox(json_bbox->value)});
+                m_extracts.push_back(std::make_unique<ExtractBBox>(output_file, description, parse_bbox(json_bbox->value)));
             } else if (json_polygon != e.MemberEnd()) {
-                m_extracts.emplace_back(new ExtractPolygon{output_file, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, m_buffer)});
+                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, m_buffer)));
             } else if (json_multipolygon != e.MemberEnd()) {
-                m_extracts.emplace_back(new ExtractPolygon{output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, m_buffer)});
+                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, m_buffer)));
             } else {
                 throw config_error{"Missing geometry for extract. Need 'bbox', 'polygon', or 'multipolygon'."};
             }
@@ -402,21 +402,21 @@ std::unique_ptr<ExtractStrategy> CommandExtract::make_strategy(const std::string
         if (m_with_history) {
             throw argument_error{"The 'simple' strategy is not supported for history files."};
         }
-        return std::unique_ptr<ExtractStrategy>(new strategy_simple::Strategy{m_extracts, m_options});
+        return std::make_unique<strategy_simple::Strategy>(m_extracts, m_options);
     }
 
     if (name == "complete_ways") {
         if (m_with_history) {
-            return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways_with_history::Strategy{m_extracts, m_options});
+            return std::make_unique<strategy_complete_ways_with_history::Strategy>(m_extracts, m_options);
         }
-        return std::unique_ptr<ExtractStrategy>(new strategy_complete_ways::Strategy{m_extracts, m_options});
+        return std::make_unique<strategy_complete_ways::Strategy>(m_extracts, m_options);
     }
 
     if (name == "smart") {
         if (m_with_history) {
             throw argument_error{"The 'smart' strategy is not supported for history files."};
         }
-        return std::unique_ptr<ExtractStrategy>(new strategy_smart::Strategy{m_extracts, m_options});
+        return std::make_unique<strategy_smart::Strategy>(m_extracts, m_options);
     }
 
     throw argument_error{std::string{"Unknown extract strategy: '"} + name + "'."};
@@ -499,7 +499,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
         if (m_with_history) {
             m_output_file.set_has_multiple_object_versions(true);
         }
-        m_extracts.emplace_back(new ExtractBBox{m_output_file, "", parse_bbox(vm["bbox"].as<std::string>(), "--box/-b")});
+        m_extracts.push_back(std::make_unique<ExtractBBox>(m_output_file, "", parse_bbox(vm["bbox"].as<std::string>(), "--box/-b")));
     }
 
     if (vm.count("polygon")) {
@@ -510,7 +510,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
         if (m_with_history) {
             m_output_file.set_has_multiple_object_versions(true);
         }
-        m_extracts.emplace_back(new ExtractPolygon{m_output_file, "", m_buffer, parse_multipolygon_object("./", vm["polygon"].as<std::string>(), "", m_buffer)});
+        m_extracts.push_back(std::make_unique<ExtractPolygon>(m_output_file, "", m_buffer, parse_multipolygon_object("./", vm["polygon"].as<std::string>(), "", m_buffer)));
     }
 
     if (vm.count("option")) {

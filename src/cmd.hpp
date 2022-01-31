@@ -273,7 +273,7 @@ public:
  */
 class CommandFactory {
 
-    using create_command_type = std::function<Command*()>;
+    using create_command_type = std::function<std::unique_ptr<Command>()>;
 
     struct command_info {
         std::string description; // description of command for help

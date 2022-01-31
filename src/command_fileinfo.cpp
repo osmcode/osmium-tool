@@ -859,11 +859,11 @@ void CommandFileinfo::show_arguments() {
 bool CommandFileinfo::run() {
     std::unique_ptr<Output> output;
     if (m_json_output) {
-        output.reset(new JSONOutput{});
+        output = std::make_unique<JSONOutput>();
     } else if (m_get_value.empty()) {
-        output.reset(new HumanReadableOutput{});
+        output = std::make_unique<HumanReadableOutput>();
     } else {
-        output.reset(new SimpleOutput{m_get_value});
+        output = std::make_unique<SimpleOutput>(m_get_value);
     }
 
     output->set_crc(m_calculate_crc);

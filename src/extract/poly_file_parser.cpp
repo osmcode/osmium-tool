@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <fstream>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -135,7 +136,7 @@ std::size_t PolyFileParser::operator()() {
         throw poly_error{std::string{"File '"} + m_file_name + "' is empty."};
     }
 
-    m_builder.reset(new osmium::builder::AreaBuilder{m_buffer});
+    m_builder = std::make_unique<osmium::builder::AreaBuilder>(m_buffer);
     while (m_line < m_data.size()) {
         parse_multipolygon();
     }

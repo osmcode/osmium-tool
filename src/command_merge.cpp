@@ -111,7 +111,7 @@ namespace {
     public:
 
         explicit DataSource(const osmium::io::File& file, bool with_history) :
-            m_reader(new osmium::io::Reader{file}),
+            m_reader(std::make_unique<osmium::io::Reader>(file)),
             m_name(file.filename()),
             m_iterator(*m_reader),
             m_warning(!with_history) {

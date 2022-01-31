@@ -260,10 +260,10 @@ bool CommandDiff::run() {
 
     if (m_output_action == "compact") {
         const int fd = osmium::io::detail::open_for_writing(m_output_filename, m_output_overwrite);
-        action.reset(new OutputActionCompact{fd});
+        action = std::make_unique<OutputActionCompact>(fd);
     } else if (m_output_action == "osm") {
         m_output_file.set("diff");
-        action.reset(new OutputActionOSM{m_output_file, m_output_overwrite});
+        action = std::make_unique<OutputActionOSM>(m_output_file, m_output_overwrite);
     }
 
     uint64_t count_left = 0;
