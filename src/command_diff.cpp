@@ -167,16 +167,16 @@ public:
     OutputAction(OutputAction&&) noexcept = delete;
     OutputAction& operator=(OutputAction&&) noexcept = delete;
 
-    virtual void left(osmium::OSMObject& /* object */) {
+    virtual void left(const osmium::OSMObject& /* object */) {
     }
 
-    virtual void right(osmium::OSMObject& /* object */) {
+    virtual void right(const osmium::OSMObject& /* object */) {
     }
 
-    virtual void same(osmium::OSMObject& /* object */) {
+    virtual void same(const osmium::OSMObject& /* object */) {
     }
 
-    virtual void different(osmium::OSMObject& /* left */, osmium::OSMObject& /* right */) {
+    virtual void different(const osmium::OSMObject& /* left */, const osmium::OSMObject& /* right */) {
     }
 
 }; // class OutputAction
@@ -199,19 +199,19 @@ public:
         m_fd(fd) {
     }
 
-    void left(osmium::OSMObject& object) override {
+    void left(const osmium::OSMObject& object) override {
         print('-', object);
     }
 
-    void right(osmium::OSMObject& object) override {
+    void right(const osmium::OSMObject& object) override {
         print('+', object);
     }
 
-    void same(osmium::OSMObject& object) override {
+    void same(const osmium::OSMObject& object) override {
         print(' ', object);
     }
 
-    void different(osmium::OSMObject& left, osmium::OSMObject& /* right */) override {
+    void different(const osmium::OSMObject& left, const osmium::OSMObject& /* right */) override {
         print('*', left);
     }
 
@@ -227,19 +227,19 @@ public:
         m_writer(file, ow) {
     }
 
-    void left(osmium::OSMObject& object) override {
+    void left(const osmium::OSMObject& object) override {
         m_writer(object);
     }
 
-    void right(osmium::OSMObject& object) override {
+    void right(const osmium::OSMObject& object) override {
         m_writer(object);
     }
 
-    void same(osmium::OSMObject& object) override {
+    void same(const osmium::OSMObject& object) override {
         m_writer(object);
     }
 
-    void different(osmium::OSMObject& left, osmium::OSMObject& right) override {
+    void different(const osmium::OSMObject& left, const osmium::OSMObject& right) override {
         m_writer(left);
         m_writer(right);
     }
