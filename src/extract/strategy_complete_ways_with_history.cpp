@@ -55,7 +55,7 @@ namespace strategy_complete_ways_with_history {
 
     public:
 
-        explicit Pass1(Strategy& strategy) :
+        explicit Pass1(Strategy* strategy) :
             Pass(strategy) {
         }
 
@@ -70,9 +70,9 @@ namespace strategy_complete_ways_with_history {
             m_current_way_nodes.clear();
         }
 
-        void enode(extract_data& e, const osmium::Node& node) {
-            if (e.contains(node.location())) {
-                e.node_ids.set(node.positive_id());
+        void enode(extract_data* e, const osmium::Node& node) {
+            if (e->contains(node.location())) {
+                e->node_ids.set(node.positive_id());
             }
         }
 
@@ -87,10 +87,10 @@ namespace strategy_complete_ways_with_history {
             }
         }
 
-        void eway(extract_data& e, const osmium::Way& way) {
+        void eway(extract_data* e, const osmium::Way& way) {
             for (const auto& nr : way.nodes()) {
-                if (e.node_ids.get(nr.positive_ref())) {
-                    e.way_ids.set(way.positive_id());
+                if (e->node_ids.get(nr.positive_ref())) {
+                    e->way_ids.set(way.positive_id());
                     return;
                 }
             }
@@ -100,18 +100,18 @@ namespace strategy_complete_ways_with_history {
             m_relations_map_stash.add_members(relation);
         }
 
-        void erelation(extract_data& e, const osmium::Relation& relation) {
+        void erelation(extract_data* e, const osmium::Relation& relation) {
             for (const auto& member : relation.members()) {
                 switch (member.type()) {
                     case osmium::item_type::node:
-                        if (e.node_ids.get(member.positive_ref())) {
-                            e.relation_ids.set(relation.positive_id());
+                        if (e->node_ids.get(member.positive_ref())) {
+                            e->relation_ids.set(relation.positive_id());
                             return;
                         }
                         break;
                     case osmium::item_type::way:
-                        if (e.way_ids.get(member.positive_ref())) {
-                            e.relation_ids.set(relation.positive_id());
+                        if (e->way_ids.get(member.positive_ref())) {
+                            e->relation_ids.set(relation.positive_id());
                             return;
                         }
                         break;
@@ -131,26 +131,26 @@ namespace strategy_complete_ways_with_history {
 
     public:
 
-        explicit Pass2(Strategy& strategy) :
+        explicit Pass2(Strategy* strategy) :
             Pass(strategy) {
         }
 
-        void enode(extract_data& e, const osmium::Node& node) {
-            if (e.node_ids.get(node.positive_id()) ||
-                e.extra_node_ids.get(node.positive_id())) {
-                e.write(node);
+        void enode(extract_data* e, const osmium::Node& node) {
+            if (e->node_ids.get(node.positive_id()) ||
+                e->extra_node_ids.get(node.positive_id())) {
+                e->write(node);
             }
         }
 
-        void eway(extract_data& e, const osmium::Way& way) {
-            if (e.way_ids.get(way.positive_id())) {
-                e.write(way);
+        void eway(extract_data* e, const osmium::Way& way) {
+            if (e->way_ids.get(way.positive_id())) {
+                e->write(way);
             }
         }
 
-        void erelation(extract_data& e, const osmium::Relation& relation) {
-            if (e.relation_ids.get(relation.positive_id())) {
-                e.write(relation);
+        void erelation(extract_data* e, const osmium::Relation& relation) {
+            if (e->relation_ids.get(relation.positive_id())) {
+                e->write(relation);
             }
         }
 
@@ -166,7 +166,7 @@ namespace strategy_complete_ways_with_history {
         osmium::ProgressBar progress_bar{file_size * 2, display_progress};
 
         vout << "First pass (of two)...\n";
-        Pass1 pass1{*this};
+        Pass1 pass1{this};
         pass1.run(progress_bar, input_file);
         progress_bar.file_done(file_size);
         pass1.add_extra_nodes();
@@ -181,7 +181,7 @@ namespace strategy_complete_ways_with_history {
 
         progress_bar.remove();
         vout << "Second pass (of two)...\n";
-        Pass2 pass2{*this};
+        Pass2 pass2{this};
         pass2.run(progress_bar, input_file);
         progress_bar.done();
     }

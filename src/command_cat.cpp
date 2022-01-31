@@ -34,6 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
+#include <cassert>
 #include <string>
 #include <utility>
 #include <vector>
@@ -128,18 +129,20 @@ void CommandCat::write_buffers(osmium::ProgressBar& progress_bar, std::vector<os
     }
 }
 
-static void report_filename(osmium::VerboseOutput& vout, const osmium::io::File& file, const osmium::io::Reader& reader) {
+static void report_filename(osmium::VerboseOutput* vout, const osmium::io::File& file, const osmium::io::Reader& reader) {
+    assert(vout);
+
     const auto size = reader.file_size();
     const auto& name = file.filename();
 
     if (size == 0) {
         if (name.empty()) {
-            vout << "Reading from stdin...\n";
+            *vout << "Reading from stdin...\n";
         } else {
-            vout << "Reading input file '" << name << "'...\n";
+            *vout << "Reading input file '" << name << "'...\n";
         }
     } else {
-        vout << "Reading input file '" << name << "' (" << size << " bytes)...\n";
+        *vout << "Reading input file '" << name << "' (" << size << " bytes)...\n";
     }
 }
 
@@ -150,7 +153,7 @@ bool CommandCat::run() {
         osmium::io::Reader reader{m_input_files[0], osm_entity_bits()};
         osmium::io::Header header{reader.header()};
 
-        report_filename(m_vout, m_input_files[0], reader);
+        report_filename(&m_vout, m_input_files[0], reader);
 
         setup_header(header);
         osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
@@ -185,7 +188,7 @@ bool CommandCat::run() {
             for (const auto& input_file : m_input_files) {
                 progress_bar_reader.remove();
                 osmium::io::Reader reader{input_file, osm_entity_bits()};
-                report_filename(m_vout, input_file, reader);
+                report_filename(&m_vout, input_file, reader);
                 size += read_buffers(progress_bar_reader, reader, buffers);
                 progress_bar_reader.file_done(reader.file_size());
                 reader.close();
@@ -203,7 +206,7 @@ bool CommandCat::run() {
             for (const auto& input_file : m_input_files) {
                 progress_bar.remove();
                 osmium::io::Reader reader{input_file, osm_entity_bits()};
-                report_filename(m_vout, input_file, reader);
+                report_filename(&m_vout, input_file, reader);
                 copy(progress_bar, reader, writer);
                 progress_bar.file_done(reader.file_size());
                 reader.close();

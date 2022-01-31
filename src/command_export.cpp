@@ -170,7 +170,7 @@ static Ruleset parse_tags_ruleset(const rapidjson::Value& object, const char* ke
     return ruleset;
 }
 
-static bool parse_string_array(const rapidjson::Value& object, const char* key, std::vector<std::string>& result) {
+static bool parse_string_array(const rapidjson::Value& object, const char* key, std::vector<std::string>* result) {
     const auto json = object.FindMember(key);
     if (json == object.MemberEnd()) {
         return false;
@@ -186,7 +186,7 @@ static bool parse_string_array(const rapidjson::Value& object, const char* key, 
         }
 
         if (value.GetString()[0] != '\0') {
-            result.emplace_back(value.GetString());
+            result->emplace_back(value.GetString());
         }
     }
 
@@ -229,8 +229,8 @@ void CommandExport::parse_config_file() {
         m_area_ruleset.set_rule_type(tags_filter_rule_type::any);
     }
 
-    parse_string_array(doc, "include_tags", m_include_tags);
-    parse_string_array(doc, "exclude_tags", m_exclude_tags);
+    parse_string_array(doc, "include_tags", &m_include_tags);
+    parse_string_array(doc, "exclude_tags", &m_exclude_tags);
 }
 
 void CommandExport::canonicalize_output_format() {
@@ -491,26 +491,28 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
-static void print_taglist(osmium::VerboseOutput& vout, const std::vector<std::string>& strings) {
+static void print_taglist(osmium::VerboseOutput* vout, const std::vector<std::string>& strings) {
+    assert(vout);
     for (const auto& str : strings) {
-        vout << "    " << str << '\n';
+        *vout << "    " << str << '\n';
     }
 }
 
-static void print_ruleset(osmium::VerboseOutput& vout, const Ruleset& ruleset) {
+static void print_ruleset(osmium::VerboseOutput* vout, const Ruleset& ruleset) {
+    assert(vout);
     switch (ruleset.rule_type()) {
         case tags_filter_rule_type::none:
-            vout << "none\n";
+            *vout << "none\n";
             break;
         case tags_filter_rule_type::any:
-            vout << "any\n";
+            *vout << "any\n";
             break;
         case tags_filter_rule_type::list:
-            vout << "one of the following:\n";
+            *vout << "one of the following:\n";
             print_taglist(vout, ruleset.tags());
             break;
         case tags_filter_rule_type::other:
-            vout << "if other tag list doesn't match\n";
+            *vout << "if other tag list doesn't match\n";
             break;
     }
 }
@@ -554,16 +556,16 @@ void CommandExport::show_arguments() {
     }
 
     m_vout << "  linear tags: ";
-    print_ruleset(m_vout, m_linear_ruleset);
+    print_ruleset(&m_vout, m_linear_ruleset);
     m_vout << "  area tags:   ";
-    print_ruleset(m_vout, m_area_ruleset);
+    print_ruleset(&m_vout, m_area_ruleset);
 
     if (!m_include_tags.empty()) {
         m_vout << "  include only these tags:\n";
-        print_taglist(m_vout, m_include_tags);
+        print_taglist(&m_vout, m_include_tags);
     } else if (!m_exclude_tags.empty()) {
         m_vout << "  exclude these tags:\n";
-        print_taglist(m_vout, m_exclude_tags);
+        print_taglist(&m_vout, m_exclude_tags);
     }
 
     m_vout << "  other options:\n";

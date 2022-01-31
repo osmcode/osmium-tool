@@ -38,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/progress_bar.hpp>
 #include <osmium/util/verbose_output.hpp>
 
+#include <cassert>
 #include <memory>
 
 template <typename T>
@@ -88,7 +89,7 @@ public:
 template <typename TStrategy, typename TChild>
 class Pass {
 
-    TStrategy& m_strategy;
+    TStrategy* m_strategy;
 
     void run_impl(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader) {
         while (osmium::memory::Buffer buffer = reader.read()) {
@@ -98,19 +99,19 @@ class Pass {
                     case osmium::item_type::node:
                         self().node(static_cast<const osmium::Node&>(object));
                         for (auto& e : extracts()) {
-                            self().enode(e, static_cast<const osmium::Node&>(object));
+                            self().enode(&e, static_cast<const osmium::Node&>(object));
                         }
                         break;
                     case osmium::item_type::way:
                         self().way(static_cast<const osmium::Way&>(object));
                         for (auto& e : extracts()) {
-                            self().eway(e, static_cast<const osmium::Way&>(object));
+                            self().eway(&e, static_cast<const osmium::Way&>(object));
                         }
                         break;
                     case osmium::item_type::relation:
                         self().relation(static_cast<const osmium::Relation&>(object));
                         for (auto& e : extracts()) {
-                            self().erelation(e, static_cast<const osmium::Relation&>(object));
+                            self().erelation(&e, static_cast<const osmium::Relation&>(object));
                         }
                         break;
                     default:
@@ -125,11 +126,11 @@ protected:
     using extract_data = typename TStrategy::extract_data;
 
     TStrategy& strategy() {
-        return m_strategy;
+        return *m_strategy;
     }
 
     std::vector<extract_data>& extracts() {
-        return m_strategy.m_extracts;
+        return m_strategy->m_extracts;
     }
 
     TChild& self() {
@@ -145,19 +146,20 @@ protected:
     void relation(const osmium::Relation&) {
     }
 
-    void enode(extract_data&, const osmium::Node&) {
+    void enode(extract_data*, const osmium::Node&) {
     }
 
-    void eway(extract_data&, const osmium::Way&) {
+    void eway(extract_data*, const osmium::Way&) {
     }
 
-    void erelation(extract_data&, const osmium::Relation&) {
+    void erelation(extract_data*, const osmium::Relation&) {
     }
 
 public:
 
-    explicit Pass(TStrategy& strategy) :
+    explicit Pass(TStrategy* strategy) :
         m_strategy(strategy) {
+        assert(strategy);
     }
 
     template <typename... Args>

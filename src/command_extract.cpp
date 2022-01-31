@@ -165,7 +165,9 @@ static osmium::Box parse_bbox(const rapidjson::Value& value) {
     throw config_error{"'bbox' member is not an array or object."};
 }
 
-static std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer& buffer) {
+static std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer* buffer) {
+    assert(buffer);
+
     if (file_name.empty()) {
         throw config_error{"Missing 'file_name' in '(multi)polygon' object."};
     }
@@ -193,7 +195,7 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
 
     if (file_type == "osm") {
         try {
-            OSMFileParser parser{buffer, file_name};
+            OSMFileParser parser{*buffer, file_name};
             return parser();
         } catch (const std::system_error& e) {
             throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
@@ -203,14 +205,14 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
             throw osmium::io_error{std::string{"While reading file '"} + file_name + "':\n" + e.what()};
         }
     } else if (file_type == "geojson") {
-        GeoJSONFileParser parser{buffer, file_name};
+        GeoJSONFileParser parser{*buffer, file_name};
         try {
             return parser();
         } catch (const config_error& e) {
             throw geojson_error{e.what()};
         }
     } else if (file_type == "poly") {
-        PolyFileParser parser{buffer, file_name};
+        PolyFileParser parser{*buffer, file_name};
         return parser();
     } else if (file_type.empty()) {
         throw config_error{"Could not autodetect file type in '(multi)polygon' object. Add a 'file_type'."};
@@ -219,13 +221,17 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
     throw config_error{std::string{"Unknown file type: '"} + file_type + "' in '(multi)polygon.file_type'"};
 }
 
-static std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+static std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
+    assert(buffer);
+
     const std::string file_name{get_value_as_string(value, "file_name")};
     const std::string file_type{get_value_as_string(value, "file_type")};
     return parse_multipolygon_object(directory, file_name, file_type, buffer);
 }
 
-static std::size_t parse_polygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+static std::size_t parse_polygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
+    assert(buffer);
+
     if (value.IsArray()) {
         return parse_polygon_array(value, buffer);
     }
@@ -237,7 +243,9 @@ static std::size_t parse_polygon(const std::string& directory, const rapidjson::
     throw config_error{"Polygon must be an object or array."};
 }
 
-std::size_t parse_multipolygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+std::size_t parse_multipolygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
+    assert(buffer);
+
     if (value.IsArray()) {
         return parse_multipolygon_array(value, buffer);
     }
@@ -343,9 +351,9 @@ void CommandExtract::parse_config_file() {
             if (json_bbox != e.MemberEnd()) {
                 m_extracts.push_back(std::make_unique<ExtractBBox>(output_file, description, parse_bbox(json_bbox->value)));
             } else if (json_polygon != e.MemberEnd()) {
-                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, m_buffer)));
+                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, &m_buffer)));
             } else if (json_multipolygon != e.MemberEnd()) {
-                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, m_buffer)));
+                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, &m_buffer)));
             } else {
                 throw config_error{"Missing geometry for extract. Need 'bbox', 'polygon', or 'multipolygon'."};
             }
@@ -510,7 +518,7 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
         if (m_with_history) {
             m_output_file.set_has_multiple_object_versions(true);
         }
-        m_extracts.push_back(std::make_unique<ExtractPolygon>(m_output_file, "", m_buffer, parse_multipolygon_object("./", vm["polygon"].as<std::string>(), "", m_buffer)));
+        m_extracts.push_back(std::make_unique<ExtractPolygon>(m_output_file, "", m_buffer, parse_multipolygon_object("./", vm["polygon"].as<std::string>(), "", &m_buffer)));
     }
 
     if (vm.count("option")) {

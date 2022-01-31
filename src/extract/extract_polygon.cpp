@@ -35,7 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-static void add_ring(std::vector<osmium::Segment>& segments, const osmium::NodeRefList& ring) {
+static void add_ring(std::vector<osmium::Segment>* segments, const osmium::NodeRefList& ring) {
     const auto* it = ring.begin();
     const auto* const end = ring.end();
 
@@ -45,7 +45,7 @@ static void add_ring(std::vector<osmium::Segment>& segments, const osmium::NodeR
 
     const auto* prev_it = it++;
     while (it != end) {
-        segments.emplace_back(prev_it->location(), it->location());
+        segments->emplace_back(prev_it->location(), it->location());
         prev_it = it++;
     }
 }
@@ -62,10 +62,10 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
     // get segments from all rings
     std::vector<osmium::Segment> segments;
     for (const auto& outer_ring : area().outer_rings()) {
-        add_ring(segments, outer_ring);
+        add_ring(&segments, outer_ring);
 
         for (const auto& inner_ring : area().inner_rings(outer_ring)) {
-            add_ring(segments, inner_ring);
+            add_ring(&segments, inner_ring);
         }
     }
 

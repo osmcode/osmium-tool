@@ -30,9 +30,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 static constexpr const std::size_t initial_buffer_size = 1024 * 1024;
 static constexpr const std::size_t flush_buffer_size   =  800 * 1024;
 
-static void add_to_stream(rapidjson::StringBuffer& stream, const char* s) {
+static void add_to_stream(rapidjson::StringBuffer* stream, const char* s) {
     while (*s) {
-        stream.Put(*s++);
+        stream->Put(*s++);
     }
 }
 
@@ -50,7 +50,7 @@ ExportFormatJSON::ExportFormatJSON(const std::string& output_format,
     m_factory(m_writer) {
     m_stream.Reserve(initial_buffer_size);
     if (!m_text_sequence_format) {
-        add_to_stream(m_stream, "{\"type\":\"FeatureCollection\",\"features\":[\n");
+        add_to_stream(&m_stream, "{\"type\":\"FeatureCollection\",\"features\":[\n");
     }
     m_committed_size = m_stream.GetSize();
 
@@ -194,9 +194,9 @@ void ExportFormatJSON::close() {
     if (m_fd > 0) {
         rollback_uncomitted();
 
-        add_to_stream(m_stream, "\n");
+        add_to_stream(&m_stream, "\n");
         if (!m_text_sequence_format) {
-            add_to_stream(m_stream, "]}\n");
+            add_to_stream(&m_stream, "]}\n");
         }
 
         flush_to_output();

@@ -332,12 +332,12 @@ void CommandRenumber::write_index(osmium::item_type type) {
     close(fd);
 }
 
-void read_relations(const osmium::io::File& input_file, id_map& map) {
+void read_relations(const osmium::io::File& input_file, id_map* map) {
     osmium::io::Reader reader{input_file, osmium::osm_entity_bits::relation};
 
     const auto input = osmium::io::make_input_iterator_range<osmium::Relation>(reader);
     for (const osmium::Relation& relation : input) {
-        map(relation.id());
+        (*map)(relation.id());
     }
 
     reader.close();
@@ -368,7 +368,7 @@ bool CommandRenumber::run() {
 
     if (osm_entity_bits() & osmium::osm_entity_bits::relation) {
         m_vout << "First pass (of two) through input file (reading relations)...\n";
-        read_relations(m_input_file, m_id_map(osmium::item_type::relation));
+        read_relations(m_input_file, &m_id_map(osmium::item_type::relation));
         m_vout << "First pass done.\n";
         m_vout << "Second pass (of two) through input file...\n";
     } else {

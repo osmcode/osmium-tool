@@ -92,7 +92,7 @@ std::vector<osmium::geom::Coordinates> parse_ring(const rapidjson::Value& value)
     return coordinates;
 }
 
-void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& builder) {
+void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder* builder) {
     assert(value.IsArray());
     const auto array = value.GetArray();
     if (array.Empty()) {
@@ -104,7 +104,7 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
         if (!is_ccw(outer_ring)) {
             std::reverse(outer_ring.begin(), outer_ring.end());
         }
-        osmium::builder::OuterRingBuilder ring_builder{builder};
+        osmium::builder::OuterRingBuilder ring_builder{*builder};
         for (const auto& c : outer_ring) {
             osmium::Location loc{c.x, c.y};
             if (loc.valid()) {
@@ -123,7 +123,7 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
         if (is_ccw(inner_ring)) {
             std::reverse(inner_ring.begin(), inner_ring.end());
         }
-        osmium::builder::InnerRingBuilder ring_builder{builder};
+        osmium::builder::InnerRingBuilder ring_builder{*builder};
         for (const auto& c : inner_ring) {
             osmium::Location loc{c.x, c.y};
             if (loc.valid()) {
@@ -138,16 +138,16 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder& bu
     }
 }
 
-std::size_t parse_polygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+std::size_t parse_polygon_array(const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
     {
-        osmium::builder::AreaBuilder builder{buffer};
-        parse_rings(value, builder);
+        osmium::builder::AreaBuilder builder{*buffer};
+        parse_rings(value, &builder);
     }
 
-    return buffer.commit();
+    return buffer->commit();
 }
 
-std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memory::Buffer& buffer) {
+std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
     assert(value.IsArray());
     const auto array = value.GetArray();
     if (array.Empty()) {
@@ -155,16 +155,16 @@ std::size_t parse_multipolygon_array(const rapidjson::Value& value, osmium::memo
     }
 
     {
-        osmium::builder::AreaBuilder builder{buffer};
+        osmium::builder::AreaBuilder builder{*buffer};
         for (const auto& polygon : array) {
             if (!polygon.IsArray()) {
                 throw config_error{"Polygon must be an array."};
             }
-            parse_rings(polygon, builder);
+            parse_rings(polygon, &builder);
         }
     }
 
-    return buffer.commit();
+    return buffer->commit();
 }
 
 [[noreturn]] void GeoJSONFileParser::error(const std::string& message) {
@@ -208,10 +208,10 @@ std::size_t GeoJSONFileParser::parse_top(const rapidjson::Value& top) {
     }
 
     if (geometry_type == "Polygon") {
-        return parse_polygon_array(json_coordinates->value, m_buffer);
+        return parse_polygon_array(json_coordinates->value, &m_buffer);
     }
 
-    return parse_multipolygon_array(json_coordinates->value, m_buffer);
+    return parse_multipolygon_array(json_coordinates->value, &m_buffer);
 }
 
 std::size_t GeoJSONFileParser::operator()() {

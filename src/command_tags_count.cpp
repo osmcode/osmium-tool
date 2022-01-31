@@ -214,15 +214,15 @@ std::vector<element_type> CommandTagsCount::sort_results() const {
     return results;
 }
 
-static void append_escaped(std::string& out, const char* str) {
-    out += '"';
+static void append_escaped(std::string* out, const char* str) {
+    *out += '"';
     for (; *str != '\0'; ++str) {
         if (*str == '"') {
-            out += '"';
+            *out += '"';
         }
-        out += *str;
+        *out += *str;
     }
-    out += '"';
+    *out += '"';
 }
 
 static void write_results(const std::vector<element_type>& results, int fd) {
@@ -233,11 +233,11 @@ static void write_results(const std::vector<element_type>& results, int fd) {
     for (const auto& c : results) {
         out += std::to_string(c.count);
         out += '\t';
-        append_escaped(out, c.name->key());
+        append_escaped(&out, c.name->key());
         const char* value = c.name->value();
         if (value) {
             out += '\t';
-            append_escaped(out, value);
+            append_escaped(&out, value);
         }
         out += '\n';
         if (out.size() > (buffer_size - 1000)) {

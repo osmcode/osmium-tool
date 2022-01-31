@@ -186,21 +186,21 @@ bool ExportFormatPg::add_tags_json(const osmium::OSMObject& object) {
     return has_tags;
 }
 
-static void add_escape_hstore(std::string& out, const char* str) {
-    out += "\"";
+static void add_escape_hstore(std::string* out, const char* str) {
+    *out += "\"";
 
     while (*str) {
         if (*str == '"') {
-            out += "\\\"";
+            *out += "\\\"";
         } else if (*str == '\\') {
-            out += "\\\\";
+            *out += "\\\\";
         } else {
-            out += *str;
+            *out += *str;
         }
         ++str;
     }
 
-    out += "\"";
+    *out += "\"";
 }
 
 bool ExportFormatPg::add_tags_hstore(const osmium::OSMObject& object) {
@@ -215,9 +215,9 @@ bool ExportFormatPg::add_tags_hstore(const osmium::OSMObject& object) {
     for (const auto& tag : object.tags()) {
         if (options().tags_filter(tag)) {
             has_tags = true;
-            add_escape_hstore(data, tag.key());
+            add_escape_hstore(&data, tag.key());
             data += "=>";
-            add_escape_hstore(data, tag.value());
+            add_escape_hstore(&data, tag.value());
             data += ',';
         }
     }

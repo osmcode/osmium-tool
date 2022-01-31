@@ -176,8 +176,8 @@ namespace {
 
     public:
 
-        explicit copy_first_with_id(osmium::io::Writer& w) :
-            writer(&w) {
+        explicit copy_first_with_id(osmium::io::Writer* w) :
+            writer(w) {
         }
 
         void operator()(const osmium::OSMObject& obj) {
@@ -193,12 +193,12 @@ namespace {
 
 } // anonymous namespace
 
-static void update_nodes_if_way(osmium::OSMObject& object, const location_index_type& location_index) {
-    if (object.type() != osmium::item_type::way) {
+static void update_nodes_if_way(osmium::OSMObject* object, const location_index_type& location_index) {
+    if (object->type() != osmium::item_type::way) {
         return;
     }
 
-    for (auto& node_ref : static_cast<osmium::Way&>(object).nodes()) {
+    for (auto& node_ref : static_cast<osmium::Way*>(object)->nodes()) {
         auto location = location_index.get_noexcept(node_ref.positive_ref());
         if (location) {
             node_ref.set_location(location);
@@ -334,7 +334,7 @@ bool CommandApplyChanges::run() {
                     auto last_it = it;
                     while (it != objects.end() && osmium::object_order_type_id_reverse_version{}(*it, object)) {
                         if (it->visible()) {
-                            update_nodes_if_way(*it, location_index);
+                            update_nodes_if_way(&*it, location_index);
                             writer(*it);
                         }
                         last_it = it;
@@ -342,14 +342,14 @@ bool CommandApplyChanges::run() {
                     }
 
                     if (last_it == objects.end() || last_it->type() != object.type() || last_it->id() != object.id()) {
-                        update_nodes_if_way(object, location_index);
+                        update_nodes_if_way(&object, location_index);
                         writer(object);
                     }
                 }
             }
             while (it != objects.end()) {
                 if (it->visible()) {
-                    update_nodes_if_way(*it, location_index);
+                    update_nodes_if_way(&*it, location_index);
                     writer(*it);
                 }
                 ++it;
@@ -357,9 +357,7 @@ bool CommandApplyChanges::run() {
         } else {
             m_vout << "Applying changes and writing them to output...\n";
             const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
-            auto output_it = boost::make_function_output_iterator(
-                                copy_first_with_id(writer)
-            );
+            auto output_it = boost::make_function_output_iterator(copy_first_with_id(&writer));
 
             std::set_union(objects.begin(),
                            objects.end(),

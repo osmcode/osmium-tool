@@ -49,7 +49,7 @@ namespace strategy_simple {
 
     public:
 
-        explicit Pass1(Strategy& strategy) :
+        explicit Pass1(Strategy* strategy) :
             Pass(strategy) {
         }
 
@@ -57,10 +57,10 @@ namespace strategy_simple {
             m_check_order.node(node);
         }
 
-        void enode(extract_data& e, const osmium::Node& node) {
-            if (e.contains(node.location())) {
-                e.write(node);
-                e.node_ids.set(node.positive_id());
+        void enode(extract_data* e, const osmium::Node& node) {
+            if (e->contains(node.location())) {
+                e->write(node);
+                e->node_ids.set(node.positive_id());
             }
         }
 
@@ -68,11 +68,11 @@ namespace strategy_simple {
             m_check_order.way(way);
         }
 
-        void eway(extract_data& e, const osmium::Way& way) {
+        void eway(extract_data* e, const osmium::Way& way) {
             for (const auto& nr : way.nodes()) {
-                if (e.node_ids.get(nr.positive_ref())) {
-                    e.write(way);
-                    e.way_ids.set(way.positive_id());
+                if (e->node_ids.get(nr.positive_ref())) {
+                    e->write(way);
+                    e->way_ids.set(way.positive_id());
                 }
                 return;
             }
@@ -82,17 +82,17 @@ namespace strategy_simple {
             m_check_order.relation(relation);
         }
 
-        void erelation(extract_data& e, const osmium::Relation& relation) {
+        void erelation(extract_data* e, const osmium::Relation& relation) {
             for (const auto& member : relation.members()) {
                 switch (member.type()) {
                     case osmium::item_type::node:
-                        if (e.node_ids.get(member.positive_ref())) {
-                            e.write(relation);
+                        if (e->node_ids.get(member.positive_ref())) {
+                            e->write(relation);
                         }
                         return;
                     case osmium::item_type::way:
-                        if (e.way_ids.get(member.positive_ref())) {
-                            e.write(relation);
+                        if (e->way_ids.get(member.positive_ref())) {
+                            e->write(relation);
                         }
                         return;
                     default:
@@ -108,7 +108,7 @@ namespace strategy_simple {
         const std::size_t file_size = input_file.filename().empty() ? 0 : osmium::file_size(input_file.filename());
         osmium::ProgressBar progress_bar{file_size, display_progress};
 
-        Pass1 pass1{*this};
+        Pass1 pass1{this};
         pass1.run(progress_bar, input_file);
 
         progress_bar.done();
