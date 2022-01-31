@@ -41,7 +41,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <cerrno>
-#include <cstring>
 #include <fcntl.h>
 #include <fstream>
 #include <iostream>
@@ -50,6 +49,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <system_error>
 #include <utility>
 #include <vector>
 
@@ -298,7 +298,7 @@ void CommandRenumber::read_index(osmium::item_type type) {
         if (errno == ENOENT) {
             return;
         }
-        throw std::runtime_error{std::string{"Could not open file '"} + f + "': " + std::strerror(errno)};
+        throw std::system_error{errno, std::system_category(), "Could not open file '" + f + "'"};
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);
@@ -323,7 +323,7 @@ void CommandRenumber::write_index(osmium::item_type type) {
     const std::string f{filename(osmium::item_type_to_name(type))};
     const int fd = ::open(f.c_str(), O_WRONLY | O_CREAT, 0666); // NOLINT(hicpp-signed-bitwise)
     if (fd < 0) {
-        throw std::runtime_error{std::string{"Could not open file '"} + f + "': " + std::strerror(errno)};
+        throw std::system_error{errno, std::system_category(), "Could not open file '" + f + "'"};
     }
 #ifdef _WIN32
     _setmode(fd, _O_BINARY);
