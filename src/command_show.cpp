@@ -167,7 +167,7 @@ static int execute_pager(const std::string& pager, bool with_color) {
             std::exit(1);
         }
 
-        if (with_color && pager.substr(pager.size() - 4, 4) == "less") {
+        if (with_color && pager.size() >= 4 && pager.substr(pager.size() - 4, 4) == "less") {
             ::execlp(pager.c_str(), pager.c_str(), "-R", nullptr);
         } else {
             // execute pager without arguments
