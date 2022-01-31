@@ -1,5 +1,5 @@
 ---
-Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugprone-use-after-move,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-non-private-member-variables-in-classes,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-google-runtime-references,-hicpp-avoid-c-arrays,-hicpp-invalid-access-moved,-hicpp-no-array-decay,-hicpp-vararg,-llvmlibc-*,-misc-no-recursion,-misc-non-private-member-variables-in-classes,-modernize-avoid-c-arrays,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-implicit-bool-cast,-readability-implicit-bool-conversion,-readability-magic-numbers'
+Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugprone-easily-swappable-parameters,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-hicpp-avoid-c-arrays,-hicpp-no-array-decay,-hicpp-vararg,-llvmlibc-*,-misc-no-recursion,-modernize-avoid-c-arrays,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-implicit-bool-conversion,-readability-magic-numbers'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
@@ -19,28 +19,29 @@ Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugpro
 #    There are several cases in this code where the code seems much more
 #    readable with branch clones than without.
 #
-#  bugprone-use-after-move
-#  hicpp-invalid-access-moved
-#    Generates too many false positives. A bug report has been sent:
-#    https://bugs.llvm.org/show_bug.cgi?id=36516
+#  bugprone-easily-swappable-parameters
+#    Not much we can do about those except inventing new types for everything
+#    and anything.
 #
 #  cppcoreguidelines-avoid-c-arrays
-#    Alias for modernize-avoid-c-arrays.
+#  hicpp-avoid-c-arrays
+#  modernize-avoid-c-arrays
+#    Makes sense for some array, but especially for char arrays using
+#    std::array isn't a good solution.
 #
 #  cppcoreguidelines-avoid-magic-numbers
+#  readability-magic-numbers
 #    Generally good advice, but there are too many places where this is
 #    useful, for instance in tests.
 #
 #  cppcoreguidelines-macro-usage
 #    There are cases where we actually need macros.
 #
-#  cppcoreguidelines-non-private-member-variables-in-classes
-#    Alias for misc-non-private-member-variables-in-classes
-#
 #  cppcoreguidelines-owning-memory
 #    Don't want to add dependency on gsl library.
 #
 #  cppcoreguidelines-pro-bounds-array-to-pointer-decay
+#  hicpp-no-array-decay
 #    Limited use and many false positives including for all asserts.
 #
 #  cppcoreguidelines-pro-bounds-pointer-arithmetic
@@ -56,15 +57,6 @@ Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugpro
 #  fuchsia-*
 #    Much too strict.
 #
-#  google-runtime-references
-#    This is just a matter of preference.
-#
-#  hicpp-avoid-c-arrays
-#    Alias for modernize-avoid-c-arrays.
-#
-#  hicpp-no-array-decay
-#    Alias for cppcoreguidelines-pro-bounds-array-to-pointer-decay.
-#
 #  hicpp-vararg
 #    Too strict, sometimes calling vararg functions is necessary.
 #
@@ -74,15 +66,6 @@ Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugpro
 #  misc-no-recursion
 #    Nothing wrong about recursion.
 #
-#  misc-non-private-member-variables-in-classes
-#    Reports this also for structs, which doesn't make any sense. There is
-#    an option "IgnoreClassesWithAllMemberVariablesBeingPublic" which should
-#    disable this, but it didn't work for me.
-#
-#  modernize-avoid-c-arrays
-#    Makes sense for some array, but especially for char arrays using
-#    std::array isn't a good solution.
-#
 #  modernize-use-trailing-return-type
 #    I am not quite that modern.
 #
@@ -90,14 +73,13 @@ Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugpro
 #    Not a bad idea, but it is overzealous when there are member functions
 #    overwritten in child classes and some of them can't be static.
 #
-#  readability-implicit-bool-cast
-#    Old name for readability-implicit-bool-conversion.
-#
 #  readability-implicit-bool-conversion
 #    I don't think this makes the code more readable.
 #
-#  readability-magic-numbers
-#    Alias for cppcoreguidelines-avoid-magic-numbers.
-#
 #WarningsAsErrors: '*'
+CheckOptions:
+    - key: cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+      value: true
+    - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+      value: true
 ...
