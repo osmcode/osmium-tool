@@ -466,7 +466,9 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     po::store(po::command_line_parser(arguments).options(parsed_options).positional(positional).run(), vm);
     po::notify(vm);
 
-    setup_common(vm, desc);
+    if (!setup_common(vm, desc)) {
+        return false;
+    }
     setup_progress(vm);
     setup_input_file(vm);
     init_output_file(vm);

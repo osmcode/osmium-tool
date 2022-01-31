@@ -215,7 +215,9 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
         return false;
     }
 
-    setup_common(vm, desc);
+    if (!setup_common(vm, desc)) {
+        return false;
+    }
     setup_progress(vm);
     setup_object_type_nwr(vm);
     setup_input_file(vm);

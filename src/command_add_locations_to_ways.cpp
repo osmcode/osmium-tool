@@ -97,7 +97,9 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
         m_index_type_name_neg = check_index_type(vm["index-type-neg"].as<std::string>());
     }
 
-    setup_common(vm, desc);
+    if (!setup_common(vm, desc)) {
+        return false;
+    }
     setup_progress(vm);
     setup_input_files(vm);
     setup_output_file(vm);

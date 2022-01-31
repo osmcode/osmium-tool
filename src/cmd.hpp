@@ -110,7 +110,7 @@ public:
     virtual const char* synopsis() const noexcept = 0;
 
     static po::options_description add_common_options(bool with_progress = true);
-    void setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
+    bool setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc);
     void setup_progress(const boost::program_options::variables_map& vm);
     void setup_object_type_nwrc(const boost::program_options::variables_map& vm);
     void setup_object_type_nwr(const boost::program_options::variables_map& vm);

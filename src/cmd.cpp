@@ -49,18 +49,20 @@ po::options_description Command::add_common_options(const bool with_progress) {
     return options;
 }
 
-void Command::setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc) {
+bool Command::setup_common(const boost::program_options::variables_map& vm, const po::options_description& desc) {
     if (vm.count("help")) {
         std::cout << "Usage: " << synopsis() << "\n\n"
                   << m_command_factory.get_description(name()) << "\n"
                   << desc
                   << "\nUse 'osmium help " << name() << "' to display the manual page.\n";
-        std::exit(0);
+        return false;
     }
 
     if (vm.count("verbose")) {
         m_vout.verbose(true);
     }
+
+    return true;
 }
 
 void Command::setup_progress(const boost::program_options::variables_map& vm) {
