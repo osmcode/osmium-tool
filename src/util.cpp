@@ -271,6 +271,6 @@ std::size_t show_mbytes(std::size_t value) noexcept {
 }
 
 double show_gbytes(std::size_t value) noexcept {
-    return static_cast<double>(value / (1000UL * 1000UL)) / 1000; // NOLINT(bugprone-integer-division)
+    return static_cast<double>(show_mbytes(value)) / 1000; // NOLINT(bugprone-integer-division)
 }
 
