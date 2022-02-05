@@ -51,5 +51,7 @@ osmium::Box parse_bbox(const std::string& str, const std::string& option_name);
 osmium::item_type parse_item_type(const std::string& t);
 const char* object_type_as_string(const osmium::OSMObject& object) noexcept;
 bool ends_with(const std::string& str, const std::string& suffix);
+std::size_t show_mbytes(std::size_t value) noexcept;
+double show_gbytes(std::size_t value) noexcept;
 
 #endif // UTIL_HPP

@@ -640,7 +640,7 @@ bool CommandExport::run() {
         }));
         reader.close();
         m_vout << "About "
-               << ((location_index_pos->used_memory() + location_index_neg->used_memory()) / (1024 * 1024))
+               << show_mbytes(location_index_pos->used_memory() + location_index_neg->used_memory())
                << " MBytes used for node location index (in main memory or on disk).\n";
     }
     m_vout << "Second pass done.\n";

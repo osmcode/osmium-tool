@@ -189,7 +189,7 @@ bool CommandAddLocationsToWays::run() {
     }
 
     const auto mem = location_index_pos->used_memory() + location_index_neg->used_memory();
-    m_vout << "About " << (mem / (1024 * 1024)) << " MBytes used for node location index (in main memory or on disk).\n";
+    m_vout << "About " << show_mbytes(mem) << " MBytes used for node location index (in main memory or on disk).\n";
     show_memory_used();
     m_vout << "Done.\n";
 

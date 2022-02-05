@@ -266,3 +266,11 @@ bool ends_with(const std::string& str, const std::string& suffix) {
                        suffix.c_str()) == 0;
 }
 
+std::size_t show_mbytes(std::size_t value) noexcept {
+    return value / (1024UL * 1024UL);
+}
+
+double show_gbytes(std::size_t value) noexcept {
+    return static_cast<double>(value / (1000UL * 1000UL)) / 1000; // NOLINT(bugprone-integer-division)
+}
+

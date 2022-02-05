@@ -313,7 +313,7 @@ bool CommandCheckRefs::run() {
         std::cerr << "Nodes in ways missing: " << handler.missing_nodes_in_ways() << "\n";
     }
 
-    m_vout << "Memory used for indexes: " << (handler.used_memory() / (1024 * 1024)) << " MBytes\n";
+    m_vout << "Memory used for indexes: " << show_mbytes(handler.used_memory()) << " MBytes\n";
 
     show_memory_used();
     m_vout << "Done.\n";
