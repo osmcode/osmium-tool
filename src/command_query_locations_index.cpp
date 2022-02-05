@@ -124,7 +124,7 @@ bool CommandQueryLocationsIndex::run() {
     osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};
 
     if (m_dump) {
-        const std::size_t max_buffer_size = 11 * 1024 * 1024;
+        const std::size_t max_buffer_size = 11UL * 1024UL * 1024UL;
         osmium::memory::Buffer buffer{max_buffer_size};
 
         m_vout << "Opening output file...\n";
@@ -140,7 +140,7 @@ bool CommandQueryLocationsIndex::run() {
                 builder.set_location(location_index.get_noexcept(i));
             }
             buffer.commit();
-            if (buffer.committed() > 10 * 1024 * 1024) {
+            if (buffer.committed() > 10UL * 1024UL * 1024UL) {
                 writer(std::move(buffer));
                 buffer = osmium::memory::Buffer{max_buffer_size};
             }

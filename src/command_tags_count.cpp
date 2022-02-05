@@ -229,7 +229,7 @@ static void append_escaped(std::string* out, const char* str) {
 
 static void write_results(const std::vector<element_type>& results, int fd) {
     std::string out;
-    const std::size_t buffer_size = 1024 * 1024;
+    const std::size_t buffer_size = 1024UL * 1024UL;
     out.reserve(buffer_size);
 
     for (const auto& c : results) {
