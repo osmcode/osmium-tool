@@ -166,7 +166,7 @@ static int execute_pager(const std::string& pager, bool with_color) {
         ::close(pipefd[1]); // close write end of the pipe
         ::close(0); // close stdin
         if (::dup2(pipefd[0], 0) < 0) { // put end of pipe as stdin
-            std::exit(1);
+            throw std::system_error{errno, std::system_category(), "Could not run pager: dup2() call failed"};
         }
 
         if (with_color && pager.size() >= 4 && pager.substr(pager.size() - 4, 4) == "less") {
@@ -178,7 +178,7 @@ static int execute_pager(const std::string& pager, bool with_color) {
 
         // Exec will either succeed and never return here, or it fails and
         // we'll exit.
-        std::exit(1);
+        throw std::system_error{errno, std::system_category(), "Could not run pager: execlp() call failed"};
     }
 
     // parent
