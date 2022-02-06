@@ -25,14 +25,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp" // IWYU pragma: export
 
+#include <osmium/osm/crc.hpp>
+#include <osmium/osm/crc_zlib.hpp>
+
 #include <string>
 #include <vector>
 
 class CommandDiff : public CommandWithMultipleOSMInputs, public with_osm_output {
 
     std::string m_output_action;
+    bool m_ignore_attrs_changeset = false;
+    bool m_ignore_attrs_uid = false;
+    bool m_ignore_attrs_user = false;
     bool m_show_summary = false;
     bool m_suppress_common = false;
+
+    void update_object_crc(osmium::CRC<osmium::CRC_zlib>* crc, const osmium::OSMObject &object);
 
 public:
 

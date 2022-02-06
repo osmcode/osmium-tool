@@ -52,6 +52,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 bool CommandDiff::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
+    ("ignore-changeset", "Ignore changeset id when comparing objects")
+    ("ignore-uid", "Ignore user id when comparing objects")
+    ("ignore-user", "Ignore user name when comparing objects")
     ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation)")
     ("output,o", po::value<std::string>(), "Output file")
     ("output-format,f", po::value<std::string>(), "Format of output file")
@@ -93,6 +96,18 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
         throw argument_error("You need exactly two input files for this command.");
     }
 
+    if (vm.count("ignore-changeset")) {
+        m_ignore_attrs_changeset = true;
+    }
+
+    if (vm.count("ignore-uid")) {
+        m_ignore_attrs_uid = true;
+    }
+
+    if (vm.count("ignore-user")) {
+        m_ignore_attrs_user = true;
+    }
+
     if (vm.count("output")) {
         m_output_filename = vm["output"].as<std::string>();
     }
@@ -129,6 +144,18 @@ bool CommandDiff::setup(const std::vector<std::string>& arguments) {
             m_output_action = "osm";
             m_output_file = osmium::io::File{m_output_filename, m_output_format};
             m_output_file.check();
+
+            std::string metadata{"version+timestamp"};
+            if (!m_ignore_attrs_changeset) {
+                metadata += "+changeset";
+            }
+            if (!m_ignore_attrs_uid) {
+                metadata += "+uid";
+            }
+            if (!m_ignore_attrs_changeset) {
+                metadata += "+user";
+            }
+            m_output_file.set("add_metadata", metadata);
 
             auto f = m_output_file.format();
             if (f != osmium::io::file_format::opl && f != osmium::io::file_format::debug) {
@@ -248,6 +275,21 @@ public:
 
 }; // class OutputActionOSM
 
+void CommandDiff::update_object_crc(osmium::CRC<osmium::CRC_zlib>* crc, const osmium::OSMObject &object) {
+    crc->update_bool(object.visible());
+    crc->update(object.timestamp());
+    crc->update(object.tags());
+    if (!m_ignore_attrs_changeset) {
+        crc->update_int32(object.changeset());
+    }
+    if (!m_ignore_attrs_uid) {
+        crc->update_int32(object.uid());
+    }
+    if (!m_ignore_attrs_user) {
+        crc->update_string(object.user());
+    }
+}
+
 bool CommandDiff::run() {
     osmium::io::Reader reader1{m_input_files[0], osm_entity_bits()};
     osmium::io::ReaderWithProgressBar reader2{display_progress(), m_input_files[1], osm_entity_bits()};
@@ -298,18 +340,20 @@ bool CommandDiff::run() {
         } else { /* *it1 == *it2 */
             osmium::CRC<osmium::CRC_zlib> crc1;
             osmium::CRC<osmium::CRC_zlib> crc2;
+            update_object_crc(&crc1, *it1);
+            update_object_crc(&crc2, *it2);
             switch (it1->type()) {
                 case osmium::item_type::node:
-                    crc1.update(static_cast<const osmium::Node&>(*it1));
-                    crc2.update(static_cast<const osmium::Node&>(*it2));
+                    crc1.update(static_cast<const osmium::Node&>(*it1).location());
+                    crc2.update(static_cast<const osmium::Node&>(*it2).location());
                     break;
                 case osmium::item_type::way:
-                    crc1.update(static_cast<const osmium::Way&>(*it1));
-                    crc2.update(static_cast<const osmium::Way&>(*it2));
+                    crc1.update(static_cast<const osmium::Way&>(*it1).nodes());
+                    crc2.update(static_cast<const osmium::Way&>(*it2).nodes());
                     break;
                 case osmium::item_type::relation:
-                    crc1.update(static_cast<const osmium::Relation&>(*it1));
-                    crc2.update(static_cast<const osmium::Relation&>(*it2));
+                    crc1.update(static_cast<const osmium::Relation&>(*it1).members());
+                    crc2.update(static_cast<const osmium::Relation&>(*it2).members());
                     break;
                 default:
                     break;

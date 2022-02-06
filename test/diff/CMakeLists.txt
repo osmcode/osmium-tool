@@ -20,4 +20,12 @@ check_diff(opl-c "-f opl -c" input1.osm input2.osm output-c.opl 1)
 
 check_diff(same "" input1.osm input1.osm output-same 0)
 
+check_diff(ignore-uid "--ignore-uid -c" input1.osm input2.osm output-compact-c-nouid 1)
+
+check_diff(ignore-uid-15 "--ignore-uid -c" input1uid.osm input2uid.osm output-empty 0)
+
+check_diff(ignore-uid-opl "--ignore-uid -f opl -c" input1.osm input2.osm output-compact-c-nouid-opl 1)
+
+check_diff(ignore-uid-15-opl "--ignore-uid -f opl -c" input1uid.osm input2uid.osm output-empty 0)
+
 #-----------------------------------------------------------------------------

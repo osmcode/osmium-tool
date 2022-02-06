@@ -63,6 +63,19 @@ None of the output formats print the headers of the input files.
 -f, \--output-format=FORMAT
 :   See the **OUTPUT FORMATS** section.
 
+\--ignore-changeset
+:   Ignore changeset id on OSM objects when comparing files. When used with
+    the OPL output format the 'changeset' attribute is not written to the
+    output.
+
+\--ignore-uid
+:   Ignore user id on OSM objects when comparing files. When used with
+    the OPL output format the 'uid' attribute is not written to the output.
+
+\--ignore-user
+:   Ignore user name on OSM objects when comparing files. When used with
+    the OPL output format the 'user' attribute is not written to the output.
+
 -o, \--output=FILE
 :   Name of the output file. Default is '-' (STDOUT).
 
@@ -107,7 +120,7 @@ None of the output formats print the headers of the input files.
 
 # EXAMPLES
 
-Show difference between Nepal files from January 2016 and Febrary 2016 in
+Show difference between Nepal files from January 2016 and February 2016 in
 compact format:
 
     osmium diff nepal-20160101.osm.pbf nepal-20160201.osm.pbf

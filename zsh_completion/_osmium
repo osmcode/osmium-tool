@@ -182,6 +182,9 @@ _osmium-diff() {
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-diff-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
+        '--ignore-changeset[ignore changeset id on OSM objects when comparing files]' \
+        '--ignore-uid[ignore user id on OSM objects when comparing files]' \
+        '--ignore-user[ignore user name on OSM objects when comparing files]' \
         '(--quiet)-q[report only when files differ]' \
         '(-q)--quiet[report only when files differ]' \
         '(--suppress-common)-c[suppress common objects]' \
