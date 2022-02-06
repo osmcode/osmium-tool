@@ -158,7 +158,7 @@ bool CommandCat::run() {
         report_filename(&m_vout, m_input_files[0], reader);
 
         setup_header(header);
-        osmium::io::Writer writer(m_output_file, header, m_output_overwrite, m_fsync);
+        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
         if (m_buffer_data) {
             std::vector<osmium::memory::Buffer> buffers;
