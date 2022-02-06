@@ -48,6 +48,11 @@ endfunction()
 
 function(check_output _dir _name _command _reference)
     set(_cmd "$<TARGET_FILE:osmium> ${_command}")
+    if(ARGC GREATER 4)
+        set(_return_code "${ARGV4}")
+    else()
+        set(_return_code 0)
+    endif()
     add_test(
         NAME "${_dir}-${_name}"
         COMMAND ${CMAKE_COMMAND}
@@ -55,6 +60,7 @@ function(check_output _dir _name _command _reference)
         -D dir:PATH=${PROJECT_SOURCE_DIR}/test
         -D reference:FILEPATH=${PROJECT_SOURCE_DIR}/test/${_reference}
         -D output:FILEPATH=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
+        -D return_code=${_return_code}
         -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
     )
 endfunction()
@@ -71,6 +77,7 @@ function(check_output2 _dir _name _tmpdir _command1 _command2 _reference)
         -D tmpdir:PATH=${_tmpdir}
         -D reference:FILEPATH=${PROJECT_SOURCE_DIR}/test/${_reference}
         -D output:FILEPATH=${PROJECT_BINARY_DIR}/test/${_dir}/cmd-output-${_name}
+        -D return_code=0
         -P ${CMAKE_SOURCE_DIR}/cmake/run_test_compare_output.cmake
     )
 endfunction()

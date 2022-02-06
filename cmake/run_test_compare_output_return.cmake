@@ -3,7 +3,7 @@
 #  all its content and recreated.
 #
 #  Then runs a test command given in the variable 'cmd' in directory 'dir'.
-#  Checks that the return code is the same as variable 'return_code'.
+#  Checks that the return code is 0.
 #  Checks that there is nothing on stderr.
 #  If the variable 'cmd2' is set, the command will be run and checked in the
 #  same manner.
