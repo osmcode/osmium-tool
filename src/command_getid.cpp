@@ -248,7 +248,7 @@ bool CommandGetId::find_relations_in_relations() {
     m_vout << "  Reading input file to find relations in relations...\n";
     osmium::index::RelationsMapStash stash;
 
-    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation, osmium::io::read_meta::no};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             for (const auto& member : relation.members()) {
@@ -281,7 +281,7 @@ bool CommandGetId::find_relations_in_relations() {
 void CommandGetId::find_nodes_and_ways_in_relations() {
     m_vout << "  Reading input file to find nodes/ways in relations...\n";
 
-    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation};
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation, osmium::io::read_meta::no};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             if (m_ids(osmium::item_type::relation).get(relation.positive_id())) {
@@ -301,7 +301,7 @@ void CommandGetId::find_nodes_and_ways_in_relations() {
 void CommandGetId::find_nodes_in_ways() {
     m_vout << "  Reading input file to find nodes in ways...\n";
 
-    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::way};
+    osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::way, osmium::io::read_meta::no};
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& way : buffer.select<osmium::Way>()) {
             if (m_ids(osmium::item_type::way).get(way.positive_id())) {

@@ -255,7 +255,7 @@ static void write_results(const std::vector<element_type>& results, int fd) {
 
 bool CommandTagsCount::run() {
     m_vout << "Opening input file...\n";
-    osmium::io::Reader reader{m_input_file, osm_entity_bits()};
+    osmium::io::Reader reader{m_input_file, osm_entity_bits(), osmium::io::read_meta::no};
 
     m_vout << "Opening output file...\n";
     int fd = 1;
