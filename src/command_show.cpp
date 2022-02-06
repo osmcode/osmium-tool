@@ -184,10 +184,6 @@ static int execute_pager(const std::string& pager, bool with_color) {
     // parent
     ::close(pipefd[0]); // close read end of the pipe
 
-    if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) { // NOLINT(cppcoreguidelines-pro-type-cstyle-cast,performance-no-int-to-ptr)
-        throw std::system_error{errno, std::system_category(), "Could not run pager: signal() call failed"};
-    }
-
     return pipefd[1];
 }
 #endif
