@@ -42,11 +42,13 @@ command can be updated with the **apply-changes** command using the
 
 This command will not work on full history files.
 
-The command will work with negative IDs. The index types for positive IDs
-and negative IDs are set separately with the **\--index-type/-i** and
-**\--index-type-neg** options, respectively.
+The command will work with negative IDs (unless the option
+**--keep-member-nodes** is used). The index types for positive IDs and negative
+IDs are set separately with the **\--index-type/-i** and **\--index-type-neg**
+options, respectively.
 
-This commands reads its input file(s) only once and writes its output file in
+This commands reads its input file(s) only once (unless the
+**--keep-member-nodes** option is used) and writes its output file in
 one go so it can be streamed, ie. it can read from STDIN and write to STDOUT.
 The input file must be sorted in the usual order: first nodes, then ways, then
 relations, objects of each type ordered by id. If there are multiple input
@@ -72,6 +74,12 @@ the case use **osmium merge** on the inputs first.
 
 -n, \--keep-untagged-nodes
 :   Keep the untagged nodes in the output file.
+
+\--keep-member-nodes
+:   Keep the nodes that are referenced from relations. If this option is
+    specified the input file(s) are read twice. Note that the nodes kept
+    when this option is set are a strict subset of the nodes kept when
+    **--keep-untagged-nodes** is set, so setting both options is unnecessary.
 
 \--ignore-missing-nodes
 :   If this is not set a missing node needed for a way results in an error.

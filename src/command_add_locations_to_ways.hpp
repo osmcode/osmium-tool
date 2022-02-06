@@ -26,6 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cmd.hpp" // IWYU pragma: export
 
 #include <osmium/handler/node_locations_for_ways.hpp>
+#include <osmium/index/id_set.hpp>
 #include <osmium/index/map/all.hpp>
 #include <osmium/io/reader.hpp>
 #include <osmium/io/writer.hpp>
@@ -39,11 +40,14 @@ using location_handler_type = osmium::handler::NodeLocationsForWays<index_type, 
 
 class CommandAddLocationsToWays : public CommandWithMultipleOSMInputs, public with_osm_output {
 
+    osmium::index::IdSetSmall<osmium::unsigned_object_id_type> m_member_node_ids;
     std::string m_index_type_name_pos;
     std::string m_index_type_name_neg;
     bool m_keep_untagged_nodes = false;
+    bool m_keep_member_nodes = false;
     bool m_ignore_missing_nodes = false;
 
+    void find_member_nodes();
     void copy_data(osmium::ProgressBar& progress_bar, osmium::io::Reader& reader, osmium::io::Writer& writer, location_handler_type& location_handler) const;
 
 public:

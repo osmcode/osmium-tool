@@ -12,6 +12,7 @@ endfunction()
 
 check_add_locations_to_ways(taggednodes "" input.osm output.osm)
 check_add_locations_to_ways(allnodes "-n" input.osm output-n.osm)
+check_add_locations_to_ways(membernodes "--keep-member-nodes" input-rel.osm output-rel.osm)
 
 
 #-----------------------------------------------------------------------------

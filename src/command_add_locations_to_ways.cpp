@@ -55,6 +55,7 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     ("index-type,i", po::value<std::string>()->default_value(default_index_type), "Index type for positive IDs")
     ("index-type-neg", po::value<std::string>()->default_value(default_index_type), "Index type for negative IDs")
     ("show-index-types,I", "Show available index types")
+    ("keep-member-nodes", "Keep node members of relations")
     ("keep-untagged-nodes,n", "Keep untagged nodes")
     ("ignore-missing-nodes", "Ignore missing nodes")
     ;
@@ -108,8 +109,18 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
         m_keep_untagged_nodes = true;
     }
 
+    if (vm.count("keep-member-nodes")) {
+        m_keep_member_nodes = true;
+    }
+
     if (vm.count("ignore-missing-nodes")) {
         m_ignore_missing_nodes = true;
+    }
+
+    // If we keep all nodes anyway, the member nodes don't need special consideration
+    if (m_keep_untagged_nodes && m_keep_member_nodes) {
+        std::cerr << "Warning! Option --keep-member-nodes is unnecessary when --keep-untagged-nodes is set.\n";
+        m_keep_member_nodes = false;
     }
 
     return true;
@@ -123,6 +134,7 @@ void CommandAddLocationsToWays::show_arguments() {
     m_vout << "    index type (for positive ids): " << m_index_type_name_pos << '\n';
     m_vout << "    index type (for negative ids): " << m_index_type_name_neg << '\n';
     m_vout << "    keep untagged nodes: " << yes_no(m_keep_untagged_nodes);
+    m_vout << "    keep nodes that are relation members: " << yes_no(m_keep_member_nodes);
     m_vout << '\n';
 }
 
@@ -135,7 +147,12 @@ void CommandAddLocationsToWays::copy_data(osmium::ProgressBar& progress_bar, osm
             writer(std::move(buffer));
         } else {
             for (const auto& object : buffer) {
-                if (object.type() != osmium::item_type::node || !static_cast<const osmium::Node&>(object).tags().empty()) {
+                if (object.type() == osmium::item_type::node) {
+                    const auto &node = static_cast<const osmium::Node&>(object);
+                    if (!node.tags().empty() || m_member_node_ids.get_binary_search(node.positive_id())) {
+                        writer(object);
+                    }
+                } else {
                     writer(object);
                 }
             }
@@ -143,7 +160,29 @@ void CommandAddLocationsToWays::copy_data(osmium::ProgressBar& progress_bar, osm
     }
 }
 
+void CommandAddLocationsToWays::find_member_nodes() {
+    for (const auto& input_file : m_input_files) {
+        osmium::io::Reader reader{input_file, osmium::osm_entity_bits::relation, osmium::io::read_meta::no};
+        while (osmium::memory::Buffer buffer = reader.read()) {
+            for (const auto& relation : buffer.select<osmium::Relation>()) {
+                for (const auto& member : relation.members()) {
+                    if (member.type() == osmium::item_type::node) {
+                        m_member_node_ids.set(member.positive_ref());
+                    }
+                }
+            }
+        }
+    }
+    m_member_node_ids.sort_unique();
+}
+
 bool CommandAddLocationsToWays::run() {
+    if (m_keep_member_nodes) {
+        m_vout << "Getting all nodes referenced from relations...\n";
+        find_member_nodes();
+        m_vout << "Found " << m_member_node_ids.size() << " nodes referenced from relations.\n";
+    }
+
     const auto& map_factory = osmium::index::MapFactory<osmium::unsigned_object_id_type, osmium::Location>::instance();
     auto location_index_pos = map_factory.create_map(m_index_type_name_pos);
     auto location_index_neg = map_factory.create_map(m_index_type_name_neg);
@@ -156,7 +195,7 @@ bool CommandAddLocationsToWays::run() {
     m_output_file.set("locations_on_ways");
 
     if (m_input_files.size() == 1) { // single input file
-        m_vout << "Copying input file '" << m_input_files[0].filename() << "'\n";
+        m_vout << "Copying input file '" << m_input_files[0].filename() << "'...\n";
         osmium::io::Reader reader{m_input_files[0]};
         osmium::io::Header header{reader.header()};
         setup_header(header);
@@ -176,7 +215,7 @@ bool CommandAddLocationsToWays::run() {
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {
             progress_bar.remove();
-            m_vout << "Copying input file '" << input_file.filename() << "'\n";
+            m_vout << "Copying input file '" << input_file.filename() << "'...\n";
             osmium::io::Reader reader{input_file};
 
             copy_data(progress_bar, reader, writer, location_handler);
