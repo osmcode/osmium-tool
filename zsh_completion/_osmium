@@ -82,10 +82,11 @@ _osmium-add-locations-to-ways() {
         '(--index-type -I --show-index-types)-i[index type for positive IDs]:index types:_osmium_index_types' \
         '(-i -I --show-index-types)--index-type[index type for positive IDs]:index types:_osmium_index_types' \
         '(-I --show-index-types)--index-type-neg[index type for negative IDs]:index types:_osmium_index_types' \
-        '(--show-index-types -i --index-type -n --keep-untagged-nodes)-I[show available index types]' \
-        '(-I -i --index-type -n --keep-untagged-nodes)--show-index-types[show available index types]' \
-        '(--keep-untagged-nodes -I --show-index-types)-n[keep untagged nodes in output]' \
-        '(-n -I --show-index-types)--keep-untagged-nodes[keep untagged nodes in output]' \
+        '(--show-index-types -i --index-type -n --keep-untagged-nodes --keep-member-nodes)-I[show available index types]' \
+        '(-I -i --index-type -n --keep-untagged-nodes --keep-member-nodes)--show-index-types[show available index types]' \
+        '(--keep-untagged-nodes -I --show-index-types --keep-member-nodes)-n[keep untagged nodes in output]' \
+        '(-n -I --show-index-types --keep-member-nodes)--keep-untagged-nodes[keep untagged nodes in output]' \
+        '(--keep-untagged-nodes -n -I --show-index-types)--keep-member-nodes[keep nodes referenced from relations]' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]'
 }
@@ -113,9 +114,9 @@ _osmium-cat() {
         ${(f)"$(_osmium-output-options)"} \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
         '*--object-type[read only objects of given output types]:OSM entity type:_osmium_entity_type' \
-        '*-c[clean attributes]:attribute type:_osmium_attr_type'\
-        '*--clean[clean attributes]:attribute type:_osmium_attr_type'\
-        '--buffer-data[buffer data in memory]'\
+        '*-c[clean attributes]:attribute type:_osmium_attr_type' \
+        '*--clean[clean attributes]:attribute type:_osmium_attr_type' \
+        '--buffer-data[buffer data in memory]' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]'
 }
@@ -242,6 +243,7 @@ _osmium-extract() {
         '(--output -o --output-format -f --bbox -b --polygon -p -d)--directory[output directory]:directory:_path_files -/' \
         "(--config -c --directory -d --bbox -b --polygon)-p[polygon file]:polygon file:_files -g ${polygon_file_glob}" \
         "(--config -c --directory -d --bbox -b -p)--polygon[polygon file]:polygon file:_files -g ${polygon_file_glob}" \
+        '*--clean[clean attributes]:attribute type:_osmium_attr_type' \
         '(--strategy)-s[use strategy for computing extract]:extract strategy:_osmium_extract_strategy' \
         '(-s)--strategy[use strategy for computing extract]:extract strategy:_osmium_extract_strategy' \
         '*-S[set strategy option]:' \
