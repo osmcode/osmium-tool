@@ -607,7 +607,6 @@ bool CommandExport::run() {
     }
 
     osmium::area::Assembler::config_type assembler_config;
-    assembler_config.create_empty_areas = false;
     osmium::area::MultipolygonManager<osmium::area::Assembler> mp_manager{assembler_config};
 
     m_vout << "First pass (of two) through input file (reading relations)...\n";
@@ -632,7 +631,9 @@ bool CommandExport::run() {
         auto location_index_pos = map_factory.create_map(m_index_type_name);
         auto location_index_neg = map_factory.create_map(m_index_type_name);
         location_handler_type location_handler{*location_index_pos, *location_index_neg};
-        location_handler.ignore_errors();
+        if (!m_stop_on_error) {
+            location_handler.ignore_errors();
+        }
 
         osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_filename};
         osmium::apply(reader, check_order_handler, location_handler, export_handler, mp_manager.handler([&export_handler](osmium::memory::Buffer&& buffer) {
@@ -643,6 +644,14 @@ bool CommandExport::run() {
                << show_mbytes(location_index_pos->used_memory() + location_index_neg->used_memory())
                << " MBytes used for node location index (in main memory or on disk).\n";
     }
+
+    if (m_stop_on_error) {
+        const auto incomplete_relations = mp_manager.relations_database().count_relations();
+        if (incomplete_relations > 0) {
+            throw osmium::geometry_error{"Found " + std::to_string(incomplete_relations) + " incomplete relation(s)"};
+        }
+    }
+
     m_vout << "Second pass done.\n";
     export_handler.close();
 

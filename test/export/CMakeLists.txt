@@ -14,15 +14,22 @@ check_export(geojson    "-f geojson"       input.osm output.geojson)
 check_export(geojsonseq "-f geojsonseq -x print_record_separator=false" input.osm output.geojsonseq)
 check_export(spaten     "-f spaten"        input.osm output.spaten)
 
-check_export(missing-node "-f geojson"  input-missing-node.osm output-missing-node.geojson)
+check_export(missing-node "-f geojson" input-missing-node.osm output-missing-node.geojson)
+check_export(single-node-way "-f geojson" input-single-node-way.osm output-empty.geojson)
 
-check_export(error-node "-f geojson -E" input-missing-node.osm none.geojson)
+add_test(NAME export-error-node COMMAND osmium export -f geojson -E ${CMAKE_SOURCE_DIR}/test/export/input-missing-node.osm)
 set_tests_properties(export-error-node PROPERTIES WILL_FAIL true)
+
+add_test(NAME export-error-single-node-way COMMAND osmium export -f geojson -E ${CMAKE_SOURCE_DIR}/test/export/input-single-node-way.osm)
+set_tests_properties(export-error-single-node-way PROPERTIES WILL_FAIL true)
 
 check_export(invalid-area "-f geojson"  input-incomplete-relation.osm output-incomplete-relation.geojson)
 
-check_export(error-area "-f geojson -E" input-incomplete-relation.osm none.geojson)
+add_test(NAME export-error-area COMMAND osmium export -f geojson -E ${CMAKE_SOURCE_DIR}/test/export/input-incomplete-relation.osm)
 set_tests_properties(export-error-area PROPERTIES WILL_FAIL true)
+
+add_test(NAME export-error-incomplete-rel COMMAND osmium export -f geojson -E ${CMAKE_SOURCE_DIR}/test/export/input-incomplete-rel-missing-way.osm)
+set_tests_properties(export-error-incomplete-rel PROPERTIES WILL_FAIL true)
 
 #-----------------------------------------------------------------------------
 

@@ -110,14 +110,10 @@ void ExportHandler::way(const osmium::Way& way) {
         return;
     }
 
-    if (way.nodes().size() <= 1) {
-        if (m_show_errors) {
-            std::cerr << "Geometry error: Way with less than two nodes (id=" << way.id() << ")\n";
-        }
-        return;
-    }
-
     try {
+        if (way.nodes().size() <= 1) {
+            throw osmium::geometry_error{"Way with less than two nodes (id=" + std::to_string(way.id()) + ")"};
+        }
         if (!way.nodes().front().location() || !way.nodes().back().location()) {
             throw osmium::invalid_location{"invalid location"};
         }
@@ -138,14 +134,21 @@ void ExportHandler::area(const osmium::Area& area) {
         return;
     }
 
-    if (!area.from_way() || is_area(area.tags())) {
-        try {
-            m_handler->area(area);
-        } catch (const osmium::geometry_error& e) {
-            show_error(e);
-        } catch (const osmium::invalid_location& e) {
-            show_error(e);
+    if (area.from_way() && !is_area(area.tags())) {
+        return;
+    }
+
+    try {
+        const auto rings = area.num_rings();
+        if (rings.first == 0 && rings.second == 0) {
+            throw osmium::geometry_error{"Could not build area geometry"};
         }
+
+        m_handler->area(area);
+    } catch (const osmium::geometry_error& e) {
+        show_error(e);
+    } catch (const osmium::invalid_location& e) {
+        show_error(e);
     }
 }
 
