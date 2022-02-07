@@ -8,11 +8,29 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Add `--keep-member-nodes` option to `add-locations-to-ways` command. When
+  this is set, all nodes referenced directly from relations are kept in the
+  output. If this is used, the input file is read twice an a bit more memory
+  is needed. Osmium will run around 15% longer than without this option.
+- Add `-S relations=false` option to `complete_ways` extract strategy. If you
+  don't need any relations you can set this when using `osmium extract` and
+  the extract will be done more quickly.
 - New `--clean` option to `osmium extract` command to clean attributes.
 
 ### Changed
 
+- Switch to C++14 and CMake 3.5.0 as a minimum requirements.
+- Switch to [Catch version 2](https://github.com/catchorg/Catch2/tree/v2.x)
+  testing framework.
+
 ### Fixed
+
+- Fix possible crash when pager set for `osmium show` command was less then
+  4 characters long.
+- Fixed hangup in `osmium show` when a non-existing pager was used.
+- Fixed some tests.
+- Fix/improve error detection in export code. More errors are detected now
+  which makes a difference when the `-e` or `-E` options are used.
 
 
 ## [1.13.2] - 2021-10-05
