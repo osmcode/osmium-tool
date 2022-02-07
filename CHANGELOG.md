@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.14.0] - 2022-02-07
+
+### Added
+
 - Add `--keep-member-nodes` option to `add-locations-to-ways` command. When
   this is set, all nodes referenced directly from relations are kept in the
   output. If this is used, the input file is read twice an a bit more memory
@@ -665,7 +674,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.13.2...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.14.0...HEAD
+[1.14.0]: https://github.com/osmcode/osmium-tool/compare/v1.13.2...v1.14.0
 [1.13.2]: https://github.com/osmcode/osmium-tool/compare/v1.13.1...v1.13.2
 [1.13.1]: https://github.com/osmcode/osmium-tool/compare/v1.13.0...v1.13.1
 [1.13.0]: https://github.com/osmcode/osmium-tool/compare/v1.12.1...v1.13.0
