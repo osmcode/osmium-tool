@@ -43,7 +43,7 @@ option(BUILD_TESTING "Build the tests" ON)
 find_package(Boost 1.55.0 REQUIRED COMPONENTS program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-find_package(Osmium 2.16.0 REQUIRED COMPONENTS io)
+find_package(Osmium 2.17.0 REQUIRED COMPONENTS io)
 include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
 
 
