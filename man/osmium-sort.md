@@ -11,8 +11,8 @@ osmium-sort - sort OSM files
 
 # DESCRIPTION
 
-Merges the content of all input files given on the command line and sort the
-result.
+Cats the content of all input files given on the command line and sort the
+result. To remove duplicate elements, use osmium-merge command.
 
 Objects are sorted by type, ID, and version. IDs are sorted negative IDs first,
 the positive IDs, both ordered by their absolute values. So the sort order for
@@ -79,6 +79,6 @@ Sort *in.osm.bz2* and write out to *sorted.osm.pbf*:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-output-headers**(5)
+* **osmium**(1), **osmium-file-formats**(5), **osmium-output-headers**(5), **osmium-merge**(1)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 
