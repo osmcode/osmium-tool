@@ -46,7 +46,7 @@ Data
     file were ordered by type (nodes, then ways, then relations) and
     id, and whether there were multiple versions of the same object in
     the file (history files and change files can have that). See the
-    **osmium-sort**(1) man page for details of the expected ordering.
+    [**osmium-sort**(1)](osmium-sort.html) man page for details of the expected ordering.
 
 Metadata
 :   This section shows which metadata attributes are used in the file.
@@ -171,6 +171,6 @@ main memory.
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-sort**(1)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-sort**(1)](osmium-sort.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

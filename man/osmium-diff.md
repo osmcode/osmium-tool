@@ -119,6 +119,6 @@ Show in color debug format only those objects that are different:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-derive-changes**(1)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-derive-changes**(1)](osmium-derive-changes.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

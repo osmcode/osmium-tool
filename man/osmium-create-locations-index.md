@@ -79,7 +79,7 @@ Set a node location in the index using an input file in OPL format:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-query-locations-index**(1), **osmium-file-formats**(5)
+* [**osmium**(1)](osmium.html), [**osmium-query-locations-index**(1)](osmium-query-locations-index.html), [**osmium-file-formats**(5)](osmium-file-formats.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 * [osm2pgsql](https://wiki.openstreetmap.org/wiki/Osm2pgsql)
 

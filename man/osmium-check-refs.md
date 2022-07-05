@@ -26,7 +26,7 @@ relations will also be checked.
 This command expects the input file to be ordered in the usual way: First
 nodes in order of ID, then ways in order of ID, then relations in order of ID.
 Negative IDs are allowed, they must be ordered before the positive IDs. See
-the **osmium-sort**(1) man page for details of the ordering.
+the [**osmium-sort**(1)](osmium-sort.html) man page for details of the ordering.
 
 This command will only work for OSM data files, not OSM history files or
 change files.
@@ -74,7 +74,7 @@ use will be a bit bigger.
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-sort**(1)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-sort**(1)](osmium-sort.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 
 

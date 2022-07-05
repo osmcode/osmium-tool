@@ -24,7 +24,7 @@ index in memory.
 
 For the **osmium export** command, the special type `none` is used when reading
 from files with the node locations on the ways. (See
-**osmium-add-node-locations-to-ways**(1) for how to get a file like this.)
+[**osmium-add-node-locations-to-ways**(1)](osmium-add-node-locations-to-ways.html) for how to get a file like this.)
 
 You can use one of the file-based indexes for the node location store to
 minimize memory use, but performance will suffer. In this case use
@@ -61,7 +61,7 @@ memory was used for the index.
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-add-locations-to-ways**(1), **osmium-export**(1)
+* [**osmium**(1)](osmium.html), [**osmium-add-locations-to-ways**(1)](osmium-add-locations-to-ways.html), [**osmium-export**(1)](osmium-export.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 * [Index types](https://osmcode.org/osmium-concepts/#indexes)
 

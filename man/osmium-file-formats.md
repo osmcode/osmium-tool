@@ -130,7 +130,7 @@ Here are some examples:
 
 # SEE ALSO
 
-* **osmium**(1)
+* [**osmium**(1)](osmium.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 * [OSM File Formats Manual](https://osmcode.org/file-formats-manual/)
 

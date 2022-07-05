@@ -31,7 +31,7 @@ The **osmium export** command has to keep an index of the node locations in
 memory or in a temporary file on disk while doing its work. There are several
 different ways it can do that which have different advantages and
 disadvantages. The default is good enough for most cases, but see the
-**osmium-index-types**(5) man page for details.
+[**osmium-index-types**(5)](osmium-index-types.html) man page for details.
 
 Objects with invalid geometries are silently omitted from the output. This is
 the case for ways with less than two nodes or closed ways or relations that
@@ -82,12 +82,12 @@ files created with JOSM).
     for the known attributes list and an explanation.
 
 -i, \--index-type=TYPE
-:   Set the index type. For details see the **osmium-index-types**(5) man
+:   Set the index type. For details see the [**osmium-index-types**(5)](osmium-index-types.html) man
     page.
 
 -I, \--show-index-types
 :   Shows a list of available index types. For details see the
-    **osmium-index-types**(5) man page. If you use this options all other
+    [**osmium-index-types**(5)](osmium-index-types.html) man page. If you use this options all other
     options are ignored.
 
 -n, \--keep-untagged
@@ -352,7 +352,7 @@ The following output formats are supported:
 
 **osmium export** will usually keep all node locations and all objects needed
 for assembling the areas in memory. For larger data files, this can need
-several tens of GBytes of memory. See the **osmium-index-types**(5) man page
+several tens of GBytes of memory. See the [**osmium-index-types**(5)](osmium-index-types.html) man page
 for details.
 
 
@@ -369,8 +369,8 @@ Use a config file and export into GeoJSON Text Sequence format:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-index-types**(5),
-  **osmium-add-node-locations-to-ways**(1)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-index-types**(5)](osmium-index-types.html),
+  [**osmium-add-node-locations-to-ways**(1)](osmium-add-node-locations-to-ways.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 * [GeoJSON](http://geojson.org/)
 * [RFC7946](https://tools.ietf.org/html/rfc7946)

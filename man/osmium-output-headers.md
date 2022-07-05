@@ -47,7 +47,7 @@ Copy the file in.osm.pbf to out.osm.pbf setting the generator to **myscript**:
 
 # SEE ALSO
 
-* **osmium**(1)
+* [**osmium**(1)](osmium.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 * [Replication headers](https://wiki.openstreetmap.org/wiki/PBF_Format)
 

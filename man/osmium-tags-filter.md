@@ -171,6 +171,6 @@ Get all nodes and ways with a `highway` tag and all relations tagged with
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-output-headers**(5)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-output-headers**(5)](osmium-output-headers.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

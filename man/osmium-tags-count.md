@@ -158,7 +158,7 @@ memory!
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 * [Taginfo](https://github.com/taginfo/taginfo/)
 

@@ -34,7 +34,7 @@ The **osmium add-locations-to-ways** command has to keep an index of the node
 locations in memory or in a temporary file on disk while doing its work. There
 are several different ways it can do that which have different advantages and
 disadvantages. The default is good enough for most cases, but see the
-**osmium-index-types**(5) man page for details.
+[**osmium-index-types**(5)](osmium-index-types.html) man page for details.
 
 If the **\--keep-untagged-nodes/-n** option is used, files created by this
 command can be updated with the **apply-changes** command using the
@@ -62,15 +62,15 @@ the case use **osmium merge** on the inputs first.
 
 -i, \--index-type=TYPE
 :   Set the index type for positive IDs. For details see the
-    **osmium-index-types**(5) man page.
+    [**osmium-index-types**(5)](osmium-index-types.html) man page.
 
 \--index-type-neg=TYPE
 :   Set the index type for negative IDs. For details see the
-    **osmium-index-types**(5) man page.
+    [**osmium-index-types**(5)](osmium-index-types.html) man page.
 
 -I, \--show-index-types
 :   Shows a list of available index types. For details see the
-    **osmium-index-types**(5) man page.
+    [**osmium-index-types**(5)](osmium-index-types.html) man page.
 
 -n, \--keep-untagged-nodes
 :   Keep the untagged nodes in the output file.
@@ -109,7 +109,7 @@ the case use **osmium merge** on the inputs first.
 
 **osmium add-locations-to-ways** will usually keep all node locations in
 memory. For larger data files, this can need several tens of GBytes of memory.
-See the **osmium-index-types**(5) man page for details.
+See the [**osmium-index-types**(5)](osmium-index-types.html) man page for details.
 
 
 # EXAMPLES
@@ -125,7 +125,7 @@ Add node locations to a planet file (without untagged nodes):
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-index-types**(5),
-  **osmium-output-headers**(5)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-index-types**(5)](osmium-index-types.html),
+  [**osmium-output-headers**(5)](osmium-output-headers.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

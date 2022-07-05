@@ -21,7 +21,7 @@ from ways or relations are not guaranteed to be in the correct order.
 This command expects the input file to be ordered in the usual way: First
 nodes in order of ID, then ways in order of ID, then relations in order of ID.
 Negative IDs are allowed, they must be ordered before the positive IDs. See
-the **osmium-sort**(1) man page for details of the ordering.
+the [**osmium-sort**(1)](osmium-sort.html) man page for details of the ordering.
 
 The input file will be read twice, so it will not work with STDIN. If you
 are not renumbering relations (ie. if the option **\--object-type/-t** is used
@@ -140,6 +140,6 @@ then rewrite a change file, too:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-output-headers**(5), **osmium-sort**(1)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-output-headers**(5)](osmium-output-headers.html), [**osmium-sort**(1)](osmium-sort.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

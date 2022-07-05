@@ -72,13 +72,13 @@ STDOUT.
 -F, \--input-format=FORMAT
 :   The format of the OSM-DATA-FILE or OSM-HISTORY-FILE. Can be used to set
     the input format if it can't be autodetected from the file name.
-    See **osmium-file-formats**(5) or the libosmium manual for details.
+    See [**osmium-file-formats**(5)](osmium-file-formats.html) or the libosmium manual for details.
 
 \--change-file-format=FORMAT
 :   The format of the OSM-CHANGE-FILE(s). Can be used to set the input format
     if it can't be autodetected from the file name(s). This will set the format
     for all change files, there is no way to set the format for some change
-    files only. See **osmium-file-formats**(5) or the libosmium manual for
+    files only. See [**osmium-file-formats**(5)](osmium-file-formats.html) or the libosmium manual for
     details.
 
 
@@ -114,7 +114,7 @@ Apply changes in `362.osc.gz` to planet file and write result to `new.osm.pbf`:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-merge-changes**(1), **osmium-derive-changes**(1),
-  **osmium-file-formats**(5), **osmium-output-headers**(5)
+* [**osmium**(1)](osmium.html), [**osmium-merge-changes**(1)](osmium-merge-changes.html), [**osmium-derive-changes**(1)](osmium-derive-changes.html),
+  [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-output-headers**(5)](osmium-output-headers.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

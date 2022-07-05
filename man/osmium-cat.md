@@ -88,7 +88,7 @@ Remove changeset, uid, and user from a file to protect personal data:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-merge**(1),
-  **osmium-output-headers**(5)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-merge**(1)](osmium-merge.html),
+  [**osmium-output-headers**(5)](osmium-output-headers.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 

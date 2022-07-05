@@ -95,7 +95,7 @@ Find changes in Nepal extract in January 2016:
 
 # SEE ALSO
 
-* **osmium**(1), **osmium-file-formats**(5), **osmium-output-headers**(5),
-  **osmium-apply-changes**(1), **osmium-diff**(1)
+* [**osmium**(1)](osmium.html), [**osmium-file-formats**(5)](osmium-file-formats.html), [**osmium-output-headers**(5)](osmium-output-headers.html),
+  [**osmium-apply-changes**(1)](osmium-apply-changes.html), [**osmium-diff**(1)](osmium-diff.html)
 * [Osmium website](https://osmcode.org/osmium-tool/)
 
