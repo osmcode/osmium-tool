@@ -27,7 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 # include <unistd.h>
 #endif
 
@@ -37,7 +37,7 @@ bool CommandHelp::setup(const std::vector<std::string>& arguments) {
 }
 
 static void show_help(const std::string& topic, const std::string& info) {
-#ifndef _MSC_VER
+#ifndef _WIN32
     // show man page on non-Windows systems
     std::string manpage{"osmium-"};
     manpage += topic;

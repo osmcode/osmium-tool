@@ -68,7 +68,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # include <io.h>
 #endif
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 # include <unistd.h>
 #endif
 
