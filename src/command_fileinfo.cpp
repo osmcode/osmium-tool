@@ -57,7 +57,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 # include <unistd.h>
 #endif
 

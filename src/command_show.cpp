@@ -42,11 +42,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 # include <unistd.h>
 #endif
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 void CommandShow::setup_pager_from_env() noexcept {
     m_pager = "less";
     const char* pager = ::getenv("OSMIUM_PAGER");
@@ -71,7 +71,7 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
     ("format-debug,d", "Use debug format")
     ("format-opl,o", "Use OPL format")
     ("format-xml,x", "Use XML format")
-#ifndef _MSC_VER
+#ifndef _WIN32
     ("no-pager", "Do not run pager program")
 #endif
     ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
@@ -105,7 +105,7 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
     setup_object_type_nwrc(vm);
     setup_input_file(vm);
 
-#ifndef _MSC_VER
+#ifndef _WIN32
     if (vm.count("no-pager")) {
         m_pager = "";
     } else {
@@ -149,7 +149,7 @@ void CommandShow::show_arguments() {
     show_object_types(m_vout);
 }
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 static int execute_pager(const std::string& pager, bool with_color) {
     int pipefd[2];
     if (::pipe(pipefd) < 0) {
@@ -200,7 +200,7 @@ bool CommandShow::run() {
         }
         writer.close();
     } else {
-#ifndef _MSC_VER
+#ifndef _WIN32
         const int fd = execute_pager(m_pager, m_color_output);
 
         if (::dup2(fd, 1) < 0) { // put end of pipe as stdout
