@@ -165,6 +165,19 @@ static osmium::Box parse_bbox(const rapidjson::Value& value) {
     throw config_error{"'bbox' member is not an array or object."};
 }
 
+#ifdef _WIN32
+static bool is_valid_driver_char(const char value) {
+    return ((value | 0x20) - 'a') <= ('z' - 'a');
+}
+
+static bool is_path_rooted(const std::string& path) {
+    const std::size_t len = path.length();
+
+    return (len >= 1 && (path[0] == '\\' || path[0] == '/'))
+        || (len >= 2 && is_valid_driver_char(path[0]) && path[1] == ':');
+}
+#endif
+
 static std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer* buffer) {
     assert(buffer);
 
@@ -172,7 +185,13 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
         throw config_error{"Missing 'file_name' in '(multi)polygon' object."};
     }
 
-    if (file_name[0] != '/') {
+#ifdef _WIN32
+    const bool isRelative = !is_path_rooted(file_name);
+#else
+    const bool isRelative = file_name[0] != '/';
+#endif
+
+    if (isRelative) {
         // relative file name
         file_name = directory + file_name;
     }
