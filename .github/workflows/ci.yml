@@ -42,12 +42,12 @@ jobs:
             c_compiler: clang
             cpp_compiler: clang++
           - image: "debian:testing"
-            CXXFLAGS: -Wno-stringop-overread
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:testing"
             c_compiler: clang
             cpp_compiler: clang++
           - image: "debian:experimental"
-            CXXFLAGS: -Wno-stringop-overread
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:experimental"
             c_compiler: clang-14
             cpp_compiler: clang++-14
