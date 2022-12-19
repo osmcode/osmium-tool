@@ -12,14 +12,14 @@ jobs:
         image:
           - "ubuntu:18.04"        # gcc  7.5.0, clang  6.0.0, cmake 3.10.2
           - "ubuntu:20.04"        # gcc  9.3.0, clang 10.0.0, cmake 3.16.3
-          - "ubuntu:21.04"        # gcc 10.3.0, clang 12.0.0, cmake 3.18.4
+          - "ubuntu:22.04"        # gcc 11.2.0, clang 14.0.0, cmake 3.22.1
           - "debian:stretch"      # gcc  6.3.0, clang  3.8.1, cmake 3.7.2
           - "debian:buster"       # gcc  8.3.0, clang  7.0.1, cmake 3.13.4
           - "debian:bullseye"     # gcc 10.2.1, clang 11.0.1, cmake 3.18.4
-          - "debian:testing"      # gcc 10.3.0, clang 11.1.0, cmake 3.21.3
-          - "debian:experimental" # gcc 11.0.0, clang 14.0.0, cmake 3.21.3
-          - "fedora:34"           # gcc 11.2.1, clang 12.0.1, cmake 3.20.5
+          - "debian:testing"
+          - "debian:experimental"
           - "fedora:35"           # gcc 11.2.1, clang 13.0.0, cmake 3.22.0
+          - "fedora:36"           # gcc 12.2.0, clang 14.0.5, cmake 3.24.2
         build_type: [Dev]
         cpp_compiler: [g++]
         cpp_version: [c++14]
@@ -51,10 +51,10 @@ jobs:
           - image: "debian:experimental"
             c_compiler: clang-14
             cpp_compiler: clang++-14
-          - image: "fedora:34"
-            CXXFLAGS: -Wno-stringop-overread
           - image: "fedora:35"
             CXXFLAGS: -Wno-stringop-overread
+          - image: "fedora:36"
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
     container:
       image: ${{ matrix.image }}
       env:
@@ -111,10 +111,10 @@ jobs:
       - uses: ./.github/actions/ctest
 
   ubuntu-latest:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
-      CC: clang-13
-      CXX: clang++-13
+      CC: clang-14
+      CXX: clang++-14
       BUILD_TYPE: Dev
     steps:
       - name: Install new clang
