@@ -166,12 +166,12 @@ static osmium::Box parse_bbox(const rapidjson::Value& value) {
 }
 
 #ifdef _WIN32
-static bool is_valid_driver_char(const char value) {
+static bool is_valid_driver_char(const char value) noexcept {
     return ((value | 0x20) - 'a') <= ('z' - 'a');
 }
 
-static bool is_path_rooted(const std::string& path) {
-    const std::size_t len = path.length();
+static bool is_path_rooted(const std::string& path) noexcept {
+    const std::size_t len = path.size();
 
     return (len >= 1 && (path[0] == '\\' || path[0] == '/'))
         || (len >= 2 && is_valid_driver_char(path[0]) && path[1] == ':');
@@ -186,12 +186,12 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
     }
 
 #ifdef _WIN32
-    const bool isRelative = !is_path_rooted(file_name);
+    const bool is_relative = !is_path_rooted(file_name);
 #else
-    const bool isRelative = file_name[0] != '/';
+    const bool is_relative = file_name[0] != '/';
 #endif
 
-    if (isRelative) {
+    if (is_relative) {
         // relative file name
         file_name = directory + file_name;
     }
