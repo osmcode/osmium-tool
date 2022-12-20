@@ -72,7 +72,7 @@ jobs:
         if: startsWith(matrix.image, 'debian:') || startsWith(matrix.image, 'ubuntu:')
         run: |
           apt-get update -qq
-          apt-get install -y \
+          apt-get install -yq \
             clang \
             cmake \
             g++ \
@@ -88,23 +88,23 @@ jobs:
       - name: Install compiler
         shell: bash
         if: matrix.cpp_compiler == 'clang++-14'
-        run: apt-get install -y --no-install-suggests --no-install-recommends clang-14
+        run: apt-get install -yq --no-install-suggests --no-install-recommends clang-14
       - name: Prepare container (dnf)
         shell: bash
         if: startsWith(matrix.image, 'fedora:')
         run: |
           dnf install --quiet --assumeyes \
-            boost-devel \
-            bzip2-devel \
-            cmake \
-            expat-devel \
-            gcc-c++ \
-            git \
-            lz4-devel \
-            make \
-            pandoc \
-            zlib-devel
-      - uses: actions/checkout@v2
+              boost-devel \
+              bzip2-devel \
+              cmake \
+              expat-devel \
+              gcc-c++ \
+              git \
+              lz4-devel \
+              make \
+              pandoc \
+              zlib-devel
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
@@ -113,16 +113,18 @@ jobs:
   ubuntu-latest:
     runs-on: ubuntu-22.04
     env:
-      CC: clang-14
-      CXX: clang++-14
+      CC: clang-15
+      CXX: clang++-15
       BUILD_TYPE: Dev
     steps:
       - name: Install new clang
         run: |
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/llvm-snapshot.asc
+          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main'
+          sudo apt-get update -qq
+          sudo apt-get install -yq clang-15
         shell: bash
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
@@ -135,7 +137,6 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "macos-10.15"
           - "macos-11.0"
         build_type: [Dev]
         include:
@@ -148,7 +149,7 @@ jobs:
       BUILD_TYPE: ${{ matrix.build_type }}
     steps:
       - run: brew install boost
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
@@ -174,9 +175,7 @@ jobs:
             lz4:x64-windows \
             zlib:x64-windows
         shell: bash
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake-windows
       - uses: ./.github/actions/build-windows

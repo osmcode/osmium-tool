@@ -2,7 +2,6 @@ name: Install Prerequisites from git
 
 runs:
   using: composite
-
   steps:
     - name: Install from git
       run: |
