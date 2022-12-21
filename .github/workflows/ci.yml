@@ -137,10 +137,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "macos-11.0"
+          - "macos-11"
         build_type: [Dev]
         include:
-          - os: "macos-11.0"
+          - os: "macos-11"
             build_type: Release
     runs-on: ${{ matrix.os }}
     env:
