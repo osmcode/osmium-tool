@@ -377,13 +377,13 @@ void CommandExtract::parse_config_file() {
                 throw config_error{"Missing geometry for extract. Need 'bbox', 'polygon', or 'multipolygon'."};
             }
 
-            Extract& extract = *m_extracts.back();
             const auto json_output_header = item.FindMember("output_header");
             if (json_output_header != item.MemberEnd()) {
                 const auto& value = json_output_header->value;
                 if (!value.IsObject()) {
                     throw config_error{"Optional 'output_header' field must be an object."};
                 }
+                Extract& extract = *m_extracts.back();
                 for (auto it = value.MemberBegin(); it != value.MemberEnd(); ++it) {
                     const auto& member_value = it->value;
                     if (member_value.IsNull()) {
