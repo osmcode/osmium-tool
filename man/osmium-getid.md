@@ -69,9 +69,6 @@ This command will not work with negative IDs.
     (default: 'node'). It is also allowed to just use the first character
     of the type here.
 
-\--history
-:   Deprecated. Use **\--with-history/-H** instead.
-
 -H, \--with-history
 :   Make this program work on history files. This is only needed when using
     the **-r** option.
