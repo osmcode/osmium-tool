@@ -4,7 +4,7 @@
 #include "command_cat.hpp"
 
 TEST_CASE("cat") {
-    CommandFactory factory;
+    const CommandFactory factory;
     CommandCat cmd{factory};
 
     SECTION("no parameters") {

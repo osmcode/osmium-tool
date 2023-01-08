@@ -45,9 +45,9 @@ OSMFileParser::OSMFileParser(osmium::memory::Buffer& buffer, std::string file_na
 }
 
 std::size_t OSMFileParser::operator()() {
-    osmium::io::File input_file{m_file_name};
+    const osmium::io::File input_file{m_file_name};
 
-    osmium::area::Assembler::config_type assembler_config;
+    const osmium::area::Assembler::config_type assembler_config;
     osmium::area::MultipolygonCollector<osmium::area::Assembler> collector{assembler_config};
 
     {

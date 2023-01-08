@@ -54,9 +54,9 @@ bool CommandRemoveId::setup(const std::vector<std::string>& arguments) {
     ("id-osm-file,I", po::value<std::vector<std::string>>(), "Read OSM IDs from OSM file")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()

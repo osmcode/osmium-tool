@@ -66,9 +66,9 @@ bool CommandGetId::setup(const std::vector<std::string>& arguments) {
     ("verbose-ids", "Print all requested and missing IDs")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -188,17 +188,17 @@ void CommandGetId::show_arguments() {
     if (m_verbose_ids) {
         m_vout << "    looking for these ids:\n";
         m_vout << "      nodes:";
-        for (osmium::object_id_type id : m_ids(osmium::item_type::node)) {
+        for (const osmium::object_id_type id : m_ids(osmium::item_type::node)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
         m_vout << "      ways:";
-        for (osmium::object_id_type id : m_ids(osmium::item_type::way)) {
+        for (const osmium::object_id_type id : m_ids(osmium::item_type::way)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
         m_vout << "      relations:";
-        for (osmium::object_id_type id : m_ids(osmium::item_type::relation)) {
+        for (const osmium::object_id_type id : m_ids(osmium::item_type::relation)) {
             m_vout << " " << id;
         }
         m_vout << "\n";

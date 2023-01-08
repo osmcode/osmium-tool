@@ -119,10 +119,10 @@ void id_map::print(osmium::object_id_type new_id) {
 void id_map::read(int fd, std::size_t file_size) {
     const auto num_elements = file_size / sizeof(osmium::object_id_type);
     m_ids.reserve(num_elements);
-    osmium::TypedMemoryMapping<osmium::object_id_type> mapping{num_elements, osmium::MemoryMapping::mapping_mode::readonly, fd};
+    const osmium::TypedMemoryMapping<osmium::object_id_type> mapping{num_elements, osmium::MemoryMapping::mapping_mode::readonly, fd};
 
     osmium::object_id_type last_id = 0;
-    for (osmium::object_id_type id : mapping) {
+    for (const osmium::object_id_type id : mapping) {
         if (osmium::id_order{}(last_id, id)) {
             m_ids.push_back(id);
             last_id = id;
@@ -184,9 +184,9 @@ bool CommandRenumber::setup(const std::vector<std::string>& arguments) {
     ("start-id,s", po::value<std::string>(), "Comma separated list of first node, way, and relation id to use (default: 1,1,1)")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()

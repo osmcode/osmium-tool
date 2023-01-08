@@ -204,8 +204,8 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
         } else if (ends_with(file_name, ".json") || ends_with(file_name, ".geojson")) {
             file_type = "geojson";
         } else {
-            std::string suffix{get_filename_suffix(file_name)};
-            osmium::io::File osmfile{"", suffix};
+            const std::string suffix{get_filename_suffix(file_name)};
+            const osmium::io::File osmfile{"", suffix};
             if (osmfile.format() != osmium::io::file_format::unknown) {
                 file_type = "osm";
             }
@@ -322,7 +322,7 @@ void CommandExtract::parse_config_file() {
         throw config_error{"Top-level value must be an object."};
     }
 
-    std::string directory{get_value_as_string(doc, "directory")};
+    const std::string directory{get_value_as_string(doc, "directory")};
     if (!directory.empty() && m_output_directory.empty()) {
         m_vout << "  Directory set to '" << directory << "'.\n";
         set_directory(directory);
@@ -353,8 +353,8 @@ void CommandExtract::parse_config_file() {
 
             m_vout << "    Looking at extract '" << output << "'...\n";
 
-            std::string output_format{get_value_as_string(e, "output_format")};
-            std::string description{get_value_as_string(e, "description")};
+            const std::string output_format{get_value_as_string(e, "output_format")};
+            const std::string description{get_value_as_string(e, "description")};
 
             const auto json_bbox         = e.FindMember("bbox");
             const auto json_polygon      = e.FindMember("polygon");
@@ -463,9 +463,9 @@ bool CommandExtract::setup(const std::vector<std::string>& arguments) {
     ("clean", po::value<std::vector<std::string>>(), "Clean attribute (version, changeset, timestamp, uid, user)")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()

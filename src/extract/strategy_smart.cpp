@@ -277,7 +277,7 @@ namespace strategy_smart {
         // recursively get parents of all relations that are in an extract
         const auto relations_map = pass1.relations_map_stash().build_member_to_parent_index();
         for (auto& e : m_extracts) {
-            for (osmium::unsigned_object_id_type id : e.relation_ids) {
+            for (const osmium::unsigned_object_id_type id : e.relation_ids) {
                 e.add_relation_parents(id, relations_map);
             }
         }

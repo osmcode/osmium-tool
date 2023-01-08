@@ -4,7 +4,7 @@
 #include "command_time_filter.hpp"
 
 TEST_CASE("time-filter") {
-    CommandFactory factory;
+    const CommandFactory factory;
     CommandTimeFilter cmd{factory};
 
     SECTION("no parameters") {

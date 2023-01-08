@@ -46,9 +46,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 bool CommandSort::setup(const std::vector<std::string>& arguments) {
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_multiple_inputs_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_multiple_inputs_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -112,7 +112,7 @@ bool CommandSort::run_single_pass() {
     osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
     for (const std::string& file_name : m_filenames) {
         osmium::io::Reader reader{file_name, osmium::osm_entity_bits::object};
-        osmium::io::Header header{reader.header()};
+        const osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
         while (osmium::memory::Buffer buffer = reader.read()) {
             ++buffers_count;
@@ -169,7 +169,7 @@ bool CommandSort::run_multi_pass() {
     m_vout << "Reading input file headers...\n";
     for (const std::string& file_name : m_filenames) {
         osmium::io::Reader reader{file_name, osmium::osm_entity_bits::nothing};
-        osmium::io::Header header{reader.header()};
+        const osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
         reader.close();
     }
@@ -198,7 +198,7 @@ bool CommandSort::run_multi_pass() {
         m_vout << "Reading contents of input files...\n";
         for (const std::string& file_name : m_filenames) {
             osmium::io::Reader reader{file_name, entity};
-            osmium::io::Header header{reader.header()};
+            const osmium::io::Header header{reader.header()};
             bounding_box.extend(header.joined_boxes());
             while (osmium::memory::Buffer buffer = reader.read()) {
                 ++buffers_count;

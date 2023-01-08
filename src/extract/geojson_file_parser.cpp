@@ -106,7 +106,7 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder* bu
         }
         osmium::builder::OuterRingBuilder ring_builder{*builder};
         for (const auto& c : outer_ring) {
-            osmium::Location loc{c.x, c.y};
+            const osmium::Location loc{c.x, c.y};
             if (loc.valid()) {
                 ring_builder.add_node_ref(0, loc);
             } else {
@@ -125,7 +125,7 @@ void parse_rings(const rapidjson::Value& value, osmium::builder::AreaBuilder* bu
         }
         osmium::builder::InnerRingBuilder ring_builder{*builder};
         for (const auto& c : inner_ring) {
-            osmium::Location loc{c.x, c.y};
+            const osmium::Location loc{c.x, c.y};
             if (loc.valid()) {
                 ring_builder.add_node_ref(0, loc);
             } else {
@@ -190,7 +190,7 @@ std::size_t GeoJSONFileParser::parse_top(const rapidjson::Value& top) {
         error("Expected 'geometry' value to be an object.");
     }
 
-    std::string geometry_type{get_value_as_string(json_geometry->value, "type")};
+    const std::string geometry_type{get_value_as_string(json_geometry->value, "type")};
     if (geometry_type.empty()) {
         error("Missing 'geometry.type'.");
     }

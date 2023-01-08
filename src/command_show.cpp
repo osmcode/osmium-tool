@@ -78,8 +78,8 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
     ("output-format,f", po::value<std::string>(), "Format of output file")
     ;
 
-    po::options_description opts_common{add_common_options(false)};
-    po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_common{add_common_options(false)};
+    const po::options_description opts_input{add_single_input_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -190,10 +190,10 @@ static int execute_pager(const std::string& pager, bool with_color) {
 
 bool CommandShow::run() {
     osmium::io::Reader reader{m_input_file, osm_entity_bits()};
-    osmium::io::Header header{reader.header()};
+    const osmium::io::Header header{reader.header()};
 
     if (m_pager.empty()) {
-        osmium::io::File file{"-", m_output_format};
+        const osmium::io::File file{"-", m_output_format};
         osmium::io::Writer writer{file, header};
         while (osmium::memory::Buffer buffer = reader.read()) {
             writer(std::move(buffer));
@@ -208,7 +208,7 @@ bool CommandShow::run() {
         }
         ::close(fd);
 
-        osmium::io::File file{"-", m_output_format};
+        const osmium::io::File file{"-", m_output_format};
         osmium::io::Writer writer{file, header};
         try {
             while (osmium::memory::Buffer buffer = reader.read()) {

@@ -4,7 +4,7 @@
 #include "command_diff.hpp"
 
 TEST_CASE("diff") {
-    CommandFactory factory;
+    const CommandFactory factory;
     CommandDiff cmd{factory};
 
     SECTION("no arguments - need exactly two arguments") {

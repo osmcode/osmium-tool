@@ -50,9 +50,9 @@ bool CommandMergeChanges::setup(const std::vector<std::string>& arguments) {
     ("simplify,s", "Simplify change")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_multiple_inputs_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_multiple_inputs_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -108,7 +108,7 @@ bool CommandMergeChanges::run() {
     // to each object to objects collection.
     m_vout << "Reading change file contents...\n";
     osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
-    for (osmium::io::File& change_file : m_input_files) {
+    for (const osmium::io::File& change_file : m_input_files) {
         osmium::io::Reader reader{change_file, osmium::osm_entity_bits::object};
         while (osmium::memory::Buffer buffer = reader.read()) {
             progress_bar.update(reader.offset());

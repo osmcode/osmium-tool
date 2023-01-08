@@ -47,9 +47,9 @@ bool CommandCat::setup(const std::vector<std::string>& arguments) {
     ("buffer-data", "Buffer all data in memory before writing it out")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_multiple_inputs_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_multiple_inputs_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -163,7 +163,7 @@ bool CommandCat::run() {
         if (m_buffer_data) {
             std::vector<osmium::memory::Buffer> buffers;
             osmium::ProgressBar progress_bar_reader{reader.file_size(), display_progress()};
-            std::size_t size = read_buffers(progress_bar_reader, reader, buffers);
+            const std::size_t size = read_buffers(progress_bar_reader, reader, buffers);
             progress_bar_reader.done();
             m_vout << "All data read.\n";
             show_memory_used();

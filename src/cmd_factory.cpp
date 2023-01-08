@@ -30,7 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 bool CommandFactory::register_command(const std::string& name, const std::string& description, create_command_type&& create_function) {
-    command_info info{description, std::forward<create_command_type>(create_function)};
+    const command_info info{description, std::forward<create_command_type>(create_function)};
     return m_commands.emplace(name, info).second;
 }
 

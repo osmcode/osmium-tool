@@ -49,8 +49,8 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
     ("dump", "Dump all locations to STDOUT")
     ;
 
-    po::options_description opts_common{add_common_options(false)};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options(false)};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -121,7 +121,7 @@ bool CommandQueryLocationsIndex::run() {
         throw std::system_error{errno, std::system_category(), std::string("Can not open index file '") + m_index_file_name + "'"};
     }
 
-    osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};
+    const osmium::index::map::DenseFileArray<osmium::unsigned_object_id_type, osmium::Location> location_index{fd};
 
     if (m_dump) {
         const std::size_t max_buffer_size = 11UL * 1024UL * 1024UL;

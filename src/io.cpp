@@ -103,7 +103,7 @@ void with_multiple_osm_inputs::setup_input_files(const boost::program_options::v
     }
 
     for (const std::string& input_filename : m_input_filenames) {
-        osmium::io::File input_file{input_filename, m_input_format};
+        const osmium::io::File input_file{input_filename, m_input_format};
         m_input_files.push_back(input_file);
     }
 }

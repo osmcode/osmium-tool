@@ -112,8 +112,8 @@ bool CommandTagsCount::setup(const std::vector<std::string>& arguments) {
     ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation)")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
 
     po::options_description hidden;
     hidden.add_options()

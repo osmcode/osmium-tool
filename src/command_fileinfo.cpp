@@ -730,8 +730,8 @@ bool CommandFileinfo::setup(const std::vector<std::string>& arguments) {
     ("object-type,t", po::value<std::vector<std::string>>(), "Read only objects of given type (node, way, relation, changeset)")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -871,7 +871,7 @@ bool CommandFileinfo::run() {
     output->file(m_input_filename, m_input_file);
 
     osmium::io::Reader reader{m_input_file, m_extended ? osm_entity_bits() : osmium::osm_entity_bits::nothing};
-    osmium::io::Header header{reader.header()};
+    const osmium::io::Header header{reader.header()};
     output->header(header);
 
     if (m_extended) {

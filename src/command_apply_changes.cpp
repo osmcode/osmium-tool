@@ -65,9 +65,9 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     ("locations-on-ways", "Expect and update locations on ways")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -219,7 +219,7 @@ bool CommandApplyChanges::run() {
             throw argument_error{"When reading the change file from STDIN you have to use\n"
                                  "the --change-file-format option to specify the file format."};
         }
-        osmium::io::File file{change_file_name, m_change_file_format};
+        const osmium::io::File file{change_file_name, m_change_file_format};
         osmium::io::Reader reader{file, osmium::osm_entity_bits::object};
         while (osmium::memory::Buffer buffer = reader.read()) {
             osmium::apply(buffer, objects);

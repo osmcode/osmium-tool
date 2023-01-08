@@ -255,7 +255,7 @@ void CommandExport::canonicalize_output_format() {
 }
 
 bool CommandExport::setup(const std::vector<std::string>& arguments) {
-    std::string default_index_type{"flex_mem"};
+    const std::string default_index_type{"flex_mem"};
 
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
@@ -277,8 +277,8 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     ("omit-rs,r", "Do not print RS (record separator) character when using JSON Text Sequences")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_single_input_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_single_input_options()};
 
     po::options_description hidden;
     hidden.add_options()
@@ -606,7 +606,7 @@ bool CommandExport::run() {
         handler->debug_output(m_vout, m_output_filename);
     }
 
-    osmium::area::Assembler::config_type assembler_config;
+    const osmium::area::Assembler::config_type assembler_config;
     osmium::area::MultipolygonManager<osmium::area::Assembler> mp_manager{assembler_config};
 
     m_vout << "First pass (of two) through input file (reading relations)...\n";

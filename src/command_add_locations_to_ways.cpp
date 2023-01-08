@@ -48,7 +48,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments) {
-    std::string default_index_type{"flex_mem"};
+    const std::string default_index_type{"flex_mem"};
 
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
@@ -60,9 +60,9 @@ bool CommandAddLocationsToWays::setup(const std::vector<std::string>& arguments)
     ("ignore-missing-nodes", "Ignore missing nodes")
     ;
 
-    po::options_description opts_common{add_common_options()};
-    po::options_description opts_input{add_multiple_inputs_options()};
-    po::options_description opts_output{add_output_options()};
+    const po::options_description opts_common{add_common_options()};
+    const po::options_description opts_input{add_multiple_inputs_options()};
+    const po::options_description opts_output{add_output_options()};
 
     po::options_description hidden;
     hidden.add_options()
