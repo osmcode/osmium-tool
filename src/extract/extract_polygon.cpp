@@ -134,10 +134,10 @@ bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
             return true;
         }
         if ((segment.second().y() > location.y()) != (segment.first().y() > location.y())) {
-            const int64_t ax = int64_t(segment.first().x()) - int64_t(segment.second().x());
-            const int64_t ay = int64_t(segment.first().y()) - int64_t(segment.second().y());
-            const int64_t tx = int64_t(location.x())        - int64_t(segment.second().x());
-            const int64_t ty = int64_t(location.y())        - int64_t(segment.second().y());
+            const auto ax = static_cast<int64_t>(segment.first().x()) - static_cast<int64_t>(segment.second().x());
+            const auto ay = static_cast<int64_t>(segment.first().y()) - static_cast<int64_t>(segment.second().y());
+            const auto tx = static_cast<int64_t>(location.x())        - static_cast<int64_t>(segment.second().x());
+            const auto ty = static_cast<int64_t>(location.y())        - static_cast<int64_t>(segment.second().y());
 
             const bool comp = tx * ay < ax * ty;
 

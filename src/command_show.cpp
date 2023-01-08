@@ -49,11 +49,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _WIN32
 void CommandShow::setup_pager_from_env() noexcept {
     m_pager = "less";
-    const char* pager = ::getenv("OSMIUM_PAGER");
+    const char* pager = ::getenv("OSMIUM_PAGER"); // NOLINT(concurrency-mt-unsafe)
     if (pager) {
         m_pager = pager;
     } else {
-        pager = ::getenv("PAGER");
+        pager = ::getenv("PAGER"); // NOLINT(concurrency-mt-unsafe)
         if (pager) {
             m_pager = pager;
         }
@@ -129,7 +129,7 @@ bool CommandShow::setup(const std::vector<std::string>& arguments) {
     } else if (vm.count("format-xml")) {
         m_output_format = "xml";
     } else {
-        const char* output_format_from_env = ::getenv("OSMIUM_SHOW_FORMAT");
+        const char* output_format_from_env = ::getenv("OSMIUM_SHOW_FORMAT"); // NOLINT(concurrency-mt-unsafe)
         if (output_format_from_env) {
             m_output_format = output_format_from_env;
         }

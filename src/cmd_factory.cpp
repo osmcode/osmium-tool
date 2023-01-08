@@ -36,6 +36,7 @@ bool CommandFactory::register_command(const std::string& name, const std::string
 
 std::vector<std::pair<std::string, std::string>> CommandFactory::help() const {
     std::vector<std::pair<std::string, std::string>> commands;
+    commands.reserve(m_commands.size());
 
     for (const auto& cmd : m_commands) {
         commands.emplace_back(cmd.first, cmd.second.description);
