@@ -339,26 +339,26 @@ void CommandExtract::parse_config_file() {
 
     m_vout << "  Reading extracts from config file...\n";
     int extract_num = 1;
-    for (const auto& e : json_extracts->value.GetArray()) {
+    for (const auto& item : json_extracts->value.GetArray()) {
         std::string output;
         try {
-            if (!e.IsObject()) {
+            if (!item.IsObject()) {
                 throw config_error{"Members in 'extracts' array must be objects."};
             }
 
-            output = get_value_as_string(e, "output");
+            output = get_value_as_string(item, "output");
             if (output.empty()) {
                 throw config_error{"Missing 'output' field for extract."};
             }
 
             m_vout << "    Looking at extract '" << output << "'...\n";
 
-            const std::string output_format{get_value_as_string(e, "output_format")};
-            const std::string description{get_value_as_string(e, "description")};
+            const std::string output_format{get_value_as_string(item, "output_format")};
+            const std::string description{get_value_as_string(item, "description")};
 
-            const auto json_bbox         = e.FindMember("bbox");
-            const auto json_polygon      = e.FindMember("polygon");
-            const auto json_multipolygon = e.FindMember("multipolygon");
+            const auto json_bbox         = item.FindMember("bbox");
+            const auto json_polygon      = item.FindMember("polygon");
+            const auto json_multipolygon = item.FindMember("multipolygon");
 
             osmium::io::File output_file{m_output_directory + output, output_format};
             if (m_with_history) {
@@ -367,19 +367,19 @@ void CommandExtract::parse_config_file() {
                 throw config_error{"Looks like you are trying to write a history file, but option --with-history is not set."};
             }
 
-            if (json_bbox != e.MemberEnd()) {
+            if (json_bbox != item.MemberEnd()) {
                 m_extracts.push_back(std::make_unique<ExtractBBox>(output_file, description, parse_bbox(json_bbox->value)));
-            } else if (json_polygon != e.MemberEnd()) {
+            } else if (json_polygon != item.MemberEnd()) {
                 m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, &m_buffer)));
-            } else if (json_multipolygon != e.MemberEnd()) {
+            } else if (json_multipolygon != item.MemberEnd()) {
                 m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, &m_buffer)));
             } else {
                 throw config_error{"Missing geometry for extract. Need 'bbox', 'polygon', or 'multipolygon'."};
             }
 
             Extract& extract = *m_extracts.back();
-            const auto json_output_header = e.FindMember("output_header");
-            if (json_output_header != e.MemberEnd()) {
+            const auto json_output_header = item.FindMember("output_header");
+            if (json_output_header != item.MemberEnd()) {
                 const auto& value = json_output_header->value;
                 if (!value.IsObject()) {
                     throw config_error{"Optional 'output_header' field must be an object."};

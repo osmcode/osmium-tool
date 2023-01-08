@@ -258,9 +258,9 @@ bool CommandMerge::run() {
                 writer(element.object());
             }
 
-            const int index = element.data_source_index();
-            if (data_sources[index].next()) {
-                queue.emplace(data_sources[index].get(), index);
+            const int dsindex = element.data_source_index();
+            if (data_sources[dsindex].next()) {
+                queue.emplace(data_sources[dsindex].get(), dsindex);
             }
 
             if (n++ > 10000) {

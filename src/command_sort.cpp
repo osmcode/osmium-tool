@@ -198,8 +198,8 @@ bool CommandSort::run_multi_pass() {
         m_vout << "Reading contents of input files...\n";
         for (const std::string& file_name : m_filenames) {
             osmium::io::Reader reader{file_name, entity};
-            const osmium::io::Header header{reader.header()};
-            bounding_box.extend(header.joined_boxes());
+            const osmium::io::Header read_header{reader.header()};
+            bounding_box.extend(read_header.joined_boxes());
             while (osmium::memory::Buffer buffer = reader.read()) {
                 ++buffers_count;
                 buffers_size += buffer.committed();

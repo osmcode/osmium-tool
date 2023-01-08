@@ -149,7 +149,7 @@ static void report_filename(osmium::VerboseOutput* vout, const osmium::io::File&
 }
 
 bool CommandCat::run() {
-    std::size_t file_size = 0;
+    std::size_t bytes_written = 0;
 
     if (m_input_files.size() == 1) { // single input file
         osmium::io::Reader reader{m_input_files[0], osm_entity_bits()};
@@ -176,7 +176,7 @@ bool CommandCat::run() {
             copy(progress_bar, reader, writer);
             progress_bar.done();
         }
-        file_size = writer.close();
+        bytes_written = writer.close();
         reader.close();
     } else { // multiple input files
         osmium::io::Header header;
@@ -201,7 +201,7 @@ bool CommandCat::run() {
             m_vout << "Writing data...\n";
             osmium::ProgressBar progress_bar_writer{size, display_progress()};
             write_buffers(progress_bar_writer, buffers, writer);
-            file_size = writer.close();
+            bytes_written = writer.close();
             progress_bar_writer.done();
         } else {
             osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
@@ -213,13 +213,13 @@ bool CommandCat::run() {
                 progress_bar.file_done(reader.file_size());
                 reader.close();
             }
-            file_size = writer.close();
+            bytes_written = writer.close();
             progress_bar.done();
         }
     }
 
-    if (file_size > 0) {
-        m_vout << "Wrote " << file_size << " bytes.\n";
+    if (bytes_written > 0) {
+        m_vout << "Wrote " << bytes_written << " bytes.\n";
     }
 
     show_memory_used();
