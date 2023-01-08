@@ -55,15 +55,6 @@ STDOUT.
     This allows changing the history! This mode is for special use only, for
     instance to remove copyrighted or private data.
 
--r, \--remove-deleted
-:   Deprecated. Remove deleted objects from the output. This is now the
-    default if your input file is a normal OSM data file ('.osm').
-
--s, \--simplify
-:   Deprecated. Only write the last version of any object to the output.
-    This is now the default if your input file is a normal OSM data file
-    ('.osm').
-
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@

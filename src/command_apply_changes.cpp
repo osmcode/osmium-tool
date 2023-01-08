@@ -58,9 +58,7 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
     opts_cmd.add_options()
     ("change-file-format", po::value<std::string>(), "Format of the change file(s)")
-    ("simplify,s",        "Simplify change (deprecated)")
     ("redact",            "Redact (patch) OSM files")
-    ("remove-deleted,r",  "Remove deleted objects from output (deprecated)")
     ("with-history,H",    "Apply changes to history file")
     ("locations-on-ways", "Expect and update locations on ways")
     ;
@@ -134,16 +132,6 @@ bool CommandApplyChanges::setup(const std::vector<std::string>& arguments) {
         m_with_history = true;
         m_redact = true;
         m_output_file.set_has_multiple_object_versions(true);
-    }
-
-    if (vm.count("simplify")) {
-        warning("-s, --simplify option is deprecated. Please see manual page.\n");
-        m_with_history = false;
-    }
-
-    if (vm.count("remove-deleted")) {
-        warning("-r, --remove-deleted option is deprecated. Please see manual page.\n");
-        m_with_history = false;
     }
 
     return true;
