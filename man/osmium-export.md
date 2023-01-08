@@ -96,11 +96,6 @@ files created with JOSM).
     OSM tags, not attributes (like id, version, uid, ...) without the tags
     removed by the **exclude_tags** or **include_tags** settings.
 
--r, \--omit-rs
-:   Do not print the RS (0x1e, record separator) character when using the
-    GeoJSON Text Sequence Format. Ignored for other formats. THIS OPTION
-    IS DEPRECATED, PLEASE USE "-x print_record_separator=false" INSTEAD.
-
 -u, \--add-unique-id=TYPE
 :   Add a unique ID to each feature. TYPE can be either *counter* in which
     case the first feature will get ID 1, the next ID 2 and so on. The type

@@ -274,7 +274,6 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     ("stop-on-error,E", "Stop on the first error encountered")
     ("show-index-types,I", "Show available index types")
     ("attributes,a", po::value<std::string>(), "Comma-separated list of attributes to add to the output (default: none)")
-    ("omit-rs,r", "Do not print RS (record separator) character when using JSON Text Sequences")
     ;
 
     const po::options_description opts_common{add_common_options()};
@@ -456,14 +455,6 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     if (vm.count("format-option")) {
         for (const auto& str : vm["format-option"].as<std::vector<std::string>>()) {
             m_options.format_options.set(str);
-        }
-    }
-
-    if (vm.count("omit-rs")) {
-        m_options.format_options.set("print_record_separator", false);
-        warning("The --omit-rs/-r option is deprecated. Please use '-x print_record_separator=false' instead.\n");
-        if (m_output_format != "geojsonseq") {
-            warning("The --omit-rs/-r option only works for GeoJSON Text Sequence (geojsonseq) format. Ignored.\n");
         }
     }
 
