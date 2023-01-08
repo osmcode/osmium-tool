@@ -25,6 +25,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmd.hpp" // IWYU pragma: export
 
+#include <osmium/io/reader.hpp>
+#include <osmium/io/writer.hpp>
+#include <osmium/object_pointer_collection.hpp>
+
 #include <string>
 #include <vector>
 
@@ -37,6 +41,11 @@ class CommandApplyChanges : public CommandWithSingleOSMInput, public with_osm_ou
     bool m_with_history = false;
     bool m_locations_on_ways = false;
     bool m_redact = false;
+
+    void apply_changes_and_write(osmium::ObjectPointerCollection &objects,
+                                 const std::vector<osmium::memory::Buffer> &changes,
+                                 osmium::io::Reader &reader,
+                                 osmium::io::Writer &writer);
 
 public:
 

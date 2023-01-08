@@ -208,6 +208,84 @@ static void update_nodes_if_way(osmium::OSMObject* object, const location_index_
     }
 }
 
+void CommandApplyChanges::apply_changes_and_write(osmium::ObjectPointerCollection &objects,
+                                                  const std::vector<osmium::memory::Buffer> &changes,
+                                                  osmium::io::Reader &reader,
+                                                  osmium::io::Writer &writer) {
+    objects.unique(osmium::object_equal_type_id{});
+    m_vout << "There are " << objects.size() << " unique objects in the change files\n";
+
+    osmium::index::IdSetSmall<osmium::unsigned_object_id_type> node_ids;
+    m_vout << "Creating node index...\n";
+    for (const auto& buffer : changes) {
+        for (const auto& way : buffer.select<osmium::Way>()) {
+            for (const auto& nr : way.nodes()) {
+                node_ids.set(nr.positive_ref());
+            }
+        }
+    }
+    node_ids.sort_unique();
+    m_vout << "Node index has " << node_ids.size() << " entries\n";
+
+    m_vout << "Creating location index...\n";
+    location_index_type location_index;
+    for (const auto& buffer : changes) {
+        for (const auto& node : buffer.select<osmium::Node>()) {
+            location_index.set(node.positive_id(), node.location());
+        }
+    }
+    m_vout << "Location index has " << location_index.size() << " entries\n";
+
+    m_vout << "Applying changes and writing them to output...\n";
+    auto it = objects.begin();
+    auto last_type = osmium::item_type::undefined;
+    while (osmium::memory::Buffer buffer = reader.read()) {
+        for (auto& object : buffer.select<osmium::OSMObject>()) {
+            if (object.type() < last_type) {
+                throw std::runtime_error{"Input data out of order. Need nodes, ways, relations in ID order."};
+            }
+            if (object.type() == osmium::item_type::node) {
+                const auto& node = static_cast<osmium::Node&>(object);
+                if (node_ids.get_binary_search(node.positive_id())) {
+                    const auto location = location_index.get_noexcept(node.positive_id());
+                    if (!location) {
+                        location_index.set(node.positive_id(), node.location());
+                    }
+                }
+            } else if (object.type() == osmium::item_type::way) {
+                if (last_type == osmium::item_type::node) {
+                    location_index.sort();
+                    node_ids.clear();
+                }
+            }
+
+            last_type = object.type();
+
+            auto last_it = it;
+            while (it != objects.end() && osmium::object_order_type_id_reverse_version{}(*it, object)) {
+                if (it->visible()) {
+                    update_nodes_if_way(&*it, location_index);
+                    writer(*it);
+                }
+                last_it = it;
+                ++it;
+            }
+
+            if (last_it == objects.end() || last_it->type() != object.type() || last_it->id() != object.id()) {
+                update_nodes_if_way(&object, location_index);
+                writer(object);
+            }
+        }
+    }
+    while (it != objects.end()) {
+        if (it->visible()) {
+            update_nodes_if_way(&*it, location_index);
+            writer(*it);
+        }
+        ++it;
+    }
+}
+
 bool CommandApplyChanges::run() {
     std::vector<osmium::memory::Buffer> changes;
     osmium::ObjectPointerCollection objects;
@@ -284,78 +362,7 @@ bool CommandApplyChanges::run() {
         objects.sort(osmium::object_order_type_id_reverse_version{});
 
         if (m_locations_on_ways) {
-            objects.unique(osmium::object_equal_type_id{});
-            m_vout << "There are " << objects.size() << " unique objects in the change files\n";
-
-            osmium::index::IdSetSmall<osmium::unsigned_object_id_type> node_ids;
-            m_vout << "Creating node index...\n";
-            for (const auto& buffer : changes) {
-                for (const auto& way : buffer.select<osmium::Way>()) {
-                    for (const auto& nr : way.nodes()) {
-                        node_ids.set(nr.positive_ref());
-                    }
-                }
-            }
-            node_ids.sort_unique();
-            m_vout << "Node index has " << node_ids.size() << " entries\n";
-
-            m_vout << "Creating location index...\n";
-            location_index_type location_index;
-            for (const auto& buffer : changes) {
-                for (const auto& node : buffer.select<osmium::Node>()) {
-                    location_index.set(node.positive_id(), node.location());
-                }
-            }
-            m_vout << "Location index has " << location_index.size() << " entries\n";
-
-            m_vout << "Applying changes and writing them to output...\n";
-            auto it = objects.begin();
-            auto last_type = osmium::item_type::undefined;
-            while (osmium::memory::Buffer buffer = reader.read()) {
-                for (auto& object : buffer.select<osmium::OSMObject>()) {
-                    if (object.type() < last_type) {
-                        throw std::runtime_error{"Input data out of order. Need nodes, ways, relations in ID order."};
-                    }
-                    if (object.type() == osmium::item_type::node) {
-                        const auto& node = static_cast<osmium::Node&>(object);
-                        if (node_ids.get_binary_search(node.positive_id())) {
-                            const auto location = location_index.get_noexcept(node.positive_id());
-                            if (!location) {
-                                location_index.set(node.positive_id(), node.location());
-                            }
-                        }
-                    } else if (object.type() == osmium::item_type::way) {
-                        if (last_type == osmium::item_type::node) {
-                            location_index.sort();
-                            node_ids.clear();
-                        }
-                    }
-
-                    last_type = object.type();
-
-                    auto last_it = it;
-                    while (it != objects.end() && osmium::object_order_type_id_reverse_version{}(*it, object)) {
-                        if (it->visible()) {
-                            update_nodes_if_way(&*it, location_index);
-                            writer(*it);
-                        }
-                        last_it = it;
-                        ++it;
-                    }
-
-                    if (last_it == objects.end() || last_it->type() != object.type() || last_it->id() != object.id()) {
-                        update_nodes_if_way(&object, location_index);
-                        writer(object);
-                    }
-                }
-            }
-            while (it != objects.end()) {
-                if (it->visible()) {
-                    update_nodes_if_way(&*it, location_index);
-                    writer(*it);
-                }
-                ++it;
-            }
+            apply_changes_and_write(objects, changes, reader, writer);
         } else {
             m_vout << "Applying changes and writing them to output...\n";
             const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
