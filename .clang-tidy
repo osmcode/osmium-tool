@@ -1,5 +1,5 @@
 ---
-Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugprone-easily-swappable-parameters,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-hicpp-avoid-c-arrays,-hicpp-no-array-decay,-hicpp-vararg,-llvmlibc-*,-misc-no-recursion,-modernize-avoid-c-arrays,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-implicit-bool-conversion,-readability-magic-numbers'
+Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugprone-easily-swappable-parameters,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-hicpp-avoid-c-arrays,-hicpp-no-array-decay,-hicpp-vararg,-llvmlibc-*,-misc-no-recursion,-modernize-avoid-c-arrays,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-identifier-length,-readability-implicit-bool-conversion,-readability-magic-numbers'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
@@ -72,6 +72,9 @@ Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-bugprone-branch-clone,-bugpro
 #  readability-convert-member-functions-to-static
 #    Not a bad idea, but it is overzealous when there are member functions
 #    overwritten in child classes and some of them can't be static.
+#
+#  readability-identifier-length
+#    Short identifiers are sometimes okay.
 #
 #  readability-implicit-bool-conversion
 #    I don't think this makes the code more readable.
