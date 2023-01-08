@@ -79,7 +79,7 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
         num_bands = max_bands;
     }
 
-    m_bands.resize(num_bands);
+    m_bands.resize(num_bands + 1);
 
     m_dy = (y_max() - y_min()) / num_bands;
 
@@ -87,9 +87,10 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
     for (const auto& segment : segments) {
         const std::pair<int32_t, int32_t> mm = std::minmax(segment.first().y(), segment.second().y());
         const uint32_t band_min = (mm.first - y_min()) / m_dy;
-        const uint32_t band_max = std::min(num_bands, ((mm.second - y_min()) / m_dy) + 1);
+        const uint32_t band_max = (mm.second - y_min()) / m_dy;
+        assert(band_min < m_bands.size() && band_max < m_bands.size());
 
-        for (auto band = band_min; band < band_max; ++band) {
+        for (auto band = band_min; band <= band_max; ++band) {
             m_bands[band].push_back(segment);
         }
     }
@@ -124,9 +125,7 @@ bool ExtractPolygon::contains(const osmium::Location& location) const noexcept {
     }
 
     std::size_t band = (location.y() - y_min()) / m_dy;
-    if (band >= m_bands.size()) {
-        band = m_bands.size() - 1;
-    }
+    assert(band < m_bands.size());
 
     bool inside = false;
 
