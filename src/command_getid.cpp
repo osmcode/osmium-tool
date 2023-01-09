@@ -182,17 +182,17 @@ void CommandGetId::show_arguments() {
     if (m_verbose_ids) {
         m_vout << "    looking for these ids:\n";
         m_vout << "      nodes:";
-        for (const osmium::object_id_type id : m_ids(osmium::item_type::node)) {
+        for (const auto id : m_ids(osmium::item_type::node)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
         m_vout << "      ways:";
-        for (const osmium::object_id_type id : m_ids(osmium::item_type::way)) {
+        for (const auto id : m_ids(osmium::item_type::way)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
         m_vout << "      relations:";
-        for (const osmium::object_id_type id : m_ids(osmium::item_type::relation)) {
+        for (const auto id : m_ids(osmium::item_type::relation)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
@@ -230,7 +230,7 @@ static void print_missing_ids(const char* type, const osmium::index::IdSetDense<
     std::cerr << '\n';
 }
 
-void CommandGetId::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id) {
+void CommandGetId::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::unsigned_object_id_type parent_id) {
     rel_in_rel.for_each(parent_id, [&](osmium::unsigned_object_id_type member_id) {
         if (m_ids(osmium::item_type::relation).check_and_set(member_id)) {
             mark_rel_ids(rel_in_rel, member_id);
@@ -265,7 +265,7 @@ bool CommandGetId::find_relations_in_relations() {
     }
 
     const auto rel_in_rel = stash.build_parent_to_member_index();
-    for (const osmium::unsigned_object_id_type id : m_ids(osmium::item_type::relation)) {
+    for (const auto id : m_ids(osmium::item_type::relation)) {
         mark_rel_ids(rel_in_rel, id);
     }
 

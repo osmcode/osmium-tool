@@ -74,15 +74,15 @@ osmium::object_id_type id_map::operator()(osmium::object_id_type id) {
     // New ID is larger than all existing IDs. Add it to end and return.
     if (m_ids.empty() || osmium::id_order{}(m_ids.back(), id)) {
         m_ids.push_back(id);
-        return add_offset_to_id(m_ids.size());
+        return add_offset_to_id(static_cast<osmium::object_id_type>(m_ids.size()));
     }
 
     const auto element = std::lower_bound(m_ids.cbegin(), m_ids.cend(), id, osmium::id_order{});
     // Old ID not found in m_ids, add to m_extra_ids.
     if (element == m_ids.cend() || *element != id) {
         m_ids.push_back(m_ids.back());
-        m_extra_ids[id] = m_ids.size();
-        return add_offset_to_id(m_ids.size());
+        m_extra_ids[id] = static_cast<osmium::object_id_type>(m_ids.size());
+        return add_offset_to_id(static_cast<osmium::object_id_type>(m_ids.size()));
     }
 
     // Old ID found in m_ids, return.
@@ -128,7 +128,7 @@ void id_map::read(int fd, std::size_t file_size) {
             last_id = id;
         } else {
             m_ids.push_back(last_id);
-            m_extra_ids[id] = m_ids.size();
+            m_extra_ids[id] = static_cast<osmium::object_id_type>(m_ids.size());
         }
     }
 }

@@ -101,7 +101,7 @@ bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments
         }
         const auto id = vm["node-id"].as<std::string>();
         const auto r = osmium::string_to_object_id(id.c_str(), osmium::osm_entity_bits::node, osmium::item_type::node);
-        m_id = static_cast<osmium::unsigned_object_id_type>(r.second);
+        m_id = r.second;
     } else if (!m_dump) {
         throw argument_error{"Missing node ID on command line."};
     }

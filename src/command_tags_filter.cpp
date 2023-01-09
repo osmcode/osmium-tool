@@ -239,7 +239,7 @@ bool CommandTagsFilter::matches_object(const osmium::OSMObject& object) const no
     return false;
 }
 
-void CommandTagsFilter::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id) {
+void CommandTagsFilter::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::unsigned_object_id_type parent_id) {
     rel_in_rel.for_each(parent_id, [&](osmium::unsigned_object_id_type member_id) {
         if (m_referenced_ids(osmium::item_type::relation).check_and_set(member_id)) {
             mark_rel_ids(rel_in_rel, member_id);
@@ -275,7 +275,7 @@ bool CommandTagsFilter::find_relations_in_relations() {
     }
 
     const auto rel_in_rel = stash.build_parent_to_member_index();
-    for (const osmium::unsigned_object_id_type id : m_matching_ids(osmium::item_type::relation)) {
+    for (const auto id : m_matching_ids(osmium::item_type::relation)) {
         mark_rel_ids(rel_in_rel, id);
     }
 

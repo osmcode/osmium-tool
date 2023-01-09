@@ -55,7 +55,7 @@ class CommandGetId : public CommandWithSingleOSMInput, public with_osm_output {
 
     void find_referenced_objects();
 
-    void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id);
+    void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::unsigned_object_id_type parent_id);
     bool find_relations_in_relations();
     void find_nodes_and_ways_in_relations();
     void find_nodes_in_ways();

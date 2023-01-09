@@ -88,7 +88,7 @@ void ExportFormatJSON::start_feature(const std::string& prefix, osmium::object_i
 
     if (options().unique_id == unique_id_type::counter) {
         m_writer.Key("id");
-        m_writer.Int64(m_count + 1);
+        m_writer.Int64(static_cast<int64_t>(m_count + 1));
     } else if (options().unique_id == unique_id_type::type_id) {
         m_writer.Key("id");
         m_writer.String(prefix + std::to_string(id));

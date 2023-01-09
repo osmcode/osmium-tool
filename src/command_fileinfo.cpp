@@ -348,7 +348,7 @@ public:
 
         if (!input_file.filename().empty()) {
             m_writer.String("size");
-            m_writer.Int64(file_size(input_file));
+            m_writer.Int64(static_cast<int64_t>(file_size(input_file)));
         }
 
         m_writer.EndObject();
@@ -427,13 +427,13 @@ public:
         m_writer.String("count");
         m_writer.StartObject();
         m_writer.String("changesets");
-        m_writer.Int64(info_handler.changesets);
+        m_writer.Int64(static_cast<int64_t>(info_handler.changesets));
         m_writer.String("nodes");
-        m_writer.Int64(info_handler.nodes);
+        m_writer.Int64(static_cast<int64_t>(info_handler.nodes));
         m_writer.String("ways");
-        m_writer.Int64(info_handler.ways);
+        m_writer.Int64(static_cast<int64_t>(info_handler.ways));
         m_writer.String("relations");
-        m_writer.Int64(info_handler.relations);
+        m_writer.Int64(static_cast<int64_t>(info_handler.relations));
         m_writer.EndObject();
 
         m_writer.String("minid");
@@ -463,11 +463,11 @@ public:
         m_writer.String("buffers");
         m_writer.StartObject();
         m_writer.String("count");
-        m_writer.Int64(get_largest(info_handler.buffers_count));
+        m_writer.Int64(get_largest(static_cast<int64_t>(info_handler.buffers_count)));
         m_writer.String("size");
-        m_writer.Int64(get_largest(info_handler.buffers_size));
+        m_writer.Int64(get_largest(static_cast<int64_t>(info_handler.buffers_size)));
         m_writer.String("capacity");
-        m_writer.Int64(get_largest(info_handler.buffers_capacity));
+        m_writer.Int64(get_largest(static_cast<int64_t>(info_handler.buffers_capacity)));
         m_writer.EndObject();
 
         m_writer.String("metadata");

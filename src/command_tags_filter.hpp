@@ -64,7 +64,7 @@ class CommandTagsFilter : public CommandWithSingleOSMInput, public with_osm_outp
     bool matches_relation(const osmium::Relation& relation) const noexcept;
     bool matches_object(const osmium::OSMObject& object) const noexcept;
 
-    void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::object_id_type parent_id);
+    void mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::unsigned_object_id_type parent_id);
     bool find_relations_in_relations();
     void find_nodes_and_ways_in_relations();
     void find_nodes_in_ways();

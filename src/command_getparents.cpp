@@ -153,17 +153,17 @@ void CommandGetParents::show_arguments() {
     if (m_verbose_ids) {
         m_vout << "    looking for these ids:\n";
         m_vout << "      nodes:";
-        for (const osmium::object_id_type id : m_ids(osmium::item_type::node)) {
+        for (const auto id : m_ids(osmium::item_type::node)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
         m_vout << "      ways:";
-        for (const osmium::object_id_type id : m_ids(osmium::item_type::way)) {
+        for (const auto id : m_ids(osmium::item_type::way)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
         m_vout << "      relations:";
-        for (const osmium::object_id_type id : m_ids(osmium::item_type::relation)) {
+        for (const auto id : m_ids(osmium::item_type::relation)) {
             m_vout << " " << id;
         }
         m_vout << "\n";
