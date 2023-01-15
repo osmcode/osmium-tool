@@ -10,8 +10,20 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Now requires libosmium version 2.17.0 or newer.
+- Remove the long-deprecated `--remove-deleted/--simplify` option on the
+  `apply-changes` command.
+- Remove the long-deprecated `--omit-rs` option on the `export` command.
+- Remove the long-deprecated `--history` option on the `getid` command.
+- Update included Catch to v2.13.10.
+- Various small code cleanups.
+
 ### Fixed
 
+- Fix for polygon extracts. Sometimes objects outside the polygon used for
+  extraction could end up in the output.
+- Correctly detect relative paths on Windows.
+- Fixes cross-compiling for mingw.
 
 ## [1.14.0] - 2022-02-07
 
