@@ -8,7 +8,7 @@
 
 cmake_minimum_required(VERSION 3.5.0)
 
-project(osmium VERSION 1.14.0 LANGUAGES CXX C)
+project(osmium VERSION 1.15.0 LANGUAGES CXX C)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 

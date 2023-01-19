@@ -10,6 +10,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+### Fixed
+
+
+## [1.15.0] - 2023-01-19
+
+### Changed
+
 - Now requires libosmium version 2.17.0 or newer.
 - Remove the long-deprecated `--remove-deleted/--simplify` option on the
   `apply-changes` command.
@@ -686,7 +693,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.14.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/osmcode/osmium-tool/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/osmcode/osmium-tool/compare/v1.13.2...v1.14.0
 [1.13.2]: https://github.com/osmcode/osmium-tool/compare/v1.13.1...v1.13.2
 [1.13.1]: https://github.com/osmcode/osmium-tool/compare/v1.13.0...v1.13.1
