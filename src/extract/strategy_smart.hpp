@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/index/id_set.hpp>
 #include <osmium/index/relations_map.hpp>
+#include <osmium/tags/tags_filter.hpp>
 
 #include <memory>
 #include <string>
@@ -59,8 +60,12 @@ namespace strategy_smart {
 
         std::size_t m_complete_partial_relations_percentage = 100;
 
+        std::vector<std::string> m_filter_tags;
+        osmium::TagsFilter m_filter{true};
+
         bool check_members_count(const std::size_t size, const std::size_t wanted_members) const noexcept;
         bool check_type(const osmium::Relation& relation) const noexcept;
+        bool check_tags(const osmium::Relation& relation) const noexcept;
 
     public:
 

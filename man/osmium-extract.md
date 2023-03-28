@@ -338,20 +338,31 @@ Strategy **smart**
 For the **complete_ways** strategy you can set the option "-S relations=false"
 in which case no relations will be written to the output file.
 
-For the **smart** strategy you can change the types of relations that should be
+The **smart** strategy allows the following strategy options:
+
+Use "-S types=TYPE,..." to change the types of relations that should be
 reference-complete. Instead of just relations tagged "type=multipolygon", you
 can either get all relations (use "-S types=any") or give a list of types to
 the -S option: "-S types=multipolygon,route". Note that especially boundary
 relations can be huge, so if you include them, be aware your result might be
 huge.
 
-The **smart** strategy allows another option "-S complete-partial-relations=X".
-If this is set, all relations that have more than X percent of their members
-already in the extract will have their full set of members in the extract. So
-this allows completing almost complete relations. It can be useful for instance
-to make sure a boundary relation is complete even if some of it is outside the
-polygon used for extraction.
+Use "-S complete-partial-relations=X" to force completion of partly completed
+relations. If this is set, all relations that have more than X percent of their
+members already in the extract will have their full set of members in the
+extract. So this allows completing almost complete relations. It can be useful
+for instance to make sure a boundary relation is complete even if some of it is
+outside the polygon used for extraction.
 
+Use "-S tags=PATTERN,..." to only complete relations that have a tag matching
+one of the PATTERNs. So for example if you use "-S
+tags=landuse,natural=wood,natural=water" everything tagged `landuse=*` or
+`natural=wood` or `natural=water` is added to the result, but no other
+relations.
+
+You can combine the "-S types", "-S complete-partial-relations", and "-S tags"
+options. The options will be interpreted as "(types OR
+complete-partial-relations) AND tags".
 
 # DIAGNOSTICS
 

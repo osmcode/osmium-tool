@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../util.hpp"
 
 #include <osmium/handler/check_order.hpp>
+#include <osmium/tags/taglist.hpp>
 #include <osmium/util/misc.hpp>
 #include <osmium/util/string.hpp>
 
@@ -78,6 +79,19 @@ namespace strategy_smart {
                         m_complete_partial_relations_percentage = 100;
                     }
                 }
+            } else if (option.first == "tags") {
+                m_filter_tags = osmium::split_string(option.second, ',', true);
+                m_filter.set_default_result(false);
+                for (const auto &tag : m_filter_tags) {
+                    const auto pos = tag.find('=');
+                    if (pos == std::string::npos) {
+                        m_filter.add_rule(true, osmium::TagMatcher{tag});
+                    } else {
+                        const auto key = tag.substr(0, pos);
+                        const auto value = tag.substr(pos + 1);
+                        m_filter.add_rule(true, osmium::TagMatcher{key, value});
+                    }
+                }
             } else {
                 warning(std::string{"Ignoring unknown option '"} + option.first + "' for 'smart' strategy.\n");
             }
@@ -105,6 +119,10 @@ namespace strategy_smart {
         return it != m_types.end();
     }
 
+    bool Strategy::check_tags(const osmium::Relation& relation) const noexcept {
+        return osmium::tags::match_any_of(relation.tags(), m_filter);
+    }
+
     void Strategy::show_arguments(osmium::VerboseOutput& vout) {
         vout << "Additional strategy options:\n";
         if (m_types.empty()) {
@@ -123,6 +141,18 @@ namespace strategy_smart {
             vout << "  - [complete-partial-relations] do not complete partial relations\n";
         } else {
             vout << "  - [complete-partial-relations] complete partial relations when " << m_complete_partial_relations_percentage << "% or more members are in extract\n";
+        }
+        if (m_filter_tags.empty()) {
+            vout << "  - [tags] no tags defined\n";
+        } else {
+            std::string filterlist;
+            for (const auto& tag : m_filter_tags) {
+                if (!filterlist.empty()) {
+                    filterlist += ",";
+                }
+                filterlist += tag;
+            }
+            vout << "  - [tags] " << filterlist << '\n';
         }
         vout << '\n';
     }
@@ -174,7 +204,7 @@ namespace strategy_smart {
                         if (e->node_ids.get(member.positive_ref())) {
                             if (wanted_members == 0) {
                                 e->relation_ids.set(relation.positive_id());
-                                if (strategy().check_type(relation)) {
+                                if (strategy().check_type(relation) && strategy().check_tags(relation)) {
                                     e->add_relation_members(relation);
                                     return;
                                 }
@@ -186,7 +216,7 @@ namespace strategy_smart {
                         if (e->way_ids.get(member.positive_ref())) {
                             if (wanted_members == 0) {
                                 e->relation_ids.set(relation.positive_id());
-                                if (strategy().check_type(relation)) {
+                                if (strategy().check_type(relation) && strategy().check_tags(relation)) {
                                     e->add_relation_members(relation);
                                     return;
                                 }
@@ -199,7 +229,7 @@ namespace strategy_smart {
                 }
             }
 
-            if (strategy().check_members_count(relation.members().size(), wanted_members)) {
+            if (strategy().check_members_count(relation.members().size(), wanted_members) && strategy().check_tags(relation)) {
                 e->add_relation_members(relation);
             }
         }
