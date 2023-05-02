@@ -13,7 +13,6 @@ jobs:
           - "ubuntu:18.04"        # gcc  7.5.0, clang  6.0.0, cmake 3.10.2
           - "ubuntu:20.04"        # gcc  9.3.0, clang 10.0.0, cmake 3.16.3
           - "ubuntu:22.04"        # gcc 11.2.0, clang 14.0.0, cmake 3.22.1
-          - "debian:stretch"      # gcc  6.3.0, clang  3.8.1, cmake 3.7.2
           - "debian:buster"       # gcc  8.3.0, clang  7.0.1, cmake 3.13.4
           - "debian:bullseye"     # gcc 10.2.1, clang 11.0.1, cmake 3.18.4
           - "debian:testing"
