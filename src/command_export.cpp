@@ -95,9 +95,9 @@ void CommandExport::parse_format_options(const rapidjson::Value& options) {
     if (!options.IsObject()) {
         throw config_error{"'format_options' member must be an object."};
     }
-    for (const auto& kv : options.GetObject()) {
-        const auto type = kv.value.GetType();
-        const char* key = kv.name.GetString();
+    for (auto it = options.MemberBegin(); it != options.MemberEnd(); it++) {
+        const auto type = it->value.GetType();
+        const char* key = it->name.GetString();
         switch (type) {
             case rapidjson::kNullType:
                 m_options.format_options.set(key, false);
@@ -114,10 +114,10 @@ void CommandExport::parse_format_options(const rapidjson::Value& options) {
                 throw config_error{"Option value for key '" + std::string(key) + "' can not be an array."};
                 break;
             case rapidjson::kStringType:
-                m_options.format_options.set(key, kv.value.GetString());
+                m_options.format_options.set(key, it->value.GetString());
                 break;
             case rapidjson::kNumberType:
-                m_options.format_options.set(key, std::to_string(kv.value.GetInt64()));
+                m_options.format_options.set(key, std::to_string(it->value.GetInt64()));
                 break;
         }
     }
