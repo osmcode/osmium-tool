@@ -391,6 +391,12 @@ steps. First create several larger extracts and then split them again and
 again into smaller pieces.
 
 
+# LIMITS
+
+You can not have more than 500 extracts. Although chances are that you will be
+running out of memory long before that. See MEMORY USAGE.
+
+
 # EXAMPLES
 
 See the example config files in the *extract-example-config* directory. To

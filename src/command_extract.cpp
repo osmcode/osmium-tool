@@ -72,6 +72,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # include <unistd.h>
 #endif
 
+static constexpr const std::size_t max_extracts = 500;
+
 static osmium::Box parse_bbox(const rapidjson::Value& value) {
     if (value.IsArray()) {
         if (value.Size() != 4) {
@@ -620,6 +622,10 @@ bool CommandExtract::run() {
 
     if (m_extracts.empty()) {
         throw config_error{"No extract specified in config file or on the command line."};
+    }
+
+    if (m_extracts.size() > max_extracts) {
+        throw config_error{"Too many extracts specified in config file (Maximum: " + std::to_string(max_extracts) + ")."};
     }
 
     show_extracts();
