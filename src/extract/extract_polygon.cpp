@@ -81,7 +81,7 @@ ExtractPolygon::ExtractPolygon(const osmium::io::File& output_file, const std::s
 
     m_bands.resize(num_bands + 1);
 
-    m_dy = (y_max() - y_min()) / num_bands;
+    m_dy = (y_max() - y_min() + num_bands - 1) / num_bands;
 
     // put segments into the bands they overlap
     for (const auto& segment : segments) {
