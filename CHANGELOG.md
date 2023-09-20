@@ -8,6 +8,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [1.16.0] - 2023-09-20
+
+### Added
+
 - Add "tags" strategy option for smart extract strategy. This checks relations
   for the specified keys/tags. For a relation to be completed it has to match
   the keys/tags.
@@ -703,7 +711,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.15.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/osmcode/osmium-tool/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/osmcode/osmium-tool/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/osmcode/osmium-tool/compare/v1.13.2...v1.14.0
 [1.13.2]: https://github.com/osmcode/osmium-tool/compare/v1.13.1...v1.13.2
