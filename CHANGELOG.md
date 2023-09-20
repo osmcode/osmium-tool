@@ -8,10 +8,20 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Add "tags" strategy option for smart extract strategy. This checks relations
+  for the specified keys/tags. For a relation to be completed it has to match
+  the keys/tags.
+
 ### Changed
+
+- Limit the number of extracts possible with osmium extract to 500. Prevents
+  us from running out of file descriptors.
 
 ### Fixed
 
+- Extract with a polygon could fail in some circumstances.
+- Compile problem on Windows due to our use of `GetObject()` function from
+  RapidJSON.
 
 ## [1.15.0] - 2023-01-19
 
