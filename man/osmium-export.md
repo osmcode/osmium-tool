@@ -103,8 +103,11 @@ files created with JOSM).
     case the ID is a string, the first character is the type of object ('n'
     for nodes, 'w' for linestrings created from ways, and 'a' for areas
     created from ways and/or relations, after that there is a unique ID based
-    on the original OSM object ID(s). If the input file has negative IDs, this
-    can create IDs such as 'w-12'.
+    on the original OSM object ID(s). For nodes and ways the numeric part of
+    the ID is identical to the original node or way ID. For areas, the ID
+    is calculated from the original ID, for ways it is twice the original ID,
+    for relations it is twice the original ID plus one.
+    If the input file has negative IDs, this can create IDs such as 'w-12'.
     In spaten exports the ID is written into the @fid field. For *counter* the
     value will be an integer, for *type_id* it will be a string.
 
