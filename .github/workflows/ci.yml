@@ -132,7 +132,7 @@ jobs:
               make \
               pandoc \
               zlib-devel
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
@@ -152,7 +152,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -yq clang-15
         shell: bash
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/install-ubuntu
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
@@ -178,7 +178,7 @@ jobs:
       BUILD_TYPE: ${{ matrix.build_type }}
     steps:
       - run: brew install boost
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
@@ -204,7 +204,7 @@ jobs:
             lz4:x64-windows \
             zlib:x64-windows
         shell: bash
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake-windows
       - uses: ./.github/actions/build-windows
