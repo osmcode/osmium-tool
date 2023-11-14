@@ -132,7 +132,7 @@ jobs:
               make \
               pandoc \
               zlib-devel
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3 # v4 does not work with Ubuntu 18.04
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
       - uses: ./.github/actions/build
