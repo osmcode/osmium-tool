@@ -9,6 +9,7 @@ runs:
         sudo apt-get install -yq \
              libboost-dev \
              libboost-program-options-dev \
+             libbz2-dev \
              liblz4-dev \
              pandoc
       shell: bash
