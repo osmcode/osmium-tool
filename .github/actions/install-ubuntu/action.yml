@@ -11,6 +11,7 @@ runs:
              libboost-program-options-dev \
              libbz2-dev \
              liblz4-dev \
+             nlohmann-json3-dev \
              pandoc
       shell: bash
 

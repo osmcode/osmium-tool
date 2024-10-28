@@ -31,6 +31,10 @@ You also need the following libraries:
         http://rapidjson.org/
         Debian/Ubuntu: rapidjson-dev
 
+    NLohmann JSON (>= 3.0)
+        https://json.nlohmann.me/
+        Debian/Ubuntu: nlohmann-json3-dev
+
     boost-program-options (>= 1.55)
         https://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
         Debian/Ubuntu: libboost-program-options-dev

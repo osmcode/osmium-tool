@@ -41,8 +41,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include <rapidjson/prettywriter.h>
-#include <rapidjson/stringbuffer.h>
+#include <nlohmann/json.hpp>
 
 #include <boost/program_options.hpp>
 
@@ -321,191 +320,121 @@ public:
 
 class JSONOutput : public Output {
 
-    using writer_type = rapidjson::PrettyWriter<rapidjson::StringBuffer>;
-
-    rapidjson::StringBuffer m_stream;
-    writer_type m_writer;
+    nlohmann::ordered_json m_json;
 
 public:
 
-    JSONOutput() :
-        m_writer(m_stream) {
-        m_writer.StartObject();
-    }
-
     void file(const std::string& input_filename, const osmium::io::File& input_file) final {
-        m_writer.String("file");
-        m_writer.StartObject();
-
-        m_writer.String("name");
-        m_writer.String(input_filename.c_str());
-
-        m_writer.String("format");
-        m_writer.String(osmium::io::as_string(input_file.format()));
-
-        m_writer.String("compression");
-        m_writer.String(osmium::io::as_string(input_file.compression()));
+        m_json["file"] = {
+            {"name", input_filename},
+            {"format", osmium::io::as_string(input_file.format())},
+            {"compression", osmium::io::as_string(input_file.compression())}
+        };
 
         if (!input_file.filename().empty()) {
-            m_writer.String("size");
-            m_writer.Int64(static_cast<int64_t>(file_size(input_file)));
+            m_json["file"]["size"] = static_cast<int64_t>(file_size(input_file));
         }
-
-        m_writer.EndObject();
-    }
-
-    void add_bbox(const osmium::Box& box) {
-        m_writer.StartArray();
-        m_writer.Double(box.bottom_left().lon());
-        m_writer.Double(box.bottom_left().lat());
-        m_writer.Double(box.top_right().lon());
-        m_writer.Double(box.top_right().lat());
-        m_writer.EndArray();
     }
 
     void header(const osmium::io::Header& header) final {
-        m_writer.String("header");
-        m_writer.StartObject();
-
-        m_writer.String("boxes");
-        m_writer.StartArray();
+        std::vector<std::vector<double>> boxes;
         for (const auto& box : header.boxes()) {
-            add_bbox(box);
+            boxes.emplace_back(std::vector<double>{
+                box.bottom_left().lon(),
+                box.bottom_left().lat(),
+                box.top_right().lon(),
+                box.top_right().lat()
+            });
         }
-        m_writer.EndArray();
 
-        m_writer.String("with_history");
-        m_writer.Bool(header.has_multiple_object_versions());
-
-        m_writer.String("option");
-        m_writer.StartObject();
+        nlohmann::ordered_json json_options;
         for (const auto& option : header) {
-            m_writer.String(option.first.c_str());
-            m_writer.String(option.second.c_str());
+            json_options[option.first] = option.second;
         }
-        m_writer.EndObject();
 
-        m_writer.EndObject();
+        m_json["header"] = {
+            {"boxes", boxes},
+            {"with_history", header.has_multiple_object_versions()},
+            {"option", json_options}
+        };
     }
 
     void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) final {
-        m_writer.String("data");
-        m_writer.StartObject();
-
-        m_writer.String("bbox");
-        add_bbox(info_handler.bounds);
+        nlohmann::ordered_json json_data = {
+            {"bbox", { info_handler.bounds.bottom_left().lon(),
+                       info_handler.bounds.bottom_left().lat(),
+                       info_handler.bounds.top_right().lon(),
+                       info_handler.bounds.top_right().lat() }}
+        };
 
         if (info_handler.first_timestamp() != osmium::end_of_time()) {
-            m_writer.String("timestamp");
-            m_writer.StartObject();
-
-            m_writer.String("first");
-            std::string s = info_handler.first_timestamp().to_iso();
-            m_writer.String(s.c_str());
-            m_writer.String("last");
-            s = info_handler.last_timestamp().to_iso();
-            m_writer.String(s.c_str());
-
-            m_writer.EndObject();
+            json_data["timestamp"] = {
+                {"first", info_handler.first_timestamp().to_iso()},
+                {"last", info_handler.last_timestamp().to_iso()}
+            };
         }
 
-        m_writer.String("objects_ordered");
-        m_writer.Bool(info_handler.ordered);
+        json_data["objects_ordered"] = info_handler.ordered;
 
         if (info_handler.ordered) {
-            m_writer.String("multiple_versions");
-            m_writer.Bool(info_handler.multiple_versions);
+            json_data["multiple_versions"] = info_handler.multiple_versions;
         }
 
         if (calculate_crc()) {
-            m_writer.String("crc32");
             std::stringstream ss;
             ss << std::hex << info_handler.crc32().checksum() << std::dec;
-            m_writer.String(ss.str().c_str());
+            json_data["crc32"] = ss.str().c_str();
         }
 
-        m_writer.String("count");
-        m_writer.StartObject();
-        m_writer.String("changesets");
-        m_writer.Int64(static_cast<int64_t>(info_handler.changesets));
-        m_writer.String("nodes");
-        m_writer.Int64(static_cast<int64_t>(info_handler.nodes));
-        m_writer.String("ways");
-        m_writer.Int64(static_cast<int64_t>(info_handler.ways));
-        m_writer.String("relations");
-        m_writer.Int64(static_cast<int64_t>(info_handler.relations));
-        m_writer.EndObject();
+        json_data["count"] = {
+            {"changesets", info_handler.changesets},
+            {"nodes", info_handler.nodes},
+            {"ways", info_handler.ways},
+            {"relations", info_handler.relations}
+        };
 
-        m_writer.String("minid");
-        m_writer.StartObject();
-        m_writer.String("changesets");
-        m_writer.Int64(get_smallest(info_handler.smallest_changeset_id()));
-        m_writer.String("nodes");
-        m_writer.Int64(get_smallest(info_handler.smallest_node_id()));
-        m_writer.String("ways");
-        m_writer.Int64(get_smallest(info_handler.smallest_way_id()));
-        m_writer.String("relations");
-        m_writer.Int64(get_smallest(info_handler.smallest_relation_id()));
-        m_writer.EndObject();
+        json_data["minid"] = {
+            {"changesets", static_cast<int64_t>(get_smallest(info_handler.smallest_changeset_id()))},
+            {"nodes", static_cast<int64_t>(get_smallest(info_handler.smallest_node_id()))},
+            {"ways", static_cast<int64_t>(get_smallest(info_handler.smallest_way_id()))},
+            {"relations", static_cast<int64_t>(get_smallest(info_handler.smallest_relation_id()))}
+        };
 
-        m_writer.String("maxid");
-        m_writer.StartObject();
-        m_writer.String("changesets");
-        m_writer.Int64(get_largest(info_handler.largest_changeset_id()));
-        m_writer.String("nodes");
-        m_writer.Int64(get_largest(info_handler.largest_node_id()));
-        m_writer.String("ways");
-        m_writer.Int64(get_largest(info_handler.largest_way_id()));
-        m_writer.String("relations");
-        m_writer.Int64(get_largest(info_handler.largest_relation_id()));
-        m_writer.EndObject();
+        json_data["maxid"] = {
+            {"changesets", static_cast<int64_t>(get_largest(info_handler.largest_changeset_id()))},
+            {"nodes", static_cast<int64_t>(get_largest(info_handler.largest_node_id()))},
+            {"ways", static_cast<int64_t>(get_largest(info_handler.largest_way_id()))},
+            {"relations", static_cast<int64_t>(get_largest(info_handler.largest_relation_id()))}
+        };
 
-        m_writer.String("buffers");
-        m_writer.StartObject();
-        m_writer.String("count");
-        m_writer.Int64(get_largest(static_cast<int64_t>(info_handler.buffers_count)));
-        m_writer.String("size");
-        m_writer.Int64(get_largest(static_cast<int64_t>(info_handler.buffers_size)));
-        m_writer.String("capacity");
-        m_writer.Int64(get_largest(static_cast<int64_t>(info_handler.buffers_capacity)));
-        m_writer.EndObject();
+        json_data["buffers"] = {
+            {"count", get_largest(static_cast<int64_t>(info_handler.buffers_count))},
+            {"size", get_largest(static_cast<int64_t>(info_handler.buffers_size))},
+            {"capacity", get_largest(static_cast<int64_t>(info_handler.buffers_capacity))}
+        };
 
-        m_writer.String("metadata");
-        m_writer.StartObject();
-        m_writer.String("all_objects");
-        m_writer.StartObject();
-        m_writer.String("version");
-        m_writer.Bool(info_handler.metadata_all_objects.version());
-        m_writer.String("timestamp");
-        m_writer.Bool(info_handler.metadata_all_objects.timestamp());
-        m_writer.String("changeset");
-        m_writer.Bool(info_handler.metadata_all_objects.changeset());
-        m_writer.String("user");
-        m_writer.Bool(info_handler.metadata_all_objects.user());
-        m_writer.String("uid");
-        m_writer.Bool(info_handler.metadata_all_objects.uid());
-        m_writer.EndObject();
-        m_writer.String("some_objects");
-        m_writer.StartObject();
-        m_writer.String("version");
-        m_writer.Bool(info_handler.metadata_some_objects.version());
-        m_writer.String("timestamp");
-        m_writer.Bool(info_handler.metadata_some_objects.timestamp());
-        m_writer.String("changeset");
-        m_writer.Bool(info_handler.metadata_some_objects.changeset());
-        m_writer.String("user");
-        m_writer.Bool(info_handler.metadata_some_objects.user());
-        m_writer.String("uid");
-        m_writer.Bool(info_handler.metadata_some_objects.uid());
-        m_writer.EndObject();
-        m_writer.EndObject();
+        json_data["metadata"] = {
+            {"all_objects", {
+                {"version", info_handler.metadata_all_objects.version()},
+                {"timestamp", info_handler.metadata_all_objects.timestamp()},
+                {"changeset", info_handler.metadata_all_objects.changeset()},
+                {"user", info_handler.metadata_all_objects.user()},
+                {"uid", info_handler.metadata_all_objects.uid()}}
+            },
+            {"some_objects", {
+                {"version", info_handler.metadata_some_objects.version()},
+                {"timestamp", info_handler.metadata_some_objects.timestamp()},
+                {"changeset", info_handler.metadata_some_objects.changeset()},
+                {"user", info_handler.metadata_some_objects.user()},
+                {"uid", info_handler.metadata_some_objects.uid()}}
+            }
+        };
 
-        m_writer.EndObject();
+        m_json["data"] = json_data;
     }
 
     void output() final {
-        m_writer.EndObject();
-        std::cout << m_stream.GetString() << "\n";
+        std::cout << std::setw(4) << m_json << "\n";
     }
 
 }; // class JSONOutput

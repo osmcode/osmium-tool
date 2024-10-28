@@ -46,6 +46,8 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 find_package(Osmium 2.17.0 REQUIRED COMPONENTS io)
 include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
 
+find_path(NLOHMANN_INCLUDE_DIR nlohmann/json.hpp)
+include_directories(SYSTEM ${NLOHMANN_INCLUDE_DIR})
 
 if(WITH_LZ4)
     find_package(LZ4)

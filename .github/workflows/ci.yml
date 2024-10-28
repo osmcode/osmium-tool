@@ -113,6 +113,7 @@ jobs:
             libexpat1-dev \
             liblz4-dev \
             make \
+            nlohmann-json3-dev \
             pandoc \
             zlib1g-dev
       - name: Install compiler
@@ -130,6 +131,7 @@ jobs:
               expat-devel \
               gcc-c++ \
               git \
+              json-devel \
               lz4-devel \
               make \
               pandoc \
@@ -172,7 +174,7 @@ jobs:
       CXX: clang++
       BUILD_TYPE: ${{ matrix.build_type }}
     steps:
-      - run: brew install boost
+      - run: brew install boost nlohmann-json
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
@@ -197,6 +199,7 @@ jobs:
             bzip2:x64-windows \
             expat:x64-windows \
             lz4:x64-windows \
+            nlohmann-json:x64-windows \
             zlib:x64-windows
         shell: bash
       - uses: actions/checkout@v4
