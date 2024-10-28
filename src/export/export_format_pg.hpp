@@ -54,7 +54,7 @@ class ExportFormatPg : public ExportFormat {
     bool add_tags_hstore(const osmium::OSMObject& object);
     bool add_tags(const osmium::OSMObject& object);
     void finish_feature(const osmium::OSMObject& object);
-    void append_pg_escaped(const char* str, std::size_t size);
+    void append_pg_escaped(const char* str);
 
 public:
 

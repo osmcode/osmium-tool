@@ -28,11 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/io/detail/string_util.hpp>
 
-#ifndef RAPIDJSON_HAS_STDSTRING
-# define RAPIDJSON_HAS_STDSTRING 1
-#endif
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
+#include <nlohmann/json.hpp>
 
 #include <limits>
 #include <string>
@@ -83,8 +79,8 @@ void ExportFormatPg::start_feature(const char type, const osmium::object_id_type
     }
 }
 
-void ExportFormatPg::append_pg_escaped(const char* str, std::size_t size = std::numeric_limits<std::size_t>::max()) {
-    while (size-- > 0 && *str != '\0') {
+void ExportFormatPg::append_pg_escaped(const char* str) {
+    while (*str != '\0') {
         switch (*str) {
             case '\\':
                 m_buffer += '\\';
@@ -166,22 +162,29 @@ void ExportFormatPg::add_attributes(const osmium::OSMObject& object) {
 }
 
 bool ExportFormatPg::add_tags_json(const osmium::OSMObject& object) {
-    bool has_tags = false;
+    std::string target{"{"};
+    nlohmann::json j;
 
-    rapidjson::StringBuffer stream;
-    rapidjson::Writer<rapidjson::StringBuffer> writer{stream};
-
-    writer.StartObject();
     for (const auto& tag : object.tags()) {
         if (options().tags_filter(tag)) {
-            has_tags = true;
-            writer.Key(tag.key());
-            writer.String(tag.value());
+            j = tag.key();
+            target += j.dump();
+            target += ':';
+            j = tag.value();
+            target += j.dump();
+            target += ',';
         }
     }
-    writer.EndObject();
 
-    append_pg_escaped(stream.GetString(), stream.GetSize());
+    bool const has_tags = target.size() > 1;
+
+    if (has_tags) {
+        target.back() = '}';
+    } else {
+        target += '}';
+    }
+
+    append_pg_escaped(target.c_str());
 
     return has_tags;
 }
