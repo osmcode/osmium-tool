@@ -31,7 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/index/map/all.hpp>
 #include <osmium/io/writer_options.hpp>
 
-#include <rapidjson/document.h>
+#include <nlohmann/json.hpp>
 
 #include <string>
 #include <vector>
@@ -63,8 +63,8 @@ class CommandExport : public CommandWithSingleOSMInput {
     bool m_stop_on_error = false;
 
     void canonicalize_output_format();
-    void parse_attributes(const rapidjson::Value& attributes);
-    void parse_format_options(const rapidjson::Value& options);
+    void parse_attributes(const nlohmann::json& attributes);
+    void parse_format_options(const nlohmann::json& options);
     void parse_config_file();
 
 public:

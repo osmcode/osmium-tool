@@ -43,10 +43,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/istreamwrapper.h>
-
 #include <boost/program_options.hpp>
 
 #include <cctype>
@@ -57,27 +53,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-static std::string get_attr_string(const rapidjson::Value& object, const char* key) {
-    const auto it = object.FindMember(key);
-    if (it == object.MemberEnd()) {
-        return "";
+static std::string get_attr_string(const nlohmann::json& object, const char* key) {
+    const auto it = object.find(key);
+    if (it == object.end()) {
+        return {};
     }
 
-    if (it->value.IsString()) {
-        return it->value.GetString();
+    if (it->is_string()) {
+        return it->template get<std::string>();
     }
 
-    if (it->value.IsBool()) {
-        if (it->value.GetBool()) {
-            return std::string{"@"} + key;
-        }
+    if (it->is_boolean() && it->template get<bool>()) {
+        return std::string{"@"} + key;
     }
 
-    return "";
+    return {};
 }
 
-void CommandExport::parse_attributes(const rapidjson::Value& attributes) {
-    if (!attributes.IsObject()) {
+void CommandExport::parse_attributes(const nlohmann::json& attributes) {
+    if (!attributes.is_object()) {
         throw config_error{"'attributes' member must be an object."};
     }
 
@@ -91,64 +85,68 @@ void CommandExport::parse_attributes(const rapidjson::Value& attributes) {
     m_options.way_nodes = get_attr_string(attributes, "way_nodes");
 }
 
-void CommandExport::parse_format_options(const rapidjson::Value& options) {
-    if (!options.IsObject()) {
+void CommandExport::parse_format_options(const nlohmann::json& options) {
+    if (!options.is_object()) {
         throw config_error{"'format_options' member must be an object."};
     }
-    for (auto it = options.MemberBegin(); it != options.MemberEnd(); it++) {
-        const auto type = it->value.GetType();
-        const char* key = it->name.GetString();
+    for (const auto &item : options.items()) {
+        const auto type = item.value().type();
+        const auto &key = item.key();
         switch (type) {
-            case rapidjson::kNullType:
+            case nlohmann::json::value_t::null:
                 m_options.format_options.set(key, false);
                 break;
-            case rapidjson::kTrueType:
-                m_options.format_options.set(key, true);
+            case nlohmann::json::value_t::boolean:
+                m_options.format_options.set(key, item.value().template get<bool>());
                 break;
-            case rapidjson::kFalseType:
-                m_options.format_options.set(key, false);
-                break;
-            case rapidjson::kObjectType:
+            case nlohmann::json::value_t::object:
                 throw config_error{"Option value for key '" + std::string(key) + "' can not be of type object."};
-            case rapidjson::kArrayType:
+            case nlohmann::json::value_t::array:
                 throw config_error{"Option value for key '" + std::string(key) + "' can not be an array."};
                 break;
-            case rapidjson::kStringType:
-                m_options.format_options.set(key, it->value.GetString());
+            case nlohmann::json::value_t::string:
+                m_options.format_options.set(key, item.value().template get<std::string>());
                 break;
-            case rapidjson::kNumberType:
-                m_options.format_options.set(key, std::to_string(it->value.GetInt64()));
+            case nlohmann::json::value_t::number_integer:
+                m_options.format_options.set(key, std::to_string(item.value().template get<int64_t>()));
                 break;
+            case nlohmann::json::value_t::number_unsigned:
+                m_options.format_options.set(key, std::to_string(item.value().template get<uint64_t>()));
+                break;
+            case nlohmann::json::value_t::number_float:
+                m_options.format_options.set(key, std::to_string(item.value().template get<double>()));
+                break;
+            default:
+                throw config_error{"Unknown type"};
         }
     }
 }
 
-static Ruleset parse_tags_ruleset(const rapidjson::Value& object, const char* key) {
+static Ruleset parse_tags_ruleset(const nlohmann::json& object, const char* key) {
     Ruleset ruleset;
 
-    const auto json = object.FindMember(key);
-    if (json == object.MemberEnd() || json->value.IsNull()) {
+    const auto json = object.find(key);
+    if (json == object.end() || json->is_null()) {
         // When this is not set, the default is "other". This is later
         // changed to "any" if both linear_tags and area_tags are missing.
         ruleset.set_rule_type(tags_filter_rule_type::other);
         return ruleset;
     }
 
-    if (json->value.IsFalse()) {
-        ruleset.set_rule_type(tags_filter_rule_type::none);
+    if (json->is_boolean()) {
+        if (json->template get<bool>()) {
+            ruleset.set_rule_type(tags_filter_rule_type::any);
+        } else {
+            ruleset.set_rule_type(tags_filter_rule_type::none);
+        }
         return ruleset;
     }
 
-    if (json->value.IsTrue()) {
-        ruleset.set_rule_type(tags_filter_rule_type::any);
-        return ruleset;
-    }
-
-    if (!json->value.IsArray()) {
+    if (!json->is_array()) {
         throw config_error{std::string{"'"} + key + "' member in top-level object must be false, true, null, or an array."};
     }
 
-    if (json->value.GetArray().Empty()) {
+    if (json->empty()) {
         std::cerr << "Warning! An empty array for 'linear_tags' or 'area_tags' matches any tags.\n"
                   << "         Please use 'true' instead of the array.\n";
         ruleset.set_rule_type(tags_filter_rule_type::any);
@@ -157,36 +155,38 @@ static Ruleset parse_tags_ruleset(const rapidjson::Value& object, const char* ke
 
     ruleset.set_rule_type(tags_filter_rule_type::list);
 
-    for (const auto& value : json->value.GetArray()) {
-        if (!value.IsString()) {
+    for (const auto& value : *json) {
+        if (!value.is_string()) {
             throw config_error{std::string{"Array elements in '"} + key + "' must be strings."};
         }
 
-        if (value.GetString()[0] != '\0') {
-            ruleset.add_rule(value.GetString());
+        const auto str = value.template get<std::string>();
+        if (!str.empty()) {
+            ruleset.add_rule(str);
         }
     }
 
     return ruleset;
 }
 
-static bool parse_string_array(const rapidjson::Value& object, const char* key, std::vector<std::string>* result) {
-    const auto json = object.FindMember(key);
-    if (json == object.MemberEnd()) {
+static bool parse_string_array(const nlohmann::json& object, const char* key, std::vector<std::string>* result) {
+    const auto json = object.find(key);
+    if (json == object.end()) {
         return false;
     }
 
-    if (!json->value.IsArray()) {
+    if (!json->is_array()) {
         throw config_error{std::string{"'"} + key + "' member in top-level object must be array."};
     }
 
-    for (const auto& value : json->value.GetArray()) {
-        if (!value.IsString()) {
+    for (const auto& value : *json) {
+        if (!value.is_string()) {
             throw config_error{std::string{"Array elements in '"} + key + "' must be strings."};
         }
 
-        if (value.GetString()[0] != '\0') {
-            result->emplace_back(value.GetString());
+        const auto str = value.template get<std::string>();
+        if (!str.empty()) {
+            result->emplace_back(str);
         }
     }
 
@@ -195,29 +195,20 @@ static bool parse_string_array(const rapidjson::Value& object, const char* key, 
 
 void CommandExport::parse_config_file() {
     std::ifstream config_file{m_config_file_name};
-    rapidjson::IStreamWrapper stream_wrapper{config_file};
+    nlohmann::json doc = nlohmann::json::parse(config_file);
 
-    rapidjson::Document doc;
-    if (doc.ParseStream<(rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag)>(stream_wrapper).HasParseError()) {
-        throw config_error{std::string{"JSON error at offset "} +
-                           std::to_string(doc.GetErrorOffset()) +
-                           ": " +
-                           rapidjson::GetParseError_En(doc.GetParseError())
-                          };
-    }
-
-    if (!doc.IsObject()) {
+    if (!doc.is_object()) {
         throw config_error{"Top-level value must be an object."};
     }
 
-    const auto json_attr = doc.FindMember("attributes");
-    if (json_attr != doc.MemberEnd()) {
-        parse_attributes(json_attr->value);
+    const auto json_attr = doc.find("attributes");
+    if (json_attr != doc.end()) {
+        parse_attributes(*json_attr);
     }
 
-    const auto json_opts = doc.FindMember("format_options");
-    if (json_opts != doc.MemberEnd()) {
-        parse_format_options(json_opts->value);
+    const auto json_opts = doc.find("format_options");
+    if (json_opts != doc.end()) {
+        parse_format_options(*json_opts);
     }
 
     m_linear_ruleset = parse_tags_ruleset(doc, "linear_tags");
@@ -373,6 +364,10 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
 
         try {
             parse_config_file();
+        } catch (const nlohmann::json::parse_error& e) {
+            std::cerr << "Error while reading config file '" << m_config_file_name << "':\n";
+            throw config_error{std::string{"JSON error at offset "} +
+                               std::to_string(e.byte) + ": " + e.what()};
         } catch (const config_error&) {
             std::cerr << "Error while reading config file '" << m_config_file_name << "':\n";
             throw;
