@@ -46,9 +46,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/string.hpp>
 #include <osmium/util/verbose_output.hpp>
 
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/istreamwrapper.h>
+#include <nlohmann/json.hpp>
 
 #include <boost/program_options.hpp>
 
@@ -74,20 +72,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 static constexpr const std::size_t max_extracts = 500;
 
-static osmium::Box parse_bbox(const rapidjson::Value& value) {
-    if (value.IsArray()) {
-        if (value.Size() != 4) {
+static osmium::Box parse_bbox(const nlohmann::json& value) {
+    if (value.is_array()) {
+        if (value.size() != 4) {
             throw config_error{"'bbox' must be an array with exactly four elements."};
         }
 
-        if (!value[0].IsNumber() || !value[1].IsNumber() || !value[2].IsNumber() || !value[3].IsNumber()) {
+        if (!value[0].is_number() || !value[1].is_number() || !value[2].is_number() || !value[3].is_number()) {
             throw config_error{"'bbox' array elements must be numbers."};
         }
 
-        const auto value0 = value[0].GetDouble();
-        const auto value1 = value[1].GetDouble();
-        const auto value2 = value[2].GetDouble();
-        const auto value3 = value[3].GetDouble();
+        const auto value0 = value[0].template get<double>();
+        const auto value1 = value[1].template get<double>();
+        const auto value2 = value[2].template get<double>();
+        const auto value3 = value[3].template get<double>();
 
         if (value0 < -180.0 || value0 > 180.0) {
             throw config_error{"Invalid coordinate in bbox: " + std::to_string(value0) + "."};
@@ -115,21 +113,21 @@ static osmium::Box parse_bbox(const rapidjson::Value& value) {
         return box;
     }
 
-    if (value.IsObject()) {
-        const auto left   = value.FindMember("left");
-        const auto right  = value.FindMember("right");
-        const auto top    = value.FindMember("top");
-        const auto bottom = value.FindMember("bottom");
+    if (value.is_object()) {
+        const auto left   = value.find("left");
+        const auto right  = value.find("right");
+        const auto top    = value.find("top");
+        const auto bottom = value.find("bottom");
 
-        if (left != value.MemberEnd() && right  != value.MemberEnd() &&
-            top  != value.MemberEnd() && bottom != value.MemberEnd()) {
-            if (left->value.IsNumber() && right->value.IsNumber() &&
-                top->value.IsNumber()  && bottom->value.IsNumber()) {
+        if (left != value.end() && right  != value.end() &&
+            top  != value.end() && bottom != value.end()) {
+            if (left->is_number() && right->is_number() &&
+                top->is_number()  && bottom->is_number()) {
 
-                const auto left_value = left->value.GetDouble();
-                const auto bottom_value = bottom->value.GetDouble();
-                const auto right_value = right->value.GetDouble();
-                const auto top_value = top->value.GetDouble();
+                const auto left_value   = left->template get<double>();
+                const auto right_value  = right->template get<double>();
+                const auto top_value    = top->template get<double>();
+                const auto bottom_value = bottom->template get<double>();
 
                 if (left_value < -180.0 || left_value > 180.0) {
                     throw config_error{"Invalid coordinate in bbox: " + std::to_string(left_value) + "."};
@@ -242,7 +240,7 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
     throw config_error{std::string{"Unknown file type: '"} + file_type + "' in '(multi)polygon.file_type'"};
 }
 
-static std::size_t parse_multipolygon_object(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
+static std::size_t parse_multipolygon_object(const std::string& directory, const nlohmann::json& value, osmium::memory::Buffer* buffer) {
     assert(buffer);
 
     const std::string file_name{get_value_as_string(value, "file_name")};
@@ -250,28 +248,28 @@ static std::size_t parse_multipolygon_object(const std::string& directory, const
     return parse_multipolygon_object(directory, file_name, file_type, buffer);
 }
 
-static std::size_t parse_polygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
+static std::size_t parse_polygon(const std::string& directory, const nlohmann::json& value, osmium::memory::Buffer* buffer) {
     assert(buffer);
 
-    if (value.IsArray()) {
+    if (value.is_array()) {
         return parse_polygon_array(value, buffer);
     }
 
-    if (value.IsObject()) {
+    if (value.is_object()) {
         return parse_multipolygon_object(directory, value, buffer);
     }
 
     throw config_error{"Polygon must be an object or array."};
 }
 
-std::size_t parse_multipolygon(const std::string& directory, const rapidjson::Value& value, osmium::memory::Buffer* buffer) {
+std::size_t parse_multipolygon(const std::string& directory, const nlohmann::json& value, osmium::memory::Buffer* buffer) {
     assert(buffer);
 
-    if (value.IsArray()) {
+    if (value.is_array()) {
         return parse_multipolygon_array(value, buffer);
     }
 
-    if (value.IsObject()) {
+    if (value.is_object()) {
         return parse_multipolygon_object(directory, value, buffer);
     }
 
@@ -309,18 +307,9 @@ void CommandExtract::set_directory(const std::string& directory) {
 
 void CommandExtract::parse_config_file() {
     std::ifstream config_file{m_config_file_name};
-    rapidjson::IStreamWrapper stream_wrapper{config_file};
+    nlohmann::json doc = nlohmann::json::parse(config_file);
 
-    rapidjson::Document doc;
-    if (doc.ParseStream<(rapidjson::kParseCommentsFlag | rapidjson::kParseTrailingCommasFlag)>(stream_wrapper).HasParseError()) {
-        throw config_error{std::string{"JSON error at offset "} +
-                           std::to_string(doc.GetErrorOffset()) +
-                           ": " +
-                           rapidjson::GetParseError_En(doc.GetParseError())
-                          };
-    }
-
-    if (!doc.IsObject()) {
+    if (!doc.is_object()) {
         throw config_error{"Top-level value must be an object."};
     }
 
@@ -330,21 +319,21 @@ void CommandExtract::parse_config_file() {
         set_directory(directory);
     }
 
-    const auto json_extracts = doc.FindMember("extracts");
-    if (json_extracts == doc.MemberEnd()) {
+    const auto json_extracts = doc.find("extracts");
+    if (json_extracts == doc.end()) {
         throw config_error{"Missing 'extracts' member in top-level object."};
     }
 
-    if (!json_extracts->value.IsArray()) {
+    if (!json_extracts->is_array()) {
         throw config_error{"'extracts' member in top-level object must be array."};
     }
 
     m_vout << "  Reading extracts from config file...\n";
     int extract_num = 1;
-    for (const auto& item : json_extracts->value.GetArray()) {
+    for (const auto& item : *json_extracts) {
         std::string output;
         try {
-            if (!item.IsObject()) {
+            if (!item.is_object()) {
                 throw config_error{"Members in 'extracts' array must be objects."};
             }
 
@@ -358,9 +347,9 @@ void CommandExtract::parse_config_file() {
             const std::string output_format{get_value_as_string(item, "output_format")};
             const std::string description{get_value_as_string(item, "description")};
 
-            const auto json_bbox         = item.FindMember("bbox");
-            const auto json_polygon      = item.FindMember("polygon");
-            const auto json_multipolygon = item.FindMember("multipolygon");
+            const auto json_bbox         = item.find("bbox");
+            const auto json_polygon      = item.find("polygon");
+            const auto json_multipolygon = item.find("multipolygon");
 
             osmium::io::File output_file{m_output_directory + output, output_format};
             if (m_with_history) {
@@ -369,32 +358,30 @@ void CommandExtract::parse_config_file() {
                 throw config_error{"Looks like you are trying to write a history file, but option --with-history is not set."};
             }
 
-            if (json_bbox != item.MemberEnd()) {
-                m_extracts.push_back(std::make_unique<ExtractBBox>(output_file, description, parse_bbox(json_bbox->value)));
-            } else if (json_polygon != item.MemberEnd()) {
-                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_polygon(m_config_directory, json_polygon->value, &m_buffer)));
-            } else if (json_multipolygon != item.MemberEnd()) {
-                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_multipolygon(m_config_directory, json_multipolygon->value, &m_buffer)));
+            if (json_bbox != item.end()) {
+                m_extracts.push_back(std::make_unique<ExtractBBox>(output_file, description, parse_bbox(*json_bbox)));
+            } else if (json_polygon != item.end()) {
+                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_polygon(m_config_directory, *json_polygon, &m_buffer)));
+            } else if (json_multipolygon != item.end()) {
+                m_extracts.push_back(std::make_unique<ExtractPolygon>(output_file, description, m_buffer, parse_multipolygon(m_config_directory, *json_multipolygon, &m_buffer)));
             } else {
                 throw config_error{"Missing geometry for extract. Need 'bbox', 'polygon', or 'multipolygon'."};
             }
 
-            const auto json_output_header = item.FindMember("output_header");
-            if (json_output_header != item.MemberEnd()) {
-                const auto& value = json_output_header->value;
-                if (!value.IsObject()) {
+            const auto json_output_header = item.find("output_header");
+            if (json_output_header != item.end()) {
+                if (!json_output_header->is_object()) {
                     throw config_error{"Optional 'output_header' field must be an object."};
                 }
                 Extract& extract = *m_extracts.back();
-                for (auto it = value.MemberBegin(); it != value.MemberEnd(); ++it) {
-                    const auto& member_value = it->value;
-                    if (member_value.IsNull()) {
-                        extract.add_header_option(it->name.GetString());
+                for (auto const& header_item : json_output_header->items()) {
+                    if (header_item.value().is_null()) {
+                        extract.add_header_option(header_item.key());
                     } else {
-                        if (!member_value.IsString()) {
+                        if (!header_item.value().is_string()) {
                             throw config_error{"Values in 'output_header' object must be strings or null."};
                         }
-                        extract.add_header_option(it->name.GetString(), member_value.GetString());
+                        extract.add_header_option(header_item.key(), header_item.value().template get<std::string>());
                     }
                 }
             }
@@ -614,6 +601,10 @@ bool CommandExtract::run() {
         m_vout << "Reading config file...\n";
         try {
             parse_config_file();
+        } catch (const nlohmann::json::parse_error &e) {
+            throw geojson_error{std::string{"In file '"} + m_config_file_name +
+                  "':\nJSON error at offset " + std::to_string(e.byte) +
+                  " : " + e.what()};
         } catch (const config_error&) {
             std::cerr << "Error while reading config file '" << m_config_file_name << "':\n";
             throw;
