@@ -26,18 +26,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "export_format.hpp"
 
 #include <osmium/fwd.hpp>
-#include <osmium/geom/rapid_geojson.hpp>
 #include <osmium/io/writer_options.hpp>
 
-#ifndef RAPIDJSON_HAS_STDSTRING
-# define RAPIDJSON_HAS_STDSTRING 1
-#endif
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
+#include <nlohmann/json.hpp>
 
 #include <string>
-
-using writer_type = rapidjson::Writer<rapidjson::StringBuffer>;
 
 class ExportFormatJSON : public ExportFormat {
 
@@ -45,18 +38,25 @@ class ExportFormatJSON : public ExportFormat {
     osmium::io::fsync m_fsync;
     bool m_text_sequence_format;
     bool m_with_record_separator;
-    rapidjson::StringBuffer m_stream;
+    std::string m_buffer;
     std::size_t m_committed_size = 0;
-    writer_type m_writer;
-    osmium::geom::RapidGeoJSONFactory<writer_type> m_factory;
 
     void flush_to_output();
 
     void rollback_uncomitted();
 
+    void add_option(const std::string& name);
+
     void start_feature(const std::string& prefix, osmium::object_id_type id);
     void add_attributes(const osmium::OSMObject& object);
     void finish_feature(const osmium::OSMObject& object);
+
+    void create_coordinate(const osmium::Location& location);
+    void create_coordinate_list(const osmium::NodeRefList& nrl);
+
+    void create_point(const osmium::Node& node);
+    void create_linestring(const osmium::Way& way);
+    void create_multipolygon(const osmium::Area& area);
 
 public:
 
