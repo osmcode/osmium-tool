@@ -73,15 +73,14 @@ if(cmd2)
     endif()
 endif()
 
-set(compare "${CMAKE_COMMAND} -E compare_files ${reference} ${output}")
+set(compare "${CMAKE_COMMAND};-E;compare_files;${reference};${output}")
 message("Executing: ${compare}")
-separate_arguments(compare)
 execute_process(
     COMMAND ${compare}
     RESULT_VARIABLE result
 )
 
-if(result)
-    message(SEND_ERROR "Test output does not match '${reference}'. Output is in '${output}'.")
+if(result AND NOT result EQUAL 0)
+    message(SEND_ERROR "Test output does not match '${reference}'. Output is in '${output}'. Result: ${result}.")
 endif()
 
