@@ -12,6 +12,7 @@ if(NOT WIN32)
     endfunction()
 
     check_fileinfo(fi1-extended "--extended --crc" fi1.osm fi1-result.txt)
+    check_fileinfo(fi1-extended-json "--extended --crc --json" fi1.osm fi1-result.json)
 endif()
 
 #-----------------------------------------------------------------------------

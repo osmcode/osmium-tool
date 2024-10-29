@@ -1,0 +1,71 @@
+{
+    "file": {
+        "name": "fileinfo/fi1.osm",
+        "format": "XML",
+        "compression": "none",
+        "size": 630
+    },
+    "header": {
+        "boxes": [],
+        "with_history": false,
+        "option": {
+            "generator": "testdata",
+            "version": "0.6",
+            "xml_josm_upload": "false"
+        }
+    },
+    "data": {
+        "bbox": [
+            1.0,
+            1.0,
+            1.0,
+            3.0
+        ],
+        "timestamp": {
+            "first": "2015-01-01T01:00:00Z",
+            "last": "2015-01-01T04:00:00Z"
+        },
+        "objects_ordered": true,
+        "multiple_versions": false,
+        "crc32": "95828746",
+        "count": {
+            "changesets": 0,
+            "nodes": 3,
+            "ways": 2,
+            "relations": 0
+        },
+        "minid": {
+            "changesets": 0,
+            "nodes": 1,
+            "ways": -4,
+            "relations": 0
+        },
+        "maxid": {
+            "changesets": 0,
+            "nodes": 4,
+            "ways": -3,
+            "relations": 0
+        },
+        "buffers": {
+            "count": 1,
+            "size": 224,
+            "capacity": 1048576
+        },
+        "metadata": {
+            "all_objects": {
+                "version": true,
+                "timestamp": true,
+                "changeset": true,
+                "user": true,
+                "uid": true
+            },
+            "some_objects": {
+                "version": true,
+                "timestamp": true,
+                "changeset": true,
+                "user": true,
+                "uid": true
+            }
+        }
+    }
+}
