@@ -25,12 +25,6 @@ You also need the following libraries:
         Debian/Ubuntu: libprotozero-dev
         Fedora/CentOS: protozero-devel
 
-    RapidJSON (>= 1.1)
-        This is included in the osmium-tool repository, so you usually do
-        not need to install this.
-        http://rapidjson.org/
-        Debian/Ubuntu: rapidjson-dev
-
     NLohmann JSON (>= 3.0)
         https://json.nlohmann.me/
         Debian/Ubuntu: nlohmann-json3-dev
