@@ -64,7 +64,7 @@ check_export(c-tag-null    "-E -f text -c export/config-tag-null.json" way.osm w
 
 #-----------------------------------------------------------------------------
 
-check_export(ph-untagged     "-f pg     --keep-untagged" input.osm output-untagged.pg)
+check_export(pg-untagged     "-f pg     --keep-untagged" input.osm output-untagged.pg)
 check_export(spaten-untagged "-f spaten --keep-untagged" input.osm output-untagged.spaten)
 
 #-----------------------------------------------------------------------------
