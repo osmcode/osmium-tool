@@ -33,6 +33,11 @@ option(WITH_LZ4 "Build with lz4 support for PBF files" ON)
 
 option(BUILD_TESTING "Build the tests" ON)
 
+# Some tests compare with binary files which might be different on your
+# setup. Setting this to OFF disables those test.
+# See https://github.com/osmcode/osmium-tool/issues/274
+option(RUN_TESTS_WITH_BINARY_COMPARE "Run tests that do binary comparisons" ON)
+
 
 #-----------------------------------------------------------------------------
 #
