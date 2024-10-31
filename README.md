@@ -6,8 +6,7 @@ the Osmium library.
 
 Official web site: https://osmcode.org/osmium-tool/
 
-[![Github Build Status](https://github.com/osmcode/osmium-tool/workflows/CI/badge.svg?branch=master)](https://github.com/osmcode/osmium-tool/actions)
-[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/k9v6et0o4baekrmi/branch/master?svg=true)](https://ci.appveyor.com/project/lonvia/osmium-tool/branch/master)
+[![Github Build Status](https://github.com/osmcode/osmium-tool/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/osmcode/osmium-tool/actions)
 
 
 ## Prerequisites
@@ -37,22 +36,26 @@ You also need the following libraries:
         Debian/Ubuntu: libboost-program-options-dev
         Fedora/CentOS: boost-devel
         openSUSE: boost-devel (use 'libboost_program_options-devel' for modern OS versions)
+        vcpkg: boost-program-options
 
     bz2lib
         http://www.bzip.org/
         Debian/Ubuntu: libbz2-dev
         Fedora/CentOS: bzip2-devel
         openSUSE: libbz2-devel
+        vcpkg: bzip2
 
     zlib
         https://www.zlib.net/
         Debian/Ubuntu: zlib1g-dev
         Fedora/CentOS: zlib-devel
         openSUSE: zlib-devel
+        vcpkg: zlib
 
     LZ4 (optional)
         https://lz4.github.io/lz4/
         Debian/Ubuntu: liblz4-dev
+        vcpkg: lz4
 
         Only needed for LZ4 PBF compression.
 
@@ -61,6 +64,7 @@ You also need the following libraries:
         Debian/Ubuntu: libexpat1-dev
         Fedora/CentOS: expat-devel
         openSUSE: libexpat-devel
+        vcpkg: expat
 
     cmake
         https://cmake.org/
@@ -81,7 +85,8 @@ check the versions. If the packaged version available is not new enough, you'll
 have to install from source. Most likely this is the case for Protozero and
 Libosmium.
 
-On macOS many of the libraries above will be available through Homebrew.
+On macOS many of the libraries above will be available through Homebrew. On
+Windows you can install the libraries with vcpkg.
 
 When building the tool, CMake will automatically look for these libraries in
 the usual places on your system. In addition it will look for the Libosmium and
@@ -114,9 +119,8 @@ default is RelWithDebInfo.
 Please read the CMake documentation and get familiar with the `cmake` and
 `ccmake` tools which have many more options.
 
-On Windows you can compile with the Visual Studio C++ compiler and nmake.
-The necessary dependencies can be installed with [conda](https://conda.io).
-See `appveyor.yml` for the necessary commands to compile osmium-tool.
+If you have trouble with compiling, look into the files in `.github/workflows`
+and `.github/actions` that run the CI builds to give you some pointers.
 
 
 ## Documentation
