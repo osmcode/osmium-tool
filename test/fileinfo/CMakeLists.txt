@@ -12,7 +12,12 @@ if(NOT WIN32)
     endfunction()
 
     check_fileinfo(fi1-extended "--extended --crc" fi1.osm fi1-result.txt)
-    check_fileinfo(fi1-extended-json "--extended --crc --json" fi1.osm fi1-result.json)
+
+    # Nlohmann JSON library before 3.9 don't have an ordered JSON type,
+    # don't run tests that will not work because of that.
+    if(nlohmann_json_VERSION VERSION_GREATER_EQUAL "3.9")
+        check_fileinfo(fi1-extended-json "--extended --crc --json" fi1.osm fi1-result.json)
+    endif()
 endif()
 
 #-----------------------------------------------------------------------------

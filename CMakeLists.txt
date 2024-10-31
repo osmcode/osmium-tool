@@ -6,7 +6,7 @@
 #
 #-----------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.7.0)
 
 project(osmium VERSION 1.16.0 LANGUAGES CXX C)
 
@@ -45,6 +45,8 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 find_package(Osmium 2.17.0 REQUIRED COMPONENTS io)
 include_directories(SYSTEM ${OSMIUM_INCLUDE_DIRS})
+
+find_package(nlohmann_json)
 
 find_path(NLOHMANN_INCLUDE_DIR nlohmann/json.hpp)
 include_directories(SYSTEM ${NLOHMANN_INCLUDE_DIR})

@@ -60,6 +60,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # include <unistd.h>
 #endif
 
+// Use ordered_json type if available. Tests rely on ordering.
+#if NLOHMANN_JSON_VERSION_MAJOR == 3 && NLOHMANN_JSON_VERSION_MINOR < 9
+using json = nlohmann::json;
+#else
+using json = nlohmann::ordered_json;
+#endif
+
 /*************************************************************************/
 
 struct InfoHandler : public osmium::handler::Handler {
@@ -320,7 +327,7 @@ public:
 
 class JSONOutput : public Output {
 
-    nlohmann::ordered_json m_json;
+    json m_json;
 
 public:
 
@@ -347,7 +354,7 @@ public:
             });
         }
 
-        nlohmann::ordered_json json_options;
+        json json_options;
         for (const auto& option : header) {
             json_options[option.first] = option.second;
         }
@@ -360,7 +367,7 @@ public:
     }
 
     void data(const osmium::io::Header& /*header*/, const InfoHandler& info_handler) final {
-        nlohmann::ordered_json json_data = {
+        json json_data = {
             {"bbox", { info_handler.bounds.bottom_left().lon(),
                        info_handler.bounds.bottom_left().lat(),
                        info_handler.bounds.top_right().lon(),
