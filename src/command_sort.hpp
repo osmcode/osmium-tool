@@ -30,7 +30,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 class CommandSort : public CommandWithMultipleOSMInputs, public with_osm_output {
 
-    std::vector<std::string> m_filenames;
     std::string m_strategy{"simple"};
 
 public:

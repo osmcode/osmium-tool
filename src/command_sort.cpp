@@ -76,14 +76,18 @@ bool CommandSort::setup(const std::vector<std::string>& arguments) {
     setup_input_files(vm);
     setup_output_file(vm);
 
-    if (vm.count("input-filenames")) {
-        m_filenames = vm["input-filenames"].as<std::vector<std::string>>();
-    }
-
     if (vm.count("strategy")) {
         m_strategy = vm["strategy"].as<std::string>();
         if (m_strategy != "simple" && m_strategy != "multipass") {
             throw argument_error{"Unknown strategy: " + m_strategy};
+        }
+    }
+
+    if (m_strategy == "multipass") {
+        if (std::any_of(m_input_filenames.cbegin(), m_input_filenames.cend(), [&](const std::string& name) {
+            return name == "-";
+        })) {
+            throw argument_error{"Can not read from STDIN when using multipass strategy"};
         }
     }
 
@@ -110,8 +114,8 @@ bool CommandSort::run_single_pass() {
 
     m_vout << "Reading contents of input files...\n";
     osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
-    for (const std::string& file_name : m_filenames) {
-        osmium::io::Reader reader{file_name, osmium::osm_entity_bits::object};
+    for (const auto& file : m_input_files) {
+        osmium::io::Reader reader{file, osmium::osm_entity_bits::object};
         const osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
         while (osmium::memory::Buffer buffer = reader.read()) {
@@ -167,8 +171,8 @@ bool CommandSort::run_multi_pass() {
     osmium::Box bounding_box;
 
     m_vout << "Reading input file headers...\n";
-    for (const std::string& file_name : m_filenames) {
-        osmium::io::Reader reader{file_name, osmium::osm_entity_bits::nothing};
+    for (const auto& file : m_input_files) {
+        osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
         const osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
         reader.close();
@@ -196,8 +200,8 @@ bool CommandSort::run_multi_pass() {
 
         m_vout << "Pass " << pass++ << "...\n";
         m_vout << "Reading contents of input files...\n";
-        for (const std::string& file_name : m_filenames) {
-            osmium::io::Reader reader{file_name, entity};
+        for (const auto& file : m_input_files) {
+            osmium::io::Reader reader{file, entity};
             const osmium::io::Header read_header{reader.header()};
             bounding_box.extend(read_header.joined_boxes());
             while (osmium::memory::Buffer buffer = reader.read()) {
