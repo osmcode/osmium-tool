@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+<!-- Note that osmium-tool was created to work with OSM data. If you are
+using non-OSM data with osmium and it fails, this is not considered a bug.
+Please don't open a bug report unless you are willing to pay for support. -->
+
 ## What version of osmium-tool are you using?
 
 <!-- Paste output of `osmium --version` here. Please use the [latest
