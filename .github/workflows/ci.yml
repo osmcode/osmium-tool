@@ -18,10 +18,9 @@ jobs:
           - "debian:bookworm"     # gcc 12.2.0, clang 15.0.6, cmake 3.25.1
           - "debian:testing"
           - "debian:experimental"
-          - "fedora:37"           # gcc 12.3.1, clang 15.0.7, cmake 3.26.4
-          - "fedora:38"           # gcc 13.0.1, clang 16.0.5, cmake 3.26.4
           - "fedora:39"
           - "fedora:40"
+          - "fedora:41"
         build_type: [Dev]
         cpp_compiler: [g++]
         cpp_version: [c++14]
@@ -77,13 +76,12 @@ jobs:
           - image: "debian:experimental"
             c_compiler: clang
             cpp_compiler: clang++
-          - image: "fedora:37"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "fedora:38"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "fedora:39"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "fedora:40"
+            CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+          - image: "fedora:41"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
     container:
@@ -127,17 +125,17 @@ jobs:
         if: startsWith(matrix.image, 'fedora:')
         run: |
           dnf install --quiet --assumeyes \
-              boost-devel \
-              bzip2-devel \
-              cmake \
-              expat-devel \
-              gcc-c++ \
-              git \
-              json-devel \
-              lz4-devel \
-              make \
-              pandoc \
-              zlib-devel
+            boost-devel \
+            bzip2-devel \
+            cmake \
+            expat-devel \
+            gcc-c++ \
+            git \
+            json-devel \
+            lz4-devel \
+            make \
+            pandoc \
+            zlib-devel
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake
@@ -146,6 +144,7 @@ jobs:
 
   ubuntu-latest:
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     env:
       CC: clang-18
       CXX: clang++-18
@@ -159,18 +158,18 @@ jobs:
       - uses: ./.github/actions/ctest
 
   macos:
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
         os:
-          - "macos-14"
-          - "macos-15"
+          - macos-14
+          - macos-15
         build_type: [Dev]
         include:
-          - os: "macos-14"
+          - os: macos-14
             build_type: Release
-    runs-on: ${{ matrix.os }}
     env:
       CC: clang
       CXX: clang++
@@ -184,6 +183,7 @@ jobs:
       - uses: ./.github/actions/ctest
 
   windows:
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -191,7 +191,6 @@ jobs:
         os:
           - windows-2019
           - windows-2022
-    runs-on: ${{ matrix.os }}
     steps:
       - run: |
           vcpkg install \
