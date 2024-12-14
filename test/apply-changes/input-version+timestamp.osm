@@ -6,6 +6,7 @@
   </node>
   <node id="2" version="2" timestamp="2017-01-03T00:00:00Z" lat="50" lon="10.01"/>
   <node id="3" version="1" timestamp="2017-01-03T00:00:00Z" lat="50" lon="10.02"/>
+  <node id="5" version="1" timestamp="2017-01-03T00:00:00Z" lat="50" lon="10.03"/>
   <way id="1" version="1" timestamp="2017-01-03T00:00:00Z">
     <nd ref="1"/>
     <nd ref="2"/>

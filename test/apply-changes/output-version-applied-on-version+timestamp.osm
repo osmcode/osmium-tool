@@ -5,6 +5,7 @@
     <tag k="name" v="School"/>
   </node>
   <node id="2" version="2" timestamp="2017-01-03T00:00:00Z" lat="50" lon="10.01"/>
+  <node id="3" version="1" timestamp="2017-01-03T00:00:00Z" lat="50" lon="10.02"/>
   <node id="4" version="1" lat="50" lon="10.02"/>
   <way id="1" version="2">
     <nd ref="1"/>

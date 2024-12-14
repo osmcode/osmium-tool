@@ -9,6 +9,9 @@
   <delete>
     <node id="3" version="1" visible="false"/>
   </delete>
+  <delete>
+    <node id="5" version="2" visible="false"/>
+  </delete>
   <create>
     <node id="4" version="1" lat="50.0" lon="10.02"/>
   </create>
