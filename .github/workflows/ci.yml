@@ -205,5 +205,5 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install-from-git
       - uses: ./.github/actions/cmake-windows
-      - uses: ./.github/actions/build-windows
-      - uses: ./.github/actions/ctest-windows
+      - uses: ./.github/actions/build
+      - uses: ./.github/actions/ctest
