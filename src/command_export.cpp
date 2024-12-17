@@ -53,7 +53,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-static std::string get_attr_string(const nlohmann::json& object, const char* key) {
+namespace {
+
+std::string get_attr_string(const nlohmann::json& object, const char* key) {
     const auto it = object.find(key);
     if (it == object.end()) {
         return {};
@@ -69,6 +71,8 @@ static std::string get_attr_string(const nlohmann::json& object, const char* key
 
     return {};
 }
+
+} // anonymous namespace
 
 void CommandExport::parse_attributes(const nlohmann::json& attributes) {
     if (!attributes.is_object()) {
@@ -122,7 +126,7 @@ void CommandExport::parse_format_options(const nlohmann::json& options) {
     }
 }
 
-static Ruleset parse_tags_ruleset(const nlohmann::json& object, const char* key) {
+Ruleset parse_tags_ruleset(const nlohmann::json& object, const char* key) {
     Ruleset ruleset;
 
     const auto json = object.find(key);
@@ -169,7 +173,7 @@ static Ruleset parse_tags_ruleset(const nlohmann::json& object, const char* key)
     return ruleset;
 }
 
-static bool parse_string_array(const nlohmann::json& object, const char* key, std::vector<std::string>* result) {
+bool parse_string_array(const nlohmann::json& object, const char* key, std::vector<std::string>* result) {
     const auto json = object.find(key);
     if (json == object.end()) {
         return false;
@@ -479,14 +483,16 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
-static void print_taglist(osmium::VerboseOutput* vout, const std::vector<std::string>& strings) {
+namespace {
+
+void print_taglist(osmium::VerboseOutput* vout, const std::vector<std::string>& strings) {
     assert(vout);
     for (const auto& str : strings) {
         *vout << "    " << str << '\n';
     }
 }
 
-static void print_ruleset(osmium::VerboseOutput* vout, const Ruleset& ruleset) {
+void print_ruleset(osmium::VerboseOutput* vout, const Ruleset& ruleset) {
     assert(vout);
     switch (ruleset.rule_type()) {
         case tags_filter_rule_type::none:
@@ -505,7 +511,7 @@ static void print_ruleset(osmium::VerboseOutput* vout, const Ruleset& ruleset) {
     }
 }
 
-static const char* print_unique_id_type(unique_id_type unique_id) {
+const char* print_unique_id_type(unique_id_type unique_id) {
     switch (unique_id) {
         case unique_id_type::counter:
             return "counter";
@@ -517,6 +523,32 @@ static const char* print_unique_id_type(unique_id_type unique_id) {
 
     return "no";
 }
+
+std::unique_ptr<ExportFormat> create_handler(const std::string& output_format,
+                                             const std::string& output_filename,
+                                             osmium::io::overwrite overwrite,
+                                             osmium::io::fsync fsync,
+                                             const options_type& options) {
+    if (output_format == "geojson" || output_format == "geojsonseq") {
+        return std::make_unique<ExportFormatJSON>(output_format, output_filename, overwrite, fsync, options);
+    }
+
+    if (output_format == "pg") {
+        return std::make_unique<ExportFormatPg>(output_format, output_filename, overwrite, fsync, options);
+    }
+
+    if (output_format == "text") {
+        return std::make_unique<ExportFormatText>(output_format, output_filename, overwrite, fsync, options);
+    }
+
+    if (output_format == "spaten") {
+        return std::make_unique<ExportFormatSpaten>(output_format, output_filename, overwrite, fsync, options);
+    }
+
+    throw argument_error{"Unknown output format"};
+}
+
+} // anonymous namespace
 
 void CommandExport::show_arguments() {
     show_single_input_arguments(m_vout);
@@ -560,30 +592,6 @@ void CommandExport::show_arguments() {
     m_vout << "    index type: " << m_index_type_name << '\n';
     m_vout << "    add unique IDs: " << print_unique_id_type(m_options.unique_id) << '\n';
     m_vout << "    keep untagged features: " << yes_no(m_options.keep_untagged);
-}
-
-static std::unique_ptr<ExportFormat> create_handler(const std::string& output_format,
-                                                    const std::string& output_filename,
-                                                    osmium::io::overwrite overwrite,
-                                                    osmium::io::fsync fsync,
-                                                    const options_type& options) {
-    if (output_format == "geojson" || output_format == "geojsonseq") {
-        return std::make_unique<ExportFormatJSON>(output_format, output_filename, overwrite, fsync, options);
-    }
-
-    if (output_format == "pg") {
-        return std::make_unique<ExportFormatPg>(output_format, output_filename, overwrite, fsync, options);
-    }
-
-    if (output_format == "text") {
-        return std::make_unique<ExportFormatText>(output_format, output_filename, overwrite, fsync, options);
-    }
-
-    if (output_format == "spaten") {
-        return std::make_unique<ExportFormatSpaten>(output_format, output_filename, overwrite, fsync, options);
-    }
-
-    throw argument_error{"Unknown output format"};
 }
 
 bool CommandExport::run() {

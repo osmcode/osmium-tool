@@ -200,6 +200,8 @@ void CommandChangesetFilter::show_arguments() {
     }
 }
 
+namespace {
+
 bool changeset_after(const osmium::Changeset& changeset, osmium::Timestamp time) {
     return changeset.open() || changeset.closed_at() >= time;
 }
@@ -207,6 +209,8 @@ bool changeset_after(const osmium::Changeset& changeset, osmium::Timestamp time)
 bool changeset_before(const osmium::Changeset& changeset, osmium::Timestamp time) {
     return changeset.created_at() <= time;
 }
+
+} // anonymous namespace
 
 bool CommandChangesetFilter::run() {
     m_vout << "Opening input file...\n";

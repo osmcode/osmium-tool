@@ -189,7 +189,9 @@ bool ExportFormatPg::add_tags_json(const osmium::OSMObject& object) {
     return has_tags;
 }
 
-static void add_escape_hstore(std::string* out, const char* str) {
+namespace {
+
+void add_escape_hstore(std::string* out, const char* str) {
     *out += "\"";
 
     while (*str) {
@@ -205,6 +207,8 @@ static void add_escape_hstore(std::string* out, const char* str) {
 
     *out += "\"";
 }
+
+} // anonymous namespace
 
 bool ExportFormatPg::add_tags_hstore(const osmium::OSMObject& object) {
     if (object.tags().empty()) {

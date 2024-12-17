@@ -152,38 +152,36 @@ void CommandApplyChanges::show_arguments() {
 
 namespace {
 
-    /**
-     *  Copy the first OSM object with a given Id to the output. Keep
-     *  track of the Id of each object to do this.
-     *
-     *  We are using this functor class instead of a simple lambda, because the
-     *  lambda doesn't build on MSVC.
-     */
-    class copy_first_with_id {
+/**
+ *  Copy the first OSM object with a given Id to the output. Keep
+ *  track of the Id of each object to do this.
+ *
+ *  We are using this functor class instead of a simple lambda, because the
+ *  lambda doesn't build on MSVC.
+ */
+class copy_first_with_id {
 
-        osmium::io::Writer* writer;
-        osmium::object_id_type id = 0;
+    osmium::io::Writer* writer;
+    osmium::object_id_type id = 0;
 
-    public:
+public:
 
-        explicit copy_first_with_id(osmium::io::Writer* w) :
-            writer(w) {
-        }
+    explicit copy_first_with_id(osmium::io::Writer* w) :
+        writer(w) {
+    }
 
-        void operator()(const osmium::OSMObject& obj) {
-            if (obj.id() != id) {
-                if (obj.visible()) {
-                    (*writer)(obj);
-                }
-                id = obj.id();
+    void operator()(const osmium::OSMObject& obj) {
+        if (obj.id() != id) {
+            if (obj.visible()) {
+                (*writer)(obj);
             }
+            id = obj.id();
         }
+    }
 
-    }; // class copy_first_with_id
+}; // class copy_first_with_id
 
-} // anonymous namespace
-
-static void update_nodes_if_way(osmium::OSMObject* object, const location_index_type& location_index) {
+void update_nodes_if_way(osmium::OSMObject* object, const location_index_type& location_index) {
     if (object->type() != osmium::item_type::way) {
         return;
     }
@@ -195,6 +193,8 @@ static void update_nodes_if_way(osmium::OSMObject* object, const location_index_
         }
     }
 }
+
+} // anonymous namespace
 
 void CommandApplyChanges::apply_changes_and_write(osmium::ObjectPointerCollection &objects,
                                                   const std::vector<osmium::memory::Buffer> &changes,

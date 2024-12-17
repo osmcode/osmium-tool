@@ -150,7 +150,9 @@ void CommandShow::show_arguments() {
 }
 
 #ifndef _WIN32
-static int execute_pager(const std::string& pager, bool with_color) {
+namespace {
+
+int execute_pager(const std::string& pager, bool with_color) {
     int pipefd[2];
     if (::pipe(pipefd) < 0) {
         throw std::system_error{errno, std::system_category(), "Could not run pager: pipe() call failed"};
@@ -186,6 +188,8 @@ static int execute_pager(const std::string& pager, bool with_color) {
 
     return pipefd[1];
 }
+
+} // anonymous namespace
 #endif
 
 bool CommandShow::run() {

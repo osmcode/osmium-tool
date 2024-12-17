@@ -3,6 +3,33 @@
 
 #include "util.hpp"
 
+namespace {
+
+void test_filter(const std::string& expression, osmium::osm_entity_bits::type entities, const char* filter) {
+    const auto p = get_filter_expression(expression);
+    REQUIRE(p.first == entities);
+    REQUIRE(p.second == filter);
+}
+
+void test_strip_whitespace(const char* in, const char* out) {
+    std::string str{in};
+    strip_whitespace(str);
+    REQUIRE(str == out);
+}
+
+void test_string_matcher(const char* string, const char* print_out) {
+    std::stringstream ss;
+    ss << get_string_matcher(string);
+    REQUIRE(ss.str() == print_out);
+}
+
+bool test_tag_matcher(const char* expression, const char* key, const char* value) {
+    const auto matcher = get_tag_matcher(expression);
+    return matcher(key, value);
+}
+
+} // anonymous namespace
+
 TEST_CASE("Get suffix from filename") {
     REQUIRE(get_filename_suffix("foo.bar") == "bar");
 }
@@ -34,12 +61,6 @@ TEST_CASE("Get object types") {
     REQUIRE_THROWS_AS(get_types("nwx"), argument_error);
 }
 
-static void test_filter(const std::string& expression, osmium::osm_entity_bits::type entities, const char* filter) {
-    const auto p = get_filter_expression(expression);
-    REQUIRE(p.first == entities);
-    REQUIRE(p.second == filter);
-}
-
 TEST_CASE("Get tags filter expression") {
     test_filter("highway", osmium::osm_entity_bits::nwr, "highway");
     test_filter("/highway", osmium::osm_entity_bits::nwr, "highway");
@@ -51,12 +72,6 @@ TEST_CASE("Get tags filter expression") {
     REQUIRE_THROWS_AS(get_filter_expression("highway/foo"), argument_error);
 }
 
-void test_strip_whitespace(const char* in, const char* out) {
-    std::string str{in};
-    strip_whitespace(str);
-    REQUIRE(str == out);
-}
-
 TEST_CASE("strip whitespace") {
     test_strip_whitespace("foo", "foo");
     test_strip_whitespace(" foo", "foo");
@@ -64,12 +79,6 @@ TEST_CASE("strip whitespace") {
     test_strip_whitespace(" foo ", "foo");
     test_strip_whitespace("   foo   ", "foo");
     test_strip_whitespace("f o o", "f o o");
-}
-
-void test_string_matcher(const char* string, const char* print_out) {
-    std::stringstream ss;
-    ss << get_string_matcher(string);
-    REQUIRE(ss.str() == print_out);
 }
 
 TEST_CASE("get_string_matcher") {
@@ -94,11 +103,6 @@ TEST_CASE("get_string_matcher") {
     test_string_matcher("  foo ", "equal[foo]");
     test_string_matcher("foo, bar, baz", "list[[foo][bar][baz]]");
     test_string_matcher("  foo, bar   ,baz   ", "list[[foo][bar][baz]]");
-}
-
-bool test_tag_matcher(const char* expression, const char* key, const char* value) {
-    const auto matcher = get_tag_matcher(expression);
-    return matcher(key, value);
 }
 
 TEST_CASE("get_tag_matcher") {

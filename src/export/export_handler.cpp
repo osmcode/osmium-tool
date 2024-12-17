@@ -37,7 +37,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-static bool check_conditions(const osmium::TagList& tags, const Ruleset& r1, const Ruleset& r2, bool is_no) noexcept {
+namespace {
+
+bool check_conditions(const osmium::TagList& tags, const Ruleset& r1, const Ruleset& r2, bool is_no) noexcept {
     const char* area_tag = tags.get_value_by_key("area");
     if (area_tag) {
         if (std::strcmp(area_tag, "no") == 0) {
@@ -54,6 +56,8 @@ static bool check_conditions(const osmium::TagList& tags, const Ruleset& r1, con
 
     return osmium::tags::match_any_of(tags, r1.filter());
 }
+
+} // anonymous namespace
 
 bool ExportHandler::is_linear(const osmium::TagList& tags) const noexcept {
     return check_conditions(tags, m_linear_ruleset, m_area_ruleset, true);

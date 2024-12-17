@@ -70,9 +70,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # include <unistd.h>
 #endif
 
-static constexpr const std::size_t max_extracts = 500;
+namespace {
 
-static osmium::Box parse_bbox(const nlohmann::json& value) {
+constexpr const std::size_t max_extracts = 500;
+
+osmium::Box parse_bbox(const nlohmann::json& value) {
     if (value.is_array()) {
         if (value.size() != 4) {
             throw config_error{"'bbox' must be an array with exactly four elements."};
@@ -166,11 +168,11 @@ static osmium::Box parse_bbox(const nlohmann::json& value) {
 }
 
 #ifdef _WIN32
-static bool is_valid_driver_char(const char value) noexcept {
+bool is_valid_driver_char(const char value) noexcept {
     return ((value | 0x20) - 'a') <= ('z' - 'a');
 }
 
-static bool is_path_rooted(const std::string& path) noexcept {
+bool is_path_rooted(const std::string& path) noexcept {
     const std::size_t len = path.size();
 
     return (len >= 1 && (path[0] == '\\' || path[0] == '/'))
@@ -178,7 +180,7 @@ static bool is_path_rooted(const std::string& path) noexcept {
 }
 #endif
 
-static std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer* buffer) {
+std::size_t parse_multipolygon_object(const std::string& directory, std::string file_name, std::string file_type, osmium::memory::Buffer* buffer) {
     assert(buffer);
 
     if (file_name.empty()) {
@@ -240,7 +242,7 @@ static std::size_t parse_multipolygon_object(const std::string& directory, std::
     throw config_error{std::string{"Unknown file type: '"} + file_type + "' in '(multi)polygon.file_type'"};
 }
 
-static std::size_t parse_multipolygon_object(const std::string& directory, const nlohmann::json& value, osmium::memory::Buffer* buffer) {
+std::size_t parse_multipolygon_object(const std::string& directory, const nlohmann::json& value, osmium::memory::Buffer* buffer) {
     assert(buffer);
 
     const std::string file_name{get_value_as_string(value, "file_name")};
@@ -248,7 +250,7 @@ static std::size_t parse_multipolygon_object(const std::string& directory, const
     return parse_multipolygon_object(directory, file_name, file_type, buffer);
 }
 
-static std::size_t parse_polygon(const std::string& directory, const nlohmann::json& value, osmium::memory::Buffer* buffer) {
+std::size_t parse_polygon(const std::string& directory, const nlohmann::json& value, osmium::memory::Buffer* buffer) {
     assert(buffer);
 
     if (value.is_array()) {
@@ -276,7 +278,7 @@ std::size_t parse_multipolygon(const std::string& directory, const nlohmann::jso
     throw config_error{"Multipolygon must be an object or array."};
 }
 
-static bool is_existing_directory(const char* name) {
+bool is_existing_directory(const char* name) {
 #ifdef _MSC_VER
     // Windows implementation
     // https://msdn.microsoft.com/en-us/library/14h5k7ff.aspx
@@ -294,6 +296,8 @@ static bool is_existing_directory(const char* name) {
     return S_ISDIR(s.st_mode); // NOLINT(hicpp-signed-bitwise)
 #endif
 }
+
+} // anonymous namespace
 
 void CommandExtract::set_directory(const std::string& directory) {
     if (!is_existing_directory(directory.c_str())) {

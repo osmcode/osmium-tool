@@ -131,7 +131,9 @@ void CommandCat::write_buffers(osmium::ProgressBar& progress_bar, std::vector<os
     }
 }
 
-static void report_filename(osmium::VerboseOutput* vout, const osmium::io::File& file, const osmium::io::Reader& reader) {
+namespace {
+
+void report_filename(osmium::VerboseOutput* vout, const osmium::io::File& file, const osmium::io::Reader& reader) {
     assert(vout);
 
     const auto size = reader.file_size();
@@ -147,6 +149,8 @@ static void report_filename(osmium::VerboseOutput* vout, const osmium::io::File&
         *vout << "Reading input file '" << name << "' (" << size << " bytes)...\n";
     }
 }
+
+} // anonymous namespace
 
 bool CommandCat::run() {
     std::size_t bytes_written = 0;

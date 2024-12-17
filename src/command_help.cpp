@@ -36,7 +36,9 @@ bool CommandHelp::setup(const std::vector<std::string>& arguments) {
     return true;
 }
 
-static void show_help(const std::string& topic, const std::string& info) {
+namespace {
+
+void show_help(const std::string& topic, const std::string& info) {
 #ifndef _WIN32
     // show man page on non-Windows systems
     std::string manpage{"osmium-"};
@@ -48,6 +50,8 @@ static void show_help(const std::string& topic, const std::string& info) {
     std::cout << info << "\n";
     std::cout << "You'll find more documentation at https://osmcode.org/osmium-tool/\n";
 }
+
+} // anonymous namespace
 
 bool CommandHelp::run() {
     const auto commands = m_command_factory.help();

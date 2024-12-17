@@ -210,7 +210,9 @@ bool CommandTagsFilter::matches_way(const osmium::Way& way) const noexcept {
                osmium::tags::match_any_of(way.tags(), m_area_filters));
 }
 
-static bool is_multipolygon(const osmium::Relation& relation) noexcept {
+namespace {
+
+bool is_multipolygon(const osmium::Relation& relation) noexcept {
     const char* type = relation.tags().get_value_by_key("type");
     if (type == nullptr) {
         return false;
@@ -218,6 +220,8 @@ static bool is_multipolygon(const osmium::Relation& relation) noexcept {
 
     return !std::strcmp(type, "multipolygon") || !std::strcmp(type, "boundary");
 }
+
+} // anonymous namespace
 
 bool CommandTagsFilter::matches_relation(const osmium::Relation& relation) const noexcept {
     return osmium::tags::match_any_of(relation.tags(), m_filters(osmium::item_type::relation)) ||

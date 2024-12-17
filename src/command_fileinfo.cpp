@@ -218,13 +218,17 @@ public:
 
 }; // class Output
 
-static osmium::object_id_type get_smallest(osmium::object_id_type id) noexcept {
+namespace {
+
+osmium::object_id_type get_smallest(osmium::object_id_type id) noexcept {
     return id == osmium::min_op<osmium::object_id_type>{}() ? 0 : id;
 }
 
-static osmium::object_id_type get_largest(osmium::object_id_type id) noexcept {
+osmium::object_id_type get_largest(osmium::object_id_type id) noexcept {
     return id == osmium::max_op<osmium::object_id_type>{}() ? 0 : id;
 }
+
+} // anonymous namespace
 
 class HumanReadableOutput : public Output {
 

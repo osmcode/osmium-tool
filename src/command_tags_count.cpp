@@ -65,7 +65,9 @@ void CommandTagsCount::read_expressions_file(const std::string& file_name) {
     }
 }
 
-static sort_func_type get_sort_function(const std::string& sort_order) {
+namespace {
+
+sort_func_type get_sort_function(const std::string& sort_order) {
     static const std::pair<std::string, sort_func_type> sort_options[] = {
         { "count-desc", [](const element_type& a, const element_type& b){
                 if (a.count == b.count) {
@@ -99,6 +101,8 @@ static sort_func_type get_sort_function(const std::string& sort_order) {
 
     throw argument_error{"Unknown sort order '" + sort_order + "'"};
 }
+
+} // anonymous namespace
 
 bool CommandTagsCount::setup(const std::vector<std::string>& arguments) {
     po::options_description opts_cmd{"COMMAND OPTIONS"};
@@ -216,7 +220,9 @@ std::vector<element_type> CommandTagsCount::sort_results() const {
     return results;
 }
 
-static void append_escaped(std::string* out, const char* str) {
+namespace {
+
+void append_escaped(std::string* out, const char* str) {
     *out += '"';
     for (; *str != '\0'; ++str) {
         if (*str == '"') {
@@ -227,7 +233,7 @@ static void append_escaped(std::string* out, const char* str) {
     *out += '"';
 }
 
-static void write_results(const std::vector<element_type>& results, int fd) {
+void write_results(const std::vector<element_type>& results, int fd) {
     std::string out;
     const std::size_t buffer_size = 1024UL * 1024UL;
     out.reserve(buffer_size);
@@ -252,6 +258,8 @@ static void write_results(const std::vector<element_type>& results, int fd) {
 
     close(fd);
 }
+
+} // anonymous namespace
 
 bool CommandTagsCount::run() {
     m_vout << "Opening input file...\n";

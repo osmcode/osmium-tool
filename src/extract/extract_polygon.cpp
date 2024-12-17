@@ -35,7 +35,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-static void add_ring(std::vector<osmium::Segment>* segments, const osmium::NodeRefList& ring) {
+namespace {
+
+void add_ring(std::vector<osmium::Segment>* segments, const osmium::NodeRefList& ring) {
     const auto* it = ring.begin();
     const auto* const end = ring.end();
 
@@ -49,6 +51,8 @@ static void add_ring(std::vector<osmium::Segment>* segments, const osmium::NodeR
         prev_it = it++;
     }
 }
+
+} // anonymous namespace
 
 const osmium::Area& ExtractPolygon::area() const noexcept {
     return m_buffer.get<osmium::Area>(m_offset);

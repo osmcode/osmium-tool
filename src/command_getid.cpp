@@ -219,7 +219,9 @@ osmium::osm_entity_bits::type CommandGetId::get_needed_types() const {
     return types;
 }
 
-static void print_missing_ids(const char* type, const osmium::index::IdSetDense<osmium::unsigned_object_id_type>& set) {
+namespace {
+
+void print_missing_ids(const char* type, const osmium::index::IdSetDense<osmium::unsigned_object_id_type>& set) {
     if (set.empty()) {
         return;
     }
@@ -229,6 +231,8 @@ static void print_missing_ids(const char* type, const osmium::index::IdSetDense<
     }
     std::cerr << '\n';
 }
+
+} // anonymous namespace
 
 void CommandGetId::mark_rel_ids(const osmium::index::RelationsMapIndex& rel_in_rel, osmium::unsigned_object_id_type parent_id) {
     rel_in_rel.for_each(parent_id, [&](osmium::unsigned_object_id_type member_id) {

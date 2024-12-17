@@ -185,7 +185,9 @@ void ExportFormatJSON::finish_feature(const osmium::OSMObject& object) {
     }
 }
 
-static void append_coordinate(std::string* buffer, double coord) {
+namespace {
+
+void append_coordinate(std::string* buffer, double coord) {
     std::array<char, 20> tmp{};
     auto n = std::snprintf(&*tmp.begin(), 20, "%.7f", coord);
 
@@ -196,6 +198,8 @@ static void append_coordinate(std::string* buffer, double coord) {
 
     buffer->append(&*tmp.begin(), n);
 }
+
+} // anonymous namespace
 
 void ExportFormatJSON::create_coordinate(const osmium::Location& location) {
     std::string buffer;

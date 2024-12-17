@@ -133,13 +133,17 @@ void id_map::read(int fd, std::size_t file_size) {
     }
 }
 
-static osmium::object_id_type get_start_id(const std::string& s) {
+namespace {
+
+osmium::object_id_type get_start_id(const std::string& s) {
     const auto id = osmium::string_to_object_id(s.c_str());
     if (id == 0) {
         return 1;
     }
     return id;
 }
+
+} // anonymous namespace
 
 void CommandRenumber::set_start_ids(const std::string& str) {
     const auto start_ids = osmium::split_string(str, ',');
@@ -334,6 +338,8 @@ void CommandRenumber::write_index(osmium::item_type type) {
     close(fd);
 }
 
+namespace {
+
 void read_relations(const osmium::io::File& input_file, id_map* map) {
     osmium::io::Reader reader{input_file, osmium::osm_entity_bits::relation};
 
@@ -344,6 +350,8 @@ void read_relations(const osmium::io::File& input_file, id_map* map) {
 
     reader.close();
 }
+
+} // anonymous namespace
 
 void CommandRenumber::read_start_ids_file() {
     std::ifstream start_id_file{m_index_directory + "/start_ids"};
