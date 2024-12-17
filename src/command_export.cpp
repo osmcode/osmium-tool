@@ -27,7 +27,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "export/export_format_json.hpp"
 #include "export/export_format_pg.hpp"
-#include "export/export_format_spaten.hpp"
 #include "export/export_format_text.hpp"
 #include "export/export_handler.hpp"
 
@@ -350,9 +349,8 @@ bool CommandExport::setup(const std::vector<std::string>& arguments) {
     if (m_output_format != "geojson" &&
         m_output_format != "geojsonseq" &&
         m_output_format != "pg" &&
-        m_output_format != "text" &&
-        m_output_format != "spaten") {
-        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', 'pg', 'spaten', or 'text'."};
+        m_output_format != "text") {
+        throw argument_error{"Set output format with --output-format or -f to 'geojson', 'geojsonseq', 'pg', or 'text'."};
     }
 
     // Set defaults for output format options depending on output format
@@ -539,10 +537,6 @@ std::unique_ptr<ExportFormat> create_handler(const std::string& output_format,
 
     if (output_format == "text") {
         return std::make_unique<ExportFormatText>(output_format, output_filename, overwrite, fsync, options);
-    }
-
-    if (output_format == "spaten") {
-        return std::make_unique<ExportFormatSpaten>(output_format, output_filename, overwrite, fsync, options);
     }
 
     throw argument_error{"Unknown output format"};

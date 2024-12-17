@@ -13,7 +13,6 @@ endfunction()
 check_export(geojson    "-f geojson"       input.osm output.geojson)
 check_export(geojsonseq "-f geojsonseq -x print_record_separator=false" input.osm output.geojsonseq)
 check_export(pg         "-f pg"            input.osm output.pg)
-check_export(spaten     "-f spaten"        input.osm output.spaten)
 
 check_export(missing-node "-f geojson" input-missing-node.osm output-missing-node.geojson)
 check_export(single-node-way "-f geojson" input-single-node-way.osm output-empty.geojson)
@@ -64,7 +63,6 @@ check_export(c-tag-null    "-E -f text -c export/config-tag-null.json" way.osm w
 
 #-----------------------------------------------------------------------------
 
-check_export(pg-untagged     "-f pg     --keep-untagged" input.osm output-untagged.pg)
-check_export(spaten-untagged "-f spaten --keep-untagged" input.osm output-untagged.spaten)
+check_export(pg-untagged "-f pg --keep-untagged" input.osm output-untagged.pg)
 
 #-----------------------------------------------------------------------------
