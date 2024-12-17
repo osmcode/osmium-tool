@@ -1,0 +1,58 @@
+name: clang-tidy
+
+on: workflow_dispatch
+
+jobs:
+  clang-tidy:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["debian:bookworm", "debian:testing", "debian:experimental"]
+        include:
+          - image: "debian:bookworm"
+            clang: 15
+          - image: "debian:testing"
+            clang: 19
+          - image: "debian:experimental"
+            clang: 20
+    container:
+      image: ${{ matrix.image }}
+      env:
+        BUILD_TYPE: Dev
+        CC: clang-${{ matrix.clang }}
+        CXX: clang++-${{ matrix.clang }}
+        CPP_VERSION: c++14
+        APT_LISTCHANGES_FRONTEND: none
+        DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Prepare container (apt)
+        run: |
+          apt-get update -qq
+          apt-get install -yq \
+            clang-${{ matrix.clang }} \
+            clang-tidy-${{ matrix.clang }} \
+            cmake \
+            git \
+            libboost-dev \
+            libboost-program-options-dev \
+            libbz2-dev \
+            libexpat1-dev \
+            liblz4-dev \
+            make \
+            nlohmann-json3-dev \
+            zlib1g-dev
+        shell: bash
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install-from-git
+      - uses: ./.github/actions/cmake
+      - name: Run clang-tidy
+        run: make clang-tidy | tee osmium-tool-clang-tidy-${{ matrix.clang }}.log
+        shell: bash
+        working-directory: build
+      - name: Upload clang-tidy log
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: osmium-tool-clang-tidy-${{ matrix.clang }}-log
+          path: build/osmium-tool-clang-tidy-${{ matrix.clang }}.log
