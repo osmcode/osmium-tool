@@ -274,7 +274,7 @@ public:
                m_idset_neg(osmium::item_type::node).used_memory() +
                m_idset_neg(osmium::item_type::way).used_memory() +
                m_idset_neg(osmium::item_type::relation).used_memory() +
-               m_relation_refs.capacity() * sizeof(decltype(m_relation_refs)::value_type);
+               (m_relation_refs.capacity() * sizeof(decltype(m_relation_refs)::value_type));
     }
 
 }; // class RefCheckHandler

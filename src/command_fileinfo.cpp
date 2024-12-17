@@ -82,15 +82,15 @@ struct InfoHandler : public osmium::handler::Handler {
     uint64_t buffers_size     = 0;
     uint64_t buffers_capacity = 0;
 
-    osmium::min_op<osmium::object_id_type> smallest_changeset_id{};
-    osmium::min_op<osmium::object_id_type> smallest_node_id{};
-    osmium::min_op<osmium::object_id_type> smallest_way_id{};
-    osmium::min_op<osmium::object_id_type> smallest_relation_id{};
+    osmium::min_op<osmium::object_id_type> smallest_changeset_id;
+    osmium::min_op<osmium::object_id_type> smallest_node_id;
+    osmium::min_op<osmium::object_id_type> smallest_way_id;
+    osmium::min_op<osmium::object_id_type> smallest_relation_id;
 
-    osmium::max_op<osmium::object_id_type> largest_changeset_id{};
-    osmium::max_op<osmium::object_id_type> largest_node_id{};
-    osmium::max_op<osmium::object_id_type> largest_way_id{};
-    osmium::max_op<osmium::object_id_type> largest_relation_id{};
+    osmium::max_op<osmium::object_id_type> largest_changeset_id;
+    osmium::max_op<osmium::object_id_type> largest_node_id;
+    osmium::max_op<osmium::object_id_type> largest_way_id;
+    osmium::max_op<osmium::object_id_type> largest_relation_id;
 
     osmium::metadata_options metadata_all_objects{"all"};
     osmium::metadata_options metadata_some_objects{"none"};

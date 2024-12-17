@@ -86,7 +86,7 @@ osmium::object_id_type id_map::operator()(osmium::object_id_type id) {
     }
 
     // Old ID found in m_ids, return.
-    return add_offset_to_id(osmium::object_id_type(std::distance(m_ids.cbegin(), element) + 1));
+    return add_offset_to_id(static_cast<osmium::object_id_type>(std::distance(m_ids.cbegin(), element) + 1));
 }
 
 void id_map::write(int fd) {

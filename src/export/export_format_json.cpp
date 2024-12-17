@@ -29,6 +29,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/detail/read_write.hpp>
 #include <osmium/osm.hpp>
 
+#include <array>
+#include <cstdio>
+
 static constexpr const std::size_t initial_buffer_size = 1024UL * 1024UL;
 static constexpr const std::size_t flush_buffer_size   =  800UL * 1024UL;
 
@@ -183,7 +186,7 @@ void ExportFormatJSON::finish_feature(const osmium::OSMObject& object) {
 }
 
 static void append_coordinate(std::string* buffer, double coord) {
-    std::array<char, 20> tmp;
+    std::array<char, 20> tmp{};
     auto n = std::snprintf(&*tmp.begin(), 20, "%.7f", coord);
 
     // remove trailing zeros
