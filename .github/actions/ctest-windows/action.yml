@@ -7,4 +7,3 @@ runs:
       run: ctest --output-on-failure -C Release
       shell: bash
       working-directory: build
-

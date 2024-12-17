@@ -14,4 +14,3 @@ runs:
              nlohmann-json3-dev \
              pandoc
       shell: bash
-

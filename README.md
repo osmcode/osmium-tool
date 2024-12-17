@@ -6,7 +6,7 @@ the Osmium library.
 
 Official web site: https://osmcode.org/osmium-tool/
 
-[![Github Build Status](https://github.com/osmcode/osmium-tool/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/osmcode/osmium-tool/actions)
+[![Build Status](https://github.com/osmcode/osmium-tool/actions/workflows/ci.yml/badge.svg)](https://github.com/osmcode/osmium-tool/actions)
 
 
 ## Prerequisites

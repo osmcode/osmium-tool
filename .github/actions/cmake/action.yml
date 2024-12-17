@@ -8,7 +8,8 @@ runs:
       shell: bash
     - name: Configure
       run: |
-        cmake -LA .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ${CMAKE_OPTS}
+        cmake -LA .. \
+              ${CMAKE_OPTS} \
+              -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
       shell: bash
       working-directory: build
-

@@ -7,4 +7,3 @@ runs:
       run: make VERBOSE=1
       shell: bash
       working-directory: build
-

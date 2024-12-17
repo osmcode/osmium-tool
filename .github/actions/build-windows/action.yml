@@ -7,4 +7,3 @@ runs:
       run: cmake --build . --config Release --verbose
       shell: bash
       working-directory: build
-
