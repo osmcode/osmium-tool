@@ -69,6 +69,11 @@ set additional options.
 
 The following options can be added when writing OSM files:
 
+`history`=`true`/`false`
+:   Explicitly set whether this file allows multiple versions of the same
+    object or not. By default set to `true` for *.osh* and *.osc* files, to
+    `false` otherwise.
+
 `xml_change_format`=`true`/`false`
 :   Enable/disable XML change format. Same as *.osc*.
 
