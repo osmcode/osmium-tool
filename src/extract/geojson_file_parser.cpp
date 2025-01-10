@@ -51,6 +51,8 @@ std::string get_value_as_string(const nlohmann::json& object, const char* key) {
     throw config_error{std::string{"Value for name '"} + key + "' must be a string."};
 }
 
+namespace {
+
 // parse coordinate pair from JSON array
 osmium::geom::Coordinates parse_coordinate(const nlohmann::json& value) {
     if (!value.is_array()) {
@@ -131,6 +133,8 @@ void parse_rings(const nlohmann::json& value, osmium::builder::AreaBuilder* buil
         }
     }
 }
+
+} // namespace anonymous
 
 std::size_t parse_polygon_array(const nlohmann::json& value, osmium::memory::Buffer* buffer) {
     {

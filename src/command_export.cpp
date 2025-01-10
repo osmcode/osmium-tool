@@ -71,60 +71,6 @@ std::string get_attr_string(const nlohmann::json& object, const char* key) {
     return {};
 }
 
-} // anonymous namespace
-
-void CommandExport::parse_attributes(const nlohmann::json& attributes) {
-    if (!attributes.is_object()) {
-        throw config_error{"'attributes' member must be an object."};
-    }
-
-    m_options.type      = get_attr_string(attributes, "type");
-    m_options.id        = get_attr_string(attributes, "id");
-    m_options.version   = get_attr_string(attributes, "version");
-    m_options.changeset = get_attr_string(attributes, "changeset");
-    m_options.timestamp = get_attr_string(attributes, "timestamp");
-    m_options.uid       = get_attr_string(attributes, "uid");
-    m_options.user      = get_attr_string(attributes, "user");
-    m_options.way_nodes = get_attr_string(attributes, "way_nodes");
-}
-
-void CommandExport::parse_format_options(const nlohmann::json& options) {
-    if (!options.is_object()) {
-        throw config_error{"'format_options' member must be an object."};
-    }
-    for (const auto &item : options.items()) {
-        const auto type = item.value().type();
-        const auto &key = item.key();
-        switch (type) {
-            case nlohmann::json::value_t::null:
-                m_options.format_options.set(key, false);
-                break;
-            case nlohmann::json::value_t::boolean:
-                m_options.format_options.set(key, item.value().template get<bool>());
-                break;
-            case nlohmann::json::value_t::object:
-                throw config_error{"Option value for key '" + std::string(key) + "' can not be of type object."};
-            case nlohmann::json::value_t::array:
-                throw config_error{"Option value for key '" + std::string(key) + "' can not be an array."};
-                break;
-            case nlohmann::json::value_t::string:
-                m_options.format_options.set(key, item.value().template get<std::string>());
-                break;
-            case nlohmann::json::value_t::number_integer:
-                m_options.format_options.set(key, std::to_string(item.value().template get<int64_t>()));
-                break;
-            case nlohmann::json::value_t::number_unsigned:
-                m_options.format_options.set(key, std::to_string(item.value().template get<uint64_t>()));
-                break;
-            case nlohmann::json::value_t::number_float:
-                m_options.format_options.set(key, std::to_string(item.value().template get<double>()));
-                break;
-            default:
-                throw config_error{"Unknown type"};
-        }
-    }
-}
-
 Ruleset parse_tags_ruleset(const nlohmann::json& object, const char* key) {
     Ruleset ruleset;
 
@@ -194,6 +140,60 @@ bool parse_string_array(const nlohmann::json& object, const char* key, std::vect
     }
 
     return true;
+}
+
+} // anonymous namespace
+
+void CommandExport::parse_attributes(const nlohmann::json& attributes) {
+    if (!attributes.is_object()) {
+        throw config_error{"'attributes' member must be an object."};
+    }
+
+    m_options.type      = get_attr_string(attributes, "type");
+    m_options.id        = get_attr_string(attributes, "id");
+    m_options.version   = get_attr_string(attributes, "version");
+    m_options.changeset = get_attr_string(attributes, "changeset");
+    m_options.timestamp = get_attr_string(attributes, "timestamp");
+    m_options.uid       = get_attr_string(attributes, "uid");
+    m_options.user      = get_attr_string(attributes, "user");
+    m_options.way_nodes = get_attr_string(attributes, "way_nodes");
+}
+
+void CommandExport::parse_format_options(const nlohmann::json& options) {
+    if (!options.is_object()) {
+        throw config_error{"'format_options' member must be an object."};
+    }
+    for (const auto &item : options.items()) {
+        const auto type = item.value().type();
+        const auto &key = item.key();
+        switch (type) {
+            case nlohmann::json::value_t::null:
+                m_options.format_options.set(key, false);
+                break;
+            case nlohmann::json::value_t::boolean:
+                m_options.format_options.set(key, item.value().template get<bool>());
+                break;
+            case nlohmann::json::value_t::object:
+                throw config_error{"Option value for key '" + std::string(key) + "' can not be of type object."};
+            case nlohmann::json::value_t::array:
+                throw config_error{"Option value for key '" + std::string(key) + "' can not be an array."};
+                break;
+            case nlohmann::json::value_t::string:
+                m_options.format_options.set(key, item.value().template get<std::string>());
+                break;
+            case nlohmann::json::value_t::number_integer:
+                m_options.format_options.set(key, std::to_string(item.value().template get<int64_t>()));
+                break;
+            case nlohmann::json::value_t::number_unsigned:
+                m_options.format_options.set(key, std::to_string(item.value().template get<uint64_t>()));
+                break;
+            case nlohmann::json::value_t::number_float:
+                m_options.format_options.set(key, std::to_string(item.value().template get<double>()));
+                break;
+            default:
+                throw config_error{"Unknown type"};
+        }
+    }
 }
 
 void CommandExport::parse_config_file() {
