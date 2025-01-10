@@ -190,6 +190,7 @@ jobs:
         os:
           - windows-2019
           - windows-2022
+          - windows-2025
     steps:
       - run: |
           vcpkg install \
