@@ -6,7 +6,7 @@
 #
 #-----------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.7.0)
+cmake_minimum_required(VERSION 3.10)
 
 project(osmium VERSION 1.16.0 LANGUAGES CXX C)
 
