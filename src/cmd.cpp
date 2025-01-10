@@ -26,9 +26,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/index/map.hpp>
 #include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/location.hpp>
 #include <osmium/osm/types.hpp>
 #include <osmium/util/memory.hpp>
 #include <osmium/util/verbose_output.hpp>
+
+#include <boost/program_options.hpp>
 
 #include <cstdlib>
 #include <iostream>

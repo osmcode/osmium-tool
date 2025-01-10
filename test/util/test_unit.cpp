@@ -3,6 +3,8 @@
 
 #include "util.hpp"
 
+#include <osmium/osm/entity_bits.hpp>
+
 #include <sstream>
 #include <string>
 

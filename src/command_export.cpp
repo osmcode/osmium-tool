@@ -42,6 +42,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
+#include <nlohmann/json.hpp>
+
 #include <boost/program_options.hpp>
 
 #include <cctype>

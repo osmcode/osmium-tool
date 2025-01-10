@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/handler/check_order.hpp>
 #include <osmium/util/file.hpp>
 
+#include <cstdlib>
 #include <memory>
 #include <vector>
 
