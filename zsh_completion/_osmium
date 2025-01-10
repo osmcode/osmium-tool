@@ -524,7 +524,8 @@ _osmium_export_file_formats() {
         'json[GeoJSON format]' \
         'geojson[GeoJSON format]' \
         'jsonseq[GeoJSON Text Sequence format]' \
-        'geojsonseq[GeoJSON Text Sequence format]'
+        'geojsonseq[GeoJSON Text Sequence format]' \
+        'pg[PostgreSQL COPY text format]'
 }
 
 _osmium_export_id_type() {
