@@ -8,9 +8,25 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Add options to the "diff" command to ignore changeset, uid, and/or user
+  attributes.
+- More tests.
+
 ### Changed
 
+- Switch from RapidJSON to NLohman JSON. RapidJSON hasn't seen an update in
+  a long time, so we are using a different JSON library.
+- Removed "spaten" output format.
+- Open writer in getid command earlier, so see potential errors earlier.
+- Lots of small code cleanups.
+
 ### Fixed
+
+- Fix reading from STDIN for sort command.
+- Make tests using binary files optional, because they don't work with zlib-ng
+  that some distributions use. Use `-DRUN_TESTS_WITH_BINARY_COMPARE=OFF` to
+  switch off those tests.
+
 
 ## [1.16.0] - 2023-09-20
 
