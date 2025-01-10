@@ -27,6 +27,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/osm/object.hpp>
 #include <osmium/osm/types.hpp>
 
+#include <string>
+#include <vector>
+
 void OptionClean::setup(const boost::program_options::variables_map& vm) {
     if (vm.count("clean")) {
         for (const auto& c : vm["clean"].as<std::vector<std::string>>()) {

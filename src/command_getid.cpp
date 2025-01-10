@@ -42,9 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstddef>
 #include <fstream>
 #include <iostream>
-#include <stdexcept>
 #include <string>
-#include <utility>
 #include <vector>
 
 std::size_t CommandGetId::count_ids() const noexcept {

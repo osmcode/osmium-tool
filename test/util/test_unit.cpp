@@ -3,6 +3,9 @@
 
 #include "util.hpp"
 
+#include <sstream>
+#include <string>
+
 namespace {
 
 void test_filter(const std::string& expression, osmium::osm_entity_bits::type entities, const char* filter) {

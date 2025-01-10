@@ -39,7 +39,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <boost/program_options.hpp>
 
-#include <algorithm>
+#include <cstdlib>
+#include <iostream>
 #include <memory>
 #include <numeric>
 #include <queue>

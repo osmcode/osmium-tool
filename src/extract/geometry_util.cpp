@@ -1,6 +1,8 @@
 
 #include "geometry_util.hpp"
 
+#include <vector>
+
 double calculate_double_area(const std::vector<osmium::Location>& coordinates) {
     assert(coordinates.size() > 1);
 

@@ -32,8 +32,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <fstream>
 #include <string>
+#include <utility>
 #include <vector>
 
 std::string get_value_as_string(const nlohmann::json& object, const char* key) {

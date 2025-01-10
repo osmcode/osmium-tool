@@ -27,6 +27,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/handler/check_order.hpp>
 #include <osmium/util/file.hpp>
 
+#include <memory>
+#include <vector>
+
 namespace strategy_complete_ways {
 
     void Data::add_relation_parents(osmium::unsigned_object_id_type id, const osmium::index::RelationsMapIndex& map) {

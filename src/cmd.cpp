@@ -32,6 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 po::options_description Command::add_common_options(const bool with_progress) {
     po::options_description options{"COMMON OPTIONS"};

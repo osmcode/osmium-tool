@@ -29,6 +29,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/misc.hpp>
 #include <osmium/util/string.hpp>
 
+#include <algorithm>
+#include <cstdlib>
+#include <memory>
+#include <string>
+#include <vector>
+
 namespace strategy_smart {
 
     void Data::add_relation_members(const osmium::Relation& relation) {

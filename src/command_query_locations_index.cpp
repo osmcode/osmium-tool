@@ -38,8 +38,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstring>
 #include <iostream>
-#include <stdexcept>
 #include <string>
+#include <system_error>
+#include <utility>
 #include <vector>
 
 bool CommandQueryLocationsIndex::setup(const std::vector<std::string>& arguments) {

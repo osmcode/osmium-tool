@@ -3,6 +3,8 @@
 
 #include "command_cat.hpp"
 
+#include <stdexcept>
+
 TEST_CASE("cat") {
     const CommandFactory factory;
     CommandCat cmd{factory};

@@ -9,6 +9,9 @@
 #include <osmium/osm/relation.hpp>
 #include <osmium/osm/way.hpp>
 
+#include <istream>
+#include <string>
+
 void add_nodes(const osmium::Way& way, ids_type& ids) {
     for (const auto& nr : way.nodes()) {
         ids(osmium::item_type::node).set(nr.positive_ref());

@@ -52,9 +52,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdlib>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <system_error>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <vector>

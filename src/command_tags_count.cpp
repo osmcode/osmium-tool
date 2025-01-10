@@ -30,8 +30,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/progress_bar.hpp>
 
 #include <algorithm>
+#include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <functional>
+#include <limits>
+#include <string>
+#include <utility>
+#include <vector>
 
 void CommandTagsCount::add_matcher(const std::string& expression) {
     bool has_value_matcher = false;

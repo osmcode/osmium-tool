@@ -9,6 +9,8 @@
 
 #include <osmium/memory/buffer.hpp>
 
+#include <vector>
+
 TEST_CASE("Parse poly files") {
     osmium::memory::Buffer buffer{1024};
 

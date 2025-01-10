@@ -40,9 +40,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdlib>
 #include <cstring>
-#include <iostream>
-#include <stdexcept>
 #include <string>
+#include <system_error>
 #include <vector>
 
 bool CommandCreateLocationsIndex::setup(const std::vector<std::string>& arguments) {

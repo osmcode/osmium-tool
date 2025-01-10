@@ -26,6 +26,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/handler/check_order.hpp>
 
+#include <cstdlib>
+#include <memory>
+#include <vector>
+
 namespace strategy_simple {
 
     Strategy::Strategy(const std::vector<std::unique_ptr<Extract>>& extracts, const osmium::Options& options) {

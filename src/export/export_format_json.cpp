@@ -31,6 +31,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <array>
 #include <cstdio>
+#include <string>
 
 static constexpr const std::size_t initial_buffer_size = 1024UL * 1024UL;
 static constexpr const std::size_t flush_buffer_size   =  800UL * 1024UL;

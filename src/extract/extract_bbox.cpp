@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <osmium/osm/location.hpp>
 
+#include <iterator>
 #include <string>
 
 bool ExtractBBox::contains(const osmium::Location& location) const noexcept {

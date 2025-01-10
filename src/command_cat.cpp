@@ -35,6 +35,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <boost/program_options.hpp>
 
 #include <cassert>
+#include <cstdlib>
 #include <string>
 #include <utility>
 #include <vector>

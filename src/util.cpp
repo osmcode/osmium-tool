@@ -32,9 +32,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <utility>
 
 /**
  * Get the suffix of the given file name. The suffix is everything after
