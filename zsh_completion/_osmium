@@ -97,11 +97,11 @@ _osmium-apply-changes() {
         ${(f)"$(_osmium-multiple-inputs-options)"} \
         ${(f)"$(_osmium-output-format-options)"} \
         ${(f)"$(_osmium-output-options)"} \
-        '--change-file-format[Format of the change file(s)]' \
+        '--change-file-format[format of the change file(s)]' \
         '--locations-on-ways[update OSM file with locations on ways]' \
         '(--with-history)-H[update OSM history file]' \
         '(-H)--with-history[update OSM history file]' \
-        '--redact[Redact (patch) OSM history file]' \
+        '--redact[redact (patch) OSM history file]' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]'
 }
@@ -186,8 +186,8 @@ _osmium-diff() {
         '(-q)--quiet[report only when files differ]' \
         '(--suppress-common)-c[suppress common objects]' \
         '(-c)--suppress-common[suppress common objects]' \
-        '(--summary)-s[Show summary on STDERR]' \
-        '(-s)--summary[Show summary on STDERR]' \
+        '(--summary)-s[show summary on STDERR]' \
+        '(-s)--summary[show summary on STDERR]' \
         '(--progress)--no-progress[disable progress bar]' \
         '(--no-progress)--progress[enable progress bar]' \
         '*-t[read only objects of given output types]:OSM entity type:_osmium_object_type' \
@@ -477,10 +477,10 @@ _osmium_output_file_formats() {
 
 _osmium_diff_file_formats() {
     _values 'Diff file formats' \
-        'opl[One object per line]' \
-        'debug[Debug format]' \
-        'debug,color[Debug format with color]' \
-        'compact[Compact format]'
+        'opl[one object per line]' \
+        'debug[debug format]' \
+        'debug,color[debug format with color]' \
+        'compact[compact format]'
 }
 
 _osmium_object_type() {
