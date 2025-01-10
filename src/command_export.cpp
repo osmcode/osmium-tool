@@ -610,7 +610,7 @@ bool CommandExport::run() {
 
     if (m_index_type_name == "none") {
         osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_file};
-        osmium::apply(reader, check_order_handler, export_handler, mp_manager.handler([&export_handler](osmium::memory::Buffer&& buffer) {
+        osmium::apply(reader, check_order_handler, export_handler, mp_manager.handler([&export_handler](const osmium::memory::Buffer& buffer) {
             osmium::apply(buffer, export_handler);
         }));
         reader.close();
@@ -624,7 +624,7 @@ bool CommandExport::run() {
         }
 
         osmium::io::ReaderWithProgressBar reader{display_progress(), m_input_filename};
-        osmium::apply(reader, check_order_handler, location_handler, export_handler, mp_manager.handler([&export_handler](osmium::memory::Buffer&& buffer) {
+        osmium::apply(reader, check_order_handler, location_handler, export_handler, mp_manager.handler([&export_handler](const osmium::memory::Buffer& buffer) {
             osmium::apply(buffer, export_handler);
         }));
         reader.close();

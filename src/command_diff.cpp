@@ -275,7 +275,7 @@ public:
 
 }; // class OutputActionOSM
 
-void CommandDiff::update_object_crc(osmium::CRC<osmium::CRC_zlib>* crc, const osmium::OSMObject &object) {
+void CommandDiff::update_object_crc(osmium::CRC<osmium::CRC_zlib>* crc, const osmium::OSMObject &object) const {
     crc->update_bool(object.visible());
     crc->update(object.timestamp());
     crc->update(object.tags());

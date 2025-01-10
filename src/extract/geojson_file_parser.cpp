@@ -136,7 +136,7 @@ void parse_rings(const nlohmann::json& value, osmium::builder::AreaBuilder* buil
     }
 }
 
-} // namespace anonymous
+} // anonymous namespace
 
 std::size_t parse_polygon_array(const nlohmann::json& value, osmium::memory::Buffer* buffer) {
     {

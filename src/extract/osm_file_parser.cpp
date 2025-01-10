@@ -64,7 +64,7 @@ std::size_t OSMFileParser::operator()() {
         osmium::builder::AreaBuilder builder{m_buffer};
 
         osmium::io::Reader reader{input_file};
-        osmium::apply(reader, location_handler, collector.handler([&](osmium::memory::Buffer&& buffer) {
+        osmium::apply(reader, location_handler, collector.handler([&](const osmium::memory::Buffer& buffer) {
             for (const auto& area : buffer.select<osmium::Area>()) {
                 for (const auto& item : area) {
                     if (item.type() == osmium::item_type::outer_ring ||

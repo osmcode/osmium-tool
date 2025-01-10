@@ -35,8 +35,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 /**
  * Get the suffix of the given file name. The suffix is everything after

@@ -40,7 +40,7 @@ class CommandDiff : public CommandWithMultipleOSMInputs, public with_osm_output 
     bool m_show_summary = false;
     bool m_suppress_common = false;
 
-    void update_object_crc(osmium::CRC<osmium::CRC_zlib>* crc, const osmium::OSMObject &object);
+    void update_object_crc(osmium::CRC<osmium::CRC_zlib>* crc, const osmium::OSMObject &object) const;
 
 public:
 
