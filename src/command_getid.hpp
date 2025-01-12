@@ -29,21 +29,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/index/id_set.hpp>
 #include <osmium/index/nwr_array.hpp>
 #include <osmium/index/relations_map.hpp>
-#include <osmium/io/reader.hpp>
-#include <osmium/io/writer.hpp>
 #include <osmium/osm/entity_bits.hpp>
 #include <osmium/osm/item_type.hpp>
 #include <osmium/osm/types.hpp>
 
 #include <cstddef>
 #include <iosfwd>
-#include <memory>
 #include <string>
 #include <vector>
 
 class CommandGetId : public CommandWithSingleOSMInput, public with_osm_output {
-
-    std::unique_ptr<osmium::io::Writer> m_writer;
 
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_matching_ids;
     osmium::nwr_array<osmium::index::IdSetDense<osmium::unsigned_object_id_type>> m_ids;
@@ -57,12 +52,6 @@ class CommandGetId : public CommandWithSingleOSMInput, public with_osm_output {
 
     osmium::osm_entity_bits::type get_needed_types() const;
     std::size_t count_ids() const noexcept;
-
-    void open_writer(osmium::io::Reader& reader);
-
-    osmium::io::Writer& writer() {
-        return *m_writer;
-    }
 
     void find_referenced_objects();
 

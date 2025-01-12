@@ -42,7 +42,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstddef>
 #include <fstream>
 #include <iostream>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -246,7 +245,6 @@ bool CommandGetId::find_relations_in_relations() {
     osmium::index::RelationsMapStash stash;
 
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation, osmium::io::read_meta::no};
-    open_writer(reader);
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             for (const auto& member : relation.members()) {
@@ -280,7 +278,6 @@ void CommandGetId::find_nodes_and_ways_in_relations() {
     m_vout << "  Reading input file to find nodes/ways in relations...\n";
 
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::relation, osmium::io::read_meta::no};
-    open_writer(reader);
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& relation : buffer.select<osmium::Relation>()) {
             if (m_ids(osmium::item_type::relation).get(relation.positive_id())) {
@@ -301,7 +298,6 @@ void CommandGetId::find_nodes_in_ways() {
     m_vout << "  Reading input file to find nodes in ways...\n";
 
     osmium::io::Reader reader{m_input_file, osmium::osm_entity_bits::way, osmium::io::read_meta::no};
-    open_writer(reader);
     while (osmium::memory::Buffer buffer = reader.read()) {
         for (const auto& way : buffer.select<osmium::Way>()) {
             if (m_ids(osmium::item_type::way).get(way.positive_id())) {
@@ -336,17 +332,6 @@ void CommandGetId::find_referenced_objects() {
     m_vout << "Done following references.\n";
 }
 
-void CommandGetId::open_writer(osmium::io::Reader& reader) {
-    if (m_writer) {
-        return;
-    }
-
-    m_vout << "Opening output file...\n";
-    osmium::io::Header header{reader.header()};
-    setup_header(header);
-    m_writer = std::make_unique<osmium::io::Writer>(m_output_file, header, m_output_overwrite, m_fsync);
-}
-
 bool CommandGetId::run() {
     if (m_add_referenced_objects) {
         find_referenced_objects();
@@ -354,7 +339,12 @@ bool CommandGetId::run() {
 
     m_vout << "Opening input file...\n";
     osmium::io::Reader reader{m_input_file, get_needed_types()};
-    open_writer(reader);
+
+    m_vout << "Opening output file...\n";
+    osmium::io::Header header{reader.header()};
+    setup_header(header);
+
+    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
     m_vout << "Copying matching objects to output file...\n";
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
@@ -365,7 +355,7 @@ bool CommandGetId::run() {
                 if (!m_work_with_history) {
                     m_ids(object.type()).unset(object.positive_id());
                 }
-                writer()(object);
+                writer(object);
             } else if (m_ids(object.type()).get(object.positive_id())) {
                 if (!m_work_with_history) {
                     m_ids(object.type()).unset(object.positive_id());
@@ -373,14 +363,14 @@ bool CommandGetId::run() {
                 if (m_remove_tags) {
                     object.remove_tags();
                 }
-                writer()(object);
+                writer(object);
             }
         }
     }
     progress_bar.done();
 
     m_vout << "Closing output file...\n";
-    writer().close();
+    writer.close();
 
     m_vout << "Closing input file...\n";
     reader.close();
