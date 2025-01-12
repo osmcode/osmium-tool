@@ -275,6 +275,13 @@ void CommandApplyChanges::apply_changes_and_write(osmium::ObjectPointerCollectio
 }
 
 bool CommandApplyChanges::run() {
+    if (m_locations_on_ways) {
+        m_output_file.set("locations_on_ways");
+    }
+
+    m_vout << "Opening output file...\n";
+    osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
+
     std::vector<osmium::memory::Buffer> changes;
     osmium::ObjectPointerCollection objects;
 
@@ -302,13 +309,7 @@ bool CommandApplyChanges::run() {
     if (m_with_history) {
         header.set_has_multiple_object_versions(true);
     }
-
-    if (m_locations_on_ways) {
-        m_output_file.set("locations_on_ways");
-    }
-
-    m_vout << "Opening output file...\n";
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+    writer.set_header(header);
 
     if (m_with_history) {
         // For history files this is a straightforward sort of the change

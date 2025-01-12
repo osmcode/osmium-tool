@@ -176,6 +176,9 @@ void CommandAddLocationsToWays::find_member_nodes() {
 }
 
 bool CommandAddLocationsToWays::run() {
+    m_output_file.set("locations_on_ways");
+    osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
+
     if (m_keep_member_nodes) {
         m_vout << "Getting all nodes referenced from relations...\n";
         find_member_nodes();
@@ -191,14 +194,12 @@ bool CommandAddLocationsToWays::run() {
         location_handler.ignore_errors();
     }
 
-    m_output_file.set("locations_on_ways");
-
     if (m_input_files.size() == 1) { // single input file
         m_vout << "Copying input file '" << m_input_files[0].filename() << "'...\n";
         osmium::io::Reader reader{m_input_files[0]};
         osmium::io::Header header{reader.header()};
         setup_header(header);
-        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+        writer.set_header(header);
 
         osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
         copy_data(progress_bar, reader, writer, location_handler);
@@ -209,7 +210,7 @@ bool CommandAddLocationsToWays::run() {
     } else { // multiple input files
         osmium::io::Header header;
         setup_header(header);
-        osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+        writer.set_header(header);
 
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {

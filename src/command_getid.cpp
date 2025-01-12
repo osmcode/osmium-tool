@@ -333,6 +333,9 @@ void CommandGetId::find_referenced_objects() {
 }
 
 bool CommandGetId::run() {
+    m_vout << "Opening output file...\n";
+    osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
+
     if (m_add_referenced_objects) {
         find_referenced_objects();
     }
@@ -340,11 +343,9 @@ bool CommandGetId::run() {
     m_vout << "Opening input file...\n";
     osmium::io::Reader reader{m_input_file, get_needed_types()};
 
-    m_vout << "Opening output file...\n";
     osmium::io::Header header{reader.header()};
     setup_header(header);
-
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+    writer.set_header(header);
 
     m_vout << "Copying matching objects to output file...\n";
     osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};

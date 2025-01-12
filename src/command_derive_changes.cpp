@@ -151,6 +151,12 @@ void CommandDeriveChanges::write_deleted(osmium::io::Writer& writer, osmium::OSM
 }
 
 bool CommandDeriveChanges::run() {
+    m_vout << "Opening output file...\n";
+    if (m_output_file.format() != osmium::io::file_format::xml || !m_output_file.is_true("xml_change_format")) {
+        warning("Output format chosen is not the XML change format. Use .osc(.gz|bz2) as suffix or -f option.\n");
+    }
+    osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
+
     m_vout << "Opening input files...\n";
     osmium::io::Reader reader1{m_input_files[0], osmium::osm_entity_bits::object};
     osmium::io::ReaderWithProgressBar reader2{display_progress(), m_input_files[1], osmium::osm_entity_bits::object};
@@ -161,16 +167,9 @@ bool CommandDeriveChanges::run() {
     auto end1 = in1.end();
     auto end2 = in2.end();
 
-    reader2.progress_bar().remove();
-    m_vout << "Opening output file...\n";
-    if (m_output_file.format() != osmium::io::file_format::xml || !m_output_file.is_true("xml_change_format")) {
-        warning("Output format chosen is not the XML change format. Use .osc(.gz|bz2) as suffix or -f option.\n");
-    }
-
     osmium::io::Header header;
     setup_header(header);
-
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+    writer.set_header(header);
 
     reader2.progress_bar().remove();
     m_vout << "Deriving changes...\n";

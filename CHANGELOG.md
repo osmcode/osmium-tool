@@ -14,10 +14,11 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Needs at least libosmium version 2.20.0.
 - Switch from RapidJSON to NLohman JSON. RapidJSON hasn't seen an update in
   a long time, so we are using a different JSON library.
 - Removed "spaten" output format.
-- Open writer in getid command earlier, so see potential errors earlier.
+- Open writer in some commands earlier, so we see potential errors earlier.
 - Lots of small code cleanups.
 
 ### Fixed

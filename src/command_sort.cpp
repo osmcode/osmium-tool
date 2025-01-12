@@ -104,6 +104,8 @@ void CommandSort::show_arguments() {
 }
 
 bool CommandSort::run_single_pass() {
+    osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
+
     std::vector<osmium::memory::Buffer> data;
     osmium::ObjectPointerCollection objects;
 
@@ -149,8 +151,7 @@ bool CommandSort::run_single_pass() {
     if (bounding_box) {
         header.add_box(bounding_box);
     }
-
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+    writer.set_header(header);
 
     m_vout << "Sorting data...\n";
     objects.sort(osmium::object_order_type_id_version());
@@ -169,6 +170,8 @@ bool CommandSort::run_single_pass() {
 }
 
 bool CommandSort::run_multi_pass() {
+    osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
+
     osmium::Box bounding_box;
 
     m_vout << "Reading input file headers...\n";
@@ -185,8 +188,7 @@ bool CommandSort::run_multi_pass() {
     if (bounding_box) {
         header.add_box(bounding_box);
     }
-
-    osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
+    writer.set_header(header);
 
     osmium::ProgressBar progress_bar{file_size_sum(m_input_files) * 3, display_progress()};
 
