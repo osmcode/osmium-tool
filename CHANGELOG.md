@@ -8,6 +8,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+
+## [1.17.0] - 2025-01-14
+
+### Added
+
 - Add options to the "diff" command to ignore changeset, uid, and/or user
   attributes.
 - More tests.
@@ -728,7 +737,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.16.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.17.0...HEAD
+[1.17.0]: https://github.com/osmcode/osmium-tool/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/osmcode/osmium-tool/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/osmcode/osmium-tool/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/osmcode/osmium-tool/compare/v1.13.2...v1.14.0
