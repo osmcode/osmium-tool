@@ -29,6 +29,10 @@ This commands reads its input file only once and writes its output file
 in one go so it can be streamed, ie. it can read from STDIN and write to
 STDOUT.
 
+If the input file has a timestamp set in the header and the specified *TO-TIME*
+is before that timestamp in the header, the header of the output file will have
+the timestamp set to the *TO-TIME* (or *TO-TIME* minus one second if a
+*FROM-TIME* was also set).
 
 @MAN_COMMON_OPTIONS@
 @MAN_PROGRESS_OPTIONS@

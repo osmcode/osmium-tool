@@ -134,6 +134,19 @@ bool CommandTimeFilter::run() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header{reader.header()};
+    try {
+        osmium::Timestamp const input_timestamp{header.get("osmosis_replication_timestamp")};
+        if (input_timestamp.valid() && input_timestamp >= m_to) {
+            auto ts = m_to;
+            if (m_from != m_to) {
+                ts -= 1;
+            }
+            m_vout << "Set output timestamp to " << ts.to_iso() << "\n";
+            header.set("osmosis_replication_timestamp", ts.to_iso());
+        }
+    } catch (const std::invalid_argument&) { // NOLINT(bugprone-empty-catch)
+        // Ignore unset or invalid timestamp from input file
+    }
     setup_header(header);
 
     osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
