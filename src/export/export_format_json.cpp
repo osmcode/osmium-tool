@@ -87,9 +87,10 @@ void ExportFormatJSON::start_feature(const std::string& prefix, osmium::object_i
         m_buffer += R"(,"id":)";
         m_buffer += std::to_string(m_count + 1);
     } else if (options().unique_id == unique_id_type::type_id) {
-        m_buffer += R"(,"id":)";
+        m_buffer += R"(,"id":")";
         m_buffer += prefix;
         m_buffer += std::to_string(id);
+        m_buffer += '"';
     }
 }
 
