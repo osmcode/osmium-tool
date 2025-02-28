@@ -14,6 +14,9 @@ check_export(geojson    "-f geojson"       input.osm output.geojson)
 check_export(geojsonseq "-f geojsonseq -x print_record_separator=false" input.osm output.geojsonseq)
 check_export(geojsonuid "-f geojsonseq -u type_id" input.osm output-uid.geojsonseq)
 check_export(geojsoncnt "-f geojsonseq -u counter" input.osm output-cnt.geojsonseq)
+check_export(geojsonattr "-f geojson -n -a type,id,version,changeset,timestamp,uid,user,way_nodes" input.osm output-attr.geojson)
+check_export(geojsonchar "-f geojson -n -a type,id,version,changeset,timestamp,uid,user,way_nodes" input-chars.osm output-chars.geojson)
+
 check_export(pg         "-f pg"            input.osm output.pg)
 
 check_export(missing-node "-f geojson" input-missing-node.osm output-missing-node.geojson)

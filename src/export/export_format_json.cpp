@@ -96,7 +96,6 @@ void ExportFormatJSON::start_feature(const std::string& prefix, osmium::object_i
 
 void ExportFormatJSON::add_option(const std::string& name) {
     const nlohmann::json j = name;
-    m_buffer += ',';
     m_buffer += j.dump();
     m_buffer += ':';
 }
@@ -105,38 +104,47 @@ void ExportFormatJSON::add_attributes(const osmium::OSMObject& object) {
 
     if (!options().type.empty()) {
         add_option(options().type);
+        m_buffer += '"';
         m_buffer += object_type_as_string(object);
+        m_buffer += '"';
+        m_buffer += ',';
     }
 
     if (!options().id.empty()) {
         add_option(options().id);
         m_buffer += std::to_string(object.type() == osmium::item_type::area ? osmium::area_id_to_object_id(object.id()) : object.id());
+        m_buffer += ',';
     }
 
     if (!options().version.empty()) {
         add_option(options().version);
         m_buffer += std::to_string(object.version());
+        m_buffer += ',';
     }
 
     if (!options().changeset.empty()) {
         add_option(options().changeset);
         m_buffer += std::to_string(object.changeset());
+        m_buffer += ',';
     }
 
     if (!options().uid.empty()) {
         add_option(options().uid);
         m_buffer += std::to_string(object.uid());
+        m_buffer += ',';
     }
 
     if (!options().user.empty()) {
         add_option(options().user);
         const nlohmann::json j = object.user();
-        m_buffer += j.template get<std::string>();
+        m_buffer += j.dump();
+        m_buffer += ',';
     }
 
     if (!options().timestamp.empty()) {
         add_option(options().timestamp);
         m_buffer += std::to_string(object.timestamp().seconds_since_epoch());
+        m_buffer += ',';
     }
 
     if (!options().way_nodes.empty() && object.type() == osmium::item_type::way) {
@@ -152,6 +160,7 @@ void ExportFormatJSON::add_attributes(const osmium::OSMObject& object) {
         } else {
             m_buffer += ']';
         }
+        m_buffer += ',';
     }
 }
 

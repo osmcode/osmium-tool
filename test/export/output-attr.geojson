@@ -1,0 +1,11 @@
+{"type":"FeatureCollection","features":[
+{"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,1.0]},"properties":{"@type":"node","@id":10,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,2.0]},"properties":{"@type":"node","@id":11,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,3.0]},"properties":{"@type":"node","@id":12,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,4.0]},"properties":{"@type":"node","@id":13,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[2.0,1.5]},"properties":{"@type":"node","@id":14,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000,"amenity":"post_box"}},
+{"type":"Feature","geometry":{"type":"LineString","coordinates":[[1.0,1.0],[1.0,2.0],[1.0,3.0]]},"properties":{"@type":"way","@id":20,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000,"@way_nodes":[10,11,12],"highway":"track"}},
+{"type":"Feature","geometry":{"type":"LineString","coordinates":[[1.0,1.0],[1.0,2.0],[2.0,1.5]]},"properties":{"@type":"way","@id":21,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000,"@way_nodes":[10,11,14],"barrier":"fence"}},
+{"type":"Feature","geometry":{"type":"LineString","coordinates":[[2.0,1.5],[1.0,1.0]]},"properties":{"@type":"way","@id":22,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000,"@way_nodes":[14,10]}},
+{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[1.0,1.0],[2.0,1.5],[1.0,2.0],[1.0,1.0]]]]},"properties":{"@type":"relation","@id":30,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000,"landuse":"forest"}}
+]}

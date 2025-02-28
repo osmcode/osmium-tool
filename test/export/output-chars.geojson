@@ -1,0 +1,5 @@
+{"type":"FeatureCollection","features":[
+{"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,3.0]},"properties":{"@type":"node","@id":10,"@version":1,"@changeset":1,"@uid":1,"@user":"te'st","@timestamp":1420074000}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,1.0]},"properties":{"@type":"node","@id":11,"@version":1,"@changeset":1,"@uid":1,"@user":"te\"st","@timestamp":1420074000}},
+{"type":"Feature","geometry":{"type":"Point","coordinates":[1.0,2.0]},"properties":{"@type":"node","@id":12,"@version":1,"@changeset":1,"@uid":1,"@user":"test","@timestamp":1420074000,"ame'nity":"post\"_box"}}
+]}
