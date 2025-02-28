@@ -45,6 +45,8 @@ class GeoJSONFileParser {
 
     [[noreturn]] void error(const std::string& message);
 
+    const nlohmann::json& get_coordinates(const nlohmann::json& json_geometry);
+
     std::size_t parse_top(const nlohmann::json& top);
 
 public:

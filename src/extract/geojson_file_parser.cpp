@@ -179,6 +179,19 @@ GeoJSONFileParser::GeoJSONFileParser(osmium::memory::Buffer& buffer, std::string
     }
 }
 
+const nlohmann::json& GeoJSONFileParser::get_coordinates(const nlohmann::json& json_geometry) {
+    const auto json_coordinates = json_geometry.find("coordinates");
+    if (json_coordinates == json_geometry.end()) {
+        error("Missing 'coordinates' name in 'geometry' object.");
+    }
+
+    if (!json_coordinates->is_array()) {
+        error("Expected 'geometry.coordinates' value to be an array.");
+    }
+
+    return *json_coordinates;
+}
+
 std::size_t GeoJSONFileParser::parse_top(const nlohmann::json& top) {
     const auto json_geometry = top.find("geometry");
     if (json_geometry == top.end()) {
@@ -197,20 +210,13 @@ std::size_t GeoJSONFileParser::parse_top(const nlohmann::json& top) {
         error("Expected 'geometry.type' value to be 'Polygon' or 'MultiPolygon'.");
     }
 
-    const auto json_coordinates = json_geometry->find("coordinates");
-    if (json_coordinates == json_geometry->end()) {
-        error("Missing 'coordinates' name in 'geometry' object.");
-    }
-
-    if (!json_coordinates->is_array()) {
-        error("Expected 'geometry.coordinates' value to be an array.");
-    }
+    const auto json_coordinates = get_coordinates(*json_geometry);
 
     if (geometry_type == "Polygon") {
-        return parse_polygon_array(*json_coordinates, &m_buffer);
+        return parse_polygon_array(json_coordinates, &m_buffer);
     }
 
-    return parse_multipolygon_array(*json_coordinates, &m_buffer);
+    return parse_multipolygon_array(json_coordinates, &m_buffer);
 }
 
 std::size_t GeoJSONFileParser::operator()() {
@@ -223,7 +229,17 @@ std::size_t GeoJSONFileParser::operator()() {
 
         const std::string type{get_value_as_string(doc, "type")};
         if (type.empty()) {
-            error("Expected 'type' name with the value 'Feature' or 'FeatureCollection'.");
+            error("Expected 'type' name with the value 'Feature', 'FeatureCollection', 'Polygon', or 'MultiPolygon'.");
+        }
+
+        if (type == "Polygon") {
+            const auto json_coordinates = get_coordinates(doc);
+            return parse_polygon_array(json_coordinates, &m_buffer);
+        }
+
+        if (type == "MultiPolygon") {
+            const auto json_coordinates = get_coordinates(doc);
+            return parse_multipolygon_array(json_coordinates, &m_buffer);
         }
 
         if (type == "Feature") {
