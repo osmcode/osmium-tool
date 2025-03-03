@@ -250,19 +250,18 @@ void ExportFormatJSON::create_linestring(const osmium::Way& way) {
 
 void ExportFormatJSON::create_multipolygon(const osmium::Area& area) {
     m_buffer += R"(,"geometry":{"type":"MultiPolygon","coordinates":)";
+    m_buffer += '[';
     for (const auto &outer_ring : area.outer_rings()) {
-        m_buffer += "[[";
+        m_buffer += '[';
         create_coordinate_list(outer_ring);
-        m_buffer += ']';
         for (const auto &inner_ring : area.inner_rings(outer_ring)) {
-            m_buffer += ",[";
+            m_buffer += ",";
             create_coordinate_list(inner_ring);
-            m_buffer += ']';
         }
         m_buffer += "],";
     }
-
-    m_buffer.back() = '}';
+    m_buffer.pop_back(); // remove trailing comma
+    m_buffer += "]}";
 }
 
 void ExportFormatJSON::node(const osmium::Node& node) {

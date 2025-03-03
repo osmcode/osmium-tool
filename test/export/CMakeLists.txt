@@ -11,6 +11,7 @@ function(check_export _name _options _input _output)
 endfunction()
 
 check_export(geojson    "-f geojson"       input.osm output.geojson)
+check_export(geojsonmp  "-f geojson -u type_id" input-mp.osm output-mp.geojson)
 check_export(geojsonseq "-f geojsonseq -x print_record_separator=false" input.osm output.geojsonseq)
 check_export(geojsonuid "-f geojsonseq -u type_id" input.osm output-uid.geojsonseq)
 check_export(geojsoncnt "-f geojsonseq -u counter" input.osm output-cnt.geojsonseq)

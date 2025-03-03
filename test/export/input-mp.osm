@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" upload="false" generator="testdata">
+  <node id="10" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="1" lon="1"/>
+  <node id="11" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="1" lon="2"/>
+  <node id="12" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="2" lon="2"/>
+  <node id="13" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="2" lon="1"/>
+  <node id="14" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="0" lon="0"/>
+  <node id="15" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="0" lon="3"/>
+  <node id="16" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="3" lon="3"/>
+  <node id="17" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="3" lon="0"/>
+  <node id="18" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="4" lon="0"/>
+  <node id="19" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="4" lon="1"/>
+  <node id="20" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="5" lon="1"/>
+  <node id="21" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="5" lon="0"/>
+  <way id="80" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <nd ref="13"/>
+    <nd ref="10"/>
+  </way>
+  <way id="81" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="14"/>
+    <nd ref="15"/>
+    <nd ref="16"/>
+    <nd ref="17"/>
+    <nd ref="14"/>
+  </way>
+  <way id="82" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="18"/>
+    <nd ref="19"/>
+    <nd ref="20"/>
+    <nd ref="21"/>
+    <nd ref="18"/>
+  </way>
+  <relation id="90" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="way" ref="80" role="inner"/>
+    <member type="way" ref="81" role="outer"/>
+    <member type="way" ref="82" role="outer"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="landuse" v="forest"/>
+  </relation>
+  <relation id="91" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="way" ref="81" role="outer"/>
+    <member type="way" ref="82" role="outer"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="landuse" v="forest"/>
+  </relation>
+  <relation id="92" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="way" ref="80" role="inner"/>
+    <member type="way" ref="81" role="outer"/>
+    <tag k="type" v="multipolygon"/>
+    <tag k="landuse" v="forest"/>
+  </relation>
+</osm>
