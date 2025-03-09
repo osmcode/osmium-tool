@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6" upload="false" generator="testdata">
+  <node id="5000000010" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="0" lon="1"/>
+  <node id="5000000011" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="1" lon="1"/>
+  <node id="5000000012" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="2" lon="1"/>
+  <node id="5000000013" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="3" lon="2"/>
+  <node id="5000000014" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="4" lon="2"/>
+  <node id="5000000015" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="5" lon="2"/>
+  <node id="5000000016" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1" lat="6" lon="2"/>
+  <way id="5000000020" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="5000000011"/>
+    <nd ref="5000000012"/>
+    <nd ref="5000000013"/>
+    <tag k="foo" v="bar"/>
+  </way>
+  <way id="5000000021" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <nd ref="5000000014"/>
+    <nd ref="5000000015"/>
+    <tag k="xyz" v="abc"/>
+  </way>
+  <relation id="5000000031" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="node" ref="5000000010" role=""/>
+  </relation>
+  <relation id="5000000032" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="node" ref="5000000013" role=""/>
+  </relation>
+  <relation id="5000000033" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="way" ref="5000000020" role=""/>
+  </relation>
+  <relation id="5000000034" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="way" ref="5000000020" role=""/>
+    <member type="way" ref="5000000021" role=""/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+  <relation id="5000000035" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="relation" ref="5000000031" role=""/>
+  </relation>
+  <relation id="5000000036" version="1" timestamp="2015-01-01T01:00:00Z" uid="1" user="test" changeset="1">
+    <member type="relation" ref="5000000035" role=""/>
+  </relation>
+</osm>

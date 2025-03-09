@@ -35,6 +35,20 @@ check_extract_cfg(simple           input1.osm output-simple.osm "-s simple --out
 
 #-----------------------------------------------------------------------------
 
+check_extract(clean64                input64.osm output-clean64.osm "--clean version --clean uid")
+
+check_extract(simple64               input64.osm output-simple64.osm "-s simple --output-header=xml_josm_upload!")
+check_extract(complete_ways64        input64.osm output-complete-ways64.osm "-s complete_ways")
+check_extract(complete_ways_norels64 input64.osm output-complete-ways-norels64.osm "-s complete_ways -S relations=false")
+check_extract(smart_default64        input64.osm output-smart64.osm "-s smart")
+check_extract(smart_mp64             input64.osm output-smart64.osm "-s smart -S types=multipolygon")
+check_extract(smart_any64            input64.osm output-smart64.osm "-s smart -S types=any")
+check_extract(smart_nonmp64          input64.osm output-smart-nonmp64.osm "-s smart -S types=x")
+
+check_extract_cfg(simple64           input64.osm output-simple64.osm "-s simple --output-header=xml_josm_upload=false")
+
+#-----------------------------------------------------------------------------
+
 check_extract_opl(antimeridian-east-bbox antimeridian.opl output-antimeridian-east.opl "--bbox=160,60,180,80")
 check_extract_opl(antimeridian-west-bbox antimeridian.opl output-antimeridian-west.opl "--bbox=-180,60,-160,80")
 check_extract_opl(antimeridian-east-poly antimeridian.opl output-antimeridian-east.opl "--polygon=extract/polygon-russia-east.geojson")
