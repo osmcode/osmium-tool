@@ -10,6 +10,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+### Fixed
+
+
+## [1.18.0] - 2025-03-17
+
+### Changed
+
 - If the newest libosmium is used, the `extract` command will now work with
   relation ids that do not fit into 32bit.
 - Set header timestamp in `time-filter` output file in some situations.
@@ -746,7 +753,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Minor updates to documentation and build system
 
 
-[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.17.0...HEAD
+[unreleased]: https://github.com/osmcode/osmium-tool/compare/v1.18.0...HEAD
+[1.18.0]: https://github.com/osmcode/osmium-tool/compare/v1.17.0...v1.18.0
 [1.17.0]: https://github.com/osmcode/osmium-tool/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/osmcode/osmium-tool/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/osmcode/osmium-tool/compare/v1.14.0...v1.15.0
