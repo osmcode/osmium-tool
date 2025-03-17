@@ -10,7 +10,16 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- If the newest libosmium is used, the `extract` command will now work with
+  relation ids that do not fit into 32bit.
+- Set header timestamp in `time-filter` output file in some situations.
+- Allow GeoJSON extract boundary with only geometry in `extract` command
+  instead of a complete feature in the GeoJSON.
+
 ### Fixed
+
+- Fixed various issues introduced in 1.17.0 when using the `export` command
+  to create GeoJSON files.
 
 
 ## [1.17.0] - 2025-01-14
