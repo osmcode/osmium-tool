@@ -14,7 +14,7 @@ osmium - multipurpose tool for working with OpenStreetMap data
 Multipurpose tool for working with OpenStreetMap data.
 
 Run **osmium help** *COMMAND* to get more information about a command. This
-will only work on Linux and OS/X systems and only if the `man` command is
+will only work on Linux and macOS systems and only if the `man` command is
 available and working correctly.
 
 
