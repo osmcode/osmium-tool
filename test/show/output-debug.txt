@@ -1,0 +1,32 @@
+header
+  multiple object versions: no
+  bounding boxes: 
+  options: 
+    generator = testdata
+    version = 0.6
+    xml_josm_upload = false
+
+=============================================
+
+node 1 visible
+  version:   1
+  changeset: 1
+  timestamp: 2021-01-01T00:00:00Z (1609459200)
+  user:      1 "test"
+  lon/lat:   13.4,52.5
+  tags:      2
+    "name"    = "Test Node"
+    "amenity" = "restaurant"
+
+way 2 visible
+  version:   1
+  changeset: 1
+  timestamp: 2021-01-01T00:00:00Z (1609459200)
+  user:      1 "test"
+  tags:      2
+    "highway" = "primary"
+    "name"    = "Test Way"
+  nodes:     2 (open)
+    0:          1
+    1:          3
+
