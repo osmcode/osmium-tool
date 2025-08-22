@@ -8,3 +8,4 @@ test/export/*.geojson -crlf
 test/export/*.geojsonseq -crlf
 test/export/*.txt -crlf
 test/diff/output* -crlf
+test/show/output* -crlf
