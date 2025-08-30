@@ -126,6 +126,7 @@ bool CommandSort::run_single_pass() {
             buffers_size += buffer.committed();
             buffers_capacity += buffer.capacity();
             progress_bar.update(reader.offset());
+            check_buffer_for_locations_on_ways(buffer);
             osmium::apply(buffer, objects);
             data.push_back(std::move(buffer));
         }
@@ -161,6 +162,7 @@ bool CommandSort::run_single_pass() {
     std::copy(objects.begin(), objects.end(), out);
 
     m_vout << "Closing output file...\n";
+    warn_about_locations_on_ways();
     writer.close();
 
     show_memory_used();
@@ -212,6 +214,9 @@ bool CommandSort::run_multi_pass() {
                 buffers_size += buffer.committed();
                 buffers_capacity += buffer.capacity();
                 progress_bar.update(reader.offset());
+                if (entity == osmium::osm_entity_bits::way) {
+                    check_buffer_for_locations_on_ways(buffer);
+                }
                 osmium::apply(buffer, objects);
                 data.push_back(std::move(buffer));
             }
@@ -245,6 +250,7 @@ bool CommandSort::run_multi_pass() {
     progress_bar.done();
 
     m_vout << "Closing output file...\n";
+    warn_about_locations_on_ways();
     writer.close();
 
     show_memory_used();
