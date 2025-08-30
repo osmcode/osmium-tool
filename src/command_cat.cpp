@@ -100,8 +100,6 @@ void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& rea
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
 
-        check_buffer_for_locations_on_ways(buffer);
-
         m_clean.apply_to(buffer);
 
         writer(std::move(buffer));
@@ -113,8 +111,6 @@ std::size_t CommandCat::read_buffers(osmium::ProgressBar& progress_bar, osmium::
 
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
-
-        check_buffer_for_locations_on_ways(buffer);
 
         m_clean.apply_to(buffer);
 
@@ -166,7 +162,7 @@ bool CommandCat::run() {
 
         report_filename(&m_vout, m_input_files[0], reader);
 
-        setup_header(header);
+        setup_header(header, reader.header());
         osmium::io::Writer writer{m_output_file, header, m_output_overwrite, m_fsync};
 
         if (m_buffer_data) {
@@ -185,7 +181,6 @@ bool CommandCat::run() {
             copy(progress_bar, reader, writer);
             progress_bar.done();
         }
-        warn_if_locations_on_ways_will_be_lost();
         bytes_written = writer.close();
         reader.close();
     } else { // multiple input files
@@ -211,7 +206,6 @@ bool CommandCat::run() {
             m_vout << "Writing data...\n";
             osmium::ProgressBar progress_bar_writer{size, display_progress()};
             write_buffers(progress_bar_writer, buffers, writer);
-            warn_if_locations_on_ways_will_be_lost();
             bytes_written = writer.close();
             progress_bar_writer.done();
         } else {
@@ -224,7 +218,6 @@ bool CommandCat::run() {
                 progress_bar.file_done(reader.file_size());
                 reader.close();
             }
-            warn_if_locations_on_ways_will_be_lost();
             bytes_written = writer.close();
             progress_bar.done();
         }

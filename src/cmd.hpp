@@ -28,9 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
-#include <osmium/memory/buffer.hpp>
 #include <osmium/osm/entity_bits.hpp>
-#include <osmium/osm/way.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/verbose_output.hpp>
 
@@ -236,12 +234,6 @@ protected:
     osmium::io::File m_output_file;
     osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
     osmium::io::fsync m_fsync = osmium::io::fsync::no;
-    
-    // detected locations on ways in input data
-    mutable bool m_found_locations_on_ways = false;
-    
-    // warning about lost locations printed
-    mutable bool m_warned_locations_on_ways = false;
 
 public:
 
@@ -269,20 +261,6 @@ public:
     osmium::io::overwrite output_overwrite() const {
         return m_output_overwrite;
     }
-
-    bool found_locations_on_ways() const {
-        return m_found_locations_on_ways;
-    }
-
-    bool warned_locations_on_ways() const {
-        return m_warned_locations_on_ways;
-    }
-
-    void check_for_locations_on_ways(const osmium::Way& way) const;
-    
-    void check_buffer_for_locations_on_ways(const osmium::memory::Buffer& buffer) const;
-    
-    void warn_if_locations_on_ways_will_be_lost() const;
 
 }; // class with_osm_output
 

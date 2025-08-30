@@ -29,12 +29,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
-#include <osmium/osm/way.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -229,47 +227,20 @@ void init_header(osmium::io::Header& header, const osmium::io::Header& input_hea
 void with_osm_output::setup_header(osmium::io::Header& header, const osmium::io::Header& input_header) const {
     header.set("generator", m_generator);
     init_header(header, input_header, m_output_headers);
-}
-
-void with_osm_output::check_for_locations_on_ways(const osmium::Way& way) const {
-    if (m_found_locations_on_ways) {
-        return;
-    }
     
-    for (const auto& node : way.nodes()) {
-        if (node.location().valid()) {
-            m_found_locations_on_ways = true;
-            return;
+    // Check if input PBF has locations_on_ways but output format won't preserve them
+    bool has_locations_on_ways = false;
+    for (const auto& option : input_header) {
+        if (option.first.find("pbf_optional_feature") != std::string::npos && 
+            option.second == "LocationsOnWays") {
+            has_locations_on_ways = true;
+            break;
         }
     }
-}
-
-void with_osm_output::check_buffer_for_locations_on_ways(const osmium::memory::Buffer& buffer) const {
-    if (m_found_locations_on_ways) {
-        return;
-    }
     
-    for (const auto& way : buffer.select<osmium::Way>()) {
-        check_for_locations_on_ways(way);
-        if (m_found_locations_on_ways) {
-            return;
-        }
+    if (has_locations_on_ways && m_output_format.find("locations_on_ways") == std::string::npos) {
+        std::cerr << "Warning! Input file contains locations on ways that will be lost in output.\n";
+        std::cerr << "Use --output-format with locations_on_ways option to preserve node locations on ways.\n";
     }
 }
-
-void with_osm_output::warn_if_locations_on_ways_will_be_lost() const {
-    if (!m_found_locations_on_ways || m_warned_locations_on_ways) {
-        return;
-    }
-    
-    if (m_output_format.find("locations_on_ways") != std::string::npos) {
-        return;
-    }
-    
-    std::cerr << "Warning! Input file contains locations on ways that will be lost in output.\n";
-    std::cerr << "Use --output-format with locations_on_ways option to preserve node locations on ways.\n";
-    
-    m_warned_locations_on_ways = true;
-}
-
 

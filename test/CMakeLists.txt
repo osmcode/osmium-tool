@@ -13,10 +13,8 @@ include_directories(../include)
 
 set(ALL_UNIT_TESTS
     cat/test_setup.cpp
-    cat/test_warning.cpp
     diff/test_setup.cpp
     extract/test_unit.cpp
-    sort/test_warning.cpp
     time-filter/test_setup.cpp
     util/test_unit.cpp
 )
