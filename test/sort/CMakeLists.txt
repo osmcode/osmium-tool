@@ -16,6 +16,27 @@ function(check_sort1 _name _input _output _format)
     check_output(sort ${_name}_mp "sort --generator=test -f ${_format} -s multipass sort/${_input}" "sort/${_output}")
 endfunction()
 
+function(check_sort_warning _name _input _format _expected_stderr)
+    set(_cmd "$<TARGET_FILE:osmium> sort --no-progress --generator=test sort/${_input} -f ${_format} -o ${CMAKE_BINARY_DIR}/test/sort/warning-${_name}.osm --overwrite")
+    add_test(
+        NAME "sort-${_name}"
+        COMMAND ${CMAKE_COMMAND}
+        -D cmd:FILEPATH=${_cmd}
+        -D dir:PATH=${PROJECT_SOURCE_DIR}/test
+        -D expected_stderr:STRING=${_expected_stderr}
+        -P ${CMAKE_SOURCE_DIR}/test/sort/run_test_check_stderr.cmake
+    )
+    set(_cmd_mp "$<TARGET_FILE:osmium> sort --no-progress --generator=test -s multipass sort/${_input} -f ${_format} -o ${CMAKE_BINARY_DIR}/test/sort/warning-${_name}-mp.osm --overwrite")
+    add_test(
+        NAME "sort-${_name}-mp"
+        COMMAND ${CMAKE_COMMAND}
+        -D cmd:FILEPATH=${_cmd_mp}
+        -D dir:PATH=${PROJECT_SOURCE_DIR}/test
+        -D expected_stderr:STRING=${_expected_stderr}
+        -P ${CMAKE_SOURCE_DIR}/test/sort/run_test_check_stderr.cmake
+    )
+endfunction()
+
 
 #-----------------------------------------------------------------------------
 
@@ -31,5 +52,8 @@ check_sort2(simple-1-only-version input-simple1-only-version.osm input-simple2.o
 check_sort1(mixed-metadata input-simple-onefile.osm output-simple-onefile.osm osm)
 check_sort1(history-partially-only-version input-history-partially-only-version.osm output-history-partially-only-version.osm osm)
 check_sort1(history-only-version input-history-only-version.osm output-history-only-version.osm osm)
+
+check_sort_warning(warning-pbf-to-xml input-with-locations.osm.pbf xml "Warning! Input file contains locations on ways that will be lost in output.")
+check_sort_warning(warning-pbf-to-opl input-with-locations.osm.pbf opl "Warning! Input file contains locations on ways that will be lost in output.")
 
 #-----------------------------------------------------------------------------

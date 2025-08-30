@@ -110,6 +110,8 @@ bool CommandSort::run_single_pass() {
     osmium::ObjectPointerCollection objects;
 
     osmium::Box bounding_box;
+    osmium::io::Header first_input_header;
+    bool first_file = true;
 
     uint64_t buffers_count = 0;
     uint64_t buffers_size = 0;
@@ -120,6 +122,10 @@ bool CommandSort::run_single_pass() {
     for (const auto& file : m_input_files) {
         osmium::io::Reader reader{file, osmium::osm_entity_bits::object};
         const osmium::io::Header header{reader.header()};
+        if (first_file) {
+            first_input_header = header;
+            first_file = false;
+        }
         bounding_box.extend(header.joined_boxes());
         while (osmium::memory::Buffer buffer = reader.read()) {
             ++buffers_count;
@@ -146,7 +152,7 @@ bool CommandSort::run_single_pass() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
-    setup_header(header);
+    setup_header(header, first_input_header);
     header.set("sorting", "Type_then_ID");
     if (bounding_box) {
         header.add_box(bounding_box);
@@ -173,18 +179,24 @@ bool CommandSort::run_multi_pass() {
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 
     osmium::Box bounding_box;
+    osmium::io::Header first_input_header;
+    bool first_file = true;
 
     m_vout << "Reading input file headers...\n";
     for (const auto& file : m_input_files) {
         osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
         const osmium::io::Header header{reader.header()};
+        if (first_file) {
+            first_input_header = header;
+            first_file = false;
+        }
         bounding_box.extend(header.joined_boxes());
         reader.close();
     }
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
-    setup_header(header);
+    setup_header(header, first_input_header);
     if (bounding_box) {
         header.add_box(bounding_box);
     }

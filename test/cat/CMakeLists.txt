@@ -15,7 +15,7 @@ function(check_convert _name _input _output _format)
 endfunction()
 
 function(check_warning _name _input _format _expected_stderr)
-    set(_cmd "$<TARGET_FILE:osmium> cat --no-progress --generator=test cat/${_input} -f ${_format} -o /tmp/test-warning-output.osm --overwrite")
+    set(_cmd "$<TARGET_FILE:osmium> cat --no-progress --generator=test cat/${_input} -f ${_format} -o ${CMAKE_BINARY_DIR}/test/cat/warning-${_name}.osm --overwrite")
     add_test(
         NAME "cat-${_name}"
         COMMAND ${CMAKE_COMMAND}
