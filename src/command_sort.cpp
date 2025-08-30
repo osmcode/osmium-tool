@@ -162,7 +162,7 @@ bool CommandSort::run_single_pass() {
     std::copy(objects.begin(), objects.end(), out);
 
     m_vout << "Closing output file...\n";
-    warn_about_locations_on_ways();
+    warn_if_locations_on_ways_will_be_lost();
     writer.close();
 
     show_memory_used();
@@ -250,7 +250,7 @@ bool CommandSort::run_multi_pass() {
     progress_bar.done();
 
     m_vout << "Closing output file...\n";
-    warn_about_locations_on_ways();
+    warn_if_locations_on_ways_will_be_lost();
     writer.close();
 
     show_memory_used();

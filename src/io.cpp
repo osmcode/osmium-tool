@@ -272,7 +272,4 @@ void with_osm_output::warn_if_locations_on_ways_will_be_lost() const {
     m_warned_locations_on_ways = true;
 }
 
-void with_osm_output::warn_about_locations_on_ways() const {
-    warn_if_locations_on_ways_will_be_lost();
-}
 
