@@ -14,6 +14,18 @@ function(check_convert _name _input _output _format)
     check_output(cat ${_name} "cat --no-progress --generator=test cat/${_input} -f ${_format}" "cat/${_output}")
 endfunction()
 
+function(check_warning _name _input _format _expected_stderr)
+    set(_cmd "$<TARGET_FILE:osmium> cat --no-progress --generator=test cat/${_input} -f ${_format} -o /tmp/test-warning-output.osm --overwrite")
+    add_test(
+        NAME "cat-${_name}"
+        COMMAND ${CMAKE_COMMAND}
+        -D cmd:FILEPATH=${_cmd}
+        -D dir:PATH=${PROJECT_SOURCE_DIR}/test
+        -D expected_stderr:STRING=${_expected_stderr}
+        -P ${CMAKE_SOURCE_DIR}/test/cat/run_test_check_stderr.cmake
+    )
+endfunction()
+
 
 #-----------------------------------------------------------------------------
 
@@ -25,6 +37,9 @@ check_convert(gzip input1.osm.gz output1.osm.opl opl)
 check_convert(bzip2 input1.osm.bz2 output1.osm.opl opl)
 check_convert(pbf input1.osm.pbf output1.osm.opl opl)
 check_convert(opl output1.osm.opl output1.osm.opl opl)
+
+check_warning(warning-pbf-to-xml input-with-locations.osm.pbf xml "Warning! Input file contains locations on ways that will be lost in output.")
+check_warning(warning-pbf-to-opl input-with-locations.osm.pbf opl "Warning! Input file contains locations on ways that will be lost in output.")
 
 
 #-----------------------------------------------------------------------------
