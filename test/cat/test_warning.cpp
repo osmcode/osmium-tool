@@ -7,10 +7,13 @@
 
 TEST_CASE("locations on ways warning") {
     const CommandFactory factory;
-    CommandCat cmd{factory};
 
-    SECTION("detection logic with way containing locations") {
-        cmd.setup({"test/cat/input-with-locations.osm", "-f", "xml"});
+    auto format = GENERATE("xml", "pbf", "opl");
+    
+    SECTION("detection logic with way containing locations - " + std::string(format)) {
+        CommandCat cmd{factory};
+        std::vector<std::string> args = {"test/cat/input-with-locations.osm", "-f", format};
+        cmd.setup(args);
         
         REQUIRE(cmd.found_locations_on_ways() == false);
         REQUIRE(cmd.warned_locations_on_ways() == false);
@@ -35,8 +38,10 @@ TEST_CASE("locations on ways warning") {
         REQUIRE(cmd.warned_locations_on_ways() == false);
     }
 
-    SECTION("detection logic with way without locations") {
-        cmd.setup({"test/cat/input.osm", "-f", "xml"});
+    SECTION("detection logic with way without locations - " + std::string(format)) {
+        CommandCat cmd{factory};
+        std::vector<std::string> args = {"test/cat/input.osm", "-f", format};
+        cmd.setup(args);
         
         REQUIRE(cmd.found_locations_on_ways() == false);
         
