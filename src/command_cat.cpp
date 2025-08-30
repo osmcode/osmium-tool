@@ -100,6 +100,8 @@ void CommandCat::copy(osmium::ProgressBar& progress_bar, osmium::io::Reader& rea
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
 
+        check_buffer_for_locations_on_ways(buffer);
+
         m_clean.apply_to(buffer);
 
         writer(std::move(buffer));
@@ -111,6 +113,8 @@ std::size_t CommandCat::read_buffers(osmium::ProgressBar& progress_bar, osmium::
 
     while (osmium::memory::Buffer buffer = reader.read()) {
         progress_bar.update(reader.offset());
+
+        check_buffer_for_locations_on_ways(buffer);
 
         m_clean.apply_to(buffer);
 

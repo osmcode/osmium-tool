@@ -270,9 +270,9 @@ public:
         return m_output_overwrite;
     }
 
-    void check_for_locations_on_ways(const osmium::Way& way);
+    void check_for_locations_on_ways(const osmium::Way& way) const;
     
-    void check_buffer_for_locations_on_ways(const osmium::memory::Buffer& buffer);
+    void check_buffer_for_locations_on_ways(const osmium::memory::Buffer& buffer) const;
     
     void warn_if_locations_on_ways_will_be_lost() const;
 
