@@ -185,6 +185,7 @@ bool CommandCat::run() {
             copy(progress_bar, reader, writer);
             progress_bar.done();
         }
+        warn_about_locations_on_ways();
         bytes_written = writer.close();
         reader.close();
     } else { // multiple input files
@@ -210,6 +211,7 @@ bool CommandCat::run() {
             m_vout << "Writing data...\n";
             osmium::ProgressBar progress_bar_writer{size, display_progress()};
             write_buffers(progress_bar_writer, buffers, writer);
+            warn_about_locations_on_ways();
             bytes_written = writer.close();
             progress_bar_writer.done();
         } else {
@@ -222,6 +224,7 @@ bool CommandCat::run() {
                 progress_bar.file_done(reader.file_size());
                 reader.close();
             }
+            warn_about_locations_on_ways();
             bytes_written = writer.close();
             progress_bar.done();
         }

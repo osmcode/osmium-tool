@@ -275,6 +275,8 @@ public:
     void check_buffer_for_locations_on_ways(const osmium::memory::Buffer& buffer) const;
     
     void warn_if_locations_on_ways_will_be_lost() const;
+    
+    void warn_about_locations_on_ways() const;
 
 }; // class with_osm_output
 

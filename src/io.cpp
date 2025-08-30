@@ -208,7 +208,6 @@ void with_osm_output::show_output_arguments(osmium::VerboseOutput& vout) {
 }
 
 void with_osm_output::setup_header(osmium::io::Header& header) const {
-    warn_if_locations_on_ways_will_be_lost();
     header.set("generator", m_generator);
     for (const auto& h : m_output_headers) {
         header.set(h);
@@ -228,7 +227,6 @@ void init_header(osmium::io::Header& header, const osmium::io::Header& input_hea
 }
 
 void with_osm_output::setup_header(osmium::io::Header& header, const osmium::io::Header& input_header) const {
-    warn_if_locations_on_ways_will_be_lost();
     header.set("generator", m_generator);
     init_header(header, input_header, m_output_headers);
 }
@@ -272,5 +270,9 @@ void with_osm_output::warn_if_locations_on_ways_will_be_lost() const {
     std::cerr << "Use --output-format with locations_on_ways option to preserve node locations on ways.\n";
     
     m_warned_locations_on_ways = true;
+}
+
+void with_osm_output::warn_about_locations_on_ways() const {
+    warn_if_locations_on_ways_will_be_lost();
 }
 
