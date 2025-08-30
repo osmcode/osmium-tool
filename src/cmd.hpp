@@ -28,7 +28,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
+#include <osmium/memory/buffer.hpp>
 #include <osmium/osm/entity_bits.hpp>
+#include <osmium/osm/way.hpp>
 #include <osmium/util/file.hpp>
 #include <osmium/util/verbose_output.hpp>
 
@@ -269,6 +271,8 @@ public:
     }
 
     void check_for_locations_on_ways(const osmium::Way& way);
+    
+    void check_buffer_for_locations_on_ways(const osmium::memory::Buffer& buffer);
     
     void warn_if_locations_on_ways_will_be_lost() const;
 

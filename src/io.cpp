@@ -244,6 +244,19 @@ void with_osm_output::check_for_locations_on_ways(const osmium::Way& way) {
     }
 }
 
+void with_osm_output::check_buffer_for_locations_on_ways(const osmium::memory::Buffer& buffer) {
+    if (m_found_locations_on_ways) {
+        return;
+    }
+    
+    for (const auto& way : buffer.select<osmium::Way>()) {
+        check_for_locations_on_ways(way);
+        if (m_found_locations_on_ways) {
+            return;
+        }
+    }
+}
+
 void with_osm_output::warn_if_locations_on_ways_will_be_lost() const {
     if (!m_found_locations_on_ways || m_warned_locations_on_ways) {
         return;
