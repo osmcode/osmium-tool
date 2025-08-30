@@ -37,6 +37,25 @@ function(check_sort_warning _name _input _format _expected_stderr)
     )
 endfunction()
 
+function(check_sort_no_warning _name _input _format)
+    set(_cmd "$<TARGET_FILE:osmium> sort --no-progress --generator=test sort/${_input} -f ${_format} -o ${CMAKE_BINARY_DIR}/test/sort/no-warning-${_name}.osm --overwrite")
+    add_test(
+        NAME "sort-${_name}"
+        COMMAND ${CMAKE_COMMAND}
+        -D cmd:FILEPATH=${_cmd}
+        -D dir:PATH=${PROJECT_SOURCE_DIR}/test
+        -P ${CMAKE_SOURCE_DIR}/test/sort/run_test_check_no_stderr.cmake
+    )
+    set(_cmd_mp "$<TARGET_FILE:osmium> sort --no-progress --generator=test -s multipass sort/${_input} -f ${_format} -o ${CMAKE_BINARY_DIR}/test/sort/no-warning-${_name}-mp.osm --overwrite")
+    add_test(
+        NAME "sort-${_name}-mp"
+        COMMAND ${CMAKE_COMMAND}
+        -D cmd:FILEPATH=${_cmd_mp}
+        -D dir:PATH=${PROJECT_SOURCE_DIR}/test
+        -P ${CMAKE_SOURCE_DIR}/test/sort/run_test_check_no_stderr.cmake
+    )
+endfunction()
+
 
 #-----------------------------------------------------------------------------
 
@@ -55,5 +74,8 @@ check_sort1(history-only-version input-history-only-version.osm output-history-o
 
 check_sort_warning(warning-pbf-to-xml input-with-locations.osm.pbf xml "Warning! Input file contains locations on ways that will be lost in output.")
 check_sort_warning(warning-pbf-to-opl input-with-locations.osm.pbf opl "Warning! Input file contains locations on ways that will be lost in output.")
+
+check_sort_no_warning(no-warning-pbf-to-xml input-without-locations.osm.pbf xml)
+check_sort_no_warning(no-warning-pbf-to-opl input-without-locations.osm.pbf opl)
 
 #-----------------------------------------------------------------------------

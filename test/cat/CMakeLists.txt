@@ -26,6 +26,17 @@ function(check_warning _name _input _format _expected_stderr)
     )
 endfunction()
 
+function(check_no_warning _name _input _format)
+    set(_cmd "$<TARGET_FILE:osmium> cat --no-progress --generator=test cat/${_input} -f ${_format} -o ${CMAKE_BINARY_DIR}/test/cat/no-warning-${_name}.osm --overwrite")
+    add_test(
+        NAME "cat-${_name}"
+        COMMAND ${CMAKE_COMMAND}
+        -D cmd:FILEPATH=${_cmd}
+        -D dir:PATH=${PROJECT_SOURCE_DIR}/test
+        -P ${CMAKE_SOURCE_DIR}/test/cat/run_test_check_no_stderr.cmake
+    )
+endfunction()
+
 
 #-----------------------------------------------------------------------------
 
@@ -40,6 +51,9 @@ check_convert(opl output1.osm.opl output1.osm.opl opl)
 
 check_warning(warning-pbf-to-xml input-with-locations.osm.pbf xml "Warning! Input file contains locations on ways that will be lost in output.")
 check_warning(warning-pbf-to-opl input-with-locations.osm.pbf opl "Warning! Input file contains locations on ways that will be lost in output.")
+
+check_no_warning(no-warning-pbf-to-xml input-without-locations.osm.pbf xml)
+check_no_warning(no-warning-pbf-to-opl input-without-locations.osm.pbf opl)
 
 
 #-----------------------------------------------------------------------------
