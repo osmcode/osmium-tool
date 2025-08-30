@@ -29,10 +29,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/file.hpp>
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer_options.hpp>
+#include <osmium/osm/way.hpp>
 #include <osmium/util/verbose_output.hpp>
 
 #include <boost/program_options.hpp>
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -227,5 +229,41 @@ void init_header(osmium::io::Header& header, const osmium::io::Header& input_hea
 void with_osm_output::setup_header(osmium::io::Header& header, const osmium::io::Header& input_header) const {
     header.set("generator", m_generator);
     init_header(header, input_header, m_output_headers);
+}
+
+void with_osm_output::check_for_locations_on_ways(const osmium::Way& way) {
+    if (m_found_locations_on_ways) {
+        return;
+    }
+    
+    for (const auto& node : way.nodes()) {
+        if (node.location().valid()) {
+            m_found_locations_on_ways = true;
+            return;
+        }
+    }
+}
+
+void with_osm_output::warn_if_locations_on_ways_will_be_lost() const {
+    if (!m_found_locations_on_ways || m_warned_locations_on_ways) {
+        return;
+    }
+    
+    const auto& options = m_output_file.options();
+    if (options.get("locations_on_ways") == "true") {
+        return;
+    }
+    
+    std::cerr << "Warning! Input file contains locations on ways that will be lost in output.\n";
+    
+    if (m_output_file.format() == osmium::file_format::pbf || 
+        m_output_file.format() == osmium::file_format::xml || 
+        m_output_file.format() == osmium::file_format::opl) {
+        std::cerr << "Use --output-format=" << m_output_file.format_as_string() << ",locations_on_ways to preserve node locations on ways.\n";
+    } else {
+        std::cerr << "Output format does not support preserving node locations on ways.\n";
+    }
+    
+    m_warned_locations_on_ways = true;
 }
 

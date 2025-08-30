@@ -234,6 +234,12 @@ protected:
     osmium::io::File m_output_file;
     osmium::io::overwrite m_output_overwrite = osmium::io::overwrite::no;
     osmium::io::fsync m_fsync = osmium::io::fsync::no;
+    
+    // detected locations on ways in input data
+    mutable bool m_found_locations_on_ways = false;
+    
+    // warning about lost locations printed
+    mutable bool m_warned_locations_on_ways = false;
 
 public:
 
@@ -261,6 +267,10 @@ public:
     osmium::io::overwrite output_overwrite() const {
         return m_output_overwrite;
     }
+
+    void check_for_locations_on_ways(const osmium::Way& way);
+    
+    void warn_if_locations_on_ways_will_be_lost() const;
 
 }; // class with_osm_output
 
