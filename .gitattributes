@@ -4,6 +4,7 @@
 *.osh -crlf
 *.pg -crlf
 *-result.txt -crlf
+test/add-locations-to-ways/output* -crlf
 test/cat/output* -crlf
 test/diff/output* -crlf
 test/export/*.geojson -crlf
