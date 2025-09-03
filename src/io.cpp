@@ -210,6 +210,21 @@ void with_osm_output::setup_header(osmium::io::Header& header) const {
     for (const auto& h : m_output_headers) {
         header.set(h);
     }
+    
+    // Check if input PBF has locations_on_ways but output format won't preserve them
+    bool has_locations_on_ways = false;
+    for (const auto& option : header) {
+        if (option.first.find("pbf_optional_feature") != std::string::npos && 
+            option.second == "LocationsOnWays") {
+            has_locations_on_ways = true;
+            break;
+        }
+    }
+    
+    if (has_locations_on_ways && m_output_format.find("locations_on_ways") == std::string::npos) {
+        std::cerr << "Warning! Input file contains locations on ways that will be lost in output.\n";
+        std::cerr << "Use --output-format with locations_on_ways option to preserve node locations on ways.\n";
+    }
 }
 
 void init_header(osmium::io::Header& header, const osmium::io::Header& input_header, const std::vector<std::string>& options) {

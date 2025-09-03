@@ -110,8 +110,7 @@ bool CommandSort::run_single_pass() {
     osmium::ObjectPointerCollection objects;
 
     osmium::Box bounding_box;
-    osmium::io::Header first_input_header;
-    bool first_file = true;
+    osmium::io::Header merged_input_header;
 
     uint64_t buffers_count = 0;
     uint64_t buffers_size = 0;
@@ -122,11 +121,12 @@ bool CommandSort::run_single_pass() {
     for (const auto& file : m_input_files) {
         osmium::io::Reader reader{file, osmium::osm_entity_bits::object};
         const osmium::io::Header header{reader.header()};
-        if (first_file) {
-            first_input_header = header;
-            first_file = false;
-        }
         bounding_box.extend(header.joined_boxes());
+        
+        // Merge input header info for warning detection
+        for (const auto& option : header) {
+            merged_input_header.set(option.first, option.second);
+        }
         while (osmium::memory::Buffer buffer = reader.read()) {
             ++buffers_count;
             buffers_size += buffer.committed();
@@ -152,7 +152,7 @@ bool CommandSort::run_single_pass() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
-    setup_header(header, first_input_header);
+    setup_header(header, merged_input_header);
     header.set("sorting", "Type_then_ID");
     if (bounding_box) {
         header.add_box(bounding_box);
@@ -179,24 +179,24 @@ bool CommandSort::run_multi_pass() {
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 
     osmium::Box bounding_box;
-    osmium::io::Header first_input_header;
-    bool first_file = true;
+    osmium::io::Header merged_input_header;
 
     m_vout << "Reading input file headers...\n";
     for (const auto& file : m_input_files) {
         osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
         const osmium::io::Header header{reader.header()};
-        if (first_file) {
-            first_input_header = header;
-            first_file = false;
-        }
         bounding_box.extend(header.joined_boxes());
+        
+        // Merge input header info for warning detection
+        for (const auto& option : header) {
+            merged_input_header.set(option.first, option.second);
+        }
         reader.close();
     }
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
-    setup_header(header, first_input_header);
+    setup_header(header, merged_input_header);
     if (bounding_box) {
         header.add_box(bounding_box);
     }

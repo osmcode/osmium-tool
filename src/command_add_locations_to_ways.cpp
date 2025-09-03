@@ -198,7 +198,7 @@ bool CommandAddLocationsToWays::run() {
         m_vout << "Copying input file '" << m_input_files[0].filename() << "'...\n";
         osmium::io::Reader reader{m_input_files[0]};
         osmium::io::Header header{reader.header()};
-        setup_header(header, reader.header());
+        setup_header(header);
         writer.set_header(header);
 
         osmium::ProgressBar progress_bar{reader.file_size(), display_progress()};
@@ -208,22 +208,15 @@ bool CommandAddLocationsToWays::run() {
         writer.close();
         reader.close();
     } else { // multiple input files
-        osmium::io::Header first_input_header;
-        bool first_file = true;
-        
+        osmium::io::Header header;
+        setup_header(header);
+        writer.set_header(header);
+
         osmium::ProgressBar progress_bar{file_size_sum(m_input_files), display_progress()};
         for (const auto& input_file : m_input_files) {
             progress_bar.remove();
             m_vout << "Copying input file '" << input_file.filename() << "'...\n";
             osmium::io::Reader reader{input_file};
-            
-            if (first_file) {
-                first_input_header = reader.header();
-                osmium::io::Header header;
-                setup_header(header, first_input_header);
-                writer.set_header(header);
-                first_file = false;
-            }
 
             copy_data(progress_bar, reader, writer, location_handler);
 
