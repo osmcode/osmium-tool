@@ -154,6 +154,10 @@ void report_filename(osmium::VerboseOutput* vout, const osmium::io::File& file, 
 } // anonymous namespace
 
 bool CommandCat::run() {
+    if (has_locations_on_ways(m_input_files) && m_output_format.find("locations_on_ways") == std::string::npos) {
+        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
+    }
+    
     std::size_t bytes_written = 0;
 
     if (m_input_files.size() == 1) { // single input file

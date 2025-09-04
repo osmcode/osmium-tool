@@ -53,5 +53,6 @@ const char* object_type_as_string(const osmium::OSMObject& object) noexcept;
 bool ends_with(const std::string& str, const std::string& suffix);
 std::size_t show_mbytes(std::size_t value) noexcept;
 double show_gbytes(std::size_t value) noexcept;
+bool has_locations_on_ways(const std::vector<osmium::io::File>& input_files);
 
 #endif // UTIL_HPP

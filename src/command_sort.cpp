@@ -104,13 +104,16 @@ void CommandSort::show_arguments() {
 }
 
 bool CommandSort::run_single_pass() {
+    if (has_locations_on_ways(m_input_files) && m_output_format.find("locations_on_ways") == std::string::npos) {
+        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
+    }
+    
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 
     std::vector<osmium::memory::Buffer> data;
     osmium::ObjectPointerCollection objects;
 
     osmium::Box bounding_box;
-    osmium::io::Header merged_input_header;
 
     uint64_t buffers_count = 0;
     uint64_t buffers_size = 0;
@@ -122,11 +125,6 @@ bool CommandSort::run_single_pass() {
         osmium::io::Reader reader{file, osmium::osm_entity_bits::object};
         const osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
-        
-        // Merge input header info for warning detection
-        for (const auto& option : header) {
-            merged_input_header.set(option.first, option.second);
-        }
         while (osmium::memory::Buffer buffer = reader.read()) {
             ++buffers_count;
             buffers_size += buffer.committed();
@@ -152,7 +150,7 @@ bool CommandSort::run_single_pass() {
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
-    setup_header(header, merged_input_header);
+    setup_header(header);
     header.set("sorting", "Type_then_ID");
     if (bounding_box) {
         header.add_box(bounding_box);
@@ -176,27 +174,25 @@ bool CommandSort::run_single_pass() {
 }
 
 bool CommandSort::run_multi_pass() {
+    if (has_locations_on_ways(m_input_files) && m_output_format.find("locations_on_ways") == std::string::npos) {
+        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
+    }
+    
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 
     osmium::Box bounding_box;
-    osmium::io::Header merged_input_header;
 
     m_vout << "Reading input file headers...\n";
     for (const auto& file : m_input_files) {
         osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
         const osmium::io::Header header{reader.header()};
         bounding_box.extend(header.joined_boxes());
-        
-        // Merge input header info for warning detection
-        for (const auto& option : header) {
-            merged_input_header.set(option.first, option.second);
-        }
         reader.close();
     }
 
     m_vout << "Opening output file...\n";
     osmium::io::Header header;
-    setup_header(header, merged_input_header);
+    setup_header(header);
     if (bounding_box) {
         header.add_box(bounding_box);
     }

@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "exception.hpp"
 
 #include <osmium/io/file.hpp>
+#include <osmium/io/reader.hpp>
 #include <osmium/osm/area.hpp>
 #include <osmium/tags/tags_filter.hpp>
 #include <osmium/util/file.hpp>
@@ -274,5 +275,22 @@ std::size_t show_mbytes(std::size_t value) noexcept {
 
 double show_gbytes(std::size_t value) noexcept {
     return static_cast<double>(show_mbytes(value)) / 1000; // NOLINT(bugprone-integer-division)
+}
+
+bool has_locations_on_ways(const std::vector<osmium::io::File>& input_files) {
+    for (const auto& file : input_files) {
+        osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
+        const osmium::io::Header& header = reader.header();
+        
+        for (const auto& option : header) {
+            if (option.first.find("pbf_optional_feature") != std::string::npos && 
+                option.second == "LocationsOnWays") {
+                reader.close();
+                return true;
+            }
+        }
+        reader.close();
+    }
+    return false;
 }
 
