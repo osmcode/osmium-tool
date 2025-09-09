@@ -10,7 +10,16 @@ jobs:
       fail-fast: false
       matrix:
         image:
+          - "ubuntu:20.04"        # gcc  9.3.0, clang 10.0.0, cmake 3.16.3
+          - "ubuntu:22.04"        # gcc 12.2.0, clang 15.0.7, cmake 3.24.2
           - "ubuntu:24.04"        # gcc 14.2.0, clang 18.1.3, cmake 3.28.3
+          - "debian:bullseye"     # gcc 10.2.1, clang 11.0.1, cmake 3.18.4
+          - "debian:bookworm"     # gcc 12.2.0, clang 15.0.6, cmake 3.25.1
+          - "debian:testing"
+          - "debian:experimental"
+          - "fedora:39"
+          - "fedora:40"
+          - "fedora:41"
         build_type: [Dev]
         cpp_compiler: [g++]
         cpp_version: [c++14]
@@ -154,6 +163,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
+          - macos-14
           - macos-15
         build_type: [Dev]
         include:
@@ -178,6 +188,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
+          - windows-2022
           - windows-2025
     steps:
       - run: |

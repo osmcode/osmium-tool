@@ -14,6 +14,7 @@ function(check_convert _name _input _output _format)
     check_output(cat ${_name} "cat --no-progress --generator=test cat/${_input} -f ${_format}" "cat/${_output}")
 endfunction()
 
+
 #-----------------------------------------------------------------------------
 
 check_cat(cat12 input1.osm input2.osm output-cat12.osm)

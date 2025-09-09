@@ -1,5 +1,5 @@
 #
-# Simple test script to check that stderr contains expected warning message
+# Test script to check that stderr contains the expected warning message
 #
 
 if(NOT cmd)
