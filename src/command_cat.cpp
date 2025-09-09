@@ -154,7 +154,7 @@ void report_filename(osmium::VerboseOutput* vout, const osmium::io::File& file, 
 } // anonymous namespace
 
 bool CommandCat::run() {
-    warn_locations_on_ways_lost(m_input_files, m_output_format);
+    warn_locations_on_ways_lost(m_input_files, *this);
     
     std::size_t bytes_written = 0;
 

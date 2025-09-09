@@ -297,9 +297,3 @@ bool has_locations_on_ways(const std::vector<osmium::io::File>& input_files) {
     return false;
 }
 
-void warn_locations_on_ways_lost(const std::vector<osmium::io::File>& input_files, const std::string& output_format) {
-    if (has_locations_on_ways(input_files) && output_format.find("locations_on_ways") == std::string::npos) {
-        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
-    }
-}
-

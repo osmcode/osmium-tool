@@ -104,7 +104,7 @@ void CommandSort::show_arguments() {
 }
 
 bool CommandSort::run_single_pass() {
-    warn_locations_on_ways_lost(m_input_files, m_output_format);
+    warn_locations_on_ways_lost(m_input_files, *this);
     
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 
@@ -172,7 +172,7 @@ bool CommandSort::run_single_pass() {
 }
 
 bool CommandSort::run_multi_pass() {
-    warn_locations_on_ways_lost(m_input_files, m_output_format);
+    warn_locations_on_ways_lost(m_input_files, *this);
     
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 

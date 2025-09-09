@@ -56,6 +56,10 @@ public:
         return "osmium sort [OPTIONS] OSM-FILE...";
     }
 
+    bool should_warn_locations_lost() const override {
+        return true;
+    }
+
 }; // class CommandSort
 
 

@@ -118,6 +118,10 @@ public:
     void print_arguments(const std::string& command);
     void show_memory_used();
 
+    virtual bool should_warn_locations_lost() const {
+        return false;
+    }
+
     osmium::osm_entity_bits::type osm_entity_bits() const {
         return m_osm_entity_bits;
     }
@@ -261,6 +265,8 @@ public:
     osmium::io::overwrite output_overwrite() const {
         return m_output_overwrite;
     }
+
+    void warn_locations_on_ways_lost(const std::vector<osmium::io::File>& input_files, const Command& command) const;
 
 }; // class with_osm_output
 

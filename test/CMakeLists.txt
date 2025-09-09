@@ -99,7 +99,7 @@ foreach(_cmd IN LISTS OSMIUM_COMMANDS)
     endif()
 endforeach()
 
-foreach(_extra_tests formats help misc)
+foreach(_extra_tests formats help locations-on-ways misc)
     message(STATUS "Adding tests in ${_extra_tests}")
     add_subdirectory(${_extra_tests})
 endforeach()

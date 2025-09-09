@@ -61,6 +61,10 @@ public:
         return "osmium cat [OPTIONS] OSM-FILE...";
     }
 
+    bool should_warn_locations_lost() const override {
+        return true;
+    }
+
 }; // class CommandCat
 
 #endif // COMMAND_CAT_HPP

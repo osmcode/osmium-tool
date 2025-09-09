@@ -54,6 +54,5 @@ bool ends_with(const std::string& str, const std::string& suffix);
 std::size_t show_mbytes(std::size_t value) noexcept;
 double show_gbytes(std::size_t value) noexcept;
 bool has_locations_on_ways(const std::vector<osmium::io::File>& input_files);
-void warn_locations_on_ways_lost(const std::vector<osmium::io::File>& input_files, const std::string& output_format);
 
 #endif // UTIL_HPP

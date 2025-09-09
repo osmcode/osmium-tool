@@ -23,6 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "cmd.hpp"
 
 #include "exception.hpp"
+#include "util.hpp"
 
 #include <osmium/index/map.hpp>
 #include <osmium/osm/entity_bits.hpp>
@@ -176,4 +177,12 @@ std::string check_index_type(const std::string& index_type_name, bool allow_none
     }
 
     return index_type_name;
+}
+
+void with_osm_output::warn_locations_on_ways_lost(const std::vector<osmium::io::File>& input_files, const Command& command) const {
+    if (command.should_warn_locations_lost() && 
+        has_locations_on_ways(input_files) && 
+        m_output_format.find("locations_on_ways") == std::string::npos) {
+        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
+    }
 }
