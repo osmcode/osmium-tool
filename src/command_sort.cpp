@@ -104,9 +104,7 @@ void CommandSort::show_arguments() {
 }
 
 bool CommandSort::run_single_pass() {
-    if (has_locations_on_ways(m_input_files) && m_output_format.find("locations_on_ways") == std::string::npos) {
-        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
-    }
+    warn_locations_on_ways_lost(m_input_files, m_output_format);
     
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 
@@ -174,9 +172,7 @@ bool CommandSort::run_single_pass() {
 }
 
 bool CommandSort::run_multi_pass() {
-    if (has_locations_on_ways(m_input_files) && m_output_format.find("locations_on_ways") == std::string::npos) {
-        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
-    }
+    warn_locations_on_ways_lost(m_input_files, m_output_format);
     
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 

@@ -279,18 +279,27 @@ double show_gbytes(std::size_t value) noexcept {
 
 bool has_locations_on_ways(const std::vector<osmium::io::File>& input_files) {
     for (const auto& file : input_files) {
-        osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
-        const osmium::io::Header& header = reader.header();
-        
-        for (const auto& option : header) {
-            if (option.first.find("pbf_optional_feature") != std::string::npos && 
-                option.second == "LocationsOnWays") {
-                reader.close();
-                return true;
+        try {
+            osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
+            const osmium::io::Header& header = reader.header();
+            
+            for (const auto& option : header) {
+                if (option.first.find("pbf_optional_feature") != std::string::npos && 
+                    option.second == "LocationsOnWays") {
+                    return true;
+                }
             }
+        } catch (...) {
+            // Ignore files that can't be opened for header check
+            continue;
         }
-        reader.close();
     }
     return false;
+}
+
+void warn_locations_on_ways_lost(const std::vector<osmium::io::File>& input_files, const std::string& output_format) {
+    if (has_locations_on_ways(input_files) && output_format.find("locations_on_ways") == std::string::npos) {
+        warning("Input file contains locations on ways that will be lost in output. Use --output-format with locations_on_ways option to preserve node locations on ways.\n");
+    }
 }
 
