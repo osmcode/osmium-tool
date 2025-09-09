@@ -355,12 +355,14 @@ bool CommandApplyChanges::run() {
         } else {
             m_vout << "Applying changes and writing them to output...\n";
             const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
+            auto input_begin = input.begin();
+            auto input_end = input.end();
             auto output_it = boost::make_function_output_iterator(copy_first_with_id(&writer));
 
             std::set_union(objects.begin(),
                            objects.end(),
-                           input.begin(),
-                           input.end(),
+                           input_begin,
+                           input_end,
                            output_it,
                            osmium::object_order_type_id_reverse_version());
         }
