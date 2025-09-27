@@ -279,6 +279,8 @@ bool CommandApplyChanges::run() {
         m_output_file.set("locations_on_ways");
     }
 
+    warn_locations_on_ways_lost(m_input_files, *this);
+
     m_vout << "Opening output file...\n";
     osmium::io::Writer writer{m_output_file, m_output_overwrite, m_fsync};
 

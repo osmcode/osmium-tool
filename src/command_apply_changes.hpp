@@ -67,6 +67,10 @@ public:
         return "osmium apply-changes [OPTIONS] OSM-FILE OSM-CHANGE-FILE...";
     }
 
+    bool should_warn_locations_lost() const override {
+        return true;
+    }
+
 }; // class CommandApplyChanges
 
 
