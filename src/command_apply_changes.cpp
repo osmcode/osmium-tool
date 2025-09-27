@@ -359,12 +359,20 @@ bool CommandApplyChanges::run() {
             const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
             auto output_it = boost::make_function_output_iterator(copy_first_with_id(&writer));
 
+            // Suppress false positive GCC 15 warning with boost::make_function_output_iterator
+#if defined(__GNUC__) && (__GNUC__ >= 15)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
             std::set_union(objects.begin(),
                            objects.end(),
                            input.begin(),
                            input.end(),
                            output_it,
                            osmium::object_order_type_id_reverse_version());
+#if defined(__GNUC__) && (__GNUC__ >= 15)
+#pragma GCC diagnostic pop
+#endif
         }
     }
 
