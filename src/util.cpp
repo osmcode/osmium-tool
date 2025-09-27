@@ -282,7 +282,7 @@ bool has_locations_on_ways(const std::vector<osmium::io::File>& input_files) {
         try {
             osmium::io::Reader reader{file, osmium::osm_entity_bits::nothing};
             const osmium::io::Header& header = reader.header();
-            
+
             for (const auto& option : header) {
                 if (option.first.find("pbf_optional_feature") != std::string::npos && 
                     option.second == "LocationsOnWays") {
