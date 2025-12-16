@@ -77,8 +77,8 @@ namespace strategy_simple {
                 if (e->node_ids.get(nr.positive_ref())) {
                     e->write(way);
                     e->way_ids.set(way.positive_id());
+                    return;
                 }
-                return;
             }
         }
 
