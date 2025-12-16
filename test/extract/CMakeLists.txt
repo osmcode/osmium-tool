@@ -64,3 +64,5 @@ check_extract_opl(antimeridian-alaska-west-poly w46113981.osm w46113981.opl "--p
 check_extract_opl(antimeridian-alaska-east-json-no-feature w42394837.osm w42394837.opl "--polygon=extract/polygon-us-alaska-no-feature.geojson")
 
 #-----------------------------------------------------------------------------
+check_extract(simple_way_starts_outside input-way-starts-outside.osm output-simple-way-starts-outside.osm "-s simple")
+
