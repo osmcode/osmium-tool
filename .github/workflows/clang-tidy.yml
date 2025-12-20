@@ -22,7 +22,7 @@ jobs:
         BUILD_TYPE: Dev
         CC: clang-${{ matrix.clang }}
         CXX: clang++-${{ matrix.clang }}
-        CPP_VERSION: c++14
+        CPP_VERSION: c++17
         APT_LISTCHANGES_FRONTEND: none
         DEBIAN_FRONTEND: noninteractive
     steps:

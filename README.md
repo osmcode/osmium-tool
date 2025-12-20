@@ -11,7 +11,7 @@ Official web site: https://osmcode.org/osmium-tool/
 
 ## Prerequisites
 
-You need a C++14 compliant compiler.
+You need a C++17 compliant compiler.
 
 You also need the following libraries:
 

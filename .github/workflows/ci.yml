@@ -22,23 +22,17 @@ jobs:
           - "fedora:43"
         build_type: [Dev]
         cpp_compiler: [g++]
-        cpp_version: [c++14]
+        cpp_version: [c++17]
         include:
           - image: "ubuntu:22.04"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "ubuntu:24.04"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:bookworm"
-            cpp_version: c++17
-          - image: "debian:bookworm"
             cpp_version: c++20
           - image: "debian:bookworm"
             c_compiler: clang
             cpp_compiler: clang++
-          - image: "debian:bookworm"
-            c_compiler: clang
-            cpp_compiler: clang++
-            cpp_version: c++17
           - image: "debian:bookworm"
             c_compiler: clang
             cpp_compiler: clang++
@@ -48,18 +42,11 @@ jobs:
           - image: "debian:trixie"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:trixie"
-            cpp_version: c++17
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "debian:trixie"
             cpp_version: c++20
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:trixie"
             c_compiler: clang
             cpp_compiler: clang++
-          - image: "debian:trixie"
-            c_compiler: clang
-            cpp_compiler: clang++
-            cpp_version: c++17
           - image: "debian:trixie"
             c_compiler: clang
             cpp_compiler: clang++
@@ -121,10 +108,6 @@ jobs:
             nlohmann-json3-dev \
             pandoc \
             zlib1g-dev
-      - name: Install compiler
-        shell: bash
-        if: matrix.cpp_compiler == 'clang++-14'
-        run: apt-get install -yq --no-install-suggests --no-install-recommends clang-14
       - name: Prepare container (dnf)
         shell: bash
         if: startsWith(matrix.image, 'fedora:')
