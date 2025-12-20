@@ -1,5 +1,5 @@
 ---
-Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-boost-use-ranges,-bugprone-branch-clone,-bugprone-chained-comparison,-bugprone-easily-swappable-parameters,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-hicpp-avoid-c-arrays,-hicpp-no-array-decay,-hicpp-vararg,-llvmlibc-*,-misc-include-cleaner,-misc-no-recursion,-modernize-avoid-c-arrays,-modernize-use-nodiscard,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-function-cognitive-complexity,-readability-identifier-length,-readability-implicit-bool-conversion,-readability-magic-numbers'
+Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-boost-use-ranges,-bugprone-branch-clone,-bugprone-chained-comparison,-bugprone-easily-swappable-parameters,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-static-cast-downcast,-cppcoreguidelines-pro-type-vararg,-fuchsia-*,-hicpp-avoid-c-arrays,-hicpp-no-array-decay,-hicpp-vararg,-llvm-prefer-static-over-anonymous-namespace,-llvmlibc-*,-misc-include-cleaner,-misc-no-recursion,-modernize-avoid-c-arrays,-modernize-use-nodiscard,-modernize-use-trailing-return-type,-readability-convert-member-functions-to-static,-readability-function-cognitive-complexity,-readability-identifier-length,-readability-implicit-bool-conversion,-readability-magic-numbers'
 #
 #  For a list of check options, see:
 #  https://clang.llvm.org/extra/clang-tidy/checks/list.html
@@ -50,6 +50,9 @@ Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-boost-use-ranges,-bugprone-br
 #  hicpp-no-array-decay
 #    Limited use and many false positives including for all asserts.
 #
+#  cppcoreguidelines-pro-bounds-constant-array-index
+#    Don't want to add dependency on gsl library.
+#
 #  cppcoreguidelines-pro-bounds-pointer-arithmetic
 #    Difficult to get by without it...
 #
@@ -65,6 +68,9 @@ Checks: '*,-abseil-*,-altera-*,-android-cloexec-*,-boost-use-ranges,-bugprone-br
 #
 #  hicpp-vararg
 #    Too strict, sometimes calling vararg functions is necessary.
+#
+#  llvm-prefer-static-over-anonymous-namespace
+#    Matter of taste and we are not following this one.
 #
 #  llvmlibc-*
 #    Not applicable.
