@@ -32,13 +32,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-enum {
-    initial_buffer_size = 1024U * 1024U
-};
-
-enum {
-    flush_buffer_size = 800U * 1024U
-};
+static constexpr std::size_t initial_buffer_size = 1024UL * 1024UL;
+static constexpr std::size_t flush_buffer_size = 800UL * 1024UL;
 
 ExportFormatPg::ExportFormatPg(const std::string& /*output_format*/,
                                const std::string& output_filename,
