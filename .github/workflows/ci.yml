@@ -55,12 +55,12 @@ jobs:
             build_type: RelWithDebInfo
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:testing"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
           - image: "debian:testing"
             c_compiler: clang
             cpp_compiler: clang++
           - image: "debian:experimental"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
           - image: "debian:experimental"
             c_compiler: clang
             cpp_compiler: clang++
@@ -72,10 +72,10 @@ jobs:
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "fedora:42"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
           - image: "fedora:43"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
     container:
       image: ${{ matrix.image }}
       env:
