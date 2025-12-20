@@ -53,8 +53,11 @@ public:
                      osmium::io::fsync fsync,
                      const options_type& options);
 
-    ~ExportFormatText() override {
-        close();
+    ~ExportFormatText() noexcept override {
+        try {
+            close();
+        } catch (...) {
+        }
     }
 
     void node(const osmium::Node& node) override;

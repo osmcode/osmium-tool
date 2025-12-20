@@ -66,8 +66,11 @@ public:
                      osmium::io::fsync fsync,
                      const options_type& options);
 
-    ~ExportFormatJSON() override {
-        close();
+    ~ExportFormatJSON() noexcept override {
+        try {
+            close();
+        } catch (...) {
+        }
     }
 
     void node(const osmium::Node& node) override;

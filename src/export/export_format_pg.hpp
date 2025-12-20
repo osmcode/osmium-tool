@@ -64,7 +64,7 @@ public:
                    osmium::io::fsync fsync,
                    const options_type& options);
 
-    ~ExportFormatPg() override {
+    ~ExportFormatPg() noexcept override {
         try {
             close();
         } catch (...) {
