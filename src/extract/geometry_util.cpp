@@ -11,7 +11,7 @@ double calculate_double_area(const std::vector<osmium::Location>& coordinates) {
 
     for (unsigned i = 1; i < coordinates.size(); ++i) {
         auto const cur = coordinates[i];
-        total += prev.lon() * cur.lat() - cur.lon() * prev.lat();
+        total += (prev.lon() * cur.lat()) - (cur.lon() * prev.lat());
         prev = cur;
     }
 
@@ -26,7 +26,7 @@ double calculate_double_area(const std::vector<osmium::geom::Coordinates>& coord
 
     for (unsigned i = 1; i < coordinates.size(); ++i) {
         auto const cur = coordinates[i];
-        total += prev.x * cur.y - cur.x * prev.y;
+        total += (prev.x * cur.y) - (cur.x * prev.y);
         prev = cur;
     }
 
