@@ -8,14 +8,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ["debian:bookworm", "debian:testing", "debian:experimental"]
+        image: ["debian:trixie", "debian:testing"]
         include:
-          - image: "debian:bookworm"
-            clang: 15
-          - image: "debian:testing"
+          - image: "debian:trixie"
             clang: 19
-          - image: "debian:experimental"
-            clang: 20
+          - image: "debian:testing"
+            clang: 21
+#          - image: "debian:experimental"
+#            clang: 21
     container:
       image: ${{ matrix.image }}
       env:

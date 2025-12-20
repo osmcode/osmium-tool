@@ -10,47 +10,28 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - "ubuntu:20.04"        # gcc  9.3.0, clang 10.0.0, cmake 3.16.3
           - "ubuntu:22.04"        # gcc 12.2.0, clang 15.0.7, cmake 3.24.2
           - "ubuntu:24.04"        # gcc 14.2.0, clang 18.1.3, cmake 3.28.3
-          - "debian:bullseye"     # gcc 10.2.1, clang 11.0.1, cmake 3.18.4
           - "debian:bookworm"     # gcc 12.2.0, clang 15.0.6, cmake 3.25.1
+          - "debian:trixie"       # gcc 14.2.0, clang 19.1.7, cmake 3.31.6
           - "debian:testing"
           - "debian:experimental"
-          - "fedora:39"
           - "fedora:40"
           - "fedora:41"
+          - "fedora:42"
+          - "fedora:43"
         build_type: [Dev]
         cpp_compiler: [g++]
         cpp_version: [c++14]
         include:
+          - image: "ubuntu:22.04"
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "ubuntu:24.04"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "debian:bullseye"
-            cpp_version: c++17
-          - image: "debian:bullseye"
-            cpp_version: c++20
-          - image: "debian:bullseye"
-            c_compiler: clang
-            cpp_compiler: clang++
-          - image: "debian:bullseye"
-            c_compiler: clang
-            cpp_compiler: clang++
-            cpp_version: c++17
-          - image: "debian:bullseye"
-            c_compiler: clang
-            cpp_compiler: clang++
-            cpp_version: c++20
-          - image: "debian:bullseye"
-            build_type: RelWithDebInfo
-          - image: "debian:bookworm"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:bookworm"
             cpp_version: c++17
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:bookworm"
             cpp_version: c++20
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:bookworm"
             c_compiler: clang
             cpp_compiler: clang++
@@ -64,6 +45,27 @@ jobs:
             cpp_version: c++20
           - image: "debian:bookworm"
             build_type: RelWithDebInfo
+          - image: "debian:trixie"
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+          - image: "debian:trixie"
+            cpp_version: c++17
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+          - image: "debian:trixie"
+            cpp_version: c++20
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+          - image: "debian:trixie"
+            c_compiler: clang
+            cpp_compiler: clang++
+          - image: "debian:trixie"
+            c_compiler: clang
+            cpp_compiler: clang++
+            cpp_version: c++17
+          - image: "debian:trixie"
+            c_compiler: clang
+            cpp_compiler: clang++
+            cpp_version: c++20
+          - image: "debian:trixie"
+            build_type: RelWithDebInfo
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:testing"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
@@ -75,12 +77,16 @@ jobs:
           - image: "debian:experimental"
             c_compiler: clang
             cpp_compiler: clang++
-          - image: "fedora:39"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "fedora:40"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "fedora:41"
+            CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+          - image: "fedora:42"
+            CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
+            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
+          - image: "fedora:43"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
     container:
@@ -167,7 +173,7 @@ jobs:
           - macos-15
         build_type: [Dev]
         include:
-          - os: macos-14
+          - os: macos-15
             build_type: Release
     env:
       CC: clang
