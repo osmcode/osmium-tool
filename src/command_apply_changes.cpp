@@ -43,10 +43,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/util/verbose_output.hpp>
 #include <osmium/visitor.hpp>
 
-#include <boost/function_output_iterator.hpp>
 #include <boost/program_options.hpp>
 
 #include <algorithm>
+#include <iterator>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -155,9 +155,6 @@ namespace {
 /**
  *  Copy the first OSM object with a given Id to the output. Keep
  *  track of the Id of each object to do this.
- *
- *  We are using this functor class instead of a simple lambda, because the
- *  lambda doesn't build on MSVC.
  */
 class copy_first_with_id {
 
@@ -166,11 +163,15 @@ class copy_first_with_id {
 
 public:
 
+    using iterator_category = std::output_iterator_tag;
+    using value_type = const osmium::OSMObject;
+    using reference = const osmium::OSMObject&;
+
     explicit copy_first_with_id(osmium::io::Writer* w) :
         writer(w) {
     }
 
-    void operator()(const osmium::OSMObject& obj) {
+    void push_back(const osmium::OSMObject& obj) {
         if (obj.id() != id) {
             if (obj.visible()) {
                 (*writer)(obj);
@@ -355,7 +356,8 @@ bool CommandApplyChanges::run() {
         } else {
             m_vout << "Applying changes and writing them to output...\n";
             const auto input = osmium::io::make_input_iterator_range<osmium::OSMObject>(reader);
-            auto output_it = boost::make_function_output_iterator(copy_first_with_id(&writer));
+            copy_first_with_id copy_first{&writer};
+            auto output_it = std::back_inserter(copy_first);
 
             std::set_union(objects.begin(),
                            objects.end(),
