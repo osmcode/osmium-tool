@@ -15,7 +15,7 @@ $endfor$
 $if(author)$
 .SH COPYRIGHT
 .PP
-Copyright (C) 2013\-2025 Jochen Topf <jochen@topf.org>.
+Copyright (C) 2013\-2026 Jochen Topf <jochen@topf.org>.
 
 License GPLv3+: GNU GPL version 3 or later
 <https://gnu.org/licenses/gpl.html>.
