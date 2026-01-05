@@ -22,27 +22,27 @@ jobs:
           - "fedora:43"
         build_type: [Dev]
         cpp_compiler: [g++]
-        cpp_version: [c++17]
+        cpp_version: [17]
         include:
           - image: "ubuntu:22.04"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "ubuntu:24.04"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:bookworm"
-            cpp_version: c++20
+            cpp_version: 20
           - image: "debian:bookworm"
             c_compiler: clang
             cpp_compiler: clang++
           - image: "debian:bookworm"
             c_compiler: clang
             cpp_compiler: clang++
-            cpp_version: c++20
+            cpp_version: 20
           - image: "debian:bookworm"
             build_type: RelWithDebInfo
           - image: "debian:trixie"
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:trixie"
-            cpp_version: c++20
+            cpp_version: 20
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "debian:trixie"
             c_compiler: clang
@@ -50,7 +50,7 @@ jobs:
           - image: "debian:trixie"
             c_compiler: clang
             cpp_compiler: clang++
-            cpp_version: c++20
+            cpp_version: 20
           - image: "debian:trixie"
             build_type: RelWithDebInfo
             CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
@@ -182,9 +182,7 @@ jobs:
     steps:
       - run: |
           vcpkg install \
-            boost-iterator:x64-windows \
             boost-program-options:x64-windows \
-            boost-variant:x64-windows \
             bzip2:x64-windows \
             expat:x64-windows \
             lz4:x64-windows \

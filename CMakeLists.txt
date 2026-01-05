@@ -15,7 +15,25 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 #-----------------------------------------------------------------------------
 #
-#  Project version
+#  Decide which C++ version to use (Minimum/default: C++17)
+#
+#-----------------------------------------------------------------------------
+
+if(NOT USE_CPP_VERSION)
+    set(USE_CPP_VERSION 17)
+endif()
+message(STATUS "Use C++ version: ${USE_CPP_VERSION}")
+
+set(CMAKE_CXX_STANDARD ${USE_CPP_VERSION})
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+#-----------------------------------------------------------------------------
+#
+#  Configurations
 #
 #-----------------------------------------------------------------------------
 
@@ -26,8 +44,6 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo;MinSizeRel;Dev"
     FORCE)
 
 set(AUTHOR "Jochen Topf <jochen@topf.org>")
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(WITH_LZ4 "Build with lz4 support for PBF files" ON)
 
@@ -45,7 +61,7 @@ option(RUN_TESTS_WITH_BINARY_COMPARE "Run tests that do binary comparisons" ON)
 #
 #-----------------------------------------------------------------------------
 
-find_package(Boost 1.55.0 REQUIRED COMPONENTS program_options)
+find_package(Boost CONFIG 1.55.0 REQUIRED COMPONENTS program_options)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 find_package(Osmium 2.20.0 REQUIRED COMPONENTS io)
@@ -108,20 +124,6 @@ if(IWYU_TOOL)
 else()
     message(STATUS "Looking for iwyu_tool.py - not found")
     message(STATUS "  Make target 'iwyu' will not be available")
-endif()
-
-
-#-----------------------------------------------------------------------------
-#
-#  Decide which C++ version to use (Minimum/default: C++17).
-#
-#-----------------------------------------------------------------------------
-if(NOT MSVC)
-    if(NOT USE_CPP_VERSION)
-        set(USE_CPP_VERSION c++17)
-    endif()
-    message(STATUS "Use C++ version: ${USE_CPP_VERSION}")
-    add_compile_options(-std=${USE_CPP_VERSION})
 endif()
 
 

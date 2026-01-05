@@ -10,6 +10,7 @@ runs:
       run: |
         cmake -LA .. \
               ${CMAKE_OPTS} \
-              -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+              -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+              -DUSE_CPP_VERSION=${CPP_VERSION}
       shell: bash
       working-directory: build
