@@ -176,6 +176,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Dev")
     endif()
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_definitions(-Wno-stringop-overread)
+endif()
+
 # Force RelWithDebInfo build type if none was given
 if(CMAKE_BUILD_TYPE)
     set(build_type ${CMAKE_BUILD_TYPE})

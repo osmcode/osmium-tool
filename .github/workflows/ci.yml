@@ -24,58 +24,45 @@ jobs:
         cpp_compiler: [g++]
         cpp_version: [17]
         include:
-          - image: "ubuntu:22.04"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "ubuntu:24.04"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "debian:bookworm"
-            cpp_version: 20
           - image: "debian:bookworm"
             c_compiler: clang
             cpp_compiler: clang++
-          - image: "debian:bookworm"
+          - image: "debian:trixie"
+            cpp_version: 20
+          - image: "debian:trixie"
+            cpp_version: 23
+          - image: "debian:trixie"
+            c_compiler: clang
+            cpp_compiler: clang++
+          - image: "debian:trixie"
             c_compiler: clang
             cpp_compiler: clang++
             cpp_version: 20
-          - image: "debian:bookworm"
+          - image: "debian:trixie"
+            c_compiler: clang
+            cpp_compiler: clang++
+            cpp_version: 23
+          - image: "debian:trixie"
             build_type: RelWithDebInfo
           - image: "debian:trixie"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "debian:trixie"
-            cpp_version: 20
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "debian:trixie"
             c_compiler: clang
             cpp_compiler: clang++
-          - image: "debian:trixie"
-            c_compiler: clang
-            cpp_compiler: clang++
-            cpp_version: 20
-          - image: "debian:trixie"
-            build_type: RelWithDebInfo
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
-          - image: "debian:testing"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
+            CXXFLAGS: -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer
+            LDFLAGS: -fsanitize=address,undefined
           - image: "debian:testing"
             c_compiler: clang
             cpp_compiler: clang++
-          - image: "debian:experimental"
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
           - image: "debian:experimental"
             c_compiler: clang
             cpp_compiler: clang++
           - image: "fedora:40"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "fedora:41"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds
           - image: "fedora:42"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
           - image: "fedora:43"
             CMAKE_OPTS: -DRUN_TESTS_WITH_BINARY_COMPARE=OFF
-            CXXFLAGS: -Wno-stringop-overread -Wno-array-bounds -Wno-maybe-uninitialized
     container:
       image: ${{ matrix.image }}
       env:
@@ -83,7 +70,7 @@ jobs:
         CMAKE_OPTS: ${{ matrix.CMAKE_OPTS }}
         CC: ${{ matrix.c_compiler }}
         CXX: ${{ matrix.cpp_compiler }}
-        CXXFLAGS: ${{ matrix.CXXFLAGS }}
+        CXXFLAGS: -Werror ${{ matrix.CXXFLAGS }}
         LDFLAGS: ${{ matrix.LDFLAGS }}
         CPP_VERSION: ${{ matrix.cpp_version }}
         APT_LISTCHANGES_FRONTEND: none
@@ -136,6 +123,7 @@ jobs:
     env:
       CC: clang-18
       CXX: clang++-18
+      CXXFLAGS: -Werror
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v4
@@ -161,6 +149,7 @@ jobs:
     env:
       CC: clang
       CXX: clang++
+      CXXFLAGS: -Werror
       BUILD_TYPE: ${{ matrix.build_type }}
     steps:
       - run: brew install boost nlohmann-json
