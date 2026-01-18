@@ -103,7 +103,7 @@ if(CPPCHECK)
     # cpp doesn't find system includes for some reason, suppress that report
     set(CPPCHECK_OPTIONS ${CPPCHECK_OPTIONS} --suppress=missingIncludeSystem)
 
-    add_custom_target(cppcheck ${CPPCHECK} --std=c++17 ${CPPCHECK_OPTIONS} ${CMAKE_SOURCE_DIR}/src/*pp)
+    add_custom_target(cppcheck ${CPPCHECK} --std=c++${USE_CPP_VERSION} ${CPPCHECK_OPTIONS} ${CMAKE_SOURCE_DIR}/src/*pp)
 else()
     message(STATUS "Looking for cppcheck - not found")
     message(STATUS "  Build target 'cppcheck' will not be available")
