@@ -84,7 +84,7 @@ void with_multiple_osm_inputs::setup_input_files(const boost::program_options::v
     }
 
     bool uses_stdin = false;
-    for (auto& filename : m_input_filenames) {
+    for (const auto& filename : m_input_filenames) {
         if (filename == "-") {
             if (uses_stdin) {
                 throw argument_error{"Can read at most one file from STDIN."};
