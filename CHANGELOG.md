@@ -8,9 +8,22 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Add integration tests for show command output formats. Thanks to Alexander
+  Farber <farber72@outlook.de>.
+
 ### Changed
 
+- Switch to C++17 as minimum requirement.
+- Use `std::back_inserter` instead of `boost::function_output_iterator`
+  removing one dependency on Boost.
+- Various small fixes and code cleanups.
+
 ### Fixed
+
+- Fix ID comparison in `osmium merge` to match `osmium sort` behavior. Thanks
+  to Zi-Hao WANG <zhwang0721@gmail.com>.
+- Extract in "simple" mode: Check all nodes in a way for overlap with the
+  extraction region. Thanks to Muhammed Can Küçükaslan <muhammed.kucukaslan@getir.com>.
 
 
 ## [1.18.0] - 2025-03-17
