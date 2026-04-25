@@ -104,9 +104,7 @@ class Pass {
                         break;
                     case osmium::item_type::way:
                         self().way(static_cast<const osmium::Way&>(object));
-                        for (auto& e : extracts()) {
-                            self().eway(&e, static_cast<const osmium::Way&>(object));
-                        }
+                        self().eway_all(extracts(), static_cast<const osmium::Way&>(object));
                         break;
                     case osmium::item_type::relation:
                         self().relation(static_cast<const osmium::Relation&>(object));
@@ -153,6 +151,15 @@ protected:
     }
 
     void erelation(extract_data*, const osmium::Relation&) {
+    }
+
+    // Default implementation: call eway() for each extract separately.
+    // Subclasses may override this to process all extracts in a single
+    // pass over way.nodes().
+    void eway_all(std::vector<extract_data>& exts, const osmium::Way& way) {
+        for (auto& e : exts) {
+            self().eway(&e, way);
+        }
     }
 
 public:
