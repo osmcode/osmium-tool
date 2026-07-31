@@ -1,0 +1,344 @@
+# Bash completion for Osmium tool.
+#
+# To test this file:
+# 1) Call: source ./osmium
+# 2) Type: osmium <TAB>
+#
+# Uses helpers from the bash-completion package
+# (_init_completion, _filedir) when available and falls back to bash
+# builtins otherwise. Compatible with bash 3.2.
+
+_osmium_commands="add-locations-to-ways apply-changes cat changeset-filter
+check-refs create-locations-index derive-changes diff export extract fileinfo
+getid getparents help merge merge-changes query-locations-index removeid
+renumber show sort tags-count tags-filter time-filter"
+
+_osmium_help_topics="$_osmium_commands file-formats index-types"
+
+_osmium_input_formats="osm osm.gz osm.bz2 osh osh.gz osh.bz2 osc osc.gz osc.bz2 o5m o5c pbf"
+_osmium_output_formats="debug debug.gz debug.bz2 opl opl.gz opl.bz2 $_osmium_input_formats"
+_osmium_diff_formats="opl debug debug,color compact"
+_osmium_export_formats="json geojson jsonseq geojsonseq pg"
+_osmium_object_types="node way relation"
+_osmium_attr_types="version timestamp changeset uid user"
+_osmium_export_attrs="type id version timestamp changeset uid user way_nodes"
+_osmium_export_id_types="counter type_id"
+_osmium_extract_strategies="simple complete_ways smart"
+_osmium_sort_orders="count-asc count-desc name-asc name-desc"
+
+_osmium_file_ext='@(osm|osh|osc|o5m|o5c|pbf|osm.pbf|osm.gz|osm.bz2|osh.gz|osh.bz2|osc.gz|osc.bz2|o5m.gz|o5m.bz2|o5c.gz|o5c.bz2)'
+_osmium_polygon_ext='@(json|geojson|poly|osm|osh|osc|o5m|o5c|pbf|osm.pbf|osm.gz|osm.bz2|osh.gz|osh.bz2|osc.gz|osc.bz2)'
+
+# File completion, optionally restricted to an extglob extension pattern.
+__osmium_filedir()
+{
+    if declare -F _filedir >/dev/null 2>&1; then
+        if [[ -n $1 ]]; then
+            _filedir "$1"
+        else
+            _filedir
+        fi
+    else
+        local IFS=$'\n'
+        COMPREPLY=( $(compgen -f -- "$cur") )
+        type compopt >/dev/null 2>&1 && compopt -o filenames 2>/dev/null
+    fi
+}
+
+__osmium_dirs()
+{
+    if declare -F _filedir >/dev/null 2>&1; then
+        _filedir -d
+    else
+        local IFS=$'\n'
+        COMPREPLY=( $(compgen -d -- "$cur") )
+        type compopt >/dev/null 2>&1 && compopt -o filenames 2>/dev/null
+    fi
+}
+
+# Complete from the output of an osmium command (e.g. --show-index-types),
+# doing nothing if the osmium binary is not available.
+__osmium_dynamic()
+{
+    command -v osmium >/dev/null 2>&1 || return 0
+    COMPREPLY=( $(compgen -W "$(osmium "$@" 2>/dev/null)" -- "$cur") )
+}
+
+# Print the options valid for the given subcommand.
+__osmium_opts()
+{
+    local common="-h --help -v --verbose"
+    local input="-F --input-format"
+    local outfmt="-f --output-format"
+    local output="--fsync --generator --output-header -o --output -O --overwrite"
+    local progress="--progress --no-progress"
+
+    case $1 in
+        add-locations-to-ways)
+            echo "$common $input $outfmt $output $progress -i --index-type --index-type-neg -I --show-index-types -n --keep-untagged-nodes --keep-member-nodes";;
+        apply-changes)
+            echo "$common $input $outfmt $output $progress --change-file-format --locations-on-ways -H --with-history --redact";;
+        cat)
+            echo "$common $input $outfmt $output $progress -t --object-type -c --clean --buffer-data";;
+        changeset-filter)
+            echo "$common $input $outfmt $output $progress -d --with-discussions -D --without-discussions -c --with-changes -C --without-changes --open --closed -u --user -U --uid -a --after -b --before -B --bbox";;
+        check-refs)
+            echo "$common $input $progress -i --show-ids -r --check-relations";;
+        create-locations-index)
+            echo "$common $input $progress -i --index-file -u --update";;
+        derive-changes)
+            echo "$common $input $outfmt $output $progress --increment-version --keep-details --update-timestamp";;
+        diff)
+            echo "$common $input $outfmt $output $progress --ignore-changeset --ignore-uid --ignore-user -q --quiet -c --suppress-common -s --summary -t --object-type";;
+        export)
+            echo "$common $input $progress --fsync -o --output -O --overwrite -f --output-format -c --config -e --show-errors -E --stop-on-error -i --index-type -I --show-index-types -C --print-default-config -n --keep-untagged -r --omit-rs -u --add-unique-id -a --attributes";;
+        extract)
+            echo "$common $input $outfmt $output -b --bbox -c --config -d --directory -p --polygon --clean -s --strategy -S --option -H --with-history";;
+        fileinfo)
+            echo "$common $input $progress -e --extended -g --get -j --json -G --show-variables";;
+        getid)
+            echo "$common $input $outfmt $output $progress --default-type -i --id-file -I --id-osm-file -r --add-referenced -H --with-history --verbose-ids";;
+        getparents)
+            echo "$common $input $outfmt $output $progress --default-type -i --id-file -I --id-osm-file -s --add-self --verbose-ids";;
+        merge)
+            echo "$common $input $outfmt $output $progress";;
+        merge-changes)
+            echo "$common $input $outfmt $output $progress -s --simplify";;
+        query-locations-index)
+            echo "$common $outfmt $output -i --index-file --dump";;
+        removeid)
+            echo "$common $input $outfmt $output $progress --default-type -i --id-file -I --id-osm-file";;
+        renumber)
+            echo "$common $input $outfmt $output $progress -i --index-directory -t --object-type";;
+        show)
+            echo "$common $input -f --output-format --format-debug -d --format-opl -o --format-xml -x --no-pager -t --object-type";;
+        sort)
+            echo "$common $input $outfmt $output $progress";;
+        tags-count)
+            echo "$common $input $progress -e --expressions -m --min-count -M --max-count -s --sort -t --object-type -o --output -O --overwrite";;
+        tags-filter)
+            echo "$common $input $outfmt $output $progress -e --expressions -i --invert-match -R --omit-referenced";;
+        time-filter)
+            echo "$common $input $outfmt $output $progress";;
+    esac
+}
+
+# Complete the argument of the previous option. Returns 0 if the previous
+# word was an option taking an argument (COMPREPLY may then be empty for
+# free-form arguments), 1 otherwise.
+__osmium_complete_arg()
+{
+    local cmd=$1 prev=$2 cur=$3
+
+    case $prev in
+        -F|--input-format|--change-file-format)
+            COMPREPLY=( $(compgen -W "$_osmium_input_formats" -- "$cur") )
+            return 0;;
+        -f|--output-format)
+            case $cmd in
+                diff)   COMPREPLY=( $(compgen -W "$_osmium_diff_formats" -- "$cur") );;
+                export) COMPREPLY=( $(compgen -W "$_osmium_export_formats" -- "$cur") );;
+                *)      COMPREPLY=( $(compgen -W "$_osmium_output_formats" -- "$cur") );;
+            esac
+            return 0;;
+        -t|--object-type)
+            case $cmd in
+                diff|renumber) COMPREPLY=( $(compgen -W "$_osmium_object_types" -- "$cur") );;
+                *)             COMPREPLY=( $(compgen -W "$_osmium_object_types changeset" -- "$cur") );;
+            esac
+            return 0;;
+        --default-type)
+            COMPREPLY=( $(compgen -W "$_osmium_object_types" -- "$cur") )
+            return 0;;
+        --clean)
+            COMPREPLY=( $(compgen -W "$_osmium_attr_types" -- "$cur") )
+            return 0;;
+        --config)
+            __osmium_filedir '@(json)'
+            return 0;;
+        -c)
+            case $cmd in
+                cat)
+                    COMPREPLY=( $(compgen -W "$_osmium_attr_types" -- "$cur") )
+                    return 0;;
+                export|extract)
+                    __osmium_filedir '@(json)'
+                    return 0;;
+            esac
+            return 1;;
+        --strategy)
+            COMPREPLY=( $(compgen -W "$_osmium_extract_strategies" -- "$cur") )
+            return 0;;
+        --sort)
+            COMPREPLY=( $(compgen -W "$_osmium_sort_orders" -- "$cur") )
+            return 0;;
+        -s)
+            case $cmd in
+                extract)
+                    COMPREPLY=( $(compgen -W "$_osmium_extract_strategies" -- "$cur") )
+                    return 0;;
+                tags-count)
+                    COMPREPLY=( $(compgen -W "$_osmium_sort_orders" -- "$cur") )
+                    return 0;;
+            esac
+            return 1;;
+        --add-unique-id)
+            COMPREPLY=( $(compgen -W "$_osmium_export_id_types" -- "$cur") )
+            return 0;;
+        --attributes)
+            COMPREPLY=( $(compgen -W "$_osmium_export_attrs" -- "$cur") )
+            return 0;;
+        -a)
+            case $cmd in
+                changeset-filter) COMPREPLY=(); return 0;;  # timestamp
+                export)
+                    COMPREPLY=( $(compgen -W "$_osmium_export_attrs" -- "$cur") )
+                    return 0;;
+            esac
+            return 1;;
+        -u)
+            case $cmd in
+                changeset-filter) COMPREPLY=(); return 0;;  # user name
+                export)
+                    COMPREPLY=( $(compgen -W "$_osmium_export_id_types" -- "$cur") )
+                    return 0;;
+            esac
+            return 1;;
+        -U)
+            [[ $cmd == changeset-filter ]] && { COMPREPLY=(); return 0; }  # user id
+            return 1;;
+        -b)
+            case $cmd in
+                changeset-filter|extract) COMPREPLY=(); return 0;;  # timestamp / bbox
+            esac
+            return 1;;
+        -B|--bbox|--user|--uid|--after|--before)
+            COMPREPLY=()
+            return 0;;
+        -o|--output)
+            case $cmd in
+                show) return 1;;  # -o means --format-opl here
+                export) __osmium_filedir '@(json|geojson|jsonseq|geojsonseq)';;
+                tags-count) __osmium_filedir;;
+                *) __osmium_filedir "$_osmium_file_ext";;
+            esac
+            return 0;;
+        -p|--polygon)
+            [[ $cmd == extract ]] || return 1
+            __osmium_filedir "$_osmium_polygon_ext"
+            return 0;;
+        --directory|--index-directory)
+            __osmium_dirs
+            return 0;;
+        -d)
+            [[ $cmd == extract ]] || return 1
+            __osmium_dirs
+            return 0;;
+        --index-file|--id-file)
+            __osmium_filedir
+            return 0;;
+        --id-osm-file)
+            __osmium_filedir "$_osmium_file_ext"
+            return 0;;
+        -i)
+            case $cmd in
+                add-locations-to-ways)
+                    __osmium_dynamic add-locations-to-ways --show-index-types
+                    return 0;;
+                export)
+                    __osmium_dynamic export --show-index-types
+                    return 0;;
+                create-locations-index|query-locations-index)
+                    __osmium_filedir
+                    return 0;;
+                getid|getparents|removeid)
+                    __osmium_filedir
+                    return 0;;
+                renumber)
+                    __osmium_dirs
+                    return 0;;
+            esac
+            return 1;;
+        -I)
+            case $cmd in
+                getid|getparents|removeid)
+                    __osmium_filedir "$_osmium_file_ext"
+                    return 0;;
+            esac
+            return 1;;
+        --index-type|--index-type-neg)
+            case $cmd in
+                export) __osmium_dynamic export --show-index-types;;
+                *)      __osmium_dynamic add-locations-to-ways --show-index-types;;
+            esac
+            return 0;;
+        --get)
+            __osmium_dynamic fileinfo --show-variables
+            return 0;;
+        -g)
+            [[ $cmd == fileinfo ]] || return 1
+            __osmium_dynamic fileinfo --show-variables
+            return 0;;
+        --expressions)
+            __osmium_filedir
+            return 0;;
+        -e)
+            case $cmd in
+                tags-count|tags-filter)
+                    __osmium_filedir
+                    return 0;;
+            esac
+            return 1;;
+        -S|--option)
+            [[ $cmd == extract ]] && { COMPREPLY=(); return 0; }
+            return 1;;
+        -m|-M|--min-count|--max-count)
+            [[ $cmd == tags-count ]] && { COMPREPLY=(); return 0; }
+            return 1;;
+        --generator|--output-header)
+            COMPREPLY=()
+            return 0;;
+    esac
+
+    return 1
+}
+
+_osmium()
+{
+    local cur prev words cword
+    if declare -F _init_completion >/dev/null 2>&1; then
+        _init_completion || return
+    else
+        COMPREPLY=()
+        cur=${COMP_WORDS[COMP_CWORD]}
+        prev=${COMP_WORDS[COMP_CWORD-1]}
+        words=("${COMP_WORDS[@]}")
+        cword=$COMP_CWORD
+    fi
+
+    if (( cword == 1 )); then
+        COMPREPLY=( $(compgen -W "$_osmium_commands" -- "$cur") )
+        return
+    fi
+
+    local cmd=${words[1]}
+
+    if [[ $cmd == help ]]; then
+        COMPREPLY=( $(compgen -W "$_osmium_help_topics" -- "$cur") )
+        return
+    fi
+
+    __osmium_complete_arg "$cmd" "$prev" "$cur" && return
+
+    if [[ $cur == -* ]]; then
+        COMPREPLY=( $(compgen -W "$(__osmium_opts "$cmd")" -- "$cur") )
+        return
+    fi
+
+    case $cmd in
+        query-locations-index) ;;  # positional argument is a node ID
+        *) __osmium_filedir "$_osmium_file_ext";;
+    esac
+}
+
+complete -F _osmium osmium
