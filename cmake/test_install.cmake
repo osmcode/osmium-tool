@@ -27,6 +27,8 @@ set(OSMIUM_INSTALL_FILES
     share/man/man5/osmium-file-formats.5
     share/man/man5/osmium-index-types.5
     share/man/man5/osmium-output-headers.5
+    share/bash-completion/completions/osmium
+    share/zsh/site-functions/_osmium
     bin/osmium
 )
 
