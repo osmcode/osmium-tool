@@ -292,6 +292,27 @@ add_subdirectory(src)
 
 #-----------------------------------------------------------------------------
 #
+#  Command line completions
+#
+#  The completion files are installed into the locations where bash and zsh
+#  look for them by default. Packagers can override the directories, Debian
+#  for instance uses share/zsh/vendor-completions. Relative paths are
+#  interpreted relative to the install prefix, absolute paths are used as is.
+#
+#-----------------------------------------------------------------------------
+option(INSTALL_COMPLETIONS "Install bash and zsh command line completions" ON)
+
+set(BASH_COMPLETION_DIR "share/bash-completion/completions" CACHE STRING "Installation directory for the bash completion file")
+set(ZSH_COMPLETION_DIR "share/zsh/site-functions" CACHE STRING "Installation directory for the zsh completion file")
+
+if(INSTALL_COMPLETIONS)
+    install(FILES bash_completion/osmium DESTINATION ${BASH_COMPLETION_DIR})
+    install(FILES zsh_completion/_osmium DESTINATION ${ZSH_COMPLETION_DIR})
+endif()
+
+
+#-----------------------------------------------------------------------------
+#
 #  Tests
 #
 #-----------------------------------------------------------------------------
