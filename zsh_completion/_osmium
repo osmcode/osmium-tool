@@ -13,7 +13,7 @@
 #  http://zsh.sourceforge.net/Guide/zshguide06.html
 #
 
-osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(bz2|gz)'"
+osmium_file_glob="'*.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c|opl).(bz2|gz)'"
 polygon_file_glob="'*.json *.geojson *.poly *.(osm|osh|osc|o5m|o5c|pbf|osm.pbf) *.(osm|osh|osc|o5m|o5c).(bz2|gz)'"
 
 _osmium() {
@@ -478,7 +478,10 @@ _osmium_input_file_formats() {
         'osc.bz2[XML change format (compressed with bzip2)]' \
         'o5m[o5m data format]' \
         'o5c[o5c change format]' \
-        'pbf[PBF format]'
+        'pbf[PBF format]' \
+        'opl[OPL data format]' \
+        'opl.gz[OPL data format (compressed with gzip)]' \
+        'opl.bz2[OPL data format (compressed with bzip2)]'
 }
 
 _osmium_output_file_formats() {

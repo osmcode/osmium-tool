@@ -15,8 +15,8 @@ renumber show sort tags-count tags-filter time-filter"
 
 _osmium_help_topics="$_osmium_commands file-formats index-types"
 
-_osmium_input_formats="osm osm.gz osm.bz2 osh osh.gz osh.bz2 osc osc.gz osc.bz2 o5m o5c pbf"
-_osmium_output_formats="debug debug.gz debug.bz2 opl opl.gz opl.bz2 $_osmium_input_formats"
+_osmium_input_formats="osm osm.gz osm.bz2 osh osh.gz osh.bz2 osc osc.gz osc.bz2 o5m o5c pbf opl opl.gz opl.bz2"
+_osmium_output_formats="debug debug.gz debug.bz2 $_osmium_input_formats"
 _osmium_diff_formats="opl debug debug,color compact"
 _osmium_export_formats="json geojson jsonseq geojsonseq pg"
 _osmium_object_types="node way relation"
@@ -26,7 +26,7 @@ _osmium_export_id_types="counter type_id"
 _osmium_extract_strategies="simple complete_ways smart"
 _osmium_sort_orders="count-asc count-desc name-asc name-desc"
 
-_osmium_file_ext='@(osm|osh|osc|o5m|o5c|pbf|osm.pbf|osm.gz|osm.bz2|osh.gz|osh.bz2|osc.gz|osc.bz2|o5m.gz|o5m.bz2|o5c.gz|o5c.bz2)'
+_osmium_file_ext='@(osm|osh|osc|o5m|o5c|pbf|osm.pbf|osm.gz|osm.bz2|osh.gz|osh.bz2|osc.gz|osc.bz2|o5m.gz|o5m.bz2|o5c.gz|o5c.bz2|opl|opl.gz|opl.bz2 )'
 _osmium_polygon_ext='@(json|geojson|poly|osm|osh|osc|o5m|o5c|pbf|osm.pbf|osm.gz|osm.bz2|osh.gz|osh.bz2|osc.gz|osc.bz2)'
 
 # File completion, optionally restricted to an extglob extension pattern.
