@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/handler/check_order.hpp>
 #include <osmium/util/file.hpp>
 
+#include <cstdint>
 #include <cstdlib>
 #include <memory>
 #include <vector>
@@ -96,6 +97,55 @@ namespace strategy_complete_ways {
                         e->extra_node_ids.set(nr.ref());
                     }
                     return;
+                }
+            }
+        }
+
+        // Override that scans way.nodes() at most twice for all extracts
+        // combined instead of up to twice per extract as the default does.
+        // Uses a uint64_t bitmask so falls back to the default per-extract
+        // eway() loop when there are more than 64 extracts.
+        // Pass A finds which extracts claim this way.
+        // Pass B records all node refs into extra_node_ids for matched extracts.
+        void eway_all(std::vector<extract_data>& exts, const osmium::Way& way) {
+            const std::size_t n = exts.size();
+
+            if (n > 64) {
+                for (auto& e : exts) {
+                    self().eway(&e, way);
+                }
+                return;
+            }
+            std::uint64_t found_mask = 0;
+            std::size_t remaining = n;
+
+            for (const auto& nr : way.nodes()) {
+                const auto node_id = nr.positive_ref();
+                for (std::size_t i = 0; i < n; ++i) {
+                    if (!(found_mask & (std::uint64_t{1} << i)) &&
+                        exts[i].node_ids.get(node_id)) {
+                        found_mask |= std::uint64_t{1} << i;
+                        exts[i].way_ids.set(way.positive_id());
+                        if (--remaining == 0) {
+                            break;
+                        }
+                    }
+                }
+                if (remaining == 0) {
+                    break;
+                }
+            }
+
+            if (found_mask == 0) {
+                return;
+            }
+
+            for (const auto& nr : way.nodes()) {
+                const auto node_ref = nr.ref();
+                for (std::size_t i = 0; i < n; ++i) {
+                    if (found_mask & (std::uint64_t{1} << i)) {
+                        exts[i].extra_node_ids.set(node_ref);
+                    }
                 }
             }
         }
