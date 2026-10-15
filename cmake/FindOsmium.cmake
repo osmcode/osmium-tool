@@ -111,7 +111,10 @@ endif()
 # Component 'pbf'
 if(Osmium_USE_PBF)
     find_package(ZLIB)
-    find_package(Threads)
+
+    set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+    find_package(Threads REQUIRED)
+
     find_package(Protozero 1.6.3)
 
     if(Osmium_USE_LZ4)
@@ -119,8 +122,8 @@ if(Osmium_USE_PBF)
         add_definitions(-DOSMIUM_WITH_LZ4)
     endif()
 
-    list(APPEND OSMIUM_EXTRA_FIND_VARS ZLIB_FOUND Threads_FOUND PROTOZERO_INCLUDE_DIR)
-    if(ZLIB_FOUND AND Threads_FOUND AND PROTOZERO_FOUND)
+    list(APPEND OSMIUM_EXTRA_FIND_VARS ZLIB_FOUND PROTOZERO_INCLUDE_DIR)
+    if(ZLIB_FOUND AND PROTOZERO_FOUND)
         list(APPEND OSMIUM_PBF_LIBRARIES
             ${ZLIB_LIBRARIES}
             ${LZ4_LIBRARIES}
@@ -142,10 +145,12 @@ if(Osmium_USE_XML)
     find_package(EXPAT)
     find_package(BZip2)
     find_package(ZLIB)
-    find_package(Threads)
 
-    list(APPEND OSMIUM_EXTRA_FIND_VARS EXPAT_FOUND BZIP2_FOUND ZLIB_FOUND Threads_FOUND)
-    if(EXPAT_FOUND AND BZIP2_FOUND AND ZLIB_FOUND AND Threads_FOUND)
+    set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+    find_package(Threads REQUIRED)
+
+    list(APPEND OSMIUM_EXTRA_FIND_VARS EXPAT_FOUND BZIP2_FOUND ZLIB_FOUND)
+    if(EXPAT_FOUND AND BZIP2_FOUND AND ZLIB_FOUND)
         list(APPEND OSMIUM_XML_LIBRARIES
             ${EXPAT_LIBRARIES}
             ${BZIP2_LIBRARIES}
@@ -221,20 +226,6 @@ find_package_handle_standard_args(Osmium
                                   REQUIRED_VARS OSMIUM_INCLUDE_DIR ${OSMIUM_EXTRA_FIND_VARS}
                                   VERSION_VAR _libosmium_version)
 unset(OSMIUM_EXTRA_FIND_VARS)
-
-#----------------------------------------------------------------------
-#
-#  A function for setting the -pthread option in compilers/linkers
-#
-#----------------------------------------------------------------------
-function(set_pthread_on_target _target)
-    if(NOT MSVC)
-        set_target_properties(${_target} PROPERTIES COMPILE_FLAGS "-pthread")
-        if(NOT APPLE)
-            set_target_properties(${_target} PROPERTIES LINK_FLAGS "-pthread")
-        endif()
-    endif()
-endfunction()
 
 #----------------------------------------------------------------------
 #
