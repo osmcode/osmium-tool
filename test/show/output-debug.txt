@@ -27,6 +27,6 @@ way 2 visible
     "highway" = "primary"
     "name"    = "Test Way"
   nodes:     2 (open)
-    0:          1
-    1:          3
+    0:           1
+    1:           3
 
