@@ -29,12 +29,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <osmium/io/header.hpp>
 #include <osmium/io/writer.hpp>
 #include <osmium/io/writer_options.hpp>
+#include <osmium/memory/buffer.hpp>
 #include <osmium/memory/item.hpp>
 #include <osmium/osm/box.hpp>
 #include <osmium/osm/location.hpp>
 
+#include <condition_variable>
+#include <exception>
 #include <memory>
+#include <mutex>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -46,20 +51,35 @@ class Extract {
     std::string m_description;
     std::vector<std::string> m_header_options;
     osmium::Box m_envelope;
-    osmium::memory::Buffer m_buffer{buffer_size, osmium::memory::Buffer::auto_grow::no};
+
+    // Double-buffering: the main thread fills m_fill_buffer while the writer
+    // thread flushes m_flush_buffer to disk asynchronously.
+    osmium::memory::Buffer m_fill_buffer{buffer_size, osmium::memory::Buffer::auto_grow::no};
+    osmium::memory::Buffer m_flush_buffer{buffer_size, osmium::memory::Buffer::auto_grow::no};
+
     std::unique_ptr<osmium::io::Writer> m_writer;
     const OptionClean* m_clean = nullptr;
+
+    std::thread m_writer_thread;
+    std::mutex m_mutex;
+    std::condition_variable m_cv;
+    bool m_flush_pending = false;
+    bool m_shutdown = false;
+    std::exception_ptr m_writer_exception;
+
+    void writer_loop();
+    void swap_and_flush();
+    void check_writer_exception();
 
 public:
 
     Extract(const osmium::io::File& output_file, const std::string& description, const osmium::Box& envelope) :
         m_output_file(output_file),
         m_description(description),
-        m_envelope(envelope),
-        m_writer(nullptr) {
+        m_envelope(envelope) {
     }
 
-    virtual ~Extract() = default;
+    virtual ~Extract();
 
     const std::string& output() const noexcept {
         return m_output_file.filename();
