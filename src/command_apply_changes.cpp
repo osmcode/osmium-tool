@@ -190,8 +190,8 @@ void update_nodes_if_way(osmium::OSMObject* object, const location_index_type& l
     }
 
     for (auto& node_ref : static_cast<osmium::Way*>(object)->nodes()) {
-        auto location = location_index.get_noexcept(node_ref.positive_ref());
-        if (location) {
+        const auto location = location_index.get_noexcept(node_ref.positive_ref());
+        if (location.is_defined()) {
             node_ref.set_location(location);
         }
     }
@@ -239,7 +239,7 @@ void CommandApplyChanges::apply_changes_and_write(osmium::ObjectPointerCollectio
                 const auto& node = static_cast<osmium::Node&>(object);
                 if (node_ids.get_binary_search(node.positive_id())) {
                     const auto location = location_index.get_noexcept(node.positive_id());
-                    if (!location) {
+                    if (location.is_undefined()) {
                         location_index.set(node.positive_id(), node.location());
                     }
                 }

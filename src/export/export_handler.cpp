@@ -118,7 +118,7 @@ void ExportHandler::way(const osmium::Way& way) {
         if (way.nodes().size() <= 1) {
             throw osmium::geometry_error{"Way with less than two nodes (id=" + std::to_string(way.id()) + ")"};
         }
-        if (!way.nodes().front().location() || !way.nodes().back().location()) {
+        if (way.nodes().front().location().is_undefined() || way.nodes().back().location().is_undefined()) {
             throw osmium::invalid_location{"invalid location"};
         }
         if ((way.tags().empty() && m_handler->options().keep_untagged)
