@@ -14,7 +14,7 @@ jobs:
           - image: "debian:testing"
             clang: 22
           - image: "debian:experimental"
-            clang: 23
+            clang: 24
     container:
       image: ${{ matrix.image }}
       env:

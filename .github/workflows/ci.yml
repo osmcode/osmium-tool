@@ -12,6 +12,7 @@ jobs:
         image:
           - "ubuntu:22.04"        # gcc 12.2.0, clang 15.0.7, cmake 3.24.2
           - "ubuntu:24.04"        # gcc 14.2.0, clang 18.1.3, cmake 3.28.3
+          - "ubuntu:26.04"
           - "debian:bookworm"     # gcc 12.2.0, clang 15.0.6, cmake 3.25.1
           - "debian:trixie"       # gcc 14.2.0, clang 19.1.7, cmake 3.31.6
           - "debian:testing"
@@ -114,13 +115,14 @@ jobs:
       - uses: ./.github/actions/build
       - uses: ./.github/actions/ctest
 
-  ubuntu-latest:
-    runs-on: ubuntu-24.04
+  ubuntu:
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     env:
-      CC: clang-18
-      CXX: clang++-18
-      CXXFLAGS: -Werror
+      CC: clang-22
+      CXX: clang++-22
+      # -Wno-c2y-extensions needed because of Catch2 https://github.com/llvm/llvm-project/issues/189645
+      CXXFLAGS: -Werror -Wno-c2y-extensions
       BUILD_TYPE: Dev
     steps:
       - uses: actions/checkout@v7
