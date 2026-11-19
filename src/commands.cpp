@@ -22,6 +22,7 @@
 #include "command_renumber.hpp"
 #include "command_show.hpp"
 #include "command_sort.hpp"
+#include "command_split.hpp"
 #include "command_tags_count.hpp"
 #include "command_tags_filter.hpp"
 #include "command_time_filter.hpp"
@@ -108,6 +109,10 @@ void register_commands(CommandFactory& cmd_factory) {
 
     cmd_factory.register_command("sort", "Sort OSM data files", [&]() {
         return std::make_unique<CommandSort>(cmd_factory);
+    });
+
+    cmd_factory.register_command("split", "Split OSM data by object type or into tags and geometry", [&]() {
+        return std::make_unique<CommandSplit>(cmd_factory);
     });
 
     cmd_factory.register_command("tags-count", "Count OSM tags", [&]() {

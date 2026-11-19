@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version="0.6">
+  <node id="1" version="1" lat="48.1" lon="11.5">
+    <tag k="amenity" v="cafe"/>
+  </node>
+  <node id="2" version="1" lat="48.2" lon="11.6"/>
+  <way id="10" version="1">
+    <nd ref="1"/>
+    <nd ref="2"/>
+    <tag k="highway" v="residential"/>
+  </way>
+  <relation id="100" version="1">
+    <member type="way" ref="10" role="outer"/>
+    <tag k="type" v="multipolygon"/>
+  </relation>
+</osm>

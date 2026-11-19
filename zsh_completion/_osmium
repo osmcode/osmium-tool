@@ -413,6 +413,19 @@ _osmium-sort() {
         '(--no-progress)--progress[enable progress bar]'
 }
 
+_osmium-split() {
+    _arguments : \
+        '(-p --prefix)'{-p,--prefix}'[output file prefix]:prefix:_files' \
+        '(-f --output-format)'{-f,--output-format}'[format of output files]:format:(osm osm.bz2 osm.gz osm.pbf o5m opl)' \
+        '(-d --split-details)'{-d,--split-details}'[split into 6 files separating tags from geometry/references]' \
+        '(-e --skip-empty-tags)'{-e,--skip-empty-tags}'[do not write objects without tags to *_tags files]' \
+        '(-h --help)'{-h,--help}'[show usage information]' \
+        '(-v --verbose)'{-v,--verbose}'[set verbose mode]' \
+        '(--progress --no-progress)--progress[display progress bar]' \
+        '(--progress --no-progress)--no-progress[do not display progress bar]' \
+        '(-F --input-format)'{-F,--input-format}'[format of input file]:format:_osmium_formats' \
+}
+
 _osmium-tags-count() {
     _arguments : \
         ${(f)"$(_osmium-common-options)"} \
